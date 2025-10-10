@@ -7,6 +7,46 @@
  * and integrates interactions between NavigationView and SectionView with performance optimizations.
  */
 
+import SectionView from '../views/SectionView.js';
+
+/**
+ * @constant {Object} SECTION_CONFIG
+ * @brief Configuration constants for section behavior and performance
+ */
+const SECTION_CONFIG = {
+    LAZY_LOADING: {
+        threshold: 0.1,
+        rootMargin: '50px 0px',
+        contentLoadDelay: 100
+    },
+    SEARCH: {
+        debounceDelay: 300,
+        maxResults: 20,
+        minSearchLength: 2
+    },
+    ANIMATION: {
+        staggerDelay: 100,
+        transitionDuration: 300
+    },
+    PRELOAD: {
+        adjacentSections: 1,
+        criticalSections: ['hero', 'about', 'projects']
+    }
+};
+
+/**
+ * @constant {Object} ERROR_MESSAGES
+ * @brief Standardized error messages for SectionController operations
+ */
+const ERROR_MESSAGES = {
+    INVALID_MODELS: 'SectionController requires a valid models object.',
+    INVALID_VIEWS: 'SectionController requires a valid views object or SectionView instance.',
+    MISSING_SECTION_VIEW: 'SectionController requires a section view instance.',
+    MISSING_CONTENT_MODEL: 'SectionController requires a content model instance.',
+    INVALID_SECTION_ID: 'Invalid section ID provided for operation.',
+    CONTENT_LOAD_FAILED: 'Failed to load content for section:'
+};
+
 /**
  * @class SectionController
  * @brief Manages section content logic, lazy loading, filtering, and search functionality
@@ -20,9 +60,9 @@ class SectionController {
      * @param {Object} models - Collection of application model instances
      * @param {Object} models.content - Content data model instance
      * @param {Object} models.user - User data model instance
-     * @param {Object} views - Collection of view instances
-     * @param {Object} views.section - Section view instance
-     * @param {Object} views.navigation - Navigation view instance (optional)
+     * @param {Object|SectionView} views - Collection of view instances or direct SectionView instance
+     * @param {Object} [views.section] - Section view instance (if views is an object)
+     * @param {Object} [views.navigation] - Navigation view instance (optional)
      * @throws {TypeError} When required models or views are not provided
      */
     constructor(models, views) {
@@ -40,7 +80,12 @@ class SectionController {
          * @type {Object}
          * @brief Collection of view instances
          */
-        this.views = views;
+        // Handle both object format and direct SectionView instance
+        if (views instanceof SectionView) {
+            this.views = { section: views };
+        } else {
+            this.views = views;
+        }
         
         /**
          * @private
@@ -58,53 +103,81 @@ class SectionController {
         
         /**
          * @private
-         * @type {IntersectionObserver}
+         * @type {IntersectionObserver|null}
          * @brief Observer for lazy loading content within sections
          */
         this.lazyLoadingObserver = null;
         
         /**
          * @private
+         * @type {number|null}
+         * @brief Timeout reference for search debouncing
+         */
+        this.searchTimeoutId = null;
+        
+        /**
+         * @private
          * @type {Object}
          * @brief Configuration constants for section behavior
          */
-        this.sectionConfig = {
-            lazyLoadThreshold: 0.1,
-            lazyLoadRootMargin: '50px 0px',
-            debounceSearchDelay: 300,
-            maxSearchResults: 20,
-            contentLoadDelay: 100
-        };
+        this.config = { ...SECTION_CONFIG };
+
+        /**
+         * @private
+         * @type {boolean}
+         * @brief Tracks initialization state of the controller
+         */
+        this.isInitialized = false;
 
         // Bind methods to maintain context
         this.handleSectionChange = this.handleSectionChange.bind(this);
         this.handleSectionVisibility = this.handleSectionVisibility.bind(this);
         this.handleContentFilter = this.handleContentFilter.bind(this);
         this.handleSearchInput = this.handleSearchInput.bind(this);
+        this.handleLazyElementVisible = this.handleLazyElementVisible.bind(this);
     }
 
     /**
      * @brief Validates required dependencies for the controller
      * @private
      * @param {Object} models - Models object to validate
-     * @param {Object} views - Views object to validate
+     * @param {Object|SectionView} views - Views object or SectionView instance to validate
      * @throws {TypeError} When required dependencies are missing
      */
     validateDependencies(models, views) {
+        // Validate models parameter
         if (!models || typeof models !== 'object') {
-            throw new TypeError('SectionController requires a valid models object.');
+            throw new TypeError(ERROR_MESSAGES.INVALID_MODELS);
         }
 
-        if (!views || typeof views !== 'object') {
-            throw new TypeError('SectionController requires a valid views object.');
+        // Validate views parameter - accept both object format and SectionView instance
+        if (!views || (typeof views !== 'object' && !(views instanceof SectionView))) {
+            throw new TypeError(ERROR_MESSAGES.INVALID_VIEWS);
         }
 
-        if (!views.section) {
-            throw new TypeError('SectionController requires a section view instance.');
+        // Validate section view availability
+        const hasSectionView = (views.section && typeof views.section === 'object') || 
+                              (views instanceof SectionView);
+        
+        if (!hasSectionView) {
+            throw new TypeError(ERROR_MESSAGES.MISSING_SECTION_VIEW);
         }
 
-        if (!models.content) {
-            throw new TypeError('SectionController requires a content model instance.');
+        // Validate content model availability
+        if (!models.content || typeof models.content !== 'object') {
+            throw new TypeError(ERROR_MESSAGES.MISSING_CONTENT_MODEL);
+        }
+
+        // Validate content model has required methods
+        const requiredModelMethods = ['getSections', 'getSectionById', 'getProjects', 'getExperiences'];
+        const missingMethods = requiredModelMethods.filter(
+            method => !models.content[method] || typeof models.content[method] !== 'function'
+        );
+
+        if (missingMethods.length > 0) {
+            throw new TypeError(
+                `Content model missing required methods: ${missingMethods.join(', ')}`
+            );
         }
     }
 
@@ -114,10 +187,20 @@ class SectionController {
      * @returns {Promise<void>} Resolves when initialization is complete
      */
     async initialize() {
+        if (this.isInitialized) {
+            console.warn('SectionController: Already initialized');
+            return;
+        }
+
         try {
-            await this.setupEventHandlers();
-            await this.setupLazyLoadingObserver();
-            await this.preloadCriticalContent();
+            const initializationTasks = [
+                this.setupEventHandlers(),
+                this.setupLazyLoadingObserver(),
+                this.preloadCriticalContent()
+            ];
+
+            await Promise.all(initializationTasks);
+            this.isInitialized = true;
             
             console.info('SectionController: Successfully initialized section management system.');
         } catch (error) {
@@ -153,7 +236,50 @@ class SectionController {
             signal: eventSignal
         });
 
+        // Handle browser visibility changes for performance optimization
+        document.addEventListener('visibilitychange', this.handleVisibilityChange.bind(this), {
+            signal: eventSignal
+        });
+
         console.debug('SectionController: Event handlers established.');
+    }
+
+    /**
+     * @brief Handles browser visibility changes for performance optimization
+     * @private
+     */
+    handleVisibilityChange() {
+        if (document.hidden) {
+            // Reduce performance impact when tab is not visible
+            this.pauseNonCriticalOperations();
+        } else {
+            // Resume normal operations when tab becomes visible
+            this.resumeOperations();
+        }
+    }
+
+    /**
+     * @brief Pauses non-critical operations when tab is not visible
+     * @private
+     */
+    pauseNonCriticalOperations() {
+        if (this.lazyLoadingObserver) {
+            this.lazyLoadingObserver.disconnect();
+        }
+    }
+
+    /**
+     * @brief Resumes operations when tab becomes visible
+     * @private
+     */
+    resumeOperations() {
+        if (this.lazyLoadingObserver) {
+            // Reconnect lazy loading observer
+            const sections = document.querySelectorAll('[data-section]');
+            sections.forEach(section => {
+                this.lazyLoadingObserver.observe(section);
+            });
+        }
     }
 
     /**
@@ -164,8 +290,8 @@ class SectionController {
     async setupLazyLoadingObserver() {
         const observerOptions = {
             root: null,
-            rootMargin: this.sectionConfig.lazyLoadRootMargin,
-            threshold: this.sectionConfig.lazyLoadThreshold
+            rootMargin: this.config.LAZY_LOADING.rootMargin,
+            threshold: this.config.LAZY_LOADING.threshold
         };
 
         this.lazyLoadingObserver = new IntersectionObserver((entries) => {
@@ -175,6 +301,12 @@ class SectionController {
                 }
             });
         }, observerOptions);
+
+        // Start observing all sections
+        const sections = document.querySelectorAll('[data-section]');
+        sections.forEach(section => {
+            this.lazyLoadingObserver.observe(section);
+        });
 
         console.debug('SectionController: Lazy loading observer initialized.');
     }
@@ -186,10 +318,7 @@ class SectionController {
      */
     async preloadCriticalContent() {
         try {
-            // Preload content for the first visible section or hero section
-            const initialSections = ['hero', 'about', 'projects'];
-            
-            const preloadPromises = initialSections.map(sectionId => 
+            const preloadPromises = this.config.PRELOAD.criticalSections.map(sectionId => 
                 this.preloadSectionContent(sectionId)
             );
 
@@ -205,16 +334,26 @@ class SectionController {
      * @private
      * @param {CustomEvent} event - Section change event
      */
-    handleSectionChange = (event) => {
+    handleSectionChange(event) {
         const { sectionId, previousSectionId } = event.detail;
         
-        if (!sectionId) {
-            console.warn('SectionController: Received section change with invalid section ID');
+        if (!this.isValidSectionId(sectionId)) {
+            console.warn('SectionController: Received section change with invalid section ID:', sectionId);
             return;
         }
 
         this.processSectionActivation(sectionId, previousSectionId);
-    };
+    }
+
+    /**
+     * @brief Validates if a section ID is valid
+     * @private
+     * @param {string} sectionId - Section ID to validate
+     * @returns {boolean} True if section ID is valid
+     */
+    isValidSectionId(sectionId) {
+        return typeof sectionId === 'string' && sectionId.trim().length > 0;
+    }
 
     /**
      * @brief Processes section activation and triggers related actions
@@ -244,6 +383,10 @@ class SectionController {
             
         } catch (error) {
             console.error(`SectionController: Failed to process section activation for ${activeSectionId}:`, error);
+            this.dispatchSectionEvent('sectionActivationError', {
+                activeSectionId,
+                error: error.message
+            });
         }
     }
 
@@ -264,11 +407,11 @@ class SectionController {
      * @param {string} eventType - Type of visibility event
      * @param {Object} eventData - Data associated with the visibility event
      */
-    handleSectionVisibility = (eventType, eventData) => {
+    handleSectionVisibility(eventType, eventData) {
         if (eventType === 'sectionVisible' && eventData.sectionId) {
             this.onSectionBecameVisible(eventData.sectionId, eventData);
         }
-    };
+    }
 
     /**
      * @brief Handles when a section becomes visible in the viewport
@@ -304,14 +447,17 @@ class SectionController {
         if (!sectionElement) return;
 
         // Add animation class after a small delay for better UX
-        await new Promise(resolve => setTimeout(resolve, this.sectionConfig.contentLoadDelay));
+        await new Promise(resolve => 
+            setTimeout(resolve, this.config.LAZY_LOADING.contentLoadDelay)
+        );
         
         sectionElement.classList.add('section--animated');
         
         // Animate child elements with staggered delays
         const animatableElements = sectionElement.querySelectorAll('[data-animate]');
         animatableElements.forEach((element, index) => {
-            element.style.setProperty('--animation-delay', `${index * 0.1}s`);
+            const delay = index * this.config.ANIMATION.staggerDelay;
+            element.style.setProperty('--animation-delay', `${delay}ms`);
             element.classList.add('element--animated');
         });
     }
@@ -327,16 +473,20 @@ class SectionController {
         
         if (currentIndex === -1) return;
 
-        // Preload next section
-        const nextSection = allSections[currentIndex + 1];
-        if (nextSection && !this.loadedSections.has(nextSection.id)) {
-            this.preloadSectionContent(nextSection.id);
-        }
+        // Preload adjacent sections based on configuration
+        const preloadRange = this.config.PRELOAD.adjacentSections;
+        for (let i = 1; i <= preloadRange; i++) {
+            // Preload next sections
+            const nextSection = allSections[currentIndex + i];
+            if (nextSection && !this.loadedSections.has(nextSection.id)) {
+                this.preloadSectionContent(nextSection.id);
+            }
 
-        // Preload previous section if not too far back
-        const previousSection = allSections[currentIndex - 1];
-        if (previousSection && currentIndex > 0 && !this.loadedSections.has(previousSection.id)) {
-            this.preloadSectionContent(previousSection.id);
+            // Preload previous sections
+            const previousSection = allSections[currentIndex - i];
+            if (previousSection && currentIndex - i >= 0 && !this.loadedSections.has(previousSection.id)) {
+                this.preloadSectionContent(previousSection.id);
+            }
         }
     }
 
@@ -358,14 +508,13 @@ class SectionController {
         }
 
         try {
-            // Load lazy images
-            await this.loadLazyImages(sectionElement);
-            
-            // Load lazy iframes and videos
-            await this.loadLazyMedia(sectionElement);
-            
-            // Load dynamic content via API if needed
-            await this.loadDynamicSectionContent(sectionId);
+            const contentLoadingTasks = [
+                this.loadLazyImages(sectionElement),
+                this.loadLazyMedia(sectionElement),
+                this.loadDynamicSectionContent(sectionId)
+            ];
+
+            await Promise.allSettled(contentLoadingTasks);
             
             // Mark section as loaded
             this.loadedSections.add(sectionId);
@@ -373,7 +522,11 @@ class SectionController {
             console.debug(`SectionController: Lazy content loaded for section: ${sectionId}`);
             
         } catch (error) {
-            console.error(`SectionController: Failed to load lazy content for ${sectionId}:`, error);
+            console.error(`${ERROR_MESSAGES.CONTENT_LOAD_FAILED} ${sectionId}`, error);
+            this.dispatchSectionEvent('contentLoadError', {
+                sectionId,
+                error: error.message
+            });
         }
     }
 
@@ -384,9 +537,20 @@ class SectionController {
      * @returns {Promise<void>} Resolves when preloading is complete
      */
     async preloadSectionContent(sectionId) {
-        // Implementation for preloading section content
-        // This could involve fetching data, caching resources, etc.
-        console.debug(`SectionController: Preloading content for section: ${sectionId}`);
+        try {
+            // Get section data from content model
+            const sectionData = await this.models.content.getSectionById(sectionId);
+            if (sectionData) {
+                // Cache the section data for faster access
+                this.dispatchSectionEvent('sectionPreloaded', {
+                    sectionId,
+                    sectionData
+                });
+                console.debug(`SectionController: Preloaded content for section: ${sectionId}`);
+            }
+        } catch (error) {
+            console.warn(`SectionController: Failed to preload section ${sectionId}:`, error);
+        }
     }
 
     /**
@@ -399,17 +563,35 @@ class SectionController {
         const lazyImages = sectionElement.querySelectorAll('img[data-src], img[data-srcset]');
         const imageLoadPromises = Array.from(lazyImages).map(img => {
             return new Promise((resolve) => {
+                // Create a new image element to test loading
+                const testImage = new Image();
+                
                 if (img.dataset.src) {
+                    testImage.src = img.dataset.src;
                     img.src = img.dataset.src;
                     delete img.dataset.src;
                 }
+                
                 if (img.dataset.srcset) {
                     img.srcset = img.dataset.srcset;
                     delete img.dataset.srcset;
                 }
                 
-                img.addEventListener('load', resolve, { once: true });
-                img.addEventListener('error', resolve, { once: true });
+                // Remove loading attribute if set to lazy
+                if (img.loading === 'lazy') {
+                    img.loading = 'eager';
+                }
+                
+                testImage.addEventListener('load', () => {
+                    img.classList.add('image-loaded');
+                    resolve();
+                }, { once: true });
+                
+                testImage.addEventListener('error', () => {
+                    console.warn('SectionController: Failed to load image:', img.dataset.src || img.src);
+                    img.classList.add('image-error');
+                    resolve();
+                }, { once: true });
             });
         });
 
@@ -429,6 +611,11 @@ class SectionController {
             if (media.tagName === 'IFRAME' || media.tagName === 'VIDEO') {
                 media.src = media.dataset.src;
                 delete media.dataset.src;
+                
+                // Remove loading attribute if set to lazy
+                if (media.loading === 'lazy') {
+                    media.loading = 'eager';
+                }
             }
         });
     }
@@ -440,16 +627,25 @@ class SectionController {
      * @returns {Promise<void>} Resolves when dynamic content is loaded
      */
     async loadDynamicSectionContent(sectionId) {
-        // Implementation for loading dynamic content based on section type
-        const contentHandlers = {
-            projects: () => this.loadProjectsContent(),
-            experiences: () => this.loadExperiencesContent(),
-            research: () => this.loadResearchContent()
-        };
+        try {
+            const sectionData = await this.models.content.getSectionById(sectionId);
+            
+            if (sectionData && sectionData.type) {
+                const contentHandlers = {
+                    projects: () => this.loadProjectsContent(),
+                    experiences: () => this.loadExperiencesContent(),
+                    research: () => this.loadResearchContent(),
+                    timeline: () => this.loadTimelineContent()
+                };
 
-        const handler = contentHandlers[sectionId];
-        if (handler) {
-            await handler();
+                const handler = contentHandlers[sectionData.type];
+                if (handler) {
+                    await handler(sectionData);
+                }
+            }
+        } catch (error) {
+            console.error(`SectionController: Failed to load dynamic content for ${sectionId}:`, error);
+            throw error;
         }
     }
 
@@ -458,10 +654,10 @@ class SectionController {
      * @private
      * @param {CustomEvent} event - Filter request event
      */
-    handleContentFilter = (event) => {
+    handleContentFilter(event) {
         const { category, filterType } = event.detail;
         this.filterContentByCategory(category, filterType);
-    };
+    }
 
     /**
      * @brief Filters content by category and type
@@ -480,12 +676,12 @@ class SectionController {
             let content = [];
             
             if (filterType === 'all' || filterType === 'projects') {
-                const projects = this.models.content.getProjects?.() || [];
+                const projects = this.models.content.getProjects() || [];
                 content = content.concat(projects);
             }
             
             if (filterType === 'all' || filterType === 'experiences') {
-                const experiences = this.models.content.getExperiences?.() || [];
+                const experiences = this.models.content.getExperiences() || [];
                 content = content.concat(experiences);
             }
 
@@ -514,7 +710,7 @@ class SectionController {
      * @private
      * @param {CustomEvent} event - Search request event
      */
-    handleSearchInput = (event) => {
+    handleSearchInput(event) {
         const { searchTerm, searchType } = event.detail;
         
         // Clear previous timeout
@@ -525,8 +721,8 @@ class SectionController {
         // Debounce search to avoid excessive operations
         this.searchTimeoutId = setTimeout(() => {
             this.executeContentSearch(searchTerm, searchType);
-        }, this.sectionConfig.debounceSearchDelay);
-    };
+        }, this.config.SEARCH.debounceDelay);
+    }
 
     /**
      * @brief Executes content search across multiple content types
@@ -535,7 +731,7 @@ class SectionController {
      * @param {string} searchType - Type of content to search
      */
     executeContentSearch(searchTerm, searchType = 'all') {
-        if (!searchTerm || searchTerm.trim().length < 2) {
+        if (!searchTerm || searchTerm.trim().length < this.config.SEARCH.minSearchLength) {
             this.dispatchSectionEvent('searchCompleted', {
                 searchTerm,
                 results: [],
@@ -578,12 +774,12 @@ class SectionController {
         const normalizedSearchTerm = searchTerm.toLowerCase().trim();
 
         if (contentType === 'all' || contentType === 'projects') {
-            const projects = this.models.content.getProjects?.() || [];
+            const projects = this.models.content.getProjects() || [];
             allContent = allContent.concat(projects);
         }
 
         if (contentType === 'all' || contentType === 'experiences') {
-            const experiences = this.models.content.getExperiences?.() || [];
+            const experiences = this.models.content.getExperiences() || [];
             allContent = allContent.concat(experiences);
         }
 
@@ -594,9 +790,11 @@ class SectionController {
                 item.description.toLowerCase().includes(normalizedSearchTerm);
             const tagMatch = item.tags && 
                 item.tags.some(tag => tag.toLowerCase().includes(normalizedSearchTerm));
+            const categoryMatch = item.category && 
+                item.category.toLowerCase().includes(normalizedSearchTerm);
 
-            return titleMatch || descriptionMatch || tagMatch;
-        }).slice(0, this.sectionConfig.maxSearchResults);
+            return titleMatch || descriptionMatch || tagMatch || categoryMatch;
+        }).slice(0, this.config.SEARCH.maxResults);
 
         return searchResults;
     }
@@ -607,11 +805,12 @@ class SectionController {
      * @param {HTMLElement} element - The element that became visible
      */
     handleLazyElementVisible(element) {
-        // Implementation for handling specific lazy elements
         if (element.dataset.lazyType === 'image') {
             this.loadLazyImageElement(element);
         } else if (element.dataset.lazyType === 'component') {
             this.loadLazyComponent(element);
+        } else if (element.dataset.lazyType === 'video') {
+            this.loadLazyVideoElement(element);
         }
     }
 
@@ -632,6 +831,24 @@ class SectionController {
     }
 
     /**
+     * @brief Loads a lazy video element
+     * @private
+     * @param {HTMLElement} videoElement - The video element to load
+     */
+    loadLazyVideoElement(videoElement) {
+        if (videoElement.dataset.src) {
+            videoElement.src = videoElement.dataset.src;
+            delete videoElement.dataset.src;
+        }
+        
+        // Load poster image if available
+        if (videoElement.dataset.poster) {
+            videoElement.poster = videoElement.dataset.poster;
+            delete videoElement.dataset.poster;
+        }
+    }
+
+    /**
      * @brief Loads a lazy component dynamically
      * @private
      * @param {HTMLElement} componentElement - The component element to load
@@ -639,6 +856,12 @@ class SectionController {
     loadLazyComponent(componentElement) {
         // Implementation for dynamic component loading
         console.debug('SectionController: Loading lazy component', componentElement);
+        
+        // Dispatch event for component loading
+        this.dispatchSectionEvent('lazyComponentLoaded', {
+            element: componentElement,
+            componentType: componentElement.dataset.componentType
+        });
     }
 
     /**
@@ -647,14 +870,48 @@ class SectionController {
      * @param {string} sectionId - The section ID that was viewed
      */
     trackSectionView(sectionId) {
-        // Integration point for analytics services
         const analyticsData = {
             sectionId,
             timestamp: new Date().toISOString(),
-            duration: Date.now() // This would be calculated based on view time
+            viewCount: this.getSectionViewCount(sectionId) + 1
         };
         
+        // Store view count in session storage
+        this.incrementSectionViewCount(sectionId);
+        
+        this.dispatchSectionEvent('sectionViewTracked', analyticsData);
+        
         console.debug('SectionController: Tracking section view', analyticsData);
+    }
+
+    /**
+     * @brief Gets the view count for a specific section
+     * @private
+     * @param {string} sectionId - The section ID
+     * @returns {number} View count for the section
+     */
+    getSectionViewCount(sectionId) {
+        try {
+            const viewData = sessionStorage.getItem(`section_views_${sectionId}`);
+            return viewData ? parseInt(viewData, 10) : 0;
+        } catch (error) {
+            console.warn('SectionController: Could not access session storage:', error);
+            return 0;
+        }
+    }
+
+    /**
+     * @brief Increments the view count for a specific section
+     * @private
+     * @param {string} sectionId - The section ID
+     */
+    incrementSectionViewCount(sectionId) {
+        try {
+            const currentCount = this.getSectionViewCount(sectionId);
+            sessionStorage.setItem(`section_views_${sectionId}`, (currentCount + 1).toString());
+        } catch (error) {
+            console.warn('SectionController: Could not update session storage:', error);
+        }
     }
 
     /**
@@ -680,31 +937,81 @@ class SectionController {
     /**
      * @brief Loads projects content from model
      * @private
+     * @param {Object} sectionData - Section data for context
      * @returns {Promise<void>} Resolves when projects content is loaded
      */
-    async loadProjectsContent() {
-        // Implementation for loading projects content
-        console.debug('SectionController: Loading projects content');
+    async loadProjectsContent(sectionData) {
+        try {
+            const projects = await this.models.content.getProjects();
+            this.dispatchSectionEvent('projectsContentLoaded', {
+                sectionData,
+                projects,
+                projectCount: projects.length
+            });
+            console.debug('SectionController: Projects content loaded');
+        } catch (error) {
+            console.error('SectionController: Failed to load projects content:', error);
+            throw error;
+        }
     }
 
     /**
      * @brief Loads experiences content from model
      * @private
+     * @param {Object} sectionData - Section data for context
      * @returns {Promise<void>} Resolves when experiences content is loaded
      */
-    async loadExperiencesContent() {
-        // Implementation for loading experiences content
-        console.debug('SectionController: Loading experiences content');
+    async loadExperiencesContent(sectionData) {
+        try {
+            const experiences = await this.models.content.getExperiences();
+            this.dispatchSectionEvent('experiencesContentLoaded', {
+                sectionData,
+                experiences,
+                experienceCount: experiences.length
+            });
+            console.debug('SectionController: Experiences content loaded');
+        } catch (error) {
+            console.error('SectionController: Failed to load experiences content:', error);
+            throw error;
+        }
     }
 
     /**
      * @brief Loads research content from model
      * @private
+     * @param {Object} sectionData - Section data for context
      * @returns {Promise<void>} Resolves when research content is loaded
      */
-    async loadResearchContent() {
-        // Implementation for loading research content
-        console.debug('SectionController: Loading research content');
+    async loadResearchContent(sectionData) {
+        try {
+            // Implementation for loading research content
+            this.dispatchSectionEvent('researchContentLoaded', {
+                sectionData
+            });
+            console.debug('SectionController: Research content loaded');
+        } catch (error) {
+            console.error('SectionController: Failed to load research content:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * @brief Loads timeline content from model
+     * @private
+     * @param {Object} sectionData - Section data for context
+     * @returns {Promise<void>} Resolves when timeline content is loaded
+     */
+    async loadTimelineContent(sectionData) {
+        try {
+            // Implementation for loading timeline content
+            this.dispatchSectionEvent('timelineContentLoaded', {
+                sectionData
+            });
+            console.debug('SectionController: Timeline content loaded');
+        } catch (error) {
+            console.error('SectionController: Failed to load timeline content:', error);
+            throw error;
+        }
     }
 
     /**
@@ -724,6 +1031,28 @@ class SectionController {
      */
     isSectionLoaded(sectionId) {
         return this.loadedSections.has(sectionId);
+    }
+
+    /**
+     * @brief Gets the initialization state of the controller
+     * @public
+     * @returns {boolean} True if the controller is initialized
+     */
+    getInitializationState() {
+        return this.isInitialized;
+    }
+
+    /**
+     * @brief Updates controller configuration
+     * @public
+     * @param {Object} newConfig - New configuration options
+     */
+    updateConfiguration(newConfig) {
+        this.config = {
+            ...this.config,
+            ...newConfig
+        };
+        console.debug('SectionController: Configuration updated', this.config);
     }
 
     /**
@@ -749,6 +1078,9 @@ class SectionController {
 
         // Clear loaded sections tracking
         this.loadedSections.clear();
+
+        // Reset initialization state
+        this.isInitialized = false;
 
         console.info('SectionController: Controller destroyed and resources cleaned up.');
     }

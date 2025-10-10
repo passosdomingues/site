@@ -9,10 +9,10 @@
  */
 
 // View Imports
-import NavigationView from '../views/NavigationView.js';
-import HeroView from '../views/HeroView.js';
-import SectionView from '../views/SectionView.js';
-import FooterView from '../views/FooterView.js';
+import NavigationView from './views/NavigationView.js';
+import HeroView from './views/HeroView.js';
+import SectionView from './views/SectionView.js';
+import FooterView from './views/FooterView.js';
 
 // Controller Imports
 import NavigationController from './NavigationController.js';
@@ -292,9 +292,14 @@ class MainController {
             this.controllers.navigation = new NavigationController();
             
             // Section controller requires both models and section view
+            if (!this.views.section) {
+                throw new Error('SectionView is not inicialized');
+            }
+            
+            // Section controller requer ambos os models e a section view
             this.controllers.section = new SectionController(
                 this.models,
-                this.views.section
+                { section: this.views.section }  // as object
             );
 
             // Initialize controllers that have async initialization
