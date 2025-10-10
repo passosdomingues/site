@@ -5,12 +5,12 @@
  *              error handling, performance monitoring, and accessibility features
  */
 
-import { ViewManager } from './modules/ViewManager.js';
-import { Router } from './modules/Router.js';
-import { ThemeManager } from './modules/ThemeManager.js';
-import { AccessibilityManager } from './modules/AccessibilityManager.js';
-import { PerformanceMonitor } from './modules/PerformanceMonitor.js';
-import { ErrorReporter } from './modules/ErrorReporter.js';
+import ViewManager from './modules/ViewManager.js';
+import Router from './modules/Router.js';
+import ThemeManager from './modules/ThemeManager.js';
+import AccessibilityManager from './modules/AccessibilityManager.js';
+import PerformanceMonitor from './modules/PerformanceMonitor.js';
+import ErrorReporter from './modules/ErrorReporter.js';
 
 /**
  * @class App
