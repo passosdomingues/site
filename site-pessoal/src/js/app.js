@@ -233,106 +233,371 @@ class App {
     }
 
     /**
-     * @brief Initializes core application managers with proper error handling
+     * @brief Initializes core application managers with proper error handling and dependency injection
      * @method initializeCoreManagers
      * @returns {Promise<void>}
      * @private
+     * @description Orchestrates the sequential initialization of all core application subsystems
+     * with robust error handling, timeout protection, and proper dependency management.
+     * Ensures models are initialized first, followed by infrastructure managers, and finally
+     * the view layer with all required dependencies injected.
      */
     async initializeCoreManagers() {
+        /**
+         * @step 1: Initialize critical data models first
+         * @description Models form the foundation of the application and must be available
+         * before any other components that depend on data access and business logic.
+         */
         const initializationPromises = [];
 
-        /**
-         * STEP 1: CREATE MODELS FIRST
-         * Models are the data foundation and must exist before any other components.
-         * They handle data operations, storage, and business logic.
-         */
-        this.models = {
-            content: new ContentModel(),
-            user: new UserModel()
-        };
-        // Add model initialization to promises array for parallel execution
-        initializationPromises.push(
-            this.models.content.initialize(),
-            this.models.user.initialize()
-        );
+        try {
+            console.info('App: Starting core managers initialization...');
 
-        /**
-         * STEP 2: INITIALIZE CORE INFRASTRUCTURE MANAGERS
-         * These managers handle essential application services:
-         * - Error reporting for monitoring and debugging
-         * - Accessibility for inclusive user experience
-         * - Theme management for visual consistency
-         */
-        this.errorReporter = new ErrorReporter();
-        initializationPromises.push(this.errorReporter.initialize());
+            /**
+             * @subsection A: Data Models Initialization
+             * @priority Critical - Foundation layer
+             */
+            this.models = {
+                content: new ContentModel(),
+                user: new UserModel()
+            };
 
-        this.accessibilityManager = new AccessibilityManager();
-        initializationPromises.push(this.accessibilityManager.initialize());
+            // Add model initialization to promises array for parallel execution
+            initializationPromises.push(
+                this.models.content.initialize().catch(error => {
+                    console.error('App: ContentModel initialization failed:', error);
+                    throw new Error(`ContentModel failed: ${error.message}`);
+                }),
+                this.models.user.initialize().catch(error => {
+                    console.error('App: UserModel initialization failed:', error);
+                    throw new Error(`UserModel failed: ${error.message}`);
+                })
+            );
 
-        this.themeManager = new ThemeManager();
-        initializationPromises.push(this.themeManager.initialize());
+            /**
+             * @subsection B: Infrastructure Managers Initialization
+             * @priority High - Support services layer
+             */
+            this.errorReporter = new ErrorReporter();
+            initializationPromises.push(
+                this.errorReporter.initialize().catch(error => {
+                    console.error('App: ErrorReporter initialization failed:', error);
+                    throw new Error(`ErrorReporter failed: ${error.message}`);
+                })
+            );
 
-        /**
-         * STEP 3: INITIALIZE VIEW MANAGER WITH DEPENDENCIES
-         * The ViewManager now receives models and error reporter as dependencies
-         * This enables proper data flow and error handling throughout the UI layer
-         */
-        this.viewManager = new ViewManager(this.models, this.errorReporter);
-        initializationPromises.push(this.viewManager.initialize());
+            this.accessibilityManager = new AccessibilityManager();
+            initializationPromises.push(
+                this.accessibilityManager.initialize().catch(error => {
+                    console.error('App: AccessibilityManager initialization failed:', error);
+                    throw new Error(`AccessibilityManager failed: ${error.message}`);
+                })
+            );
 
-        /**
-         * STEP 4: INITIALIZE APPLICATION ROUTER
-         * Router handles navigation and URL management
-         * Initialized after core dependencies are ready
-         */
-        this.router = new Router();
-        initializationPromises.push(this.router.initialize());
+            this.themeManager = new ThemeManager();
+            initializationPromises.push(
+                this.themeManager.initialize().catch(error => {
+                    console.error('App: ThemeManager initialization failed:', error);
+                    throw new Error(`ThemeManager failed: ${error.message}`);
+                })
+            );
 
-        /**
-         * EXECUTE ALL INITIALIZATIONS WITH ROBUST ERROR HANDLING
-         * Uses Promise.allSettled to ensure all promises complete (success or failure)
-         * Implements 10-second timeout for each initialization to prevent hanging
-         * This approach ensures the application either starts properly or fails gracefully
-         */
-        await Promise.allSettled(initializationPromises.map(promise =>
-            Promise.race([
-                promise,
-                new Promise((_, reject) =>
-                    setTimeout(() => reject(new Error('Initialization timeout')), 10000)
+            /**
+             * @subsection C: View Layer Initialization
+             * @priority Medium - UI layer (depends on models and infrastructure)
+             * @fix CORRECTED: ViewManager constructor accepts only configuration, not models
+             */
+            this.viewManager = new ViewManager({
+                // ViewManager configuration goes here if needed
+                viewContainer: document.getElementById('dynamic-content'),
+                enableCaching: true
+            });
+            initializationPromises.push(
+                this.viewManager.initialize().catch(error => {
+                    console.error('App: ViewManager initialization failed:', error);
+                    throw new Error(`ViewManager failed: ${error.message}`);
+                })
+            );
+
+            /**
+             * @subsection D: Routing System Initialization
+             * @priority Medium - Navigation layer
+             */
+            this.router = new Router();
+            initializationPromises.push(
+                this.router.initialize().catch(error => {
+                    console.error('App: Router initialization failed:', error);
+                    throw new Error(`Router failed: ${error.message}`);
+                })
+            );
+
+            /**
+             * @step 2: Execute all initializations with robust timeout protection
+             * @description Uses Promise.allSettled to ensure all promises complete regardless of success/failure
+             * Implements individual timeouts to prevent hanging initializations from blocking the entire app
+             */
+            console.info('App: Executing parallel initialization with timeout protection...');
+            
+            const timeoutDuration = 10000; // 10 seconds
+            const initializationResults = await Promise.allSettled(
+                initializationPromises.map(promise =>
+                    Promise.race([
+                        promise,
+                        new Promise((_, reject) =>
+                            setTimeout(() => reject(new Error('Initialization timeout')), timeoutDuration)
+                        )
+                    ]).catch(error => {
+                        console.warn('App: Individual initialization timeout or error:', error);
+                        throw error;
+                    })
                 )
-            ])
-        ));
+            );
 
-        /**
-         * RENDER INITIAL APPLICATION CONTENT
-         * Only attempt to render if ViewManager is successfully initialized
-         * This ensures the UI layer is ready before attempting to display content
-         * Provides fallback error logging if MainController is unavailable
-         */
-        if (this.viewManager && this.viewManager.isInitialized) {
-            const mainController = this.viewManager.getController();
-            if (mainController && mainController.getInitializationState()) {
-                await mainController.renderInitialContent();
-            } else {
-                console.error('App: Could not retrieve MainController to render initial content.');
+            /**
+             * @step 3: Analyze initialization results and handle partial failures
+             */
+            const failedInitializations = initializationResults
+                .map((result, index) => ({ result, index }))
+                .filter(({ result }) => result.status === 'rejected');
+
+            if (failedInitializations.length > 0) {
+                console.warn(`App: ${failedInitializations.length} initialization(s) failed:`, 
+                    failedInitializations.map(({ result }) => result.reason));
             }
-        }
 
-        /**
-         * FAILURE VERIFICATION AND ERROR REPORTING
-         * Check initialization status of all critical managers
-         * Collect names of any failed managers for comprehensive error reporting
-         * Throw aggregated error if any essential components failed to initialize
-         */
-        const failedManagers = [];
-        if (!this.accessibilityManager.isInitialized) failedManagers.push('AccessibilityManager');
-        if (!this.themeManager.isInitialized) failedManagers.push('ThemeManager');
-        if (!this.viewManager.isInitialized) failedManagers.push('ViewManager');
-        if (!this.router.isInitialized) failedManagers.push('Router');
+            /**
+             * @step 4: CRITICAL FIX - Initialize MainController with required dependencies
+             * @problem The original code tried to get MainController from ViewManager, but
+             * ViewManager doesn't manage controllers. MainController must be instantiated separately.
+             * @solution Create MainController instance and initialize it with the required models
+             */
+            console.info('App: Initializing MainController with data models...');
+            
+            // Import and instantiate MainController (make sure it's imported at the top of the file)
+            this.mainController = new MainController(this.models);
+            
+            // Initialize the main controller
+            await this.mainController.initializeApplication().catch(error => {
+                console.error('App: MainController initialization failed:', error);
+                throw new Error(`MainController failed: ${error.message}`);
+            });
 
-        if (failedManagers.length > 0) {
-            throw new Error(`Initialization failed for: ${failedManagers.join(', ')}`);
+            /**
+             * @step 5: Render initial content through the properly initialized MainController
+             * @fix CORRECTED: Call renderInitialContent on the MainController instance, not from ViewManager
+             */
+            console.info('App: Rendering initial application content...');
+            
+            if (this.mainController && this.mainController.getInitializationState()) {
+                await this.mainController.renderInitialContent().catch(error => {
+                    console.error('App: Initial content rendering failed:', error);
+                    // Don't throw here - allow application to continue in degraded mode
+                    this.showContentLoadingError(error);
+                });
+            } else {
+                const errorMsg = 'App: MainController not available or not initialized for rendering.';
+                console.error(errorMsg);
+                this.showContentLoadingError(new Error(errorMsg));
+            }
+
+            /**
+             * @step 6: Comprehensive failure verification and error reporting
+             * @description Check initialization status of all critical managers and provide
+             * detailed error information for debugging and user feedback
+             */
+            console.info('App: Verifying initialization status of all managers...');
+            
+            const failedManagers = [];
+            const initializationStatus = {};
+
+            // Check each manager's initialization status
+            if (this.models.content && !this.models.content.isInitialized) {
+                failedManagers.push('ContentModel');
+                initializationStatus.ContentModel = 'FAILED';
+            } else {
+                initializationStatus.ContentModel = 'OK';
+            }
+
+            if (this.models.user && !this.models.user.isInitialized) {
+                failedManagers.push('UserModel');
+                initializationStatus.UserModel = 'FAILED';
+            } else {
+                initializationStatus.UserModel = 'OK';
+            }
+
+            if (this.errorReporter && !this.errorReporter.isInitialized) {
+                failedManagers.push('ErrorReporter');
+                initializationStatus.ErrorReporter = 'FAILED';
+            } else {
+                initializationStatus.ErrorReporter = 'OK';
+            }
+
+            if (this.accessibilityManager && !this.accessibilityManager.isInitialized) {
+                failedManagers.push('AccessibilityManager');
+                initializationStatus.AccessibilityManager = 'FAILED';
+            } else {
+                initializationStatus.AccessibilityManager = 'OK';
+            }
+
+            if (this.themeManager && !this.themeManager.isInitialized) {
+                failedManagers.push('ThemeManager');
+                initializationStatus.ThemeManager = 'FAILED';
+            } else {
+                initializationStatus.ThemeManager = 'OK';
+            }
+
+            if (this.viewManager && !this.viewManager.isInitialized) {
+                failedManagers.push('ViewManager');
+                initializationStatus.ViewManager = 'FAILED';
+            } else {
+                initializationStatus.ViewManager = 'OK';
+            }
+
+            if (this.router && !this.router.isInitialized) {
+                failedManagers.push('Router');
+                initializationStatus.Router = 'FAILED';
+            } else {
+                initializationStatus.Router = 'OK';
+            }
+
+            if (this.mainController && !this.mainController.getInitializationState()) {
+                failedManagers.push('MainController');
+                initializationStatus.MainController = 'FAILED';
+            } else {
+                initializationStatus.MainController = 'OK';
+            }
+
+            // Log comprehensive initialization status
+            console.info('App: Initialization status report:', initializationStatus);
+
+            /**
+             * @step 7: Final error handling and application state determination
+             */
+            if (failedManagers.length > 0) {
+                const errorMessage = `Application initialization partially failed. Failed components: ${failedManagers.join(', ')}`;
+                console.error('App:', errorMessage);
+                
+                // Determine if the failure is critical (missing essential components)
+                const criticalComponents = ['ContentModel', 'MainController', 'ViewManager'];
+                const criticalFailures = failedManagers.filter(manager => 
+                    criticalComponents.includes(manager)
+                );
+
+                if (criticalFailures.length > 0) {
+                    throw new Error(`Critical initialization failure: ${criticalFailures.join(', ')}`);
+                } else {
+                    // Non-critical failures - log but continue
+                    console.warn('App: Non-critical initialization failures, application continuing in degraded mode.');
+                }
+            } else {
+                console.info('App: All core managers initialized successfully!');
+            }
+
+        } catch (error) {
+            /**
+             * @step 8: Global error handling for initialization failures
+             */
+            console.error('App: Critical failure during core managers initialization:', error);
+            
+            // Report error through error reporter if available
+            if (this.errorReporter && this.errorReporter.isInitialized) {
+                this.errorReporter.captureError(error, {
+                    context: 'initializeCoreManagers',
+                    timestamp: Date.now(),
+                    failedManagers: this.getFailedManagerNames()
+                });
+            }
+
+            // Show user-friendly error message
+            this.showInitializationError(error);
+            
+            // Re-throw to allow upper-level error handling
+            throw error;
         }
+    }
+
+    /**
+     * @brief Helper method to show content loading errors to users
+     * @private
+     * @param {Error} error - The error that occurred during content loading
+     */
+    showContentLoadingError(error) {
+        console.error('App: Content loading error:', error);
+        
+        const loadingIndicator = document.querySelector('.content-loading-indicator');
+        if (loadingIndicator) {
+            loadingIndicator.innerHTML = `
+                <div class="content-error-state">
+                    <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
+                    <h3>Content Loading Issue</h3>
+                    <p>Some content could not be loaded. Please refresh the page or try again later.</p>
+                    <button onclick="window.location.reload()" class="btn btn--primary">
+                        <i class="fas fa-redo" aria-hidden="true"></i>
+                        Reload Page
+                    </button>
+                    <details class="error-details">
+                        <summary>Technical Details</summary>
+                        <pre>${error.message}</pre>
+                    </details>
+                </div>
+            `;
+            loadingIndicator.hidden = false;
+        }
+    }
+
+    /**
+     * @brief Helper method to show initialization errors
+     * @private
+     * @param {Error} error - The initialization error
+     */
+    showInitializationError(error) {
+        const appContainer = document.getElementById('app');
+        if (appContainer) {
+            appContainer.innerHTML = `
+                <div class="initialization-error-container">
+                    <div class="error-content">
+                        <h1>Application Startup Error</h1>
+                        <p>We're having trouble starting the application. This might be due to:</p>
+                        <ul>
+                            <li>Network connectivity issues</li>
+                            <li>Browser compatibility problems</li>
+                            <li>Temporary server unavailability</li>
+                        </ul>
+                        <div class="error-actions">
+                            <button onclick="window.location.reload()" class="btn btn--primary">
+                                Try Again
+                            </button>
+                            <button onclick="localStorage.clear(); sessionStorage.clear(); window.location.reload()" 
+                                    class="btn btn--secondary">
+                                Clear Cache & Reload
+                            </button>
+                        </div>
+                        <details class="error-details">
+                            <summary>Technical Information</summary>
+                            <pre>${error.message}</pre>
+                        </details>
+                    </div>
+                </div>
+            `;
+        }
+    }
+
+    /**
+     * @brief Helper method to get names of failed managers for error reporting
+     * @private
+     * @returns {Array} Array of failed manager names
+     */
+    getFailedManagerNames() {
+        const failed = [];
+        if (this.models?.content && !this.models.content.isInitialized) failed.push('ContentModel');
+        if (this.models?.user && !this.models.user.isInitialized) failed.push('UserModel');
+        if (this.errorReporter && !this.errorReporter.isInitialized) failed.push('ErrorReporter');
+        if (this.accessibilityManager && !this.accessibilityManager.isInitialized) failed.push('AccessibilityManager');
+        if (this.themeManager && !this.themeManager.isInitialized) failed.push('ThemeManager');
+        if (this.viewManager && !this.viewManager.isInitialized) failed.push('ViewManager');
+        if (this.router && !this.router.isInitialized) failed.push('Router');
+        if (this.mainController && !this.mainController.getInitializationState()) failed.push('MainController');
+        return failed;
     }
 
     /**
