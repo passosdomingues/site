@@ -241,19 +241,28 @@ class App {
     async initializeCoreManagers() {
         const initializationPromises = [];
 
-        // --- CHANGE #1: INITIALIZE MODELS FIRST ---
-        // Models are the foundation and need to be created before being used
+        /**
+         * STEP 1: CREATE MODELS FIRST
+         * Models are the data foundation and must exist before any other components.
+         * They handle data operations, storage, and business logic.
+         */
         this.models = {
             content: new ContentModel(),
             user: new UserModel()
         };
-        // Add model initialization promises
+        // Add model initialization to promises array for parallel execution
         initializationPromises.push(
             this.models.content.initialize(),
             this.models.user.initialize()
         );
 
-        // The rest of initialization continues...
+        /**
+         * STEP 2: INITIALIZE CORE INFRASTRUCTURE MANAGERS
+         * These managers handle essential application services:
+         * - Error reporting for monitoring and debugging
+         * - Accessibility for inclusive user experience
+         * - Theme management for visual consistency
+         */
         this.errorReporter = new ErrorReporter();
         initializationPromises.push(this.errorReporter.initialize());
 
@@ -263,15 +272,28 @@ class App {
         this.themeManager = new ThemeManager();
         initializationPromises.push(this.themeManager.initialize());
 
-        // --- CHANGE #2: PASS MODELS AND REPORTER TO VIEWMANAGER ---
-        // ViewManager now receives the dependencies it needs
+        /**
+         * STEP 3: INITIALIZE VIEW MANAGER WITH DEPENDENCIES
+         * The ViewManager now receives models and error reporter as dependencies
+         * This enables proper data flow and error handling throughout the UI layer
+         */
         this.viewManager = new ViewManager(this.models, this.errorReporter);
         initializationPromises.push(this.viewManager.initialize());
 
+        /**
+         * STEP 4: INITIALIZE APPLICATION ROUTER
+         * Router handles navigation and URL management
+         * Initialized after core dependencies are ready
+         */
         this.router = new Router();
         initializationPromises.push(this.router.initialize());
 
-        // The rest of your robust code continues the same...
+        /**
+         * EXECUTE ALL INITIALIZATIONS WITH ROBUST ERROR HANDLING
+         * Uses Promise.allSettled to ensure all promises complete (success or failure)
+         * Implements 10-second timeout for each initialization to prevent hanging
+         * This approach ensures the application either starts properly or fails gracefully
+         */
         await Promise.allSettled(initializationPromises.map(promise =>
             Promise.race([
                 promise,
@@ -281,17 +303,27 @@ class App {
             ])
         ));
 
-        // The call to render initial content continues here, as in the last suggestion
+        /**
+         * RENDER INITIAL APPLICATION CONTENT
+         * Only attempt to render if ViewManager is successfully initialized
+         * This ensures the UI layer is ready before attempting to display content
+         * Provides fallback error logging if MainController is unavailable
+         */
         if (this.viewManager && this.viewManager.isInitialized) {
             const mainController = this.viewManager.getController();
             if (mainController && mainController.getInitializationState()) {
                 await mainController.renderInitialContent();
             } else {
-                console.error('App: Could not get MainController to render content.');
+                console.error('App: Could not retrieve MainController to render initial content.');
             }
         }
 
-        // Failure checking continues the same
+        /**
+         * FAILURE VERIFICATION AND ERROR REPORTING
+         * Check initialization status of all critical managers
+         * Collect names of any failed managers for comprehensive error reporting
+         * Throw aggregated error if any essential components failed to initialize
+         */
         const failedManagers = [];
         if (!this.accessibilityManager.isInitialized) failedManagers.push('AccessibilityManager');
         if (!this.themeManager.isInitialized) failedManagers.push('ThemeManager');
@@ -299,7 +331,7 @@ class App {
         if (!this.router.isInitialized) failedManagers.push('Router');
 
         if (failedManagers.length > 0) {
-            throw new Error(`Failed to initialize: ${failedManagers.join(', ')}`);
+            throw new Error(`Initialization failed for: ${failedManagers.join(', ')}`);
         }
     }
 
