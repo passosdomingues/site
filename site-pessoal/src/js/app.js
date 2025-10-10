@@ -5,6 +5,8 @@
  *              error handling, performance monitoring, and accessibility features
  */
 
+import '../css/main.css';
+
 import ViewManager from './modules/ViewManager.js';
 import Router from './modules/Router.js';
 import ThemeManager from './modules/ThemeManager.js';
@@ -263,7 +265,7 @@ class App {
                 )
             ])
         ));
-        
+
         // After initialization, if ViewManager is ready, trigger the initial content render
         if (this.viewManager && this.viewManager.isInitialized) {
             const mainController = this.viewManager.getController();
