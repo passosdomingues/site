@@ -14,6 +14,9 @@ import AccessibilityManager from './modules/AccessibilityManager.js';
 import PerformanceMonitor from './modules/PerformanceMonitor.js';
 import ErrorReporter from './modules/ErrorReporter.js';
 
+import ContentModel from './models/ContentModel.js';
+import UserModel from './models/UserModel.js';
+
 /**
  * @class App
  * @brief Central application controller and coordinator
@@ -122,6 +125,8 @@ class App {
             
             // Initialize cross-manager communication
             this.setupInterManagerCommunication();
+
+            this.hideLoadingOverlay();
 
             this.isInitialized = true;
             this.isHealthy = true;
@@ -236,49 +241,57 @@ class App {
     async initializeCoreManagers() {
         const initializationPromises = [];
 
-        // Initialize error reporting first to catch initialization errors
+        // --- CHANGE #1: INITIALIZE MODELS FIRST ---
+        // Models are the foundation and need to be created before being used
+        this.models = {
+            content: new ContentModel(),
+            user: new UserModel()
+        };
+        // Add model initialization promises
+        initializationPromises.push(
+            this.models.content.initialize(),
+            this.models.user.initialize()
+        );
+
+        // The rest of initialization continues...
         this.errorReporter = new ErrorReporter();
         initializationPromises.push(this.errorReporter.initialize());
 
-        // Initialize accessibility manager early for screen reader support
         this.accessibilityManager = new AccessibilityManager();
         initializationPromises.push(this.accessibilityManager.initialize());
 
-        // Initialize theme manager for consistent theming
         this.themeManager = new ThemeManager();
         initializationPromises.push(this.themeManager.initialize());
 
-        // Initialize view manager for content rendering
-        this.viewManager = new ViewManager();
+        // --- CHANGE #2: PASS MODELS AND REPORTER TO VIEWMANAGER ---
+        // ViewManager now receives the dependencies it needs
+        this.viewManager = new ViewManager(this.models, this.errorReporter);
         initializationPromises.push(this.viewManager.initialize());
 
-        // Initialize router for navigation management
         this.router = new Router();
         initializationPromises.push(this.router.initialize());
 
-        // Execute all initializations with timeout protection
-        await Promise.allSettled(initializationPromises.map(promise => 
+        // The rest of your robust code continues the same...
+        await Promise.allSettled(initializationPromises.map(promise =>
             Promise.race([
                 promise,
-                new Promise((_, reject) => 
+                new Promise((_, reject) =>
                     setTimeout(() => reject(new Error('Initialization timeout')), 10000)
                 )
             ])
         ));
 
-        // After initialization, if ViewManager is ready, trigger the initial content render
+        // The call to render initial content continues here, as in the last suggestion
         if (this.viewManager && this.viewManager.isInitialized) {
             const mainController = this.viewManager.getController();
             if (mainController && mainController.getInitializationState()) {
-                // This call now paints the initial screen
                 await mainController.renderInitialContent();
             } else {
-                console.error('App: Could not retrieve initialized MainController to render content.');
+                console.error('App: Could not get MainController to render content.');
             }
         }
-        // ===================================================================
 
-        // Check for any initialization failures
+        // Failure checking continues the same
         const failedManagers = [];
         if (!this.accessibilityManager.isInitialized) failedManagers.push('AccessibilityManager');
         if (!this.themeManager.isInitialized) failedManagers.push('ThemeManager');
@@ -695,6 +708,14 @@ class App {
         this.isHealthy = false;
 
         console.info('Application destroyed successfully');
+    }
+
+    hideLoadingOverlay() {
+        const overlay = document.querySelector('[data-loading-overlay]');
+        if (overlay) {
+            overlay.style.opacity = '0';
+            overlay.addEventListener('transitionend', () => overlay.remove());
+        }
     }
 }
 
