@@ -152,6 +152,50 @@ class MainController {
     }
 
     /**
+     * @brief Renders the initial content for all primary views
+     * @public
+     * @async
+     * @description Fetches initial data from models and triggers the first render of all views.
+     */
+    async renderInitialContent() {
+        if (!this.isInitialized) {
+            console.error('MainController: Cannot render initial content, controller not initialized.');
+            return;
+        }
+
+        console.info('MainController: Rendering initial page content...');
+        try {
+            // Obter dados do usuário e do conteúdo
+            const userData = await this.models.user.getUserData();
+            const allContentData = await this.models.content.getAllContent();
+
+            // Renderizar cada view com os dados apropriados
+            if (this.views.navigation) {
+                this.views.navigation.render({ user: userData, sections: allContentData.sections });
+            }
+            if (this.views.hero) {
+                this.views.hero.render({ user: userData });
+            }
+            if (this.views.footer) {
+                this.views.footer.render({ user: userData });
+            }
+            
+            // A SectionView é especial e gerenciada pelo SectionController,
+            // então vamos garantir que ele carregue a primeira seção.
+            if (this.controllers.section) {
+                const initialSection = allContentData.sections[0]?.id || 'about';
+                this.controllers.section.handleSectionChange({ detail: { sectionId: initialSection } });
+            }
+
+            console.info('MainController: Initial content rendered successfully.');
+            
+        } catch (error) {
+            console.error('MainController: Failed to render initial content.', error);
+            this.handleGlobalError(error);
+        }
+    }
+
+    /**
      * @brief Executes the ordered sequence of initialization steps
      * @private
      * @returns {Promise<void>} Resolves when all initialization steps complete successfully

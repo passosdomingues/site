@@ -263,6 +263,18 @@ class App {
                 )
             ])
         ));
+        
+        // After initialization, if ViewManager is ready, trigger the initial content render
+        if (this.viewManager && this.viewManager.isInitialized) {
+            const mainController = this.viewManager.getController();
+            if (mainController && mainController.getInitializationState()) {
+                // This call now paints the initial screen
+                await mainController.renderInitialContent();
+            } else {
+                console.error('App: Could not retrieve initialized MainController to render content.');
+            }
+        }
+        // ===================================================================
 
         // Check for any initialization failures
         const failedManagers = [];
