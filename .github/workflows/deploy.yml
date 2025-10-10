@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ main ] # Ou a branch principal que você usa
+    branches: [ main ]
 
 jobs:
   build-and-deploy:
@@ -14,11 +14,10 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20' # Define a versão do Node.js
+          node-version: '20'
 
       - name: Install and Build 🔧
-        # ADICIONAMOS working-directory PARA RODAR OS COMANDOS NA PASTA CERTA
-        working-directory: ./site-pessoal 
+        working-directory: ./site-pessoal
         run: |
           npm install
           npm run build
@@ -27,5 +26,4 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
-          # A PASTA AGORA PRECISA INCLUIR O CAMINHO DO PROJETO
           folder: site-pessoal/dist
