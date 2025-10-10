@@ -11,7 +11,14 @@ jobs:
       - name: Checkout 🛎️
         uses: actions/checkout@v3
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20' # Define a versão do Node.js
+
       - name: Install and Build 🔧
+        # ADICIONAMOS working-directory PARA RODAR OS COMANDOS NA PASTA CERTA
+        working-directory: ./site-pessoal 
         run: |
           npm install
           npm run build
@@ -19,5 +26,6 @@ jobs:
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          branch: gh-pages # A branch para a qual será feito o deploy
-          folder: dist # A pasta que será implantada (resultado do 'npm run build')
+          branch: gh-pages
+          # A PASTA AGORA PRECISA INCLUIR O CAMINHO DO PROJETO
+          folder: site-pessoal/dist
