@@ -1,29 +1,54 @@
-name: Deploy to GitHub Pages
+# Nome do Workflow
+name: Deploy Vite site to Pages
 
+# Gatilho: roda quando há um push na branch 'main'
 on:
   push:
     branches: [ main ]
 
+# Permissões necessárias para o deploy
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Permite apenas um deploy concorrente, cancelando os mais antigos
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
 jobs:
-  build-and-deploy:
+  # Job único de deploy
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 🛎️
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: 'site-pessoal/package-lock.json'
 
-      - name: Install and Build 🔧
+      - name: Install dependencies
         working-directory: ./site-pessoal
-        run: |
-          npm install
-          npm run build
+        run: npm install
 
-      - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@v4
+      - name: Build project
+        working-directory: ./site-pessoal
+        run: npm run build
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          branch: gh-pages
-          folder: site-pessoal/dist
+          # Pasta que será enviada para o deploy (resultado do build)
+          path: ./site-pessoal/dist
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
