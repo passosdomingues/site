@@ -335,6 +335,11 @@ class SectionController {
      * @param {CustomEvent} event - Section change event
      */
     handleSectionChange(event) {
+        if (!event || !event.detail) {
+            console.warn('SectionController: Invalid section change event');
+            return;
+        }
+        
         const { sectionId, previousSectionId } = event.detail;
         
         if (!this.isValidSectionId(sectionId)) {

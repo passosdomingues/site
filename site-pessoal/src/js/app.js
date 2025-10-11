@@ -270,23 +270,26 @@ class App {
     async initializeDataModels() {
         console.info('App: Initializing data models...');
         
-        this.models = {
-            content: new ContentModel(),
-            user: new UserModel()
-        };
+        try {
+            this.models = {
+                content: new ContentModel(),
+                user: new UserModel()
+            };
 
-        // Initialize models in parallel with timeout protection
-        await this.executeWithTimeout(
-            Promise.allSettled([
-                this.models.content.initialize(),
-                this.models.user.initialize()
-            ]),
-            'DataModels'
-        );
+            // Inicialize modelos com timeout
+            await this.executeWithTimeout(
+                Promise.allSettled([
+                    this.models.content.initializeContentModel?.() || this.models.content.initialize?.(),
+                    this.models.user.initialize?.()
+                ]),
+                'DataModels'
+            );
 
-        // Check if models initialized successfully
-        if (!this.models.content.isInitialized || !this.models.user.isInitialized) {
-            throw new Error('Critical data models failed to initialize');
+            console.info('App: Data models initialization attempted.');
+            
+        } catch (error) {
+            console.error('App: Data models initialization failed, continuing with fallback:', error);
+            // Não lance erro aqui - permita que o app continue com dados de fallback
         }
     }
 

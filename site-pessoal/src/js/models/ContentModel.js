@@ -881,6 +881,31 @@ class ContentModel {
     }
 
     /**
+     * @brief Gets all content data for initial rendering
+     * @public
+     * @returns {Object} Object containing all content data
+     */
+    getAllContent() {
+        return {
+            sections: this.getSections(),
+            projects: this.getProjects(),
+            experiences: this.getExperiences()
+        };
+    }
+
+    /**
+     * @brief Gets basic content for graceful degradation
+     * @public
+     * @returns {Object} Basic content data
+     */
+    getBasicContent() {
+        return {
+            introduction: 'Physicist and Computer Scientist passionate about astrophysics research, data analysis, and technology innovation.',
+            sections: this.getSections().slice(0, 3) // Only first 3 sections for fallback
+        };
+    }
+
+    /**
      * @brief Searches content across all content types
      * @public
      * @param {string} searchTerm - Term to search for

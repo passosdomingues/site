@@ -167,33 +167,91 @@ class MainController {
 
         console.info('MainController: Rendering initial page content...');
         try {
-            // Obter dados do usuário e do conteúdo
-            const userData = await this.models.user.getUserData();
-            const allContentData = await this.models.content.getAllContent();
+            // Obter dados do usuário e do conteúdo com fallback
+            let userData, sectionsData;
+            
+            try {
+                userData = await this.models.user.getUserData();
+                sectionsData = await this.models.content.getSections();
+            } catch (error) {
+                console.warn('MainController: Using fallback data due to initialization error:', error);
+                userData = {
+                    name: 'Rafael Passos Domingues',
+                    title: 'Physicist & Computer Scientist',
+                    summary: 'Researcher and Developer',
+                    profileImage: 'assets/images/profile.jpg'
+                };
+                sectionsData = this.getFallbackSections();
+            }
 
             // Renderizar cada view com os dados apropriados
+            const renderPromises = [];
+            
             if (this.views.navigation) {
-                this.views.navigation.render({ user: userData, sections: allContentData.sections });
-            }
-            if (this.views.hero) {
-                this.views.hero.render({ user: userData });
-            }
-            if (this.views.footer) {
-                this.views.footer.render({ user: userData });
+                renderPromises.push(this.views.navigation.render({ 
+                    user: userData, 
+                    sections: sectionsData 
+                }));
             }
             
-            // A SectionView é especial e gerenciada pelo SectionController,
-            // então vamos garantir que ele carregue a primeira seção.
-            if (this.controllers.section) {
-                const initialSection = allContentData.sections[0]?.id || 'about';
-                this.controllers.section.handleSectionChange({ detail: { sectionId: initialSection } });
+            if (this.views.hero) {
+                renderPromises.push(this.views.hero.render(userData));
+            }
+            
+            if (this.views.footer) {
+                renderPromises.push(this.views.footer.render(userData));
+            }
+            
+            // A SectionView é especial e gerenciada pelo SectionController
+            if (this.controllers.section && sectionsData.length > 0) {
+                const initialSection = sectionsData[0]?.id || 'about';
+                this.controllers.section.handleSectionChange({ 
+                    detail: { sectionId: initialSection } 
+                });
             }
 
+            await Promise.allSettled(renderPromises);
             console.info('MainController: Initial content rendered successfully.');
             
         } catch (error) {
             console.error('MainController: Failed to render initial content.', error);
-            this.handleGlobalError(error);
+            this.showErrorFallback(error);
+        }
+    }
+
+    // Adicione este método para fallback
+    getFallbackSections() {
+        return [
+            {
+                id: 'about',
+                title: 'About Me',
+                subtitle: 'My academic and professional journey',
+                type: 'timeline',
+                metadata: { visible: true, order: 1 }
+            },
+            {
+                id: 'projects', 
+                title: 'Projects',
+                subtitle: 'Technical and scientific works',
+                type: 'cards',
+                metadata: { visible: true, order: 2 }
+            }
+        ];
+    }
+
+    // Método para mostrar fallback em caso de erro
+    showErrorFallback(error) {
+        const mainContent = document.querySelector('main');
+        if (mainContent) {
+            mainContent.innerHTML = `
+                <div class="error-fallback">
+                    <h2>Content Temporarily Unavailable</h2>
+                    <p>Some content could not be loaded. Please refresh the page or try again later.</p>
+                    <button onclick="window.location.reload()" class="btn btn-primary">
+                        Reload Page
+                    </button>
+                </div>
+            `;
         }
     }
 

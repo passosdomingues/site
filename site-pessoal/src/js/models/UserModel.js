@@ -67,7 +67,7 @@ const DEFAULT_USER_DATA = {
         professionalTitle: 'Physicist & Computer Scientist',
         summary: 'Combining physics background with computer science expertise. Experienced in galactic astrophysics, data analysis, education, and technology innovation. Currently pursuing Computer Science degree while working in innovation ecosystems.',
         profileImage: {
-            url: 'assets/images/profile.jpg',
+            url: 'src/images/profile.jpg',
             alt: 'Professional portrait of Rafael Passos Domingues',
             width: 400,
             height: 400
