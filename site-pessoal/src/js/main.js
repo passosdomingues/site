@@ -157,7 +157,7 @@ class ContentModel {
                 caption: 'Cúpula do observatório sob o céu estrelado'
             },
             {
-                imageUrl: '/images/obs6.jpg',
+                imageUrl: 'https://media.licdn.com/dms/image/v2/D4D22AQECuuEJJkAhuQ/feedshare-shrink_2048_1536/B4DZmXwmpDIgAw-/0/1759187725383?e=1762992000&v=beta&t=BIqRjjeq7ckJg1lcV6B6WxlBwdVjBz08p-T6V5RdCFM',
                 caption: 'Palestra de divulgação científica para escolas'
             }
         ];
