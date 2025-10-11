@@ -137,27 +137,27 @@ class ContentModel {
         // As imagens devem estar na pasta `public/` para que o Vite as copie para a `dist/`
         return [
             {
-                imageUrl: '/images/obs1.jpg',
+                imageUrl: './images/obs1.jpg',
                 caption: 'Telescópio principal do Observatório da UNIFAL-MG'
             },
             {
-                imageUrl: '/images/obs2.jpg',
+                imageUrl: './images/obs2.jpg',
                 caption: 'Noite de observação aberta ao público'
             },
             {
-                imageUrl: '/images/obs3.jpg',
+                imageUrl: './images/obs3.jpg',
                 caption: 'Registro da Nebulosa de Órion (M42)'
             },
             {
-                imageUrl: '/images/obs4.jpg',
+                imageUrl: './images/obs4.jpg',
                 caption: 'Equipe de pesquisa e extensão do observatório'
             },
             {
-                imageUrl: '/images/obs5.jpg',
+                imageUrl: './images/obs5.jpg',
                 caption: 'Cúpula do observatório sob o céu estrelado'
             },
             {
-                imageUrl: 'https://media.licdn.com/dms/image/v2/D4D22AQECuuEJJkAhuQ/feedshare-shrink_2048_1536/B4DZmXwmpDIgAw-/0/1759187725383?e=1762992000&v=beta&t=BIqRjjeq7ckJg1lcV6B6WxlBwdVjBz08p-T6V5RdCFM',
+                imageUrl: './images/seminario.jpg',
                 caption: 'Palestra de divulgação científica para escolas'
             }
         ];
