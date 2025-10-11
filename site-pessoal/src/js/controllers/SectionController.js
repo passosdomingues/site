@@ -7,7 +7,7 @@
  * and integrates interactions between NavigationView and SectionView with performance optimizations.
  */
 
-import SectionView from './SectionView.js';
+import SectionView from '../views/SectionView.js';
 
 /**
  * @constant {Object} SECTION_CONFIG
@@ -207,21 +207,6 @@ class SectionController {
             console.error('SectionController: Failed to initialize:', error);
             throw error;
         }
-    }
-
-    /**
-     * @brief Renders all sections into the DOM using SectionView.
-     * @public
-     * @param {Array<Object>} sectionsData - An array of section data objects.
-     * @returns {Promise<void>} Resolves when all sections are rendered.
-     */
-    async renderSections(sectionsData) {
-        if (!this.views.section) {
-            console.error('SectionController: SectionView is not available for rendering sections.');
-            return;
-        }
-        console.info('SectionController: Rendering all sections.');
-        await this.views.section.renderAllSections(sectionsData);
     }
 
     /**
@@ -477,40 +462,100 @@ class SectionController {
         const animatableElements = sectionElement.querySelectorAll('[data-animate]');
         animatableElements.forEach((element, index) => {
             const delay = index * this.config.ANIMATION.staggerDelay;
-            element.style.transitionDelay = `${delay}ms`;
-            element.classList.add('animate-in');
+            element.style.setProperty('--animation-delay', `${delay}ms`);
+            element.classList.add('element--animated');
         });
     }
 
     /**
-     * @brief Preloads content for adjacent sections to improve perceived performance
+     * @brief Preloads content for sections adjacent to the current one
      * @private
-     * @param {string} currentSectionId - The ID of the currently active section
+     * @param {string} currentSectionId - The current section ID
      */
-    async preloadAdjacentSections(currentSectionId) {
-        const allSections = await this.models.content.getSections();
-        const currentSectionIndex = allSections.findIndex(s => s.id === currentSectionId);
+    preloadAdjacentSections(currentSectionId) {
+        const allSections = Array.from(document.querySelectorAll('[data-section]'));
+        const currentIndex = allSections.findIndex(section => section.id === currentSectionId);
+        
+        if (currentIndex === -1) return;
 
-        if (currentSectionIndex === -1) return;
-
-        const sectionsToPreload = [];
-        for (let i = 1; i <= this.config.PRELOAD.adjacentSections; i++) {
-            // Preload next section
-            if (currentSectionIndex + i < allSections.length) {
-                sectionsToPreload.push(allSections[currentSectionIndex + i].id);
+        // Preload adjacent sections based on configuration
+        const preloadRange = this.config.PRELOAD.adjacentSections;
+        for (let i = 1; i <= preloadRange; i++) {
+            // Preload next sections
+            const nextSection = allSections[currentIndex + i];
+            if (nextSection && !this.loadedSections.has(nextSection.id)) {
+                this.preloadSectionContent(nextSection.id);
             }
-            // Preload previous section
-            if (currentSectionIndex - i >= 0) {
-                sectionsToPreload.push(allSections[currentSectionIndex - i].id);
+
+            // Preload previous sections
+            const previousSection = allSections[currentIndex - i];
+            if (previousSection && currentIndex - i >= 0 && !this.loadedSections.has(previousSection.id)) {
+                this.preloadSectionContent(previousSection.id);
             }
         }
+    }
 
-        const preloadPromises = sectionsToPreload.map(sectionId => 
-            this.preloadSectionContent(sectionId)
-        );
+    /**
+     * @brief Loads lazy content for a specific section
+     * @private
+     * @param {string} sectionId - The section ID to load content for
+     * @returns {Promise<void>} Resolves when lazy content is loaded
+     */
+    async loadSectionLazyContent(sectionId) {
+        if (this.loadedSections.has(sectionId)) {
+            return; // Content already loaded
+        }
 
-        await Promise.allSettled(preloadPromises);
-        console.debug(`SectionController: Preloaded adjacent sections for ${currentSectionId}:`, sectionsToPreload);
+        const sectionElement = document.getElementById(sectionId);
+        if (!sectionElement) {
+            console.warn(`SectionController: Section element not found: ${sectionId}`);
+            return;
+        }
+
+        try {
+            const contentLoadingTasks = [
+                this.loadLazyImages(sectionElement),
+                this.loadLazyMedia(sectionElement),
+                this.loadDynamicSectionContent(sectionId)
+            ];
+
+            await Promise.allSettled(contentLoadingTasks);
+            
+            // Mark section as loaded
+            this.loadedSections.add(sectionId);
+            
+            console.debug(`SectionController: Lazy content loaded for section: ${sectionId}`);
+            
+        } catch (error) {
+            console.error(`${ERROR_MESSAGES.CONTENT_LOAD_FAILED} ${sectionId}`, error);
+            this.dispatchSectionEvent('contentLoadError', {
+                sectionId,
+                error: error.message
+            });
+        }
+    }
+
+    /**
+     * @brief Preloads section content without making it visible
+     * @private
+     * @param {string} sectionId - The section ID to preload
+     * @returns {Promise<void>} Resolves when preloading is complete
+     */
+    async preloadSectionContent(sectionId) {
+        try {
+            // Get section data from content model
+            const sectionData = await this.models.content.getSectionById(sectionId);
+            if (sectionData) {
+                // Cache the section data for faster access
+                this.dispatchSectionEvent('sectionPreloaded', {
+                    sectionId,
+                    sectionData
+                });
+                console.debug(`SectionController: Preloaded content for section: ${sectionId}`);
+            }
+        } catch (error) {
+            console.warn(`SectionController: Failed to preload section ${sectionId}:`, error);
+        }
     }
 
     /**
@@ -591,37 +636,21 @@ class SectionController {
             const sectionData = await this.models.content.getSectionById(sectionId);
             
             if (sectionData && sectionData.type) {
-                const contentMapping = {
-                    'about': 'getAboutContent',
-                    'astrophysics': 'getAstrophysicsContent',
-                    'observatory': 'getObservatoryContent',
-                    'craam': 'getCraamContent',
-                    'lna': 'getLNATelescopeContent',
-                    'education': 'getEducationContent',
-                    'innovation': 'getInnovationContent',
-                    'deep-learning': 'getDeepLearningProjectsContent',
-                    'projects': 'getProjectsContent',
-                    'hobbies': 'getHobbiesContent',
-                    'skills': 'getSkillsContent'
+                const contentHandlers = {
+                    projects: () => this.loadProjectsContent(),
+                    experiences: () => this.loadExperiencesContent(),
+                    research: () => this.loadResearchContent(),
+                    timeline: () => this.loadTimelineContent()
                 };
 
-                const contentMethod = contentMapping[sectionData.type];
-                if (!contentMethod || typeof this.models.content[contentMethod] !== 'function') {
-                    console.warn(`No content loader for section type: ${sectionData.type}`);
-                    return;
-                }
-
-                const contentData = await this.models.content[contentMethod]();
-                if (contentData && (!Array.isArray(contentData) || contentData.length > 0)) {
-                    await this.views.section.renderSectionContent(sectionId, sectionData.type, contentData);
+                const handler = contentHandlers[sectionData.type];
+                if (handler) {
+                    await handler(sectionData);
                 }
             }
         } catch (error) {
-            console.error(`${ERROR_MESSAGES.CONTENT_LOAD_FAILED} ${sectionId}`, error);
-            this.dispatchSectionEvent('contentLoadError', {
-                sectionId,
-                error: error.message
-            });
+            console.error(`SectionController: Failed to load dynamic content for ${sectionId}:`, error);
+            throw error;
         }
     }
 
@@ -960,11 +989,9 @@ class SectionController {
      */
     async loadResearchContent(sectionData) {
         try {
-            const research = await this.models.content.getResearch();
+            // Implementation for loading research content
             this.dispatchSectionEvent('researchContentLoaded', {
-                sectionData,
-                research,
-                researchCount: research.length
+                sectionData
             });
             console.debug('SectionController: Research content loaded');
         } catch (error) {
@@ -981,11 +1008,9 @@ class SectionController {
      */
     async loadTimelineContent(sectionData) {
         try {
-            const timeline = await this.models.content.getTimeline();
+            // Implementation for loading timeline content
             this.dispatchSectionEvent('timelineContentLoaded', {
-                sectionData,
-                timeline,
-                timelineCount: timeline.length
+                sectionData
             });
             console.debug('SectionController: Timeline content loaded');
         } catch (error) {
@@ -1067,4 +1092,3 @@ class SectionController {
 }
 
 export default SectionController;
-
