@@ -1,136 +1,82 @@
 /**
  * @file critical.css
- * @brief Critical above-the-fold CSS for initial render
+ * @brief Critical above-the-fold CSS for initial page load.
+ * @description This file contains the minimal styles required for the initial rendering of the page,
+ *              ensuring a fast and smooth user experience before full styles are loaded.
  */
 
-/* CSS Reset and Base Styles */
-*, *::before, *::after { 
-    box-sizing: border-box; 
-    margin: 0; 
-    padding: 0; 
+/* ===== Critical Layout and Typography ===== */
+/**
+ * @brief Base styles for the main application container.
+ * @description Initially sets opacity to 0 to prevent flash of unstyled content (FOUC)
+ *              and ensures the container takes up at least the full viewport height.
+ */
+.app-container {
+  opacity: 0;
+  min-height: 100vh;
 }
 
-/* Core Layout and Typography */
-html { 
-    -webkit-text-size-adjust: 100%; 
-    -webkit-font-smoothing: antialiased; 
-    text-rendering: optimizeSpeed;
-    scroll-behavior: smooth;
+/**
+ * @brief Styles for JavaScript-enabled application container.
+ * @description Fades in the application container once JavaScript is enabled and ready,
+ *              providing a smooth visual transition.
+ */
+.js-enabled .app-container {
+  opacity: 1;
+  transition: opacity 0.3s ease-in;
 }
 
-body { 
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-    line-height: 1.5;
-    min-height: 100vh;
-    background-color: #ffffff;
-    color: #1e293b;
+/**
+ * @brief Styles for the accessibility skip link.
+ * @description Positions the skip link off-screen by default and makes it visible on focus,
+ *              allowing keyboard users to bypass repetitive content.
+ */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: var(--color-primary-700);
+  color: white;
+  padding: 8px 12px;
+  text-decoration: none;
+  border-radius: 4px;
+  z-index: 10000;
+  font-weight: 600;
 }
 
-/* Progressive Enhancement */
-.app-container { 
-    opacity: 0;
-    min-height: 100vh;
+/**
+ * @brief Focus styles for the accessibility skip link.
+ * @description Brings the skip link into view when it receives keyboard focus.
+ */
+.skip-link:focus {
+  top: 6px;
 }
 
-.js-enabled .app-container { 
-    opacity: 1; 
-    transition: opacity 0.3s ease-in; 
+/**
+ * @brief Styles for the no-script warning message.
+ * @description Provides a prominent warning banner for users with JavaScript disabled,
+ *              informing them about potential functionality limitations.
+ */
+.noscript-warning {
+  background: var(--color-warning-light);
+  color: var(--color-text-primary);
+  padding: 1rem;
+  text-align: center;
+  border-bottom: 2px solid var(--color-warning-dark);
 }
 
-/* Accessibility */
-.skip-link { 
-    position: absolute; 
-    top: -40px; 
-    left: 6px; 
-    background: #264B93; 
-    color: white; 
-    padding: 8px 12px; 
-    text-decoration: none; 
-    border-radius: 4px; 
-    z-index: 10000;
-    font-weight: 600;
-}
-
-.skip-link:focus { 
-    top: 6px; 
-}
-
-/* NoScript Warning */
-.noscript-warning { 
-    background: #ffeb3b; 
-    color: #333; 
-    padding: 1rem; 
-    text-align: center; 
-    border-bottom: 2px solid #ffc107;
-}
-
-/* Loading States */
-.content-loading-indicator {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 3rem 2rem;
-    text-align: center;
-}
-
-.loading-spinner {
-    width: 40px;
-    height: 40px;
-    border: 4px solid #f3f3f3;
-    border-top: 4px solid #264B93;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin-bottom: 1rem;
-}
-
-.loading-text {
-    color: #64748b;
-    font-size: 1rem;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-/* Content Visibility Management */
+/* ===== Hide Dynamic Content Until JS Loads ===== */
+/**
+ * @brief Hides dynamic content containers until JavaScript initialization.
+ * @description Prevents content from being displayed before the JavaScript application
+ *              has fully initialized and rendered it, avoiding layout shifts and unstyled content.
+ * @param {string} data-app-initialized - Attribute indicating application initialization status.
+ * @param {string} data-hero-initialized - Attribute indicating hero section initialization status.
+ * @param {string} data-main-initialized - Attribute indicating main content initialization status.
+ */
 [data-app-initialized="false"] .dynamic-content-container,
+[data-hero-initialized="false"] .hero-content-container,
 [data-main-initialized="false"] .main-content > *:not(.content-loading-indicator) {
-    display: none;
+  display: none;
 }
 
-/* Basic Container Styles */
-.container {
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 1rem;
-}
-
-/* Basic Button Styles */
-.btn {
-    display: inline-block;
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 4px;
-    text-decoration: none;
-    cursor: pointer;
-    font-size: 0.875rem;
-    transition: all 0.2s ease;
-}
-
-.btn--primary {
-    background: #264B93;
-    color: white;
-}
-
-.btn--secondary {
-    background: #64748b;
-    color: white;
-}
-
-.btn:hover {
-    opacity: 0.9;
-    transform: translateY(-1px);
-}

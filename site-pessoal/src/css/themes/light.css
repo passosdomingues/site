@@ -1,15 +1,27 @@
 /**
  * @file light.css
- * @brief Light theme variables
- * @description CSS custom properties for the light color scheme
+ * @brief Light theme variables for the retro-futuristic website.
+ * @description This file defines CSS custom properties specifically for the light color scheme,
+ *              overriding default variables where necessary to ensure proper theme application.
  */
 
 :root {
-  --color-background-primary: #ffffff;
-  --color-background-secondary: #f8fafc;
-  --color-text-primary: #1e293b;
-  --color-text-secondary: #475569;
-  --color-primary-500: #3b82f6;
-  --color-border-primary: #e2e8f0;
-  /* ... other light theme variables ... */
+  /* Background Colors */
+  --color-background-primary: var(--color-neutral-50); /* Lightest background */
+  --color-background-secondary: var(--color-neutral-100); /* Slightly darker background */
+  --color-background-tertiary: var(--color-neutral-200); /* Even darker background */
+  --color-background-surface: #ffffff; /* Pure white for card surfaces */
+
+  /* Text Colors */
+  --color-text-primary: var(--color-neutral-900); /* Darkest text for primary content */
+  --color-text-secondary: var(--color-neutral-700); /* Medium dark text for secondary content */
+  --color-text-tertiary: var(--color-neutral-500); /* Lighter text for tertiary content */
+  --color-text-inverse: #ffffff; /* White text for dark backgrounds */
+  --color-text-muted: var(--color-neutral-400); /* Muted text for less emphasis */
+
+  /* Border Colors */
+  --color-border-primary: var(--color-neutral-200); /* Light border for general elements */
+  --color-border-secondary: var(--color-neutral-300); /* Slightly darker border */
+  --color-border-focus: var(--color-primary-500); /* Primary color for focus states */
 }
+

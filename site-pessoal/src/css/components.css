@@ -1,10 +1,16 @@
 /**
  * @file components.css
- * @brief Reusable UI components and patterns
- * @description Button systems, cards, navigation, and interactive components
+ * @brief Reusable UI components and patterns for the retro-futuristic website.
+ * @description This file defines styles for various UI elements such as buttons, cards, navigation,
+ *              and interactive components, incorporating the Top Gun-inspired aesthetic.
  */
 
 /* ===== Button System ===== */
+/**
+ * @brief Base styles for interactive buttons.
+ * @description Defines common properties for buttons, including layout, padding, typography,
+ *              and transition effects for a smooth user experience.
+ */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -24,11 +30,19 @@
   overflow: hidden;
 }
 
+/**
+ * @brief Focus-visible styles for buttons.
+ * @description Provides a clear outline for keyboard navigation, enhancing accessibility.
+ */
 .btn:focus-visible {
   outline: var(--outline-width) solid var(--color-border-focus);
   outline-offset: var(--outline-offset);
 }
 
+/**
+ * @brief Disabled state styles for buttons.
+ * @description Reduces opacity and changes cursor for disabled buttons, indicating non-interactivity.
+ */
 .btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
@@ -36,55 +50,92 @@
 }
 
 /* Button Variants */
+/**
+ * @brief Primary button variant styles.
+ * @description Uses primary brand colors for background and text, making it the most prominent button style.
+ */
 .btn--primary {
   background: var(--color-primary-600);
   color: var(--color-text-inverse);
   border-color: var(--color-primary-600);
 }
 
+/**
+ * @brief Primary button hover/focus styles.
+ * @description Darkens background, adds a subtle lift effect, and a neon glow for visual feedback.
+ */
 .btn--primary:hover:not(:disabled) {
   background: var(--color-primary-700);
   border-color: var(--color-primary-700);
   transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-md), 0 0 8px var(--color-neon-soft);
 }
 
+/**
+ * @brief Secondary button variant styles.
+ * @description Transparent background with primary text and border color, suitable for less prominent actions.
+ */
 .btn--secondary {
   background: transparent;
   color: var(--color-primary-600);
   border-color: var(--color-primary-600);
 }
 
+/**
+ * @brief Secondary button hover/focus styles.
+ * @description Fills background with primary color, changes text to inverse, adds a subtle lift, and neon glow.
+ */
 .btn--secondary:hover:not(:disabled) {
   background: var(--color-primary-600);
   color: var(--color-text-inverse);
   transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-md), 0 0 8px var(--color-neon-soft);
 }
 
+/**
+ * @brief Tertiary button variant styles.
+ * @description Transparent background with secondary text and primary border color, for subtle actions.
+ */
 .btn--tertiary {
   background: transparent;
   color: var(--color-text-secondary);
   border-color: var(--color-border-primary);
 }
 
+/**
+ * @brief Tertiary button hover/focus styles.
+ * @description Changes background to secondary and border to secondary for visual feedback.
+ */
 .btn--tertiary:hover:not(:disabled) {
   background: var(--color-background-secondary);
   border-color: var(--color-border-secondary);
 }
 
 /* Button Sizes */
+/**
+ * @brief Small button size variant.
+ * @description Reduces padding and font size for compact buttons.
+ */
 .btn--sm {
   padding: var(--space-2) var(--space-4);
   font-size: var(--font-size-sm);
 }
 
+/**
+ * @brief Large button size variant.
+ * @description Increases padding and font size for more prominent buttons.
+ */
 .btn--lg {
   padding: var(--space-4) var(--space-8);
   font-size: var(--font-size-lg);
 }
 
 /* ===== Card Components ===== */
+/**
+ * @brief Base styles for card components.
+ * @description Defines background, border, border-radius, padding, and transition for cards,
+ *              ensuring a consistent look and feel for content blocks.
+ */
 .card {
   background: var(--color-background-surface);
   border: 1px solid var(--color-border-primary);
@@ -96,25 +147,45 @@
   flex-direction: column;
 }
 
+/**
+ * @brief Card hover styles.
+ * @description Adds a subtle lift effect, shadow, and neon glow on hover for interactive feedback.
+ */
 .card:hover {
   transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--shadow-lg), 0 0 10px var(--color-neon-soft);
   border-color: var(--color-border-secondary);
 }
 
+/**
+ * @brief Interactive card variant.
+ * @description Sets cursor to pointer for cards that are clickable or interactive.
+ */
 .card--interactive {
   cursor: pointer;
 }
 
+/**
+ * @brief Interactive card focus-visible styles.
+ * @description Provides a clear outline for keyboard navigation on interactive cards.
+ */
 .card--interactive:focus-visible {
   outline: var(--outline-width) solid var(--color-border-focus);
   outline-offset: var(--outline-offset);
 }
 
+/**
+ * @brief Card header styles.
+ * @description Sets bottom margin for the card header section.
+ */
 .card__header {
   margin-bottom: var(--space-4);
 }
 
+/**
+ * @brief Card title styles.
+ * @description Defines font size, weight, and color for the main title within a card.
+ */
 .card__title {
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-semibold);
@@ -122,23 +193,39 @@
   color: var(--color-text-primary);
 }
 
+/**
+ * @brief Card subtitle styles.
+ * @description Defines font size, color, and removes bottom margin for the subtitle within a card.
+ */
 .card__subtitle {
   font-size: var(--font-size-sm);
   color: var(--color-text-tertiary);
   margin-bottom: 0;
 }
 
+/**
+ * @brief Card content area styles.
+ * @description Allows content to expand and sets bottom margin.
+ */
 .card__content {
   flex: 1;
   margin-bottom: var(--space-4);
 }
 
+/**
+ * @brief Card footer styles.
+ * @description Positions footer at the bottom, adds top padding, and a border for separation.
+ */
 .card__footer {
   margin-top: auto;
   padding-top: var(--space-4);
   border-top: 1px solid var(--color-border-primary);
 }
 
+/**
+ * @brief Card image styles.
+ * @description Sets width, height, object-fit, border-radius, and bottom margin for images within cards.
+ */
 .card__image {
   width: 100%;
   height: 200px;
@@ -148,12 +235,20 @@
 }
 
 /* ===== Navigation Components ===== */
+/**
+ * @brief Primary navigation container styles.
+ * @description Arranges navigation items horizontally with spacing.
+ */
 .primary-navigation {
   display: flex;
   align-items: center;
   gap: var(--space-6);
 }
 
+/**
+ * @brief Navigation list styles.
+ * @description Resets list styles and arranges items horizontally.
+ */
 .nav-list {
   display: flex;
   list-style: none;
@@ -162,6 +257,10 @@
   padding: 0;
 }
 
+/**
+ * @brief Navigation link styles.
+ * @description Defines text color, removes underline, adds padding, border-radius, and transition for links.
+ */
 .nav-link {
   color: var(--color-text-secondary);
   text-decoration: none;
@@ -172,19 +271,31 @@
   position: relative;
 }
 
+/**
+ * @brief Navigation link hover/focus styles.
+ * @description Changes text color and background on hover/focus for visual feedback.
+ */
 .nav-link:hover,
 .nav-link:focus {
   color: var(--color-primary-600);
   background: var(--color-background-secondary);
 }
 
+/**
+ * @brief Active navigation link styles.
+ * @description Highlights the currently active navigation link with primary color and background.
+ */
 .nav-link--active {
   color: var(--color-primary-600);
   background: var(--color-background-secondary);
 }
 
+/**
+ * @brief Active navigation link indicator.
+ * @description Adds an underline indicator to the active navigation link.
+ */
 .nav-link--active::after {
-  content: '';
+  content: \'
   position: absolute;
   bottom: -1px;
   left: var(--space-3);
@@ -195,12 +306,20 @@
 }
 
 /* ===== User Preference Controls ===== */
+/**
+ * @brief Container for user preference controls (e.g., theme toggle, accessibility menu toggle).
+ * @description Arranges controls horizontally with spacing.
+ */
 .user-preference-controls {
   display: flex;
   gap: var(--space-2);
   align-items: center;
 }
 
+/**
+ * @brief Theme toggle and accessibility menu toggle button styles.
+ * @description Defines base styles for toggle buttons, including border, padding, and transitions.
+ */
 .theme-toggle,
 .accessibility-menu-toggle {
   background: none;
@@ -212,6 +331,10 @@
   color: var(--color-text-secondary);
 }
 
+/**
+ * @brief Theme toggle and accessibility menu toggle hover styles.
+ * @description Changes background, border, and text color on hover for visual feedback.
+ */
 .theme-toggle:hover,
 .accessibility-menu-toggle:hover {
   background: var(--color-background-secondary);
@@ -219,6 +342,10 @@
   color: var(--color-text-primary);
 }
 
+/**
+ * @brief Theme toggle and accessibility menu toggle focus-visible styles.
+ * @description Provides a clear outline for keyboard navigation.
+ */
 .theme-toggle:focus-visible,
 .accessibility-menu-toggle:focus-visible {
   outline: var(--outline-width) solid var(--color-border-focus);
@@ -226,36 +353,60 @@
 }
 
 /* ===== Accessibility Menu Components ===== */
+/**
+ * @brief Styles for accessibility control groups within the menu.
+ * @description Arranges label and control horizontally, adds bottom margin and border.
+ */
 .accessibility-control-group {
   display: flex;
   align-items: center;
-  justify-content: between;
+  justify-content: space-between; /* Changed from 'between' to 'space-between' for clarity */
   margin-bottom: var(--space-4);
   padding: var(--space-3) 0;
   border-bottom: 1px solid var(--color-border-primary);
 }
 
+/**
+ * @brief Label styles within accessibility control groups.
+ * @description Allows label to take available space and sets font weight and color.
+ */
 .accessibility-control-group label {
   flex: 1;
   font-weight: var(--font-weight-medium);
   color: var(--color-text-primary);
 }
 
+/**
+ * @brief Range input styles within accessibility control groups.
+ * @description Sets width and horizontal margin for range sliders.
+ */
 .accessibility-control-group input[type="range"] {
   width: 120px;
   margin: 0 var(--space-4);
 }
 
+/**
+ * @brief Checkbox input styles within accessibility control groups.
+ * @description Resets width for checkboxes.
+ */
 .accessibility-control-group input[type="checkbox"] {
   width: auto;
 }
 
+/**
+ * @brief Close button styles for the accessibility menu.
+ * @description Sets full width and top margin for the close button.
+ */
 .accessibility-menu-close {
   width: 100%;
   margin-top: var(--space-4);
 }
 
 /* ===== Hero Components ===== */
+/**
+ * @brief Hero section title styles.
+ * @description Applies a responsive font size, bold weight, tight line height, and a gradient text fill for a striking visual.
+ */
 .hero-title {
   font-size: clamp(var(--font-size-4xl), 5vw, var(--font-size-6xl));
   font-weight: var(--font-weight-bold);
@@ -267,6 +418,10 @@
   background-clip: text;
 }
 
+/**
+ * @brief Hero section subtitle styles.
+ * @description Applies a responsive font size, medium weight, and secondary text color for supportive text.
+ */
 .hero-subtitle {
   font-size: clamp(var(--font-size-xl), 3vw, var(--font-size-3xl));
   font-weight: var(--font-weight-medium);
@@ -275,6 +430,10 @@
   line-height: var(--line-height-snug);
 }
 
+/**
+ * @brief Hero section description styles.
+ * @description Sets font size, line height, text color, bottom margin, and max-width for the main description.
+ */
 .hero-description {
   font-size: var(--font-size-lg);
   line-height: var(--line-height-relaxed);
@@ -283,35 +442,59 @@
   max-width: 600px;
 }
 
+/**
+ * @brief Container for hero section buttons.
+ * @description Arranges buttons horizontally with spacing and allows wrapping on smaller screens.
+ */
 .hero-buttons {
   display: flex;
   gap: var(--space-4);
   flex-wrap: wrap;
 }
 
+/**
+ * @brief Hero image container styles.
+ * @description Applies border-radius, overflow hidden, and shadow for the hero image.
+ */
 .hero-image {
   border-radius: var(--border-radius-2xl);
   overflow: hidden;
   box-shadow: var(--shadow-xl);
 }
 
+/**
+ * @brief Profile image styles within the hero section.
+ * @description Ensures image responsiveness and applies a smooth transform transition on hover.
+ */
 .profile-image {
   width: 100%;
   height: auto;
   transition: transform var(--transition-duration-slow) var(--transition-timing-function);
 }
 
+/**
+ * @brief Profile image hover styles.
+ * @description Scales the image slightly on hover for an interactive effect.
+ */
 .profile-image:hover {
   transform: scale(1.05);
 }
 
 /* ===== Content Grid Components ===== */
+/**
+ * @brief Styles for a grid layout of cards.
+ * @description Uses CSS Grid to arrange cards with a defined gap and responsive column layout.
+ */
 .card-grid {
   display: grid;
   gap: var(--space-6);
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 }
 
+/**
+ * @brief Styles for a vertical timeline component.
+ * @description Arranges timeline items vertically with a connecting line.
+ */
 .timeline {
   display: flex;
   flex-direction: column;
@@ -319,8 +502,12 @@
   position: relative;
 }
 
+/**
+ * @brief Vertical line for the timeline.
+ * @description Creates a visual connector between timeline items.
+ */
 .timeline::before {
-  content: '';
+  content: 
   position: absolute;
   left: 1rem;
   top: 0;
@@ -329,14 +516,22 @@
   background: var(--color-border-primary);
 }
 
+/**
+ * @brief Individual timeline item styles.
+ * @description Arranges content horizontally within each timeline item.
+ */
 .timeline-item {
   display: flex;
   gap: var(--space-4);
   position: relative;
 }
 
+/**
+ * @brief Timeline item marker.
+ * @description Creates a circular marker for each timeline event.
+ */
 .timeline-item::before {
-  content: '';
+  content: 
   position: absolute;
   left: 0.75rem;
   top: 0.5rem;
@@ -347,6 +542,10 @@
   border: 2px solid var(--color-background-surface);
 }
 
+/**
+ * @brief Timeline content block styles.
+ * @description Defines flex properties, margin, padding, background, border, and border-radius for timeline content.
+ */
 .timeline-content {
   flex: 1;
   margin-left: var(--space-8);
@@ -356,12 +555,20 @@
   border-radius: var(--border-radius-lg);
 }
 
+/**
+ * @brief Timeline item title styles.
+ * @description Sets font size, weight, and bottom margin for timeline titles.
+ */
 .timeline-title {
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-semibold);
   margin-bottom: var(--space-2);
 }
 
+/**
+ * @brief Timeline item date styles.
+ * @description Sets font size, color, weight, and bottom margin for timeline dates.
+ */
 .timeline-date {
   font-size: var(--font-size-sm);
   color: var(--color-primary-600);
@@ -370,28 +577,48 @@
   display: block;
 }
 
+/**
+ * @brief Timeline item description styles.
+ * @description Sets text color and line height for timeline descriptions.
+ */
 .timeline-description {
   color: var(--color-text-secondary);
   line-height: var(--line-height-relaxed);
 }
 
 /* ===== Skills Components ===== */
+/**
+ * @brief Styles for a grid layout of skills.
+ * @description Arranges skill items with a defined gap.
+ */
 .skills-grid {
   display: grid;
   gap: var(--space-4);
 }
 
+/**
+ * @brief Individual skill item styles.
+ * @description Arranges skill name and progress bar vertically.
+ */
 .skill-item {
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
 }
 
+/**
+ * @brief Skill name text styles.
+ * @description Sets font weight and color for skill names.
+ */
 .skill-name {
   font-weight: var(--font-weight-medium);
   color: var(--color-text-primary);
 }
 
+/**
+ * @brief Skill progress bar container styles.
+ * @description Defines height, background, border-radius, and overflow for the progress bar.
+ */
 .skill-bar {
   height: 8px;
   background: var(--color-background-secondary);
@@ -399,6 +626,10 @@
   overflow: hidden;
 }
 
+/**
+ * @brief Skill progress indicator styles.
+ * @description Sets height, applies a gradient background, border-radius, and a smooth width transition.
+ */
 .skill-progress {
   height: 100%;
   background: linear-gradient(90deg, var(--color-primary-500), var(--color-secondary-500));
@@ -407,22 +638,38 @@
 }
 
 /* ===== Gallery Components ===== */
+/**
+ * @brief Styles for an image gallery grid.
+ * @description Uses CSS Grid to arrange gallery items with a defined gap and responsive column layout.
+ */
 .gallery {
   display: grid;
   gap: var(--space-4);
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 }
 
+/**
+ * @brief Individual gallery item styles.
+ * @description Applies border-radius, overflow hidden, and a smooth transform transition.
+ */
 .gallery-item {
   border-radius: var(--border-radius-lg);
   overflow: hidden;
   transition: transform var(--transition-duration-base) var(--transition-timing-function);
 }
 
+/**
+ * @brief Gallery item hover styles.
+ * @description Lifts the gallery item slightly on hover for an interactive effect.
+ */
 .gallery-item:hover {
   transform: translateY(-4px);
 }
 
+/**
+ * @brief Gallery image styles.
+ * @description Sets width, height, object-fit, and applies a smooth transform transition.
+ */
 .gallery-image {
   width: 100%;
   height: 200px;
@@ -430,10 +677,18 @@
   transition: transform var(--transition-duration-slow) var(--transition-timing-function);
 }
 
+/**
+ * @brief Gallery image hover styles.
+ * @description Scales the image slightly on hover for an interactive effect.
+ */
 .gallery-item:hover .gallery-image {
   transform: scale(1.1);
 }
 
+/**
+ * @brief Gallery caption styles.
+ * @description Sets padding, background, font size, text color, and text alignment for image captions.
+ */
 .gallery-caption {
   padding: var(--space-3);
   background: var(--color-background-surface);
@@ -443,12 +698,20 @@
 }
 
 /* ===== Footer Components ===== */
+/**
+ * @brief Footer content grid styles.
+ * @description Uses CSS Grid to arrange footer sections with a defined gap and responsive column layout.
+ */
 .footer-content {
   display: grid;
   gap: var(--space-8);
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 }
 
+/**
+ * @brief Footer section title styles.
+ * @description Sets font size, weight, bottom margin, and text color for footer titles.
+ */
 .footer-section__title {
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-semibold);
@@ -456,26 +719,46 @@
   color: var(--color-text-primary);
 }
 
+/**
+ * @brief Footer links list styles.
+ * @description Resets list styles for footer navigation links.
+ */
 .footer-links {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
+/**
+ * @brief Individual footer link item styles.
+ * @description Sets bottom margin for each footer link.
+ */
 .footer-link {
   margin-bottom: var(--space-2);
 }
 
+/**
+ * @brief Footer anchor link styles.
+ * @description Sets text color, removes underline, and applies a smooth color transition.
+ */
 .footer-link a {
   color: var(--color-text-secondary);
   text-decoration: none;
   transition: color var(--transition-duration-fast) var(--transition-timing-function);
 }
 
+/**
+ * @brief Footer anchor link hover styles.
+ * @description Changes link color on hover for visual feedback.
+ */
 .footer-link a:hover {
   color: var(--color-primary-600);
 }
 
+/**
+ * @brief Footer bottom section styles.
+ * @description Sets top margin, padding, top border, text alignment, and text color for the copyright/bottom section.
+ */
 .footer-bottom {
   margin-top: var(--space-8);
   padding-top: var(--space-6);
@@ -486,7 +769,10 @@
 
 /* ===== Responsive Components ===== */
 
-/* Mobile Navigation */
+/**
+ * @brief Mobile navigation adjustments.
+ * @description Transforms primary navigation to a column layout on small screens (max-width: 767px).
+ */
 @media (max-width: 767px) {
   .primary-navigation {
     flex-direction: column;
@@ -514,7 +800,10 @@
   }
 }
 
-/* Tablet Adjustments */
+/**
+ * @brief Tablet layout adjustments.
+ * @description Adjusts card and gallery grid columns for medium-sized screens (768px to 1023px).
+ */
 @media (min-width: 768px) and (max-width: 1023px) {
   .card-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -525,7 +814,10 @@
   }
 }
 
-/* High Contrast Mode */
+/**
+ * @brief High Contrast Mode adjustments.
+ * @description Enhances visibility of borders and elements in high contrast mode.
+ */
 @media (prefers-contrast: high) {
   .card {
     border-width: 2px;
@@ -540,17 +832,70 @@
   }
 }
 
-/* Reduced Motion */
+/**
+ * @brief Reduced Motion adjustments.
+ * @description Disables transitions and transforms for users who prefer reduced motion, enhancing accessibility.
+ */
 @media (prefers-reduced-motion: reduce) {
+  .btn,
   .card,
   .gallery-item,
-  .profile-image,
-  .btn {
-    transition: none;
+  .profile-image {
+    transition: none !important;
     transform: none !important;
   }
   
   .skill-progress {
-    transition: none;
+    transition: none !important;
   }
 }
+
+/* ===== Neon Effects ===== */
+/**
+ * @brief Styles for neon text effect.
+ * @description Applies a glowing text shadow using the defined neon color.
+ */
+.neon-text {
+  color: var(--color-neon-soft);
+  text-shadow: 
+    0 0 5px var(--color-neon-soft),
+    0 0 10px var(--color-neon-soft),
+    0 0 20px var(--color-neon-soft),
+    0 0 40px rgba(var(--color-neon-soft-rgb), 0.5),
+    0 0 80px rgba(var(--color-neon-soft-rgb), 0.3);
+}
+
+/**
+ * @brief Styles for neon border effect.
+ * @description Applies a glowing border and box shadow using the defined neon color.
+ */
+.neon-border {
+  border: 2px solid var(--color-neon-soft);
+  box-shadow: 
+    0 0 5px var(--color-neon-soft),
+    0 0 10px var(--color-neon-soft),
+    0 0 20px var(--color-neon-soft),
+    0 0 40px rgba(var(--color-neon-soft-rgb), 0.5);
+}
+
+/**
+ * @brief Styles for neon icon effect.
+ * @description Applies a subtle glowing text shadow to icons using the defined neon color.
+ */
+.neon-icon {
+  color: var(--color-neon-soft);
+  text-shadow: 
+    0 0 3px var(--color-neon-soft),
+    0 0 6px var(--color-neon-soft);
+  transition: text-shadow 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+/**
+ * @brief Neon icon hover styles.
+ * @description Changes icon color and intensifies neon glow on hover.
+ */
+.neon-icon:hover {
+  color: var(--color-primary-500); /* Slightly change color on hover */
+  text-shadow: 0 0 8px var(--color-primary-500), 0 0 15px var(--color-primary-500), 0 0 25px var(--color-primary-500);
+}
+

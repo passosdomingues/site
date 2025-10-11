@@ -29,7 +29,8 @@ const SECTION_CONFIG = {
         cardGrid: '.card-grid',
         timeline: '.timeline',
         gallery: '.gallery',
-        skillsGrid: '.skills-grid'
+        skillsGrid: '.skills-grid',
+        dynamicContentArea: '.dynamic-content-area' // New selector for dynamic content insertion
     }
 };
 
@@ -86,23 +87,58 @@ class SectionView extends BaseView {
 
     /**
      * @brief Renders multiple content sections with optimized batch processing
+     * @public
      * @param {Array<Object>} sectionsData - Array of section configuration objects
-     * @returns {void}
+     * @returns {Promise<string>} Resolves with the combined HTML for all sections.
      */
-    renderSections(sectionsData) {
+    async render(sectionsData) {
         if (!this.isValidSectionsData(sectionsData)) {
-            console.warn('SectionView: Invalid sections data provided.');
+            console.warn('SectionView: Invalid sections data provided for render.');
+            return '';
+        }
+
+        try {
+            const sectionsHTML = this.generateSectionsHTML(sectionsData);
+            // The ViewManager will update the container with this HTML
+            // We then need to initialize interactions after the DOM is updated
+            // this.updateContainerContent(sectionsHTML); // This is now handled by ViewManager
+            // this.initializeSectionInteractions(); // This will be called by SectionController after DOM update
+            
+            console.info(`SectionView successfully generated HTML for ${sectionsData.length} sections.`);
+            return sectionsHTML;
+        } catch (error) {
+            console.error('SectionView: Section rendering failed in render:', error);
+            this.handleRenderError(error, sectionsData);
+            return ''; // Return empty string on error
+        }
+    }
+
+    /**
+     * @brief Renders multiple content sections with optimized batch processing
+     * @public
+     * @param {Array<Object>} sectionsData - Array of section configuration objects
+     * @returns {Promise<void>} Resolves when all sections are rendered.
+     */
+    async renderAllSections(sectionsData) {
+        if (!this.isValidSectionsData(sectionsData)) {
+            console.warn('SectionView: Invalid sections data provided for renderAllSections.');
             return;
         }
 
         try {
             const sectionsHTML = this.generateSectionsHTML(sectionsData);
             this.updateContainerContent(sectionsHTML);
+            // After rendering the section structures, dynamically load their content
+            for (const section of sectionsData) {
+                if (section.content) {
+                    await this.renderSectionContent(section.id, section.type, section.content);
+                }
+            }
             this.initializeSectionInteractions();
             
             console.info(`SectionView successfully rendered ${sectionsData.length} sections.`);
         } catch (error) {
-            console.error('SectionView: Section rendering failed:', error);
+            console.error('SectionView: Section rendering failed in renderAllSections:', error);
             this.handleRenderError(error, sectionsData);
         }
     }
@@ -147,13 +183,13 @@ class SectionView extends BaseView {
      * @param {string} sectionConfig.title - Section main title
      * @param {string} [sectionConfig.subtitle] - Optional section subtitle
      * @param {string} [sectionConfig.type] - Content type (cards, timeline, gallery, skills)
-     * @param {*} [sectionConfig.content] - Section-specific content data
      * @returns {string} Generated section HTML
      * @private
      */
     generateSingleSectionHTML(sectionConfig) {
         const sectionAriaLabel = this.generateSectionAriaLabel(sectionConfig);
         
+        // The dynamic-content-area will be populated later by renderSectionContent
         return `
             <section id="${sectionConfig.id}" 
                      class="section" 
@@ -168,7 +204,9 @@ class SectionView extends BaseView {
                         ${sectionConfig.subtitle ? 
                             `<p class="section-subtitle">${sectionConfig.subtitle}</p>` : ''}
                     </header>
-                    ${this.renderSectionContent(sectionConfig)}
+                    <div class="dynamic-content-area" data-section-id="${sectionConfig.id}">
+                        <!-- Dynamic content will be loaded here by SectionController -->
+                    </div>
                 </div>
             </section>
         `;
@@ -182,8 +220,10 @@ class SectionView extends BaseView {
      */
     generateSectionAriaLabel(sectionConfig) {
         const typeLabels = {
-            cards: SECTION_CONFIG.aria.cardsLabel,
-            timeline: SECTION_CONFIG.aria.timelineLabel,
+            projects: SECTION_CONFIG.aria.cardsLabel, // Projects will be rendered as cards
+            experiences: SECTION_CONFIG.aria.timelineLabel, // Experiences will be rendered as timeline
+            research: SECTION_CONFIG.aria.cardsLabel, // Research will be rendered as cards
+            timeline: SECTION_CONFIG.aria.timelineLabel, // Explicit timeline
             gallery: SECTION_CONFIG.aria.galleryLabel,
             skills: SECTION_CONFIG.aria.skillsLabel
         };
@@ -192,47 +232,56 @@ class SectionView extends BaseView {
     }
 
     /**
-     * @brief Renders section-specific content based on type
-     * @param {Object} sectionConfig - Section configuration
-     * @returns {string} Generated content HTML
-     * @private
+     * @brief Renders section-specific content based on type into the designated area.
+     * @public
+     * @param {string} sectionId - The ID of the section to render content into.
+     * @param {string} contentType - Type of content (e.g., 'projects', 'experiences', 'timeline').
+     * @param {Array<Object>} contentData - Data to render for the specific content type.
+     * @returns {Promise<void>} Resolves when content is rendered.
      */
-    renderSectionContent(sectionConfig) {
-        const contentRenderer = this.getContentRenderer(sectionConfig.type);
-        return contentRenderer(sectionConfig.content);
-    }
+    async renderSectionContent(sectionId, contentType, contentData) {
+        const sectionElement = this.container.querySelector(`#${sectionId}`);
+        if (!sectionElement) {
+            console.warn(`SectionView: Section element not found for ID: ${sectionId}`);
+            return;
+        }
 
-    /**
-     * @brief Gets appropriate content renderer based on section type
-     * @param {string} sectionType - Type of section content
-     * @returns {Function} Content rendering function
-     * @private
-     */
-    getContentRenderer(sectionType) {
-        const renderers = {
-            cards: this.renderCardsGrid.bind(this),
-            timeline: this.renderTimeline.bind(this),
-            gallery: this.renderImageGallery.bind(this),
-            skills: this.renderSkillsGrid.bind(this)
-        };
+        const dynamicContentArea = sectionElement.querySelector(SECTION_CONFIG.selectors.dynamicContentArea);
+        if (!dynamicContentArea) {
+            console.warn(`SectionView: Dynamic content area not found for section ID: ${sectionId}`);
+            return;
+        }
 
-        return renderers[sectionType] || this.renderDefaultContent.bind(this);
-    }
+        let contentHTML = '';
+        switch (contentType) {
+            case 'projects':
+            case 'research':
+            case 'astrophysics-research':
+            case 'innovation-entrepreneurship':
+            case 'deep-learning-projects':
+            case 'hobbies':
+                contentHTML = this.renderCardsGrid(contentData);
+                break;
+            case 'experiences':
+            case 'timeline':
+            case 'about':
+            case 'education-experience':
+                contentHTML = this.renderTimeline(contentData);
+                break;
+            case 'gallery':
+                contentHTML = this.renderImageGallery(contentData);
+                break;
+            case 'skills':
+                contentHTML = this.renderSkillsGrid(contentData);
+                break;
+            default:
+                console.warn(`SectionView: Unknown content type for rendering: ${contentType}`);
+                contentHTML = `<p>No specific content renderer for type: ${contentType}</p>`;
+                break;
+        }
 
-    /**
-     * @brief Renders default content section
-     * @param {string} content - HTML content string
-     * @returns {string} Wrapped content HTML
-     * @private
-     */
-    renderDefaultContent(content) {
-        if (!content || typeof content !== 'string') return '';
-        
-        return `
-            <div class="section-content">
-                ${content}
-            </div>
-        `;
+        dynamicContentArea.innerHTML = contentHTML;
+        console.debug(`SectionView: Rendered dynamic content for section ${sectionId} of type ${contentType}.`);
     }
 
     /**
@@ -261,23 +310,36 @@ class SectionView extends BaseView {
     renderSingleCard(cardData, index) {
         return `
             <article class="card" role="gridcell" aria-labelledby="card-title-${index}">
-                ${cardData.image ? 
-                    `<img src="${cardData.image}" 
-                          alt="${cardData.imageAlt || cardData.title}" 
-                          class="card-image" 
-                          loading="${SECTION_CONFIG.loadingStrategy}">` : ''}
+                    ${cardData.image && cardData.image.src ? 
+                        `<figure class="card-image-container">
+                            <img src="${cardData.image.src}" 
+                                  alt="${cardData.image.alt || cardData.title}" 
+                                  class="card-image" 
+                                  loading="${SECTION_CONFIG.loadingStrategy}">
+                            ${cardData.image.caption ? `<figcaption class="card-image-caption">${cardData.image.caption}</figcaption>` : ''}
+                        </figure>` : ''}
                 <div class="card-content">
+                    ${cardData.icon ? 
+                        `<i class="fas fa-${cardData.icon} neon-icon" aria-hidden="true"></i>` : ''}
                     <h3 id="card-title-${index}" class="card-title">${cardData.title}</h3>
                     ${cardData.description ? 
                         `<p class="card-description">${cardData.description}</p>` : ''}
-                    ${cardData.link ? 
-                        `<a href="${cardData.link}" 
-                            target="${cardData.external ? '_blank' : '_self'}" 
-                            rel="${cardData.external ? 'noopener noreferrer' : ''}"
-                            class="btn btn-card" 
-                            aria-label="Learn more about ${cardData.title}">
-                            Ver Mais
-                         </a>` : ''}
+                    ${cardData.highlights && cardData.highlights.length > 0 ? 
+                        `<ul class="card-highlights">
+                            ${cardData.highlights.map(highlight => `<li>${highlight}</li>`).join('')}
+                         </ul>` : ''}
+                    ${cardData.links && cardData.links.length > 0 ? 
+                        `<div class="card-links">
+                            ${cardData.links.map(link => 
+                                `<a href="${link.url}" 
+                                    target="${link.type === 'external' ? '_blank' : '_self'}" 
+                                    rel="${link.type === 'external' ? 'noopener noreferrer' : ''}"
+                                    class="btn btn-card btn-small" 
+                                    aria-label="${link.label}">
+                                    ${link.label}
+                                 </a>`
+                            ).join('')}
+                         </div>` : ''}
                 </div>
             </article>
         `;
@@ -316,6 +378,10 @@ class SectionView extends BaseView {
                             ${eventData.date}
                          </time>` : ''}
                     <p class="timeline-description">${eventData.description}</p>
+                    ${eventData.highlights && eventData.highlights.length > 0 ? 
+                        `<ul class="timeline-highlights">
+                            ${eventData.highlights.map(highlight => `<li>${highlight}</li>`).join("")}
+                         </ul>` : ""}
                 </div>
             </div>
         `;
@@ -328,304 +394,5 @@ class SectionView extends BaseView {
      * @private
      */
     formatDateForAccessibility(dateString) {
-        // Simple implementation - in production, use proper date parsing
-        return dateString.replace(/\//g, '-');
-    }
-
-    /**
-     * @brief Renders optimized image gallery with lazy loading
-     * @param {Array<Object>} galleryData - Array of image objects
-     * @returns {string} Gallery HTML
-     * @private
-     */
-    renderImageGallery(galleryData) {
-        if (!this.isValidArrayData(galleryData)) return '';
-
-        return `
-            <div class="gallery" role="group" aria-label="${SECTION_CONFIG.aria.galleryLabel}">
-                ${galleryData.map((image, index) => this.renderGalleryImage(image, index)).join('')}
-            </div>
-        `;
-    }
-
-    /**
-     * @brief Renders individual gallery image with caption
-     * @param {Object} imageData - Image configuration object
-     * @param {number} index - Image index for ARIA attributes
-     * @returns {string} Single gallery item HTML
-     * @private
-     */
-    renderGalleryImage(imageData, index) {
-        return `
-            <figure class="gallery-item" role="figure" aria-labelledby="gallery-caption-${index}">
-                <img src="${imageData.src}" 
-                     alt="${imageData.alt || 'Gallery image'}" 
-                     loading="${SECTION_CONFIG.loadingStrategy}"
-                     class="gallery-image">
-                ${imageData.caption ? 
-                    `<figcaption id="gallery-caption-${index}" class="gallery-caption">
-                        ${imageData.caption}
-                     </figcaption>` : ''}
-            </figure>
-        `;
-    }
-
-    /**
-     * @brief Renders skills grid with progress indicators
-     * @param {Array<Object>} skillsData - Array of skill objects
-     * @returns {string} Skills grid HTML
-     * @private
-     */
-    renderSkillsGrid(skillsData) {
-        if (!this.isValidArrayData(skillsData)) return '';
-
-        return `
-            <div class="skills-grid" role="list" aria-label="${SECTION_CONFIG.aria.skillsLabel}">
-                ${skillsData.map((skill, index) => this.renderSkillItem(skill, index)).join('')}
-            </div>
-        `;
-    }
-
-    /**
-     * @brief Renders individual skill item with progress bar
-     * @param {Object} skillData - Skill configuration object
-     * @param {number} index - Skill index for ARIA attributes
-     * @returns {string} Single skill item HTML
-     * @private
-     */
-    renderSkillItem(skillData, index) {
-        const progressBar = skillData.level ? 
-            `<div class="skill-bar" role="progressbar" 
-                  aria-valuenow="${skillData.level}" 
-                  aria-valuemin="0" 
-                  aria-valuemax="100"
-                  aria-label="Progress for ${skillData.name}">
-                <div class="skill-progress" style="width: ${skillData.level}%"></div>
-             </div>` : '';
-
-        return `
-            <div class="skill-item" role="listitem">
-                <span class="skill-name">${skillData.name}</span>
-                ${progressBar}
-            </div>
-        `;
-    }
-
-    /**
-     * @brief Validates array data for content rendering
-     * @param {Array} data - Data array to validate
-     * @returns {boolean} True if data is valid array
-     * @private
-     */
-    isValidArrayData(data) {
-        return Array.isArray(data) && data.length > 0;
-    }
-
-    /**
-     * @brief Updates container content and manages state
-     * @param {string} htmlContent - HTML content to insert
-     * @private
-     */
-    updateContainerContent(htmlContent) {
-        this.container.innerHTML = htmlContent;
-        this.updateSectionState();
-    }
-
-    /**
-     * @brief Updates internal section state tracking
-     * @private
-     */
-    updateSectionState() {
-        const sections = this.container.querySelectorAll(SECTION_CONFIG.selectors.section);
-        this.sectionState.renderedSections.clear();
-        
-        sections.forEach(section => {
-            this.sectionState.renderedSections.set(section.id, {
-                element: section,
-                type: section.dataset.sectionType,
-                isVisible: false
-            });
-        });
-    }
-
-    /**
-     * @brief Initializes intersection observer for section visibility
-     * @private
-     */
-    initializeIntersectionObserver() {
-        this.intersectionObserver = new IntersectionObserver(
-            this.handleIntersection.bind(this),
-            { threshold: SECTION_CONFIG.observerThreshold }
-        );
-        this.sectionState.observerInitialized = true;
-    }
-
-    /**
-     * @brief Handles intersection observer callbacks
-     * @param {Array<IntersectionObserverEntry>} entries - Observer entries
-     * @private
-     */
-    handleIntersection = (entries) => {
-        entries.forEach(entry => {
-            const sectionId = entry.target.id;
-            this.processSectionVisibility(entry, sectionId);
-        });
-    };
-
-    /**
-     * @brief Processes section visibility changes
-     * @param {IntersectionObserverEntry} entry - Intersection entry
-     * @param {string} sectionId - ID of the section
-     * @private
-     */
-    processSectionVisibility(entry, sectionId) {
-        if (entry.isIntersecting) {
-            this.activateSection(sectionId, entry.target);
-        } else {
-            this.deactivateSection(sectionId);
-        }
-    }
-
-    /**
-     * @brief Activates section when it becomes visible
-     * @param {string} sectionId - ID of the section to activate
-     * @param {HTMLElement} sectionElement - Section DOM element
-     * @private
-     */
-    activateSection(sectionId, sectionElement) {
-        sectionElement.classList.add(SECTION_CONFIG.animationClass);
-        this.sectionState.activeSection = sectionId;
-        
-        const sectionData = this.sectionState.renderedSections.get(sectionId);
-        if (sectionData) {
-            sectionData.isVisible = true;
-        }
-
-        this.notify('sectionVisible', { 
-            sectionId,
-            sectionType: sectionElement.dataset.sectionType,
-            timestamp: Date.now()
-        });
-    }
-
-    /**
-     * @brief Deactivates section when it leaves viewport
-     * @param {string} sectionId - ID of the section to deactivate
-     * @private
-     */
-    deactivateSection(sectionId) {
-        const sectionData = this.sectionState.renderedSections.get(sectionId);
-        if (sectionData) {
-            sectionData.isVisible = false;
-        }
-    }
-
-    /**
-     * @brief Initializes all section interactions and observers
-     * @private
-     */
-    initializeSectionInteractions() {
-        this.observeAllSections();
-        this.initializeSectionEventHandlers();
-    }
-
-    /**
-     * @brief Starts observing all rendered sections
-     * @private
-     */
-    observeAllSections() {
-        const sections = this.container.querySelectorAll(SECTION_CONFIG.selectors.section);
-        sections.forEach(section => {
-            this.intersectionObserver.observe(section);
-        });
-    }
-
-    /**
-     * @brief Initializes event handlers for section interactions
-     * @private
-     */
-    initializeSectionEventHandlers() {
-        this.initializeCardInteractions();
-        this.initializeGalleryInteractions();
-    }
-
-    /**
-     * @brief Initializes card-specific event handlers
-     * @private
-     */
-    initializeCardInteractions() {
-        this.addEvent('click', '.card .btn-card', (event) => {
-            const card = event.target.closest('.card');
-            const cardTitle = card?.querySelector('.card-title')?.textContent;
-            
-            this.notify('cardInteraction', {
-                action: 'click',
-                cardTitle,
-                timestamp: Date.now()
-            });
-        });
-    }
-
-    /**
-     * @brief Initializes gallery-specific event handlers
-     * @private
-     */
-    initializeGalleryInteractions() {
-        this.addEvent('click', '.gallery-image', (event) => {
-            const image = event.target;
-            const caption = image.parentElement.querySelector('.gallery-caption')?.textContent;
-            
-            this.notify('galleryImageClick', {
-                imageSrc: image.src,
-                imageAlt: image.alt,
-                caption,
-                timestamp: Date.now()
-            });
-        });
-    }
-
-    /**
-     * @brief Handles rendering errors gracefully
-     * @param {Error} error - Error encountered during rendering
-     * @param {Array} sectionsData - Original sections data for recovery
-     * @private
-     */
-    handleRenderError(error, sectionsData) {
-        this.notify('sectionRenderError', {
-            error: error.message,
-            sectionsCount: sectionsData?.length || 0,
-            timestamp: Date.now()
-        });
-
-        // Fallback: render basic sections without advanced features
-        if (sectionsData) {
-            const fallbackHTML = sectionsData.map(section => `
-                <section id="${section.id}">
-                    <h2>${section.title}</h2>
-                    ${section.subtitle ? `<p>${section.subtitle}</p>` : ''}
-                </section>
-            `).join('');
-            
-            this.container.innerHTML = fallbackHTML;
-        }
-    }
-
-    /**
-     * @brief Cleans up observers and event listeners
-     * @returns {void}
-     */
-    destroy() {
-        if (this.intersectionObserver) {
-            this.intersectionObserver.disconnect();
-            this.intersectionObserver = null;
-        }
-
-        this.sectionState.renderedSections.clear();
-        this.sectionState.activeSection = null;
-        this.sectionState.observerInitialized = false;
-
-        console.info('SectionView instance cleaned up successfully.');
-    }
-}
-
-export default SectionView;
+        // Simple implementation - in
+(Content truncated due to size limit. Use page ranges or line ranges to read remaining content)
