@@ -166,6 +166,7 @@ class NavigationView {
                     ${this.generateBrandSection()}
                     ${this.generateDesktopNavigation(currentPath)}
                     ${this.generateMobileNavigationToggle(isMobileMenuOpen)}
+                    ${this.generateFlashbackButton()}
                     ${this.generateMobileNavigationMenu(currentPath, isMobileMenuOpen)}
                 </div>
             </nav>
@@ -313,7 +314,9 @@ class NavigationView {
             this.setupMobileMenuInteractions(navigationElement),
             this.setupKeyboardNavigation(navigationElement),
             this.setupScrollBehavior(navigationElement),
-            this.setupNavigationClickHandlers(navigationElement)
+            this.setupNavigationClickHandlers(navigationElement),
+            this.setupFlashbackInteractions(navigationElement)
+
         ];
 
         await Promise.all(setupPromises);
@@ -847,3 +850,50 @@ class NavigationView {
 }
 
 export default NavigationView;
+
+    /**
+     * @brief Generates flashback button HTML
+     * @private
+     * @returns {string} Flashback button HTML string
+     */
+    generateFlashbackButton() {
+        return `
+            <button 
+                class="flashback-button btn btn--secondary btn--sm"
+                aria-label="Get a random flashback from my journey"
+            >
+                <i class="fas fa-random" aria-hidden="true"></i>
+                <span class="flashback-button-text">Flashback</span>
+            </button>
+        `;
+    }
+
+    /**
+     * @brief Sets up flashback button interactions
+     * @private
+     * @param {HTMLElement} navigationElement - The navigation container element
+     * @returns {Promise<void>} Resolves when flashback interactions are set up
+     */
+    async setupFlashbackInteractions(navigationElement) {
+        const flashbackButton = navigationElement.querySelector(".flashback-button");
+        if (!flashbackButton) return;
+
+        flashbackButton.addEventListener("click", () => {
+            this.triggerFlashback();
+        }, { signal: this.eventAbortController.signal });
+    }
+
+    /**
+     * @brief Triggers a random flashback, navigating to a random section
+     * @private
+     */
+    triggerFlashback() {
+        const sections = Array.from(document.querySelectorAll(".section"));
+        if (sections.length === 0) return;
+
+        const randomSection = sections[Math.floor(Math.random() * sections.length)];
+        randomSection.scrollIntoView({ behavior: "smooth" });
+
+        this.notifyObservers("flashbackTriggered", { sectionId: randomSection.id });
+    }
+
