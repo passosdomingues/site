@@ -28,7 +28,8 @@ import SectionController from './SectionController.js';
 const VIEW_SELECTORS = {
     navigation: '[data-view="navigation"]',
     hero: '[data-view="hero"]',
-    section: '#main-content', // CORRECTED: Changed 'mainContent' to 'section'
+    // CORRECTED: Target the specific container for dynamic sections, not the entire main tag.
+    section: '#dynamic-content',
     footer: '[data-view="footer"]'
 };
 
@@ -326,26 +327,46 @@ class MainController {
     }
 
     /**
-     * @brief Renders all main application sections with appropriate data
+     * @brief Renders all main application sections with appropriate data.
      * @private
-     * @returns {Promise<void>} Resolves when all views are successfully rendered
-     * @throws {Error} When required data is unavailable or rendering fails
+     * @async
+     * @returns {Promise<void>} Resolves when all views are successfully rendered.
+     * @throws {Error} When required data is unavailable or rendering fails.
      */
     async renderApplicationContent() {
+        const mainContentElement = document.getElementById('main-content');
+        const loadingIndicator = mainContentElement?.querySelector('.content-loading-indicator');
+
         try {
+            // Show loading indicator before fetching data
+            if (loadingIndicator) loadingIndicator.hidden = false;
+
             const userData = await this.models.user.getUserData();
             const sectionsData = await this.models.content.getSections();
 
             if (!userData || !sectionsData) {
-                throw new Error('Incomplete data for application rendering');
+                throw new Error('Incomplete data for application rendering.');
             }
 
             await this.renderAllViews(userData, sectionsData);
             console.info('MainController: All application views rendered successfully.');
             
+            // Mark the main content as initialized to trigger CSS visibility
+            if (mainContentElement) {
+                mainContentElement.setAttribute('data-main-initialized', 'true');
+            }
+            
         } catch (error) {
             console.error(ERROR_MESSAGES.renderFailure, error);
+            // In case of an error, you might want to show an error message
+            if (mainContentElement) {
+                mainContentElement.innerHTML = `<div class="error-message">Failed to load content. Please try again later.</div>`;
+            }
             throw new Error(ERROR_MESSAGES.renderFailure);
+            
+        } finally {
+            // Always hide the loading indicator after the process is complete (success or fail)
+            if (loadingIndicator) loadingIndicator.hidden = true;
         }
     }
 
