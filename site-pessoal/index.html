@@ -1,197 +1,673 @@
 <!DOCTYPE html>
-<html lang="en-US" class="js" data-theme="light">
+<html lang="pt-BR" class="js" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rafael Passos Domingues | Physicist & Computer Science Researcher</title>
-    <meta name="description" content="Rafael Passos Domingues - Physicist and Computer Scientist specializing in Astrophysics research, Data Science innovation, and Maker Education.">
+    <title>Rafael Passos Domingues | Físico & Cientista da Computação | Pesquisa em Astrofísica & Inovação</title>
+    <meta name="description" content="Rafael Passos Domingues - Físico e Cientista da Computação especializado em pesquisa em Astrofísica, Ciência de Dados e Inovação Tecnológica. Bridging scientific research with computational methodologies.">
     <meta name="author" content="Rafael Passos Domingues">
     <style>
-        /* Reset e estilos básicos */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* === ESTILOS GLOBAIS MELHORADOS === */
         :root {
             --color-primary: #264B93;
+            --color-primary-dark: #1a365f;
+            --color-primary-light: #3a6ad8;
             --color-surface: #ffffff;
+            --color-surface-variant: #f8f9fa;
             --color-gray-50: #f8f9fa;
-            --font-main: 'Segoe UI', system-ui, sans-serif;
+            --color-gray-100: #e9ecef;
+            --color-gray-800: #343a40;
+            --color-accent: #e63946;
+            --color-success: #2a9d8f;
+            --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --font-mono: 'Courier New', monospace;
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 8px rgba(0,0,0,0.15);
+            --shadow-lg: 0 8px 16px rgba(0,0,0,0.2);
+            --border-radius: 8px;
+            --border-radius-lg: 16px;
+            --transition: all 0.3s ease;
         }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             font-family: var(--font-main);
-            line-height: 1.6;
-            color: #333;
+            line-height: 1.7;
+            color: var(--color-gray-800);
             background: var(--color-surface);
+            overflow-x: hidden;
         }
+
+        /* === COMPONENTES DE ACESSIBILIDADE === */
         .skip-link {
             position: absolute;
             top: -40px;
             left: 0;
-            background: #000;
+            background: var(--color-primary);
             color: white;
-            padding: 8px;
-            z-index: 1000;
+            padding: 12px 20px;
+            text-decoration: none;
+            font-weight: 600;
+            z-index: 10000;
+            border-radius: 0 0 var(--border-radius) 0;
+            transition: var(--transition);
         }
-        .skip-link:focus { top: 0; }
-        
-        /* Loading */
+
+        .skip-link:focus {
+            top: 0;
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* === LAYOUT PRINCIPAL === */
+        .app-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 0;
+        }
+
+        /* === LOADING OVERLAY === */
         .app-loading-overlay {
             position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: var(--color-surface);
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 9999;
-        }
-        
-        /* Estrutura principal */
-        .main-content { padding: 20px; max-width: 1200px; margin: 0 auto; }
-        .hero-section { 
-            text-align: center; 
-            padding: 60px 20px;
-            background: linear-gradient(135deg, var(--color-primary) 0%, #1a365f 100%);
             color: white;
-            border-radius: 10px;
-            margin-bottom: 40px;
+            font-family: var(--font-mono);
         }
-        .section { margin: 60px 0; padding: 40px 0; }
-        .section-title { 
-            font-size: 2.5rem; 
-            margin-bottom: 10px;
-            color: var(--color-primary);
+
+        .loading-content {
+            text-align: center;
+            animation: pulse 2s infinite;
         }
-        .section-subtitle {
-            font-size: 1.2rem;
-            color: #666;
-            margin-bottom: 30px;
+
+        .loading-content h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #fff, #e0e0e0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
-        
-        /* Timeline */
-        .timeline { position: relative; max-width: 800px; margin: 0 auto; }
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 30px;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: var(--color-primary);
+
+        .loading-content p {
+            font-size: 1.1rem;
+            opacity: 0.9;
         }
-        .timeline-item {
-            position: relative;
-            margin-bottom: 40px;
-            padding-left: 80px;
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
         }
-        .timeline-period {
-            position: absolute;
-            left: 0;
-            top: 0;
-            background: var(--color-primary);
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-weight: bold;
-        }
-        .timeline-content { background: var(--color-gray-50); padding: 20px; border-radius: 8px; }
-        
-        /* Cards */
-        .cards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 40px;
-        }
-        .card {
-            background: white;
-            border-radius: 10px;
-            padding: 30px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
-        }
-        .card:hover { transform: translateY(-5px); }
-        
-        /* Navegação */
+
+        /* === NAVEGAÇÃO PRINCIPAL === */
         .main-navigation-container {
-            position: sticky;
+            position: fixed;
             top: 0;
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(10px);
-            padding: 20px 0;
-            z-index: 100;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            padding: 1rem 0;
         }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
         .nav-list {
             display: flex;
             justify-content: center;
             list-style: none;
             flex-wrap: wrap;
-            gap: 30px;
+            gap: 1.5rem;
         }
+
         .nav-link {
             text-decoration: none;
             color: var(--color-primary);
             font-weight: 600;
-            padding: 10px 20px;
-            border-radius: 25px;
-            transition: all 0.3s ease;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            transition: var(--transition);
+            border: 2px solid transparent;
+            font-size: 0.95rem;
         }
-        .nav-link:hover, .nav-link.active {
+
+        .nav-link:hover {
             background: var(--color-primary);
             color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
         }
-        
-        /* Footer */
-        .main-footer {
+
+        .nav-link.active {
+            background: var(--color-primary);
+            color: white;
+            border-color: var(--color-primary-dark);
+        }
+
+        /* === HERO SECTION === */
+        .hero-section {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+            color: white;
+            padding: 120px 2rem 80px;
             text-align: center;
-            padding: 40px 20px;
-            margin-top: 80px;
-            border-top: 1px solid #eee;
-            color: #666;
+            position: relative;
+            overflow: hidden;
         }
-        
-        /* Responsivo */
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><circle cx="200" cy="200" r="2" fill="white" opacity="0.1"/><circle cx="600" cy="300" r="1" fill="white" opacity="0.1"/><circle cx="800" cy="150" r="1.5" fill="white" opacity="0.1"/><circle cx="300" cy="400" r="1" fill="white" opacity="0.1"/></svg>');
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #fff, #e0f7ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.4rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .hero-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            opacity: 0.85;
+        }
+
+        /* === SEÇÕES DE CONTEÚDO === */
+        .section {
+            padding: 80px 2rem;
+            position: relative;
+        }
+
+        .section:nth-child(even) {
+            background: var(--color-surface-variant);
+        }
+
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            font-size: 2.8rem;
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+            border-radius: 2px;
+        }
+
+        .section-subtitle {
+            font-size: 1.3rem;
+            color: var(--color-gray-800);
+            opacity: 0.8;
+            font-weight: 300;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* === TIMELINE STYLES === */
+        .timeline {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(to bottom, var(--color-primary), var(--color-accent));
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 4rem;
+            width: 45%;
+        }
+
+        .timeline-item:nth-child(odd) {
+            left: 0;
+        }
+
+        .timeline-item:nth-child(even) {
+            left: 55%;
+        }
+
+        .timeline-period {
+            background: var(--color-primary);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: inline-block;
+            margin-bottom: 1rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .timeline-content {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-md);
+            border-left: 4px solid var(--color-primary);
+            transition: var(--transition);
+        }
+
+        .timeline-content:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .timeline-title {
+            font-size: 1.4rem;
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .timeline-description {
+            color: var(--color-gray-800);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .highlights-list {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .highlight-tag {
+            background: var(--color-surface-variant);
+            color: var(--color-primary);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            border: 1px solid var(--color-primary-light);
+        }
+
+        /* === CARDS GRID === */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: var(--border-radius-lg);
+            padding: 2.5rem;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+            border: 1px solid var(--color-gray-100);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .card-description {
+            color: var(--color-gray-800);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--color-gray-100);
+        }
+
+        .card-date {
+            color: var(--color-primary);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .card-status {
+            background: var(--color-success);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .tag {
+            background: var(--color-surface-variant);
+            color: var(--color-primary);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            border: 1px solid var(--color-primary-light);
+        }
+
+        /* === SKILLS MATRIX === */
+        .skills-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .skill-category {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-md);
+        }
+
+        .category-title {
+            font-size: 1.5rem;
+            color: var(--color-primary);
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .skill-item {
+            margin-bottom: 1.5rem;
+        }
+
+        .skill-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .skill-name {
+            font-weight: 600;
+            color: var(--color-gray-800);
+        }
+
+        .skill-proficiency {
+            color: var(--color-primary);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .skill-bar {
+            height: 8px;
+            background: var(--color-gray-100);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .skill-progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--color-primary), var(--color-primary-light));
+            border-radius: 4px;
+            transition: width 1s ease-in-out;
+        }
+
+        .skill-description {
+            font-size: 0.9rem;
+            color: var(--color-gray-800);
+            opacity: 0.8;
+            margin-top: 0.3rem;
+        }
+
+        /* === GALERIA === */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .gallery-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .gallery-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 1rem;
+            transform: translateY(100%);
+            transition: var(--transition);
+        }
+
+        .gallery-item:hover .gallery-caption {
+            transform: translateY(0);
+        }
+
+        /* === FOOTER === */
+        .main-footer {
+            background: var(--color-primary-dark);
+            color: white;
+            text-align: center;
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .footer-text {
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        /* === RESPONSIVIDADE === */
         @media (max-width: 768px) {
-            .nav-list { flex-direction: column; align-items: center; gap: 15px; }
-            .hero-section { padding: 40px 20px; }
-            .section-title { font-size: 2rem; }
+            .hero-title { font-size: 2.5rem; }
+            .section-title { font-size: 2.2rem; }
+            .timeline::before { left: 30px; }
+            .timeline-item { width: calc(100% - 60px); left: 60px !important; }
+            .nav-list { gap: 0.5rem; }
+            .nav-link { padding: 0.5rem 1rem; font-size: 0.9rem; }
+            .cards-grid { grid-template-columns: 1fr; }
+            .skills-categories { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title { font-size: 2rem; }
+            .section { padding: 60px 1rem; }
+            .card { padding: 1.5rem; }
+            .timeline-content { padding: 1.5rem; }
         }
     </style>
 </head>
 <body>
-    <a href="#main-content" class="skip-link">Skip to Main Content</a>
+    <a href="#main-content" class="skip-link">Pular para o conteúdo principal</a>
 
-    <div id="app">
+    <div class="app-container">
         <div class="app-loading-overlay" id="loading-overlay">
-            <div class="app-loading-placeholder">
-                <h1>Carregando Portfólio...</h1>
-                <p>Aguarde um momento.</p>
+            <div class="loading-content">
+                <h1>Rafael Passos Domingues</h1>
+                <p>Carregando portfólio...</p>
             </div>
         </div>
         
+        <nav class="main-navigation-container" id="main-nav">
+            <div class="nav-container">
+                <ul class="nav-list" id="nav-list">
+                    <!-- Navegação será gerada dinamicamente -->
+                </ul>
+            </div>
+        </nav>
+        
         <main id="main-content" class="main-content">
-            <nav id="main-nav" class="main-navigation-container">
-                <ul class="nav-list" id="nav-list"></ul>
-            </nav>
-            
-            <section id="hero-section" class="hero-section">
-                <h1>Rafael Passos Domingues</h1>
-                <p>Físico e Cientista da Computação | Pesquisa em Astrofísica e Inovação Tecnológica</p>
+            <section class="hero-section" id="hero-section">
+                <div class="hero-content">
+                    <h1 class="hero-title">Rafael Passos Domingues</h1>
+                    <p class="hero-subtitle">Físico & Cientista da Computação</p>
+                    <p class="hero-description">
+                        Pesquisador em Astrofísica, Ciência de Dados e Inovação Tecnológica. 
+                        Combinando rigor científico com expertise computacional para resolver 
+                        problemas complexos e impulsionar a inovação.
+                    </p>
+                </div>
             </section>
             
-            <div class="sections-container" id="sections-container">
+            <div id="sections-container">
                 <!-- Seções serão injetadas aqui via JavaScript -->
             </div>
-            
-            <footer id="main-footer" class="main-footer">
-                <p>&copy; 2024 Rafael Passos Domingues. Todos os direitos reservados.</p>
-            </footer>
         </main>
+        
+        <footer class="main-footer">
+            <div class="footer-content">
+                <p class="footer-text">
+                    &copy; 2024 Rafael Passos Domingues. Todos os direitos reservados.<br>
+                    Desenvolvido com paixão por ciência, tecnologia e inovação.
+                </p>
+            </div>
+        </footer>
     </div>
 
     <script>
-        // ContentModel - Versão Simplificada
+        // ===== CONTENT MODEL - VERSÃO COMPLETA E DETALHADA =====
         class ContentModel {
-            constructor() {
+            constructor(options = {}) {
                 this.sections = [];
+                this.contentCache = new Map();
+                this.configuration = {
+                    enableCaching: true,
+                    cacheTimeout: 300000,
+                    enableValidation: true,
+                    maxCacheSize: 100
+                };
                 this.isInitialized = false;
             }
 
@@ -217,56 +693,185 @@
                         title: 'Sobre Mim',
                         subtitle: 'Minha jornada acadêmica e profissional',
                         type: 'timeline',
-                        content: this.getAboutContent()
+                        content: this.getAboutContent(),
+                        metadata: { priority: 1, visible: true, order: 1 }
                     },
                     {
                         id: 'astrophysics-research',
                         title: 'Pesquisa em Astrofísica',
                         subtitle: 'Trabalho em astrofísica galáctica e extragaláctica',
                         type: 'cards',
-                        content: this.getAstrophysicsContent()
+                        content: this.getAstrophysicsContent(),
+                        metadata: { priority: 2, visible: true, order: 2 }
+                    },
+                    {
+                        id: 'astronomical-observatory',
+                        title: 'Observatório Astronômico',
+                        subtitle: 'Extensão científica e pesquisa na UNIFAL-MG',
+                        type: 'gallery',
+                        content: this.getObservatoryContent(),
+                        metadata: { priority: 2, visible: true, order: 3 }
+                    },
+                    {
+                        id: 'innovation-entrepreneurship',
+                        title: 'Inovação e Empreendedorismo',
+                        subtitle: 'NidusTec e ecossistema de inovação',
+                        type: 'cards',
+                        content: this.getInnovationContent(),
+                        metadata: { priority: 2, visible: true, order: 4 }
+                    },
+                    {
+                        id: 'deep-learning-projects',
+                        title: 'Projetos de Deep Learning',
+                        subtitle: 'Aplicando ML/DL em imagens médicas e astrofísica',
+                        type: 'cards',
+                        content: this.getDeepLearningProjectsContent(),
+                        metadata: { priority: 1, visible: true, order: 5 }
                     },
                     {
                         id: 'skills',
                         title: 'Habilidades e Competências',
                         subtitle: 'Áreas de conhecimento e tecnologias',
-                        type: 'cards',
-                        content: this.getSkillsContent()
+                        type: 'skills',
+                        content: this.getSkillsContent(),
+                        metadata: { priority: 2, visible: true, order: 6 }
                     }
                 ];
             }
 
             getAboutContent() {
                 return {
+                    introduction: 'Físico e Cientista da Computação apaixonado por pesquisa em astrofísica, análise de dados e inovação tecnológica. Minha jornada é uma mistura de pesquisa acadêmica e aplicação prática, sempre impulsionada pela curiosidade sobre como o universo funciona e como podemos usar a tecnologia para resolver problemas do mundo real.',
                     timeline: [
                         {
                             period: '2014-2018',
                             title: 'Bacharelado em Física, UNIFAL-MG',
-                            description: 'Minha jornada acadêmica começou com o Bacharelado em Física na UNIFAL-MG, com foco em Astrofísica Galáctica e Extragaláctica.'
+                            description: 'Minha jornada acadêmica começou com o Bacharelado em Física na UNIFAL-MG. Durante este período, mergulhei no fascinante mundo da Astrofísica Galáctica e Extragaláctica, participando de pesquisas e contribuindo para a divulgação científica no Observatório Astronômico da UNIFAL-MG. Esta experiência acendeu minha paixão por compreender o cosmos e comunicar conceitos científicos complexos.',
+                            highlights: ['Astrofísica Galáctica e Extragaláctica', 'Divulgação Científica', 'Observação Astronômica']
                         },
                         {
                             period: '2019-2022',
-                            title: 'Professor de Física, Secretaria de Educação de MG',
-                            description: 'Lecionei Física em três municípios de Minas Gerais, adaptando o conhecimento científico a diversas audiências.'
+                            title: 'Professor de Física, Secretaria de Estado de Educação de Minas Gerais',
+                            description: 'Após a graduação, dediquei-me à educação, lecionando Física em três municípios de Minas Gerais. Este papel me desafiou a adaptar o conhecimento científico a diversas audiências, especialmente durante o período sem precedentes de 2020-2022, onde apliquei expertise técnica para superar obstáculos educacionais.',
+                            highlights: ['Educação Científica', 'Física Experimental', 'Inovação Pedagógica']
+                        },
+                        {
+                            period: '2021-2023',
+                            title: 'Mestrado em Física, UNIFEI',
+                            description: 'Meu Mestrado em Física na UNIFEI focou em Núcleos Ativos de Galáxias, um campo onde desenvolvi uma profunda apreciação pela análise de dados. Esta experiência de pesquisa solidificou meu interesse em extrair insights de conjuntos de dados complexos, lançando as bases para meus futuros empreendimentos em ciência de dados.',
+                            highlights: ['Pesquisa em AGN', 'Análise Avançada de Dados', 'Computação Científica']
                         },
                         {
                             period: '2023-Presente',
                             title: 'Bacharelado em Ciência da Computação, UNIFAL-MG',
-                            description: 'Cursando Ciência da Computação com foco em processamento de imagens e computação gráfica.'
+                            description: 'Em 2023, embarquei em um novo caminho acadêmico, cursando Bacharelado em Ciência da Computação na UNIFAL-MG. Esta transição reflete meu compromisso em preencher a lacuna entre a física teórica e as soluções tecnológicas práticas. Concomitantemente, juntei-me à Incubadora de Empresas de Base Tecnológica NidusTec/UNIFAL-MG, conectando a academia com o mercado e fomentando a inovação.',
+                            highlights: ['Desenvolvimento de Software', 'Ciência de Dados', 'Aprendizado de Máquina', 'Conexão Academia-Indústria']
+                        },
+                        {
+                            period: '2024-2025',
+                            title: 'Ecossistema de Inovação e Educador Maker, Incubadora NidusTec/UNIFAL-MG',
+                            description: 'Na NidusTec, abracei o papel de educador Maker, liderando projetos de robótica, modelagem 3D e oficinas de CNC. Esta experiência me permitiu aplicar técnicas de computação gráfica e processamento de imagens em protótipos multidisciplinares, abordando necessidades de infraestrutura institucional e explorando pesquisas em Inovação, Empreendedorismo, Engenharia de Produção e Indústria 4.0.',
+                            highlights: ['Empreendedorismo', 'Transferência de Tecnologia', 'Educação Maker', 'Modelagem 3D e CNC', 'Robótica', 'Gestão da Inovação']
                         }
-                    ]
+                    ],
+                    currentFocus: 'Atualmente, sou estudante de Ciência da Computação, especializando-me em processamento de imagens e computação gráfica. Meu foco está em aplicar meu conhecimento em interfaces multidisciplinares que combinam Machine Learning, Deep Learning, Processamento de Linguagem Natural (NLP), Redes Neurais Convolucionais (CNNs) e Large Language Models (LLMs).',
+                    reflection: 'Minha jornada, aparentemente díspar à primeira vista, é um testemunho do poder do pensamento interdisciplinar. A convergência da física, astrofísica, educação e ciência da computação equipou-me com uma perspectiva única. Vejo-me não apenas como um Físico ou Desenvolvedor, mas como um resolvedor de problemas que aproveita conhecimentos diversos para criar soluções impactantes.'
                 };
             }
 
             getAstrophysicsContent() {
                 return [
                     {
-                        title: 'Pesquisa em Matéria Escura',
-                        description: 'Estudo das curvas de rotação galácticas e evidências de matéria escura no Aglomerado Bala.'
+                        id: 'dark-matter-research',
+                        title: 'Desvendando o Invisível: Minha Jornada na Pesquisa de Matéria Escura',
+                        description: 'Minha pesquisa em Matéria Escura começou com um mergulho profundo nas curvas de rotação galácticas. As velocidades anômalas das estrelas nos halos galácticos apresentaram um enigma profundo: ou as leis da gravidade precisavam de revisão, ou uma vasta quantidade de matéria invisível estava em jogo. Isso me levou a explorar o conceito de Matéria Escura, uma substância misteriosa que interage gravitacionalmente, mas não eletromagneticamente.',
+                        tags: ['Matéria Escura', 'Dinâmica Galáctica', 'Cosmologia', 'Lenteamento Gravitacional'],
+                        status: 'published',
+                        date: '2018-03-15',
+                        links: [
+                            { url: 'https://lnkd.in/deYnab4a', label: 'Publicação de Pesquisa', type: 'external' }
+                        ]
                     },
                     {
-                        title: 'Seminários de Astronomia',
-                        description: 'Palestras sobre órbitas estelares e o universo escuro no Primeiro Ciclo de Seminários da UNIFAL-MG.'
+                        id: 'astronomy-seminar',
+                        title: 'Série de Seminários de Astronomia: Órbitas Estelares e o Universo Escuro',
+                        description: 'Palestra que proferi no Primeiro Ciclo de Seminários de Astronomia da UNIFAL-MG. Minha apresentação focou em Órbitas Estelares na Galáxia, onde compartilhei simulações de movimentos estelares baseadas em modelos de distribuição de massa e soluções numéricas para acelerações, velocidades e posições estelares na Via Láctea.',
+                        tags: ['Divulgação Científica', 'Eventos Acadêmicos', 'Dinâmica Estelar'],
+                        status: 'completed',
+                        date: '2019-11-20'
+                    },
+                    {
+                        id: 'ccc-tl-cosmology',
+                        title: 'Explorando Cosmologias Alternativas: CCC+TL e Oscilações Acústicas de Bárions',
+                        description: 'Além da Matéria Escura, minha curiosidade se estende a modelos cosmológicos alternativos. Um estudo recente no "The Astrophysical Journal" sobre "Testando a Cosmologia CCC+TL com Características de Oscilação Acústica de Bárions" oferece uma perspectiva fascinante.',
+                        tags: ['Cosmologia', 'Energia Escura', 'Matéria Escura', 'Física Teórica'],
+                        status: 'published',
+                        date: '2024-01-01',
+                        links: [
+                            { url: 'https://lnkd.in/dwsKCSbM', label: 'The Astrophysical Journal', type: 'external' }
+                        ]
+                    }
+                ];
+            }
+
+            getObservatoryContent() {
+                return [
+                    {
+                        id: 'unifal-observatory',
+                        title: 'Observatório Astronômico da UNIFAL-MG',
+                        description: 'Durante meu tempo como membro da equipe do Observatório Astronômico da UNIFAL-MG (2015 a 2018), tive o privilégio de conectar mais de 2.000 visitantes de Alfenas e região às maravilhas do cosmos.',
+                        images: [
+                            { src: 'observatorio-unifal.jpg', alt: 'Observatório Astronômico da UNIFAL-MG', caption: 'Observatório Astronômico da UNIFAL-MG' },
+                            { src: 'obsLua.jpg', alt: 'Observação da Lua', caption: 'Vista detalhada da Lua' }
+                        ]
+                    }
+                ];
+            }
+
+            getInnovationContent() {
+                return [
+                    {
+                        id: 'nidustec-incubator',
+                        title: 'Incubadora de Empresas NidusTec: Conectando Academia e Empreendedorismo',
+                        description: 'Na NidusTec, abracei o papel de educador Maker, liderando projetos de Robótica, Modelagem 3D e oficinas de CNC. Esta experiência me permitiu aplicar técnicas de Computação Gráfica e Processamento de Imagens para desenvolver protótipos multidisciplinares.',
+                        tags: ['Empreendedorismo', 'Inovação', 'Educação Maker', 'Tecnologia'],
+                        status: 'completed',
+                        date: '2024-2025',
+                        links: [
+                            { url: 'https://jornal.unifal-mg.edu.br/capacitacoes-promovidas-pela-agencia-de-inovacao-e-a-incubadora-de-empresas-no-mes-de-junho-estimulam-a-cultura-empreendedora-e-a-inovacao-tecnologica-junto-a-comunidade/', label: 'Notícias UNIFAL-MG', type: 'external' }
+                        ]
+                    },
+                    {
+                        id: 'anprotec-award',
+                        title: 'Prêmio Nacional ANPROTEC de Empreendedorismo Inovador',
+                        description: 'Destaque significativo do meu envolvimento com a NidusTec foi o reconhecimento recebido no Prêmio Nacional ANPROTEC de Empreendedorismo Inovador.',
+                        tags: ['Prêmio', 'ANPROTEC', 'Empreendedorismo', 'Inovação'],
+                        status: 'awarded',
+                        date: '2024-12-04'
+                    }
+                ];
+            }
+
+            getDeepLearningProjectsContent() {
+                return [
+                    {
+                        id: 'galaxy-brightness-profiles',
+                        title: 'Perfis de Brilho de Galáxias Elípticas com o Modelo de De Vaucouleurs',
+                        description: 'Durante meu Mestrado em Física na UNIFEI, tive a oportunidade de aprofundar na Astrofísica Extragaláctica. Um projeto significativo envolveu o ajuste de perfis de brilho de galáxias elípticas utilizando o clássico perfil de De Vaucouleurs.',
+                        tags: ['Astrofísica', 'Python', 'Análise de Dados', 'Astropy'],
+                        status: 'completed',
+                        date: '2021'
+                    },
+                    {
+                        id: 'medical-image-diagnosis',
+                        title: 'Deep Learning para Diagnóstico de Imagens Médicas',
+                        description: 'Minha exploração em Machine Learning e Deep Learning me levou a uma aplicação convincente: o diagnóstico de câncer de pele a partir de imagens médicas. Utilizando conjuntos de dados de referência como ISIC 2018 Challenge e HAM10000.',
+                        tags: ['Deep Learning', 'Imagens Médicas', 'Machine Learning', 'CNNs'],
+                        status: 'ongoing',
+                        date: '2021-Presente',
+                        links: [
+                            { url: 'https://lnkd.in/dcUAP2gw', label: 'Notebook Kaggle', type: 'external' }
+                        ]
                     }
                 ];
             }
@@ -277,9 +882,22 @@
                         {
                             category: 'Habilidades Técnicas',
                             skills: [
-                                { name: 'Física e Astrofísica', proficiency: 95 },
-                                { name: 'Python e Análise de Dados', proficiency: 88 },
-                                { name: 'JavaScript e Desenvolvimento Web', proficiency: 80 }
+                                { name: 'Física e Astrofísica', proficiency: 95, years: 8, description: 'Profundo entendimento das leis físicas e fenômenos astronômicos.' },
+                                { name: 'Ciência e Análise de Dados', proficiency: 90, years: 6, description: 'Expertise em análise estatística, modelagem de dados e extração de insights.' },
+                                { name: 'Python (NumPy, Pandas, Scikit-learn)', proficiency: 88, years: 5, description: 'Proficiência avançada em Python para computação científica e ML.' },
+                                { name: 'Machine Learning e Deep Learning', proficiency: 85, years: 4, description: 'Experiência no desenvolvimento e aplicação de modelos de ML/DL.' },
+                                { name: 'JavaScript (ES6+)', proficiency: 80, years: 3, description: 'Sólidas habilidades em JavaScript moderno para aplicações web.' },
+                                { name: 'Modelagem 3D e CNC', proficiency: 78, years: 2, description: 'Proficiente na criação de modelos 3D para impressão e usinagem CNC.' }
+                            ]
+                        },
+                        {
+                            category: 'Habilidades Interpessoais e Criativas',
+                            skills: [
+                                { name: 'Pensamento Analítico e Conceitual', proficiency: 96, years: 8, description: 'Capacidade de desconstruir problemas complexos e desenvolver soluções inovadoras.' },
+                                { name: 'Ideação Criativa e Ambição', proficiency: 91, years: 7, description: 'Impulsionado a gerar novas ideias e perseguir metas ambiciosas.' },
+                                { name: 'Resolução de Problemas e Iniciativa', proficiency: 88, years: 7, description: 'Identifica proativamente desafios e implementa soluções eficazes.' },
+                                { name: 'Arquitetura de Soluções', proficiency: 85, years: 4, description: 'Habilidoso em projetar soluções abrangentes para requisitos técnicos.' },
+                                { name: 'Flexibilidade e Adaptabilidade', proficiency: 80, years: 6, description: 'Adapta-se rapidamente a novos desafios e ambientes em mudança.' }
                             ]
                         }
                     ]
@@ -295,25 +913,70 @@
             }
         }
 
-        // View Manager Simplificado
-        class ViewManager {
+        // ===== RENDER ENGINE =====
+        class RenderEngine {
             constructor() {
-                this.currentView = null;
+                this.contentModel = new ContentModel();
             }
 
-            renderSection(sectionData, container) {
+            async initialize() {
+                await this.contentModel.initializeContentModel();
+                this.renderNavigation();
+                this.renderAllSections();
+                this.setupEventListeners();
+                this.hideLoadingOverlay();
+            }
+
+            renderNavigation() {
+                const sections = this.contentModel.getSections();
+                const navContainer = document.getElementById('nav-list');
+                
+                let navHTML = '';
+                sections.forEach(section => {
+                    navHTML += `
+                        <li>
+                            <a href="#${section.id}" class="nav-link" data-section="${section.id}">
+                                ${section.title}
+                            </a>
+                        </li>
+                    `;
+                });
+                
+                navContainer.innerHTML = navHTML;
+            }
+
+            renderAllSections() {
+                const sections = this.contentModel.getSections();
+                const container = document.getElementById('sections-container');
+                
+                sections.forEach(section => {
+                    const sectionElement = this.renderSection(section);
+                    container.appendChild(sectionElement);
+                });
+            }
+
+            renderSection(sectionData) {
                 const sectionElement = document.createElement('section');
                 sectionElement.className = 'section';
                 sectionElement.id = sectionData.id;
 
-                sectionElement.innerHTML = `
-                    <h2 class="section-title">${sectionData.title}</h2>
-                    <p class="section-subtitle">${sectionData.subtitle}</p>
-                    <div class="section-content" id="content-${sectionData.id}"></div>
+                const sectionHTML = `
+                    <div class="section-container">
+                        <div class="section-header">
+                            <h2 class="section-title">${sectionData.title}</h2>
+                            <p class="section-subtitle">${sectionData.subtitle}</p>
+                        </div>
+                        <div class="section-content" id="content-${sectionData.id}"></div>
+                    </div>
                 `;
 
-                container.appendChild(sectionElement);
-                this.renderSectionContent(sectionData, document.getElementById(`content-${sectionData.id}`));
+                sectionElement.innerHTML = sectionHTML;
+                
+                // Renderizar conteúdo específico baseado no tipo
+                const contentContainer = sectionElement.querySelector(`#content-${sectionData.id}`);
+                this.renderSectionContent(sectionData, contentContainer);
+                
+                return sectionElement;
             }
 
             renderSectionContent(sectionData, container) {
@@ -324,6 +987,12 @@
                     case 'cards':
                         this.renderCards(sectionData.content, container);
                         break;
+                    case 'skills':
+                        this.renderSkills(sectionData.content, container);
+                        break;
+                    case 'gallery':
+                        this.renderGallery(sectionData.content, container);
+                        break;
                     default:
                         container.innerHTML = `<p>Conteúdo em desenvolvimento...</p>`;
                 }
@@ -333,13 +1002,20 @@
                 if (!content.timeline) return;
                 
                 let timelineHTML = '<div class="timeline">';
-                content.timeline.forEach(item => {
+                content.timeline.forEach((item, index) => {
                     timelineHTML += `
-                        <div class="timeline-item">
+                        <div class="timeline-item ${index % 2 === 0 ? 'left' : 'right'}">
                             <div class="timeline-period">${item.period}</div>
                             <div class="timeline-content">
-                                <h3>${item.title}</h3>
-                                <p>${item.description}</p>
+                                <h3 class="timeline-title">${item.title}</h3>
+                                <p class="timeline-description">${item.description}</p>
+                                ${item.highlights ? `
+                                    <ul class="highlights-list">
+                                        ${item.highlights.map(highlight => 
+                                            `<li class="highlight-tag">${highlight}</li>`
+                                        ).join('')}
+                                    </ul>
+                                ` : ''}
                             </div>
                         </div>
                     `;
@@ -349,87 +1025,77 @@
             }
 
             renderCards(content, container) {
-                if (Array.isArray(content)) {
-                    let cardsHTML = '<div class="cards-grid">';
-                    content.forEach(item => {
-                        cardsHTML += `
-                            <div class="card">
-                                <h3>${item.title}</h3>
-                                <p>${item.description}</p>
+                if (!Array.isArray(content)) return;
+                
+                let cardsHTML = '<div class="cards-grid">';
+                content.forEach(item => {
+                    cardsHTML += `
+                        <div class="card">
+                            <h3 class="card-title">${item.title}</h3>
+                            <p class="card-description">${item.description}</p>
+                            ${item.tags ? `
+                                <div class="tags-container">
+                                    ${item.tags.map(tag => 
+                                        `<span class="tag">${tag}</span>`
+                                    ).join('')}
+                                </div>
+                            ` : ''}
+                            <div class="card-meta">
+                                <span class="card-date">${item.date}</span>
+                                ${item.status ? `<span class="card-status">${item.status}</span>` : ''}
                             </div>
-                        `;
-                    });
-                    cardsHTML += '</div>';
-                    container.innerHTML = cardsHTML;
-                } else if (content.categories) {
-                    let skillsHTML = '<div class="skills-container">';
-                    content.categories.forEach(category => {
-                        skillsHTML += `<h3>${category.category}</h3>`;
-                        category.skills.forEach(skill => {
-                            skillsHTML += `
+                        </div>
+                    `;
+                });
+                cardsHTML += '</div>';
+                container.innerHTML = cardsHTML;
+            }
+
+            renderSkills(content, container) {
+                if (!content.categories) return;
+                
+                let skillsHTML = '<div class="skills-categories">';
+                content.categories.forEach(category => {
+                    skillsHTML += `
+                        <div class="skill-category">
+                            <h3 class="category-title">${category.category}</h3>
+                            ${category.skills.map(skill => `
                                 <div class="skill-item">
-                                    <span>${skill.name}</span>
+                                    <div class="skill-header">
+                                        <span class="skill-name">${skill.name}</span>
+                                        <span class="skill-proficiency">${skill.proficiency}%</span>
+                                    </div>
                                     <div class="skill-bar">
                                         <div class="skill-progress" style="width: ${skill.proficiency}%"></div>
                                     </div>
-                                    <span>${skill.proficiency}%</span>
+                                    <p class="skill-description">${skill.description}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                });
+                skillsHTML += '</div>';
+                container.innerHTML = skillsHTML;
+            }
+
+            renderGallery(content, container) {
+                if (!Array.isArray(content)) return;
+                
+                let galleryHTML = '<div class="gallery-grid">';
+                content.forEach(item => {
+                    if (item.images) {
+                        item.images.forEach(image => {
+                            galleryHTML += `
+                                <div class="gallery-item">
+                                    <img src="${image.src}" alt="${image.alt}" class="gallery-image">
+                                    <div class="gallery-caption">${image.caption}</div>
                                 </div>
                             `;
                         });
-                    });
-                    skillsHTML += '</div>';
-                    container.innerHTML = skillsHTML;
-                }
-            }
-
-            renderNavigation(sections, container) {
-                let navHTML = '';
-                sections.forEach(section => {
-                    navHTML += `
-                        <li><a href="#${section.id}" class="nav-link" data-section="${section.id}">${section.title}</a></li>
-                    `;
+                    }
                 });
-                container.innerHTML = navHTML;
-            }
-        }
-
-        // Aplicação Principal
-        class App {
-            constructor() {
-                this.contentModel = new ContentModel();
-                this.viewManager = new ViewManager();
-                this.isInitialized = false;
-            }
-
-            async initialize() {
-                try {
-                    await this.contentModel.initializeContentModel();
-                    this.renderNavigation();
-                    this.renderAllSections();
-                    this.setupEventListeners();
-                    this.hideLoadingOverlay();
-                    this.isInitialized = true;
-                    
-                    console.info('Aplicação inicializada com sucesso');
-                } catch (error) {
-                    console.error('Falha na inicialização da aplicação:', error);
-                    this.showError();
-                }
-            }
-
-            renderNavigation() {
-                const sections = this.contentModel.getSections();
-                const navContainer = document.getElementById('nav-list');
-                this.viewManager.renderNavigation(sections, navContainer);
-            }
-
-            renderAllSections() {
-                const sections = this.contentModel.getSections();
-                const container = document.getElementById('sections-container');
-                
-                sections.forEach(section => {
-                    this.viewManager.renderSection(section, container);
-                });
+                galleryHTML += '</div>';
+                container.innerHTML = galleryHTML;
             }
 
             setupEventListeners() {
@@ -441,12 +1107,38 @@
                         const targetElement = document.getElementById(targetId);
                         
                         if (targetElement) {
-                            targetElement.scrollIntoView({ 
-                                behavior: 'smooth',
-                                block: 'start'
+                            const offsetTop = targetElement.offsetTop - 80;
+                            window.scrollTo({
+                                top: offsetTop,
+                                behavior: 'smooth'
                             });
                         }
                     });
+                });
+
+                // Ativar navegação baseada no scroll
+                window.addEventListener('scroll', this.handleScrollNavigation.bind(this));
+            }
+
+            handleScrollNavigation() {
+                const sections = document.querySelectorAll('.section');
+                const navLinks = document.querySelectorAll('.nav-link');
+                
+                let currentSection = '';
+                
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop - 100;
+                    const sectionHeight = section.clientHeight;
+                    if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {
+                        currentSection = section.id;
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${currentSection}`) {
+                        link.classList.add('active');
+                    }
                 });
             }
 
@@ -454,31 +1146,35 @@
                 const overlay = document.getElementById('loading-overlay');
                 if (overlay) {
                     overlay.style.opacity = '0';
-                    setTimeout(() => overlay.remove(), 500);
-                }
-            }
-
-            showError() {
-                const container = document.getElementById('sections-container');
-                if (container) {
-                    container.innerHTML = `
-                        <div class="error-state">
-                            <h3>Erro ao Carregar Conteúdo</h3>
-                            <p>Por favor, recarregue a página ou tente novamente mais tarde.</p>
-                            <button onclick="window.location.reload()">Recarregar Página</button>
-                        </div>
-                    `;
+                    setTimeout(() => {
+                        overlay.style.display = 'none';
+                    }, 500);
                 }
             }
         }
 
-        // Inicialização da Aplicação
+        // ===== INICIALIZAÇÃO DA APLICAÇÃO =====
         document.addEventListener('DOMContentLoaded', async () => {
-            const app = new App();
-            await app.initialize();
-            
-            // Para debugging
-            window.app = app;
+            try {
+                const app = new RenderEngine();
+                await app.initialize();
+                
+                // Para debugging
+                window.app = app;
+                
+                console.log('🚀 Portfólio carregado com sucesso!');
+            } catch (error) {
+                console.error('❌ Erro ao inicializar aplicação:', error);
+                document.getElementById('loading-overlay').innerHTML = `
+                    <div style="text-align: center; color: white;">
+                        <h2>Erro ao carregar</h2>
+                        <p>Por favor, recarregue a página.</p>
+                        <button onclick="window.location.reload()" style="padding: 10px 20px; margin-top: 20px;">
+                            Recarregar
+                        </button>
+                    </div>
+                `;
+            }
         });
     </script>
 </body>
