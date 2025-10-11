@@ -61,6 +61,35 @@
         .app-container { opacity: 0; }
         .js-enabled .app-container { opacity: 1; transition: opacity 0.3s ease-in; }
         
+        /* Loading Overlay */
+        #loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease-out;
+        }
+        
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #264B93;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
         /* Accessibility: Skip Link */
         .skip-link { 
             position: absolute; 
@@ -83,6 +112,33 @@
             padding: 1rem; 
             text-align: center; 
             border-bottom: 2px solid #ffc107;
+        }
+        
+        /* Error States */
+        .browser-compatibility-error,
+        .critical-error-container,
+        .initialization-error-container {
+            padding: 2rem;
+            max-width: 600px;
+            margin: 2rem auto;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            background: #f8fafc;
+        }
+        
+        .error-title {
+            color: #dc2626;
+            margin-bottom: 1rem;
+        }
+        
+        .retry-button {
+            background: #264B93;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
         }
         
         /* Hide dynamic content until JS initializes */
@@ -127,6 +183,14 @@
         </div>
     </noscript>
 
+    <!-- Loading Overlay -->
+    <div id="loading-overlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <p>Loading Portfolio...</p>
+        </div>
+    </div>
+
     <div id="app" class="app-container" 
          aria-live="polite" 
          aria-atomic="true" 
@@ -145,6 +209,7 @@
                      data-view="navigation" 
                      data-navigation-state="collapsed"
                      aria-label="Primary navigation">
+                    <!-- Navigation will be rendered by NavigationView -->
                 </nav>
 
                 <div class="user-preference-controls" aria-label="User preference controls">
@@ -182,6 +247,7 @@
             <div class="hero-background" aria-hidden="true"></div>
             <div class="container">
                 <div class="hero-content-container">
+                    <!-- Hero content will be rendered by HeroView -->
                 </div>
             </div>
         </section>
@@ -202,9 +268,7 @@
                 <span class="loading-text">Loading content...</span>
             </div>
 
-            <!-- The SectionView will render all sections directly into main-content -->
-            <!-- The #dynamic-content div is no longer needed as a separate container for sections -->
-            <!-- The sections themselves will contain a .dynamic-content-area for their specific content -->
+            <!-- Sections will be rendered here by SectionView -->
         </main>
 
         <aside id="accessibility-menu" 
@@ -288,6 +352,7 @@
                 role="contentinfo"
                 aria-label="Site footer">
             <div class="container">
+                <!-- Footer content will be rendered by FooterView -->
             </div>
         </footer>
 
@@ -299,13 +364,6 @@
              aria-relevant="additions"
              hidden></div>
     </div>
-
-
-
-
-
-
-
 
     <script nomodule>
         /**
@@ -351,10 +409,7 @@
 
         console.warn("Legacy browser detected: Some features may be unavailable");
     </script>
+
+    <script type="module" src="/src/app.js"></script>
 </body>
 </html>
-
-
-
-
-    <script type="module" src="./app.js"></script>
