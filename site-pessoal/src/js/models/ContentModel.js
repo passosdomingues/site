@@ -421,7 +421,7 @@ class ContentModel {
                 title: 'Dark Matter Research',
                 description: 'Study of galactic rotation curves and dark matter evidence through velocity dispersion analysis and gravitational lensing observations.',
                 image: {
-                    src: 'assets/images/bullet-cluster-black-matter_upscayl.png',
+                    src: 'src/images/bullet-cluster-black-matter_upscayl.png',
                     alt: 'Bullet Cluster showing dark matter distribution',
                     caption: 'Bullet Cluster - Dark Matter Evidence'
                 },
@@ -441,7 +441,7 @@ class ContentModel {
                 title: 'Astronomy Seminar Series',
                 description: 'First Cycle of Astronomy Seminars at UNIFAL-MG featuring presentations on stellar orbits and dark matter research methodologies.',
                 image: {
-                    src: 'assets/images/seminario.jpg',
+                    src: 'src/images/seminario.jpg',
                     alt: 'Astronomy seminar presentation',
                     caption: 'Astronomy Seminar Presentation'
                 },
@@ -466,7 +466,7 @@ class ContentModel {
                 description: 'Coordination of scientific outreach activities, public observation sessions, and educational workshops.',
                 images: [
                     {
-                        src: 'assets/images/observatorio-unifal.jpg',
+                        src: 'src/images/observatorio-unifal.jpg',
                         alt: 'UNIFAL-MG Astronomical Observatory',
                         caption: 'Public Observation Session'
                     }
@@ -493,7 +493,7 @@ class ContentModel {
                 description: 'Comprehensive tour of Mackenzie Center for Radioastronomy and Astrophysics research facilities and instrumentation.',
                 images: [
                     {
-                        src: 'assets/images/craam-tour-1.jpg',
+                        src: 'src/images/craam-tour-1.jpg',
                         alt: 'CRAAM research facility tour',
                         caption: 'Research Facility Exploration'
                     }
@@ -557,7 +557,7 @@ class ContentModel {
                 title: 'NidusTec Business Incubator',
                 description: 'Working at the intersection of academia and industry to foster technology innovation and startup development.',
                 image: {
-                    src: 'assets/images/nidustec-innovation.jpg',
+                    src: 'src/images/nidustec-innovation.jpg',
                     alt: 'NidusTec innovation ecosystem',
                     caption: 'Innovation Ecosystem Development'
                 },

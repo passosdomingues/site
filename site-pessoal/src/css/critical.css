@@ -43,6 +43,92 @@
 /* Hide dynamic content until JS loads */
 [data-app-initialized="false"] .dynamic-content-container,
 [data-hero-initialized="false"] .hero-content-container,
-[data-main-initialized="false"] .main-content > *:not(.content-loading-indicator) {
+main[data-main-initialized="false"] > *:not(.content-loading-indicator) {
   display: none;
+}
+
+/**
+ * @brief Show loading indicator while main content initializes
+ * @description Ensures users see loading state during initialization
+ */
+main[data-main-initialized="false"] .content-loading-indicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  font-size: 1.1rem;
+  color: var(--color-text-secondary);
+}
+
+/**
+ * @brief Show main content after initialization completes
+ * @description Reveals all content when data-main-initialized becomes "true"
+ */
+main[data-main-initialized="true"] > * {
+  display: block;
+}
+
+main[data-main-initialized="true"] .content-loading-indicator {
+  display: none;
+}
+
+/**
+ * @brief Animation for content loading indicator
+ * @description Provides visual feedback during content loading
+ */
+.content-loading-indicator {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
+
+/**
+ * @brief Accessibility improvements for loading states
+ * @description Ensures screen readers properly announce loading status
+ */
+[aria-busy="true"] {
+  cursor: progress;
+}
+
+.content-loading-indicator[aria-live="polite"] {
+  position: relative;
+}
+
+/**
+ * @brief Print styles for critical content
+ * @description Ensures essential content prints correctly
+ */
+@media print {
+  .content-loading-indicator,
+  [data-main-initialized="false"] {
+    display: none !important;
+  }
+  
+  main[data-main-initialized="true"] {
+    display: block !important;
+  }
+}
+
+/**
+ * @brief Reduced motion support for loading animations
+ * @description Respects user motion preferences
+ */
+@media (prefers-reduced-motion: reduce) {
+  .content-loading-indicator {
+    animation: none;
+  }
+  
+  .js-enabled .app-container {
+    transition: none;
+  }
 }
