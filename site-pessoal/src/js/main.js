@@ -1,23 +1,4 @@
-import imgBulletCluster from '../images/bullet-cluster-black-matter_upscayl.png';
-import imgCraamAntena from '../images/craamAntena.jpg';
-import imgCraamControle from '../images/craamControle.jpg';
-import imgCraamDomo from '../images/craamDomo.jpg';
-import imgCraamEscada from '../images/craamEscada.jpg';
-import imgEscolaOBS1 from '../images/escolaOBS1.png';
-import imgEscolaOBS2 from '../images/escolaOBS2.jpg';
-import imgEscolaOBS3 from '../images/escolaOBS3.jpg';
-import imgEscolaOBS4 from '../images/escolaOBS4.jpg';
-import imgNidus from '../images/nidus.jpg';
-import imgObs1 from '../images/obs1.jpg';
-import imgObs2 from '../images/obs2.jpg';
-import imgObs3 from '../images/obs3.jpg';
-import imgObs4 from '../images/obs4.jpg';
-import imgObs5 from '../images/obs5.jpg';
-import imgObsGalaxiaSombrero from '../images/obsGalaxiaSombrero.jpg';
-import imgObsLua from '../images/obsLua.jpg';
-import imgPerfilMid from '../images/perfilMid.png';
-import imgSeminario from '../images/seminario.jpg';
-
+// ===== CONTENT MODEL - COMPLETE AND DETAILED VERSION =====
 class ContentModel {
     constructor() {
         this.sections = [];
@@ -118,32 +99,32 @@ class ContentModel {
                 {
                     period: '2014-2018',
                     title: 'Bachelor\'s in Physics, UNIFAL-MG',
-                    description: 'My academic journey began with a Bachelor\'s in Physics at UNIFAL-MG. During this period, I dove into the fascinating world of Galactic and Extragalactic Astrophysics, participating in research that gave me a solid foundation in scientific methodology and complex data analysis.',
+                    description: 'As a Physics student at UNIFAL-MG (2014-2018), I was a scholar in Galactic and Extragalactic Astrophysics, integrating the team of the UNIFAL-MG Astronomical Observatory (2016-2018), where I could work with science dissemination.',
                     highlights: ['Astrophysics', 'Scientific Initiation', 'Data Analysis']
                 },
                 {
                     period: '2019-2022',
                     title: 'Physics Teacher, State Department of Education of Minas Gerais',
-                    description: 'After graduation, I dedicated myself to education, teaching Physics in three municipalities in Minas Gerais. This role challenged me to adapt scientific knowledge to diverse audiences, especially during the unprecedented period of 2020-2022, where I applied technical expertise to overcome educational obstacles.',
-                    highlights: ['Scientific Education', 'Experimental Physics', 'Pedagogical Innovation']
+                    description: 'I taught at SEE-MG (2019-2022) bringing scientific knowledge in theoretical, experimental and practical spheres, applying technical knowledge to the challenges that the period (2020-2022) brought, to three municipalities in Minas Gerais.',
+                    highlights: ['Teaching', 'Educational Material Development', 'Remote Education']
                 },
                 {
                     period: '2021-2023',
                     title: 'Master\'s in Physics, UNIFEI',
-                    description: 'My Master\'s in Physics at UNIFEI focused on Active Galactic Nuclei, a field where I developed a deep appreciation for data analysis. This research experience solidified my interest in extracting insights from complex datasets, laying the groundwork for my future endeavors in data science.',
-                    highlights: ['AGN Research', 'Advanced Data Analysis', 'Scientific Computing']
+                    description: 'During my Master\'s in Physics at UNIFEI (2021-2023), I had research in Active Galactic Nuclei: That\'s when I acquired a special passion for data.',
+                    highlights: ['Research', 'Data Analysis', 'Active Galactic Nuclei']
                 },
                 {
                     period: '2023-Present',
                     title: 'Bachelor\'s in Computer Science, UNIFAL-MG',
-                    description: 'In 2023, I embarked on a new academic path, pursuing a Bachelor\'s in Computer Science at UNIFAL-MG. This transition reflects my commitment to bridging theoretical physics and practical technological solutions. Concurrently, I joined the NidusTec/UNIFAL-MG Technology-Based Business Incubator, connecting academia with the market and fostering innovation.',
-                    highlights: ['Software Development', 'Data Science', 'Machine Learning', 'Academia-Industry Connection']
+                    description: 'In 2023 I made the career transition decision, becoming a student of the Bachelor\'s in Computer Science at UNIFAL-MG (2023-2029) and a gardener in my spare time.',
+                    highlights: ['Career Transition', 'Computer Science', 'Software Development']
                 },
                 {
                     period: '2024-2025',
                     title: 'Innovation Ecosystem and Maker Educator, NidusTec/UNIFAL-MG',
-                    description: 'At NidusTec, I embraced the role of Maker Educator, leading projects in Robotics, 3D Modeling, and CNC workshops. This experience allowed me to apply computer graphics and image processing techniques in multidisciplinary prototypes, addressing institutional infrastructure needs and exploring research in Innovation, Entrepreneurship, Production Engineering, and Industry 4.0. I developed MVPs with market potential, demonstrating my ability to turn ideas into tangible solutions.',
-                    highlights: ['Entrepreneurship', 'Technology Transfer', 'Maker Education', '3D Modeling and CNC', 'Robotics', 'Innovation Management']
+                    description: 'I joined the team of the Technology-Based Business Incubator - NidusTec/UNIFAL-MG (2024-2025), connecting academia and market: There I developed a Maker educator side, developing Robotics projects and generalist and multidisciplinary prototyping in the spheres of teaching, research, extension, evolving to meet demands even of obsolescence of the institutional infrastructure through 3D and CNC modeling and manufacturing by the NidusLab Maker Laboratory. These challenges led me to develop another researcher side in Innovation, Entrepreneurship, Production Engineering and Industry 4.0, having developed in the period MVP prototypes for computer programs and products with market potential.',
+                    highlights: ['Innovation', 'Entrepreneurship', 'Maker Education', '3D Modeling', 'CNC']
                 }
             ]
         };
@@ -152,75 +133,57 @@ class ContentModel {
     getAstrophysicsContent() {
         return [
             {
-                title: 'Unveiling the Invisible: My Journey in Dark Matter Research',
-                description: 'My research in Dark Matter began with a deep dive into galactic rotation curves. The anomalous velocities of stars in galactic halos presented a profound enigma: either the laws of gravity needed revision, or a vast amount of invisible matter was at play. This led me to explore the concept of Dark Matter, a mysterious substance that interacts gravitationally but not electromagnetically. A crucial moment in my understanding came from studying the Bullet Cluster, a cosmic collision where gravitational lensing revealed a mass distribution far exceeding visible matter. The separation of ordinary and dark matter during this collision provided compelling visual evidence for the existence of Dark Matter. I had the privilege of presenting these findings at the First Cycle of Astronomy Seminars at UNIFAL-MG, turning years of observation into theoretical rigor and sharing the frontiers of cosmology with a captivated audience. This experience reinforced my belief in higher education as a vital engine for research and extension, bridging the gap between telescopic fascination and theoretical astrophysics.',
-                image: {
-                    src: imgBulletCluster,
-                    alt: 'Bullet Cluster showing dark matter distribution',
-                    caption: 'Bullet Cluster: Visual evidence of Dark Matter (Credit: NASA/CXC/M.Weiss)'
-                },
+                title: 'Beyond the Telescope: Diving into the Frontier of Galactic Astrophysics at UNIFAL-MG',
+                description: 'Looking at the sky through the eyepiece is the first step, but what really moves me is the mystery of Galactic Astrophysics and the structure of the Universe on a large scale. This image (recorded in late 2019) marks a significant moment in my life: a lecture I had the honor of delivering at the First Cycle of Seminars in Astronomy at UNIFAL-MG. It was the opportunity to transform years of observation into theoretical rigor and cutting-edge techniques. That night, we went far beyond dissemination. My presentation focused on the core developments of my research: Stellar Orbits in the Galaxy. I shared simulations of star motion from mass distribution models applied to the Gaussian law of Gravitation and numerical solutions for accelerations, velocities and stellar positions in the Milky Way and presented the evidence that led to postulates of the existence of something invisible: Dark Matter and Modified Gravitation.',
                 links: [
-                    { url: 'https://lnkd.in/deYnab4a', label: 'Related Research Publication', type: 'external' }
+                    { url: 'https://lnkd.in/deYnab4a', label: 'Research Paper' }
                 ],
-                tags: ['Dark Matter', 'Galactic Dynamics', 'Cosmology', 'Gravitational Lensing', 'Scientific Communication'],
-                status: 'published',
-                date: '2018-03-15'
+                tags: ['Dark Matter', 'Galactic Astrophysics', 'Research', 'Stellar Orbits'],
+                status: 'Completed',
+                date: '2019'
             },
             {
-                title: 'Astronomy Seminar Series: Stellar Orbits and the Dark Universe',
-                description: 'This image captures a significant moment: a lecture I delivered at the First Cycle of Astronomy Seminars at UNIFAL-MG. My presentation focused on Stellar Orbits in the Galaxy, where I shared simulations of stellar motions based on mass distribution models and numerical solutions for accelerations, velocities, and stellar positions in the Milky Way. I discussed the evidence that led to the postulates of Dark Matter and Modified Gravity, particularly highlighting the Rotation Curves of galaxies. This anomaly, where stars in the galactic halo move too fast, suggests that most of the Milky Way\'s mass is invisible. Sharing these complex ideas and challenging the audience with the mysteries of the cosmos was a profound experience, reinforcing the role of higher education in driving both research and public engagement.',
-                image: {
-                    src: imgSeminario,
-                    alt: 'Astronomy seminar presentation on stellar orbits and dark matter',
-                    caption: 'Presentation on Stellar Orbits and Dark Matter at UNIFAL-MG Seminar (2019)'
-                },
-                links: [],
-                tags: ['Scientific Outreach', 'Academic Events', 'Stellar Dynamics', 'Dark Matter', 'Public Speaking'],
-                status: 'completed',
-                date: '2019-11-20'
-            },
-            {
-                title: 'Exploring Alternative Cosmologies: CCC+TL and Baryon Acoustic Oscillations',
-                description: 'Beyond Dark Matter, my curiosity extends to alternative cosmological models. A recent study in "The Astrophysical Journal" on "Testing CCC+TL Cosmology with Baryon Acoustic Oscillation Features" offers a fascinating perspective. It proposes that the universe\'s forces weaken as it expands, creating an illusion of dark energy driving accelerated expansion. On galactic scales, this variation in forces within gravitationally bound systems could explain the "extra gravity" attributed to dark matter. This research highlights the ongoing quest to understand the fundamental forces shaping our universe and the intricate interplay between theory and observation in modern cosmology.',
+                title: 'Testing CCC+TL Cosmology with Observed Baryon Acoustic Oscillation Features',
+                description: 'A recent study published in "The Astrophysical Journal" brings a new interpretation. "The forces of the universe, in fact, become weaker on average as it expands," explained Gupta. "This weakening makes it seem like there is a mysterious force driving the accelerated expansion of the universe (which is identified as dark energy). However, on the scales of galaxies and galactic clusters, the variation of these forces in their gravitationally bound spaces results in extra gravity (which is considered attributed to dark matter)"',
                 links: [
-                    { url: 'https://lnkd.in/dwsKCSbM', label: 'The Astrophysical Journal Publication', type: 'external' }
+                    { url: 'https://lnkd.in/dwsKCSbM', label: 'The Astrophysical Journal' }
                 ],
-                tags: ['Cosmology', 'Dark Energy', 'Dark Matter', 'Baryon Acoustic Oscillation', 'Theoretical Physics'],
-                status: 'published',
-                date: '2024-01-01'
+                tags: ['Cosmology', 'Dark Energy', 'Dark Matter', 'Research'],
+                status: 'Published',
+                date: '2024'
             }
         ];
     }
 
     getObservatoryContent() {
         return [
-            { imageUrl: imgObs1, caption: 'Main dome of the UNIFAL-MG Astronomical Observatory' },
-            { imageUrl: imgObs2, caption: 'Public observation night at the observatory' },
-            { imageUrl: imgObs3, caption: 'Recording of the Orion Nebula (M42)' },
-            { imageUrl: imgObs4, caption: 'Research and extension team at the observatory' },
-            { imageUrl: imgObs5, caption: 'Observatory dome under the starry sky' },
-            { imageUrl: imgEscolaOBS1, caption: 'Scientific outreach lecture for schools' },
-            { imageUrl: imgEscolaOBS2, caption: 'Students observing the Sun with a solar filter' },
-            { imageUrl: imgEscolaOBS3, caption: 'Engaging with students during an outreach event' },
-            { imageUrl: imgEscolaOBS4, caption: 'Hands-on astronomy activity with school groups' },
-            { imageUrl: imgObsLua, caption: 'Detailed view of the Moon captured at the observatory' },
-            { imageUrl: imgObsGalaxiaSombrero, caption: 'Sombrero Galaxy (M104) captured through astrophotography' }
+            { imageUrl: './images/bullet-cluster-black-matter_upscayl.png', caption: 'Bullet Cluster showing dark matter distribution' },
+            { imageUrl: './images/seminario.jpg', caption: 'Astronomy seminar presentation at UNIFAL-MG' },
+            { imageUrl: './images/obs1.jpg', caption: 'Main telescope at UNIFAL-MG Observatory' },
+            { imageUrl: './images/obs2.jpg', caption: 'Public observation night' },
+            { imageUrl: './images/obs3.jpg', caption: 'Orion Nebula (M42) recording' },
+            { imageUrl: './images/escolaOBS1.png', caption: 'Scientific outreach event for schools' },
+            { imageUrl: './images/escolaOBS2.jpg', caption: 'Students observing with telescope' },
+            { imageUrl: './images/escolaOBS3.jpg', caption: 'Astronomy presentation for students' },
+            { imageUrl: './images/escolaOBS4.jpg', caption: 'Hands-on activity during outreach event' },
+            { imageUrl: './images/obsLua.jpg', caption: 'Detailed Moon observation' },
+            { imageUrl: './images/obsGalaxiaSombrero.jpg', caption: 'Sombrero Galaxy (M104) astrophotography' }
         ];
     }
 
     getCraamContent() {
         return [
-            { imageUrl: imgCraamAntena, caption: '7 GHz Solar Radio Polarimeter antenna at CRAAM' },
-            { imageUrl: imgCraamControle, caption: 'Control room at CRAAM' },
-            { imageUrl: imgCraamDomo, caption: 'Inside the CRAAM dome with the 1.5-meter antenna' },
-            { imageUrl: imgCraamEscada, caption: 'External staircase to the observation deck' }
+            { imageUrl: './images/craamAntena.jpg', caption: 'Radio Polarimeter antenna at CRAAM' },
+            { imageUrl: './images/craamControle.jpg', caption: 'Control room at CRAAM' },
+            { imageUrl: './images/craamDomo.jpg', caption: 'Inside the CRAAM dome' },
+            { imageUrl: './images/craamEscada.jpg', caption: 'Access to radio-heliograph instrumentation' }
         ];
     }
 
     getLnaTelescopeContent() {
         return [
-            { imageUrl: imgObs4, caption: 'LNA Observatory at sunset' },
-            { imageUrl: imgObs5, caption: 'Aerial view of the National Astrophysics Laboratory (LNA)' }
+            { imageUrl: './images/obs4.jpg', caption: 'LNA Observatory at sunset' },
+            { imageUrl: './images/obs5.jpg', caption: 'Aerial view of National Astrophysics Laboratory (LNA)' }
         ];
     }
 
@@ -230,32 +193,20 @@ class ContentModel {
                 {
                     period: '2016-2018',
                     title: 'Teaching Assistant, Physics Department, UNIFAL-MG',
-                    description: 'During my undergraduate studies, I served as a Teaching Assistant in the Physics Department at UNIFAL-MG. This role was fundamental to developing my pedagogical skills, as I was responsible for laboratory instruction for undergraduate physics courses, developing experimental protocols, and providing academic mentoring and support to students. I found immense satisfaction in helping students understand complex concepts through hands-on experiments, and I contributed to the creation of new and engaging laboratory materials. This experience solidified my understanding of fundamental physics principles and my ability to communicate them effectively.',
-                    highlights: [
-                        'Provided laboratory instruction and academic support to undergraduate physics students',
-                        'Developed and refined experimental protocols for physics courses',
-                        'Mentored students, fostering a deeper understanding of scientific concepts'
-                    ]
+                    description: 'During my undergraduate studies, I served as a Teaching Assistant in the Physics Department at UNIFAL-MG, responsible for laboratory instruction, developing experimental protocols, and providing academic mentoring.',
+                    highlights: ['Laboratory Instruction', 'Academic Support', 'Experimental Protocols']
                 },
                 {
                     period: '2017-2018',
                     title: 'Educational Material Developer, UNIFAL-MG Astronomical Observatory',
-                    description: 'My passion for astronomy extended to educational outreach at the UNIFAL-MG Astronomical Observatory. As an Educational Material Developer, I led the creation of engaging astronomy education materials and played a key role in developing and coordinating public outreach programs and workshops. Through these initiatives, I reached over 500 students, fostering scientific curiosity and developing innovative teaching methodologies that made complex astronomical phenomena accessible and exciting. This experience highlighted the importance of scientific communication and its power to inspire the next generation.',
-                    highlights: [
-                        'Created and implemented astronomy education materials for public outreach',
-                        'Developed and coordinated successful public outreach programs and workshops',
-                        'Reached over 500 students, fostering scientific curiosity and innovative teaching methodologies'
-                    ]
+                    description: 'I led the creation of engaging astronomy education materials and played a key role in developing and coordinating public outreach programs and workshops, reaching over 500 students.',
+                    highlights: ['Educational Materials', 'Public Outreach', 'Workshops']
                 },
                 {
                     period: '2019-2022',
                     title: 'Physics Teacher, State Department of Education of Minas Gerais',
-                    description: 'After my undergraduate studies, I dedicated myself to education, teaching Physics in three municipalities in Minas Gerais. This role challenged me to adapt scientific knowledge to diverse audiences, especially during the unprecedented period of 2020-2022, where I applied technical expertise to overcome educational obstacles. I developed innovative teaching strategies, including virtual labs and interactive online content, to ensure continuous learning during remote education. This experience significantly enhanced my ability to communicate complex scientific concepts in an accessible and engaging manner, promoting critical thinking and problem-solving skills among my students.',
-                    highlights: [
-                        'Taught Physics in three municipalities, adapting curriculum to diverse student needs',
-                        'Developed innovative teaching strategies, including virtual labs and interactive online content',
-                        'Successfully navigated the challenges of remote education during 2020-2022, ensuring continuous learning'
-                    ]
+                    description: 'I taught Physics in three municipalities, adapting scientific knowledge to diverse audiences and developing innovative teaching strategies including virtual labs and interactive online content during remote education.',
+                    highlights: ['Teaching', 'Curriculum Adaptation', 'Innovative Strategies']
                 }
             ]
         };
@@ -266,16 +217,20 @@ class ContentModel {
             {
                 title: 'NidusTec - Technology-Based Business Incubator',
                 description: 'As part of the NidusTec team, I acted as a bridge between academic research and the market, helping to transform innovative projects into successful startups. My role involved technical feasibility analysis of projects, product development mentoring, and the search for emerging technologies with market potential.',
-                date: '2021-2023',
+                links: [
+                    { url: 'https://jornal.unifal-mg.edu.br/capacitacoes-promovidas-pela-agencia-de-inovacao-e-a-incubadora-de-empresas-no-mes-de-junho-estimulam-a-cultura-empreendedora-e-a-inovacao-tecnologica-junto-a-comunidade/', label: 'UNIFAL-MG News: June Training' },
+                    { url: 'https://anprotec.org.br/site/2024/12/premio-nacional-anprotec-de-empreendedorismo-inovador-2024-revela-vencedores-em-sao-jose-dos-campos/', label: 'ANPROTEC Award News' }
+                ],
+                tags: ['Innovation', 'Entrepreneurship', 'Technology', 'Startups'],
                 status: 'Completed',
-                tags: ['Innovation', 'Entrepreneurship', 'Technology', 'Startups']
+                date: '2021-2023'
             },
             {
                 title: 'Development of a Data Analysis System for Precision Agriculture',
                 description: 'This project, developed in partnership with a NidusTec startup, created a platform for analyzing drone and sensor data in the field. The system uses machine learning algorithms to optimize the use of resources, such as water and fertilizers, increasing productivity and sustainability in agribusiness.',
-                date: '2022',
+                tags: ['Machine Learning', 'Precision Agriculture', 'Python', 'Innovation'],
                 status: 'Completed',
-                tags: ['Machine Learning', 'Precision Agriculture', 'Python', 'Innovation']
+                date: '2022'
             }
         ];
     }
@@ -285,16 +240,16 @@ class ContentModel {
             {
                 title: 'Brain Tumor Segmentation in Magnetic Resonance Images',
                 description: 'This project used a U-Net architecture for automatic segmentation of brain tumors in magnetic resonance images. The goal was to create a tool to support medical diagnosis, increasing the accuracy and speed of analysis. The model was trained on a large dataset of medical images and achieved high performance.',
-                date: '2023',
+                tags: ['Deep Learning', 'Computer Vision', 'Python', 'TensorFlow', 'Medicine'],
                 status: 'Completed',
-                tags: ['Deep Learning', 'Computer Vision', 'Python', 'TensorFlow', 'Medicine']
+                date: '2023'
             },
             {
                 title: 'Morphological Classification of Galaxies with CNNs',
                 description: 'Using data from the Galaxy Zoo project, I developed a convolutional neural network to classify galaxies based on their morphology (spiral, elliptical, etc.). The project demonstrated how deep learning can automate classification tasks in large astronomical surveys, accelerating scientific research.',
-                date: '2022',
+                tags: ['Deep Learning', 'Astrophysics', 'Python', 'PyTorch', 'Data Science'],
                 status: 'Completed',
-                tags: ['Deep Learning', 'Astrophysics', 'Python', 'PyTorch', 'Data Science']
+                date: '2022'
             }
         ];
     }
@@ -336,4 +291,229 @@ class ContentModel {
     }
 }
 
-export default ContentModel;
+// ===== VIEW MANAGER - RESPONSIBLE FOR RENDERING =====
+class ViewManager {
+    constructor(sectionsContainer) {
+        if (!sectionsContainer) {
+            throw new Error("ViewManager: Sections container is required.");
+        }
+        this.container = sectionsContainer;
+        this.renderMap = {
+            timeline: this.renderTimeline,
+            cards: this.renderCards,
+            skills: this.renderSkills,
+            gallery: this.renderGallery,
+        };
+    }
+
+    renderSection(section) {
+        const sectionElement = document.createElement('section');
+        sectionElement.id = section.id;
+        sectionElement.className = `section section--${section.type}`;
+
+        const renderer = this.renderMap[section.type];
+        if (typeof renderer !== 'function') {
+            console.warn(`ViewManager: No rendering method for type "${section.type}".`);
+            return;
+        }
+
+        const sectionContent = renderer.call(this, section.content);
+        
+        sectionElement.innerHTML = `
+            <div class="section-container">
+                <header class="section-header">
+                    <h2 class="section-title">${section.title}</h2>
+                    <p class="section-subtitle">${section.subtitle}</p>
+                </header>
+                ${sectionContent}
+            </div>
+        `;
+
+        this.container.appendChild(sectionElement);
+    }
+
+    renderTimeline(content) {
+        const timelineItems = content.timeline.map(item => `
+            <div class="timeline-item">
+                <div class="timeline-period">${item.period}</div>
+                <div class="timeline-content">
+                    <h3 class="timeline-title">${item.title}</h3>
+                    <p class="timeline-description">${item.description}</p>
+                    <div class="highlights-list">
+                        ${item.highlights.map(h => `<span class="highlight-tag">${h}</span>`).join('')}
+                    </div>
+                </div>
+            </div>
+        `).join('');
+
+        return `<div class="timeline">${timelineItems}</div>`;
+    }
+
+    renderCards(content) {
+        const cards = content.map(item => `
+            <div class="card">
+                <h3 class="card-title">${item.title}</h3>
+                <p class="card-description">${item.description}</p>
+                ${item.links && item.links.length > 0 ? `
+                    <div class="card-links">
+                        ${item.links.map(link => `<a href="${link.url}" target="_blank" rel="noopener">${link.label}</a>`).join('')}
+                    </div>
+                ` : ''}
+                <div class="tags-container">
+                    ${item.tags.map(t => `<span class="tag">${t}</span>`).join('')}
+                </div>
+                <div class="card-meta">
+                    <span class="card-date">${item.date}</span>
+                    <span class="card-status">${item.status}</span>
+                </div>
+            </div>
+        `).join('');
+
+        return `<div class="cards-grid">${cards}</div>`;
+    }
+
+    renderSkills(content) {
+        const categories = content.map(category => `
+            <div class="skill-category">
+                <h3 class="category-title">${category.category}</h3>
+                <div class="skills-list">
+                    ${category.skills.map(skill => `
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">${skill.name}</span>
+                                <span class="skill-proficiency">${skill.proficiency}%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: ${skill.proficiency}%;"></div>
+                            </div>
+                            <p class="skill-description">${skill.description}</p>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `).join('');
+        
+        return `<div class="skills-categories">${categories}</div>`;
+    }
+    
+    renderGallery(content) {
+        const items = content.map(item => `
+            <div class="gallery-item">
+                <img src="${item.imageUrl}" alt="${item.caption}" class="gallery-image" loading="lazy">
+                <div class="gallery-caption">${item.caption}</div>
+            </div>
+        `).join('');
+
+        return `<div class="gallery-grid">${items}</div>`;
+    }
+}
+
+// ===== RENDER ENGINE - MAIN ORCHESTRATOR =====
+class RenderEngine {
+    constructor() {
+        this.contentModel = new ContentModel();
+        
+        const sectionsContainer = document.getElementById('sections-container');
+        if (!sectionsContainer) {
+            throw new Error("RenderEngine: 'sections-container' element not found in DOM.");
+        }
+        this.viewManager = new ViewManager(sectionsContainer);
+        
+        this.navContainer = document.getElementById('nav-list');
+    }
+
+    async initialize() {
+        await this.contentModel.initializeContentModel();
+        this.renderAll();
+        this.setupEventListeners();
+        this.hideLoadingOverlay();
+    }
+
+    renderAll() {
+        this.renderNavigation();
+        const sections = this.contentModel.getAllSections();
+        sections.forEach(section => {
+            if (section.metadata.visible) {
+                this.viewManager.renderSection(section);
+            }
+        });
+    }
+
+    renderNavigation() {
+        if (!this.navContainer) return;
+        
+        const sections = this.contentModel.getAllSections();
+        const navLinks = sections
+            .filter(s => s.metadata.visible)
+            .map(section => `
+                <li>
+                    <a href="#${section.id}" class="nav-link" data-nav-id="${section.id}">
+                        ${section.title}
+                    </a>
+                </li>
+            `);
+        this.navContainer.innerHTML = navLinks.join('');
+    }
+
+    setupEventListeners() {
+        window.addEventListener('scroll', () => this.updateActiveNavLink());
+    }
+
+    updateActiveNavLink() {
+        if (!this.navContainer) return;
+
+        const scrollPosition = window.scrollY + 150; // Offset
+        const sections = this.contentModel.getAllSections();
+        
+        let activeSectionId = null;
+
+        for (const section of sections) {
+            const sectionElement = document.getElementById(section.id);
+            if (sectionElement && scrollPosition >= sectionElement.offsetTop) {
+                activeSectionId = section.id;
+            }
+        }
+        
+        const links = this.navContainer.querySelectorAll('.nav-link');
+        links.forEach(link => {
+            link.classList.remove('active');
+            if (link.dataset.navId === activeSectionId) {
+                link.classList.add('active');
+            }
+        });
+    }
+
+    hideLoadingOverlay() {
+        const overlay = document.getElementById('loading-overlay');
+        if (overlay) {
+            overlay.style.opacity = '0';
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 500);
+        }
+    }
+}
+
+// ===== APPLICATION INITIALIZATION =====
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        const app = new RenderEngine();
+        await app.initialize();
+        
+        // For debugging
+        window.app = app;
+        
+        console.log('Portfolio loaded successfully!');
+    } catch (error) {
+        console.error('Error initializing application:', error);
+        document.getElementById('loading-overlay').innerHTML = `
+            <div style="text-align: center; color: white;">
+                <h2>Loading error</h2>
+                <p>Please reload the page.</p>
+                <button onclick="window.location.reload()" style="padding: 10px 20px; margin-top: 20px;">
+                    Reload
+                </button>
+            </div>
+        `;
+    }
+});

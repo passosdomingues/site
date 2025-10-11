@@ -1,6 +1,9 @@
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vite';
 
 export default defineConfig({
-  // '/repositorio/'
-  base: '/site/', 
-})
+  base: '/site/', // '/your-repo-name/' for GitHub Pages
+  build: {
+    outDir: 'dist',
+    assetsDir: 'public/images'
+  }
+});
