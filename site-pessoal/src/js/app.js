@@ -5,25 +5,26 @@
  * error handling, performance monitoring, and accessibility features
  */
 
-import MainController from './controllers/MainController.js';
-import NavigationController from './controllers/NavigationController.js';
-import SectionController from './controllers/SectionController.js';
-import './css/main.css';
+// Corrected import paths
+import MainController from './MainController.js';
+import NavigationController from './NavigationController.js';
+import SectionController from './SectionController.js';
+import './main.css';
 
-import ViewManager from './modules/ViewManager.js';
-import Router from './modules/Router.js';
-import ThemeManager from './modules/ThemeManager.js';
-import AccessibilityManager from './modules/AccessibilityManager.js';
-import PerformanceMonitor from './modules/PerformanceMonitor.js';
-import ErrorReporter from './modules/ErrorReporter.js';
+import ViewManager from './ViewManager.js';
+import Router from './Router.js';
+import ThemeManager from './ThemeManager.js';
+import AccessibilityManager from './AccessibilityManager.js';
+import PerformanceMonitor from './PerformanceMonitor.js';
+import ErrorReporter from './ErrorReporter.js';
 
-import ContentModel from './models/ContentModel.js';
-import UserModel from './models/UserModel.js';
+import ContentModel from './ContentModel.js';
+import UserModel from './UserModel.js';
 
-import NavigationView from './views/NavigationView.js';
-import HeroView from './views/HeroView.js';
-import FooterView from './views/FooterView.js';
-import SectionView from './views/SectionView.js'; // Import SectionView
+import NavigationView from './NavigationView.js';
+import HeroView from './HeroView.js';
+import FooterView from './FooterView.js';
+import SectionView from './SectionView.js';
 
 /**
  * @class App
@@ -37,36 +38,12 @@ class App {
      * @constructor
      */
     constructor() {
-        /**
-         * @private
-         * @type {ViewManager|null}
-         * @description Manages view rendering and lifecycle
-         */
         this.viewManager = null;
-
-        /**
-         * @private
-         * @type {MainController|null}
-         * @description Main application controller for business logic
-         */
         this.mainController = null;
         this.navigationController = null;
         this.sectionController = null;
-
-        /**
-         * @private
-         * @type {Object}
-         * @description Collection of data models
-         */
         this.models = {};
-
-        /**
-         * @private
-         * @type {Object}
-         * @description Collection of view components
-         */
         this.views = {};
-        
         this.isInitialized = false;
         this.isHealthy = true;
     }
@@ -86,29 +63,24 @@ class App {
         try {
             console.info("App: Starting application initialization...");
 
-            // Initialize core components
             this.setupErrorHandling();
             this.setupPerformanceMonitoring();
             
-            // Initialize models
             this.models.content = new ContentModel();
             this.models.user = new UserModel();
             await Promise.all([this.models.content.load(), this.models.user.load()]);
 
-            // Initialize views
             this.viewManager = new ViewManager();
             this.views.navigation = new NavigationView(this.models.content.getNavigationData());
             this.views.hero = new HeroView(this.models.content.getHeroData());
             this.views.footer = new FooterView(this.models.content.getFooterData());
-            this.views.sections = new SectionView(this.models.content.getSectionsData()); // Using SectionView
+            this.views.sections = new SectionView(this.models.content.getSectionsData());
 
-            // Register views with the ViewManager
             this.viewManager.registerView('navigation', this.views.navigation);
             this.viewManager.registerView('hero', this.views.hero);
             this.viewManager.registerView('footer', this.views.footer);
             this.viewManager.registerView('sections', this.views.sections);
 
-            // Initialize controllers
             const controllers = {
                 navigation: new NavigationController(this.models, this.views),
                 section: new SectionController(this.models, this.views)
@@ -117,10 +89,8 @@ class App {
 
             await this.mainController.initialize();
             
-            // Initial render
             await this.viewManager.renderAllViews();
 
-            // Setup post-initialization components
             this.setupThemeManager();
             this.setupAccessibilityManager();
             
@@ -164,16 +134,11 @@ class App {
         }
     }
 
-    /**
-     * @brief Tears down the application and cleans up resources
-     * @public
-     */
     destroy() {
         if (!this.isInitialized) return;
 
         console.info('App: Starting application teardown...');
         
-        // Destroy managers and controllers
         this.themeManager?.destroy();
         this.accessibilityManager?.destroy();
         this.performanceMonitor?.stop();
@@ -182,7 +147,6 @@ class App {
         this.navigationController?.destroy();
         this.sectionController?.destroy();
 
-        // Clear models and views
         this.models = {};
         this.views = {};
 
@@ -192,11 +156,9 @@ class App {
     }
 }
 
-// Application bootstrap with enhanced error handling
 document.addEventListener('DOMContentLoaded', async () => {
     const applicationInstance = new App();
     
-    // Make app instance globally available for debugging and emergency access
     if (process.env.NODE_ENV === 'development') {
         window.app = applicationInstance;
     }
@@ -206,7 +168,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     } catch (bootstrapError) {
         console.error('Application bootstrap failed:', bootstrapError);
         
-        // Final fallback for complete bootstrap failure
         document.body.innerHTML = `
             <div style="padding: 2rem; text-align: center; font-family: system-ui;">
                 <h1>Application Failed to Load</h1>
@@ -219,7 +180,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-// Export for testing and potential module usage
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = { App };
 }
