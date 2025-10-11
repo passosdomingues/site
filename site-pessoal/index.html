@@ -1,88 +1,485 @@
 <!DOCTYPE html>
-<html lang="en-US" class="no-js" data-theme="light">
+<html lang="en-US" class="js" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <title>Rafael Passos Domingues | Physicist & Computer Science Researcher | Astrophysics & Data Science</title>
-
-    <!-- SEO Meta Tags -->
-    <meta name="description" content="Rafael Passos Domingues - Physicist and Computer Scientist specializing in Astrophysics research, Data Science innovation, and Maker Education. Bridging scientific research with computational methodologies.">
-    <meta name="keywords" content="Rafael Passos Domingues, Physics, Computer Science, Astrophysics, Data Science, Research, Maker Education, Data Analysis, Computational Physics, Scientific Innovation">
+    <title>Rafael Passos Domingues | Physicist & Computer Science Researcher</title>
+    <meta name="description" content="Rafael Passos Domingues - Physicist and Computer Scientist specializing in Astrophysics research, Data Science innovation, and Maker Education.">
     <meta name="author" content="Rafael Passos Domingues">
-    <meta name="robots" content="index, follow, max-image-preview:large">
-    <meta name="theme-color" content="#264B93">
-    
-    <!-- Canonical URL for SEO -->
-    <link rel="canonical" href="https://rafaeldomingues.dev">
-
-    <!-- Open Graph Meta Tags for social sharing -->
-    <meta property="og:title" content="Rafael Passos Domingues | Physicist & Computer Science Researcher">
-    <meta property="og:description" content="Physicist and Computer Scientist specializing in Astrophysics research, Data Science innovation, and Maker Education.">
-    <meta property="og:type" content="website">
-    <meta property="og:locale" content="en_US">
-    <meta property="og:url" content="https://rafaeldomingues.dev">
-    <meta property="og:site_name" content="Rafael Passos Domingues">
-    
-    <!-- Favicon and Icons -->
-    <link rel="icon" href="/favicon.ico" sizes="any">
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-    <link rel="manifest" href="/site.webmanifest">
-
-    <!-- Preconnect for performance -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    
-    <!-- === CAMINHO CORRIGIDO PARA O CSS === -->
-    <link rel="stylesheet" href="/src/main.css">
-    
-    <!-- Critical Scripts -->
-    <script>
-        (function() {
-            document.documentElement.classList.remove('no-js');
-            document.documentElement.classList.add('js');
-            const theme = localStorage.getItem('theme');
-            if (theme) {
-                document.documentElement.setAttribute('data-theme', theme);
-            } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                document.documentElement.setAttribute('data-theme', 'dark');
-            }
-        })();
-    </script>
+    <style>
+        /* Reset e estilos básicos */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --color-primary: #264B93;
+            --color-surface: #ffffff;
+            --color-gray-50: #f8f9fa;
+            --font-main: 'Segoe UI', system-ui, sans-serif;
+        }
+        body {
+            font-family: var(--font-main);
+            line-height: 1.6;
+            color: #333;
+            background: var(--color-surface);
+        }
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: #000;
+            color: white;
+            padding: 8px;
+            z-index: 1000;
+        }
+        .skip-link:focus { top: 0; }
+        
+        /* Loading */
+        .app-loading-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: var(--color-surface);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        
+        /* Estrutura principal */
+        .main-content { padding: 20px; max-width: 1200px; margin: 0 auto; }
+        .hero-section { 
+            text-align: center; 
+            padding: 60px 20px;
+            background: linear-gradient(135deg, var(--color-primary) 0%, #1a365f 100%);
+            color: white;
+            border-radius: 10px;
+            margin-bottom: 40px;
+        }
+        .section { margin: 60px 0; padding: 40px 0; }
+        .section-title { 
+            font-size: 2.5rem; 
+            margin-bottom: 10px;
+            color: var(--color-primary);
+        }
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        /* Timeline */
+        .timeline { position: relative; max-width: 800px; margin: 0 auto; }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 30px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--color-primary);
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: 40px;
+            padding-left: 80px;
+        }
+        .timeline-period {
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: var(--color-primary);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        .timeline-content { background: var(--color-gray-50); padding: 20px; border-radius: 8px; }
+        
+        /* Cards */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .card:hover { transform: translateY(-5px); }
+        
+        /* Navegação */
+        .main-navigation-container {
+            position: sticky;
+            top: 0;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            padding: 20px 0;
+            z-index: 100;
+        }
+        .nav-list {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        .nav-link {
+            text-decoration: none;
+            color: var(--color-primary);
+            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+        .nav-link:hover, .nav-link.active {
+            background: var(--color-primary);
+            color: white;
+        }
+        
+        /* Footer */
+        .main-footer {
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 80px;
+            border-top: 1px solid #eee;
+            color: #666;
+        }
+        
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .nav-list { flex-direction: column; align-items: center; gap: 15px; }
+            .hero-section { padding: 40px 20px; }
+            .section-title { font-size: 2rem; }
+        }
+    </style>
 </head>
-<body class="preload">
+<body>
     <a href="#main-content" class="skip-link">Skip to Main Content</a>
 
     <div id="app">
         <div class="app-loading-overlay" id="loading-overlay">
             <div class="app-loading-placeholder">
-                <h1>Loading Rafael's Portfolio...</h1>
-                <p>Please wait a moment.</p>
+                <h1>Carregando Portfólio...</h1>
+                <p>Aguarde um momento.</p>
             </div>
         </div>
         
-        <!-- Elemento main-content adicionado -->
-        <main id="main-content" class="main-content" role="main" aria-label="Main content" data-app-initialized="false">
-            <!-- Navigation será injetada aqui -->
-            <nav id="main-nav" class="main-navigation-container" aria-label="Main navigation"></nav>
+        <main id="main-content" class="main-content">
+            <nav id="main-nav" class="main-navigation-container">
+                <ul class="nav-list" id="nav-list"></ul>
+            </nav>
             
-            <!-- Hero section será injetada aqui -->
-            <section id="hero-section" class="hero-section" aria-label="Hero introduction"></section>
+            <section id="hero-section" class="hero-section">
+                <h1>Rafael Passos Domingues</h1>
+                <p>Físico e Cientista da Computação | Pesquisa em Astrofísica e Inovação Tecnológica</p>
+            </section>
             
-            <!-- Conteúdo das seções será injetado aqui -->
-            <div class="sections-container" data-section-container="true">
-                <div class="content-loading-indicator" hidden>
-                    <p>Loading content...</p>
-                </div>
+            <div class="sections-container" id="sections-container">
+                <!-- Seções serão injetadas aqui via JavaScript -->
             </div>
             
-            <!-- Footer será injetado aqui -->
-            <footer id="main-footer" class="main-footer" aria-label="Footer"></footer>
+            <footer id="main-footer" class="main-footer">
+                <p>&copy; 2024 Rafael Passos Domingues. Todos os direitos reservados.</p>
+            </footer>
         </main>
     </div>
-    
-    <!-- === CAMINHO CORRIGIDO PARA O JAVASCRIPT === -->
-    <script type="module" src="/src/app.js"></script>
+
+    <script>
+        // ContentModel - Versão Simplificada
+        class ContentModel {
+            constructor() {
+                this.sections = [];
+                this.isInitialized = false;
+            }
+
+            async initializeContentModel() {
+                try {
+                    await this.loadAllContent();
+                    this.isInitialized = true;
+                    console.info('ContentModel: Modelo de conteúdo inicializado com sucesso');
+                } catch (error) {
+                    console.error('ContentModel: Falha na inicialização:', error);
+                    throw error;
+                }
+            }
+
+            async loadAllContent() {
+                this.sections = this.initializeSections();
+            }
+
+            initializeSections() {
+                return [
+                    {
+                        id: 'about',
+                        title: 'Sobre Mim',
+                        subtitle: 'Minha jornada acadêmica e profissional',
+                        type: 'timeline',
+                        content: this.getAboutContent()
+                    },
+                    {
+                        id: 'astrophysics-research',
+                        title: 'Pesquisa em Astrofísica',
+                        subtitle: 'Trabalho em astrofísica galáctica e extragaláctica',
+                        type: 'cards',
+                        content: this.getAstrophysicsContent()
+                    },
+                    {
+                        id: 'skills',
+                        title: 'Habilidades e Competências',
+                        subtitle: 'Áreas de conhecimento e tecnologias',
+                        type: 'cards',
+                        content: this.getSkillsContent()
+                    }
+                ];
+            }
+
+            getAboutContent() {
+                return {
+                    timeline: [
+                        {
+                            period: '2014-2018',
+                            title: 'Bacharelado em Física, UNIFAL-MG',
+                            description: 'Minha jornada acadêmica começou com o Bacharelado em Física na UNIFAL-MG, com foco em Astrofísica Galáctica e Extragaláctica.'
+                        },
+                        {
+                            period: '2019-2022',
+                            title: 'Professor de Física, Secretaria de Educação de MG',
+                            description: 'Lecionei Física em três municípios de Minas Gerais, adaptando o conhecimento científico a diversas audiências.'
+                        },
+                        {
+                            period: '2023-Presente',
+                            title: 'Bacharelado em Ciência da Computação, UNIFAL-MG',
+                            description: 'Cursando Ciência da Computação com foco em processamento de imagens e computação gráfica.'
+                        }
+                    ]
+                };
+            }
+
+            getAstrophysicsContent() {
+                return [
+                    {
+                        title: 'Pesquisa em Matéria Escura',
+                        description: 'Estudo das curvas de rotação galácticas e evidências de matéria escura no Aglomerado Bala.'
+                    },
+                    {
+                        title: 'Seminários de Astronomia',
+                        description: 'Palestras sobre órbitas estelares e o universo escuro no Primeiro Ciclo de Seminários da UNIFAL-MG.'
+                    }
+                ];
+            }
+
+            getSkillsContent() {
+                return {
+                    categories: [
+                        {
+                            category: 'Habilidades Técnicas',
+                            skills: [
+                                { name: 'Física e Astrofísica', proficiency: 95 },
+                                { name: 'Python e Análise de Dados', proficiency: 88 },
+                                { name: 'JavaScript e Desenvolvimento Web', proficiency: 80 }
+                            ]
+                        }
+                    ]
+                };
+            }
+
+            getSections() {
+                return this.sections;
+            }
+
+            getSectionById(sectionId) {
+                return this.sections.find(section => section.id === sectionId);
+            }
+        }
+
+        // View Manager Simplificado
+        class ViewManager {
+            constructor() {
+                this.currentView = null;
+            }
+
+            renderSection(sectionData, container) {
+                const sectionElement = document.createElement('section');
+                sectionElement.className = 'section';
+                sectionElement.id = sectionData.id;
+
+                sectionElement.innerHTML = `
+                    <h2 class="section-title">${sectionData.title}</h2>
+                    <p class="section-subtitle">${sectionData.subtitle}</p>
+                    <div class="section-content" id="content-${sectionData.id}"></div>
+                `;
+
+                container.appendChild(sectionElement);
+                this.renderSectionContent(sectionData, document.getElementById(`content-${sectionData.id}`));
+            }
+
+            renderSectionContent(sectionData, container) {
+                switch(sectionData.type) {
+                    case 'timeline':
+                        this.renderTimeline(sectionData.content, container);
+                        break;
+                    case 'cards':
+                        this.renderCards(sectionData.content, container);
+                        break;
+                    default:
+                        container.innerHTML = `<p>Conteúdo em desenvolvimento...</p>`;
+                }
+            }
+
+            renderTimeline(content, container) {
+                if (!content.timeline) return;
+                
+                let timelineHTML = '<div class="timeline">';
+                content.timeline.forEach(item => {
+                    timelineHTML += `
+                        <div class="timeline-item">
+                            <div class="timeline-period">${item.period}</div>
+                            <div class="timeline-content">
+                                <h3>${item.title}</h3>
+                                <p>${item.description}</p>
+                            </div>
+                        </div>
+                    `;
+                });
+                timelineHTML += '</div>';
+                container.innerHTML = timelineHTML;
+            }
+
+            renderCards(content, container) {
+                if (Array.isArray(content)) {
+                    let cardsHTML = '<div class="cards-grid">';
+                    content.forEach(item => {
+                        cardsHTML += `
+                            <div class="card">
+                                <h3>${item.title}</h3>
+                                <p>${item.description}</p>
+                            </div>
+                        `;
+                    });
+                    cardsHTML += '</div>';
+                    container.innerHTML = cardsHTML;
+                } else if (content.categories) {
+                    let skillsHTML = '<div class="skills-container">';
+                    content.categories.forEach(category => {
+                        skillsHTML += `<h3>${category.category}</h3>`;
+                        category.skills.forEach(skill => {
+                            skillsHTML += `
+                                <div class="skill-item">
+                                    <span>${skill.name}</span>
+                                    <div class="skill-bar">
+                                        <div class="skill-progress" style="width: ${skill.proficiency}%"></div>
+                                    </div>
+                                    <span>${skill.proficiency}%</span>
+                                </div>
+                            `;
+                        });
+                    });
+                    skillsHTML += '</div>';
+                    container.innerHTML = skillsHTML;
+                }
+            }
+
+            renderNavigation(sections, container) {
+                let navHTML = '';
+                sections.forEach(section => {
+                    navHTML += `
+                        <li><a href="#${section.id}" class="nav-link" data-section="${section.id}">${section.title}</a></li>
+                    `;
+                });
+                container.innerHTML = navHTML;
+            }
+        }
+
+        // Aplicação Principal
+        class App {
+            constructor() {
+                this.contentModel = new ContentModel();
+                this.viewManager = new ViewManager();
+                this.isInitialized = false;
+            }
+
+            async initialize() {
+                try {
+                    await this.contentModel.initializeContentModel();
+                    this.renderNavigation();
+                    this.renderAllSections();
+                    this.setupEventListeners();
+                    this.hideLoadingOverlay();
+                    this.isInitialized = true;
+                    
+                    console.info('Aplicação inicializada com sucesso');
+                } catch (error) {
+                    console.error('Falha na inicialização da aplicação:', error);
+                    this.showError();
+                }
+            }
+
+            renderNavigation() {
+                const sections = this.contentModel.getSections();
+                const navContainer = document.getElementById('nav-list');
+                this.viewManager.renderNavigation(sections, navContainer);
+            }
+
+            renderAllSections() {
+                const sections = this.contentModel.getSections();
+                const container = document.getElementById('sections-container');
+                
+                sections.forEach(section => {
+                    this.viewManager.renderSection(section, container);
+                });
+            }
+
+            setupEventListeners() {
+                // Navegação suave
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const targetId = link.getAttribute('href').substring(1);
+                        const targetElement = document.getElementById(targetId);
+                        
+                        if (targetElement) {
+                            targetElement.scrollIntoView({ 
+                                behavior: 'smooth',
+                                block: 'start'
+                            });
+                        }
+                    });
+                });
+            }
+
+            hideLoadingOverlay() {
+                const overlay = document.getElementById('loading-overlay');
+                if (overlay) {
+                    overlay.style.opacity = '0';
+                    setTimeout(() => overlay.remove(), 500);
+                }
+            }
+
+            showError() {
+                const container = document.getElementById('sections-container');
+                if (container) {
+                    container.innerHTML = `
+                        <div class="error-state">
+                            <h3>Erro ao Carregar Conteúdo</h3>
+                            <p>Por favor, recarregue a página ou tente novamente mais tarde.</p>
+                            <button onclick="window.location.reload()">Recarregar Página</button>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        // Inicialização da Aplicação
+        document.addEventListener('DOMContentLoaded', async () => {
+            const app = new App();
+            await app.initialize();
+            
+            // Para debugging
+            window.app = app;
+        });
+    </script>
 </body>
 </html>
