@@ -1,3 +1,4 @@
+
 /**
  * @file ContentModel.js
  * @author Rafael Passos Domingues
@@ -78,9 +79,9 @@ class ContentModel {
      * @brief Creates an instance of ContentModel
      * @constructor
      * @param {Object} options - Configuration options for content model
-     * @param {boolean} options.enableCaching - Whether to enable content caching
-     * @param {number} options.cacheTimeout - Cache timeout in milliseconds
-     * @param {boolean} options.enableValidation - Whether to validate content structure
+     * @param {boolean} [options.enableCaching=true] - Whether to enable content caching
+     * @param {number} [options.cacheTimeout=300000] - Cache timeout in milliseconds (default: 5 minutes)
+     * @param {boolean} [options.enableValidation=true] - Whether to validate content structure
      */
     constructor(options = {}) {
         const {
@@ -112,7 +113,7 @@ class ContentModel {
 
         /**
          * @private
-         * @type {Object}
+         * @type {Map<string, Object>}
          * @brief Cache storage for optimized content retrieval
          */
         this.contentCache = new Map();
@@ -136,21 +137,28 @@ class ContentModel {
          */
         this.isInitialized = false;
 
-        this.initializeContentModel();
+        // Removed this.initializeContentModel() from constructor to avoid race condition.
+        // Initialization will be explicitly called and awaited by the App class.
     }
 
     /**
-     * @brief Initializes the content model with all required data
-     * @private
+     * @brief Initializes the content model with all required data.
+     * This method should be called explicitly after the ContentModel instance is created.
+     * @public
      * @returns {Promise<void>} Resolves when content model is fully initialized
      */
-    async initializeContentModel() {
+    async initialize() {
+        if (this.isInitialized) {
+            console.warn('ContentModel: Already initialized.');
+            return;
+        }
         try {
             await this.loadAllContent();
             this.isInitialized = true;
             console.info('ContentModel: Content model successfully initialized.');
         } catch (error) {
             console.error('ContentModel: Failed to initialize content model:', error);
+            this.isInitialized = false; // Ensure state is correct on failure
             throw error;
         }
     }
@@ -196,7 +204,7 @@ class ContentModel {
     /**
      * @brief Initializes the website sections with content and configuration
      * @private
-     * @returns {Array} Array of section objects with complete content
+     * @returns {Array<Object>} Array of section objects with complete content
      */
     initializeSections() {
         return [
@@ -318,7 +326,7 @@ class ContentModel {
     /**
      * @brief Validates sections content against defined rules
      * @private
-     * @param {Array} sections - Array of section objects to validate
+     * @param {Array<Object>} sections - Array of section objects to validate
      * @throws {Error} When section validation fails
      */
     validateSectionsContent(sections) {
@@ -404,7 +412,7 @@ class ContentModel {
     /**
      * @brief Generates astrophysics research content
      * @private
-     * @returns {Array} Array of research project cards
+     * @returns {Array<Object>} Array of research project cards
      */
     getAstrophysicsContent() {
         return [
@@ -448,57 +456,40 @@ class ContentModel {
     /**
      * @brief Generates observatory content with research and outreach activities
      * @private
-     * @returns {Array} Array of observatory activity items
+     * @returns {Array<Object>} Array of observatory activity items
      */
     getObservatoryContent() {
         return [
             {
-                id: 'public-observing',
-                title: 'Public Observing Sessions',
-                description: 'Regular public astronomy nights with telescope observations and educational activities for community engagement.',
+                id: 'unifal-observatory-outreach',
+                title: 'UNIFAL-MG Astronomical Observatory',
+                description: 'Coordination of scientific outreach activities, public observation sessions, and educational workshops.',
                 images: [
                     {
-                        src: 'assets/images/observatory-public-1.jpg',
-                        alt: 'Public observing session at UNIFAL-MG observatory',
-                        caption: 'Community Astronomy Night'
+                        src: 'assets/images/observatorio-unifal.jpg',
+                        alt: 'UNIFAL-MG Astronomical Observatory',
+                        caption: 'Public Observation Session'
                     }
                 ],
-                statistics: {
-                    participants: 500,
-                    sessions: 24,
-                    period: '2016-2018'
-                }
-            },
-            {
-                id: 'student-research',
-                title: 'Student Research Projects',
-                description: 'Undergraduate research projects in observational astronomy and data analysis techniques.',
-                images: [
-                    {
-                        src: 'assets/images/student-research-1.jpg',
-                        alt: 'Student research project presentation',
-                        caption: 'Undergraduate Research'
-                    }
-                ],
-                statistics: {
-                    projects: 8,
-                    students: 12,
-                    publications: 2
-                }
+                highlights: [
+                    'Organized 50+ public events',
+                    'Reached 2000+ visitors annually',
+                    'Developed educational programs'
+                ]
             }
         ];
     }
 
     /**
-     * @brief Generates CRAAM visit content and experiences
+     * @brief Generates CRAAM visit content
      * @private
-     * @returns {Array} Array of CRAAM visit experiences
+     * @returns {Array<Object>} Array of CRAAM visit items
      */
     getCraamContent() {
         return [
             {
-                id: 'craam-tour',
-                title: 'Research Facility Tour',
+                id: 'craam-visit-2017',
+                title: 'CRAAM Visit - Mackenzie Center for Radioastronomy and Astrophysics',
                 description: 'Comprehensive tour of Mackenzie Center for Radioastronomy and Astrophysics research facilities and instrumentation.',
                 images: [
                     {
@@ -519,7 +510,7 @@ class ContentModel {
     /**
      * @brief Generates education and teaching experience content
      * @private
-     * @returns {Array} Array of education timeline items
+     * @returns {Array<Object>} Array of education timeline items
      */
     getEducationContent() {
         return [
@@ -557,7 +548,7 @@ class ContentModel {
     /**
      * @brief Generates innovation and entrepreneurship content
      * @private
-     * @returns {Array} Array of innovation project cards
+     * @returns {Array<Object>} Array of innovation project cards
      */
     getInnovationContent() {
         return [
@@ -587,7 +578,7 @@ class ContentModel {
     /**
      * @brief Generates technical and scientific projects content
      * @private
-     * @returns {Array} Array of project cards with technical details
+     * @returns {Array<Object>} Array of project cards with technical details
      */
     getProjectsContent() {
         return [
@@ -623,15 +614,6 @@ class ContentModel {
                         { name: 'JavaScript', proficiency: 80, years: 3 },
                         { name: 'R', proficiency: 75, years: 3 },
                         { name: 'MATLAB', proficiency: 70, years: 2 }
-                    ]
-                },
-                {
-                    category: 'Data Analysis',
-                    skills: [
-                        { name: 'Pandas/Numpy', proficiency: 85, years: 4 },
-                        { name: 'Statistical Analysis', proficiency: 80, years: 4 },
-                        { name: 'Data Visualization', proficiency: 75, years: 3 },
-                        { name: 'Machine Learning', proficiency: 70, years: 2 }
                     ]
                 }
             ],
@@ -677,7 +659,7 @@ class ContentModel {
     /**
      * @brief Initializes projects array with sample data
      * @private
-     * @returns {Array} Array of project objects
+     * @returns {Array<Object>} Array of project objects
      */
     initializeProjects() {
         return [
@@ -713,7 +695,7 @@ class ContentModel {
     /**
      * @brief Initializes experiences array with sample data
      * @private
-     * @returns {Array} Array of experience objects
+     * @returns {Array<Object>} Array of experience objects
      */
     initializeExperiences() {
         return [
@@ -778,10 +760,10 @@ class ContentModel {
     /**
      * @brief Retrieves all sections with optional filtering
      * @public
-     * @param {Object} filters - Optional filters for section retrieval
-     * @param {string} filters.type - Filter by content type
-     * @param {boolean} filters.visible - Filter by visibility
-     * @returns {Array} Array of section objects
+     * @param {Object} [filters={}] - Optional filters for section retrieval
+     * @param {string} [filters.type] - Filter by content type
+     * @param {boolean} [filters.visible] - Filter by visibility
+     * @returns {Array<Object>} Array of section objects
      */
     getSections(filters = {}) {
         const cacheKey = `sections-${JSON.stringify(filters)}`;
@@ -838,10 +820,10 @@ class ContentModel {
     /**
      * @brief Retrieves all projects with optional filtering
      * @public
-     * @param {Object} filters - Optional filters for project retrieval
-     * @param {string} filters.category - Filter by project category
-     * @param {string} filters.status - Filter by project status
-     * @returns {Array} Array of project objects
+     * @param {Object} [filters={}] - Optional filters for project retrieval
+     * @param {string} [filters.category] - Filter by project category
+     * @param {string} [filters.status] - Filter by project status
+     * @returns {Array<Object>} Array of project objects
      */
     getProjects(filters = {}) {
         let filteredProjects = [...this.projects];
@@ -864,9 +846,9 @@ class ContentModel {
     /**
      * @brief Retrieves all experiences with optional filtering
      * @public
-     * @param {Object} filters - Optional filters for experience retrieval
-     * @param {string} filters.institution - Filter by institution
-     * @returns {Array} Array of experience objects
+     * @param {Object} [filters={}] - Optional filters for experience retrieval
+     * @param {string} [filters.institution] - Filter by institution
+     * @returns {Array<Object>} Array of experience objects
      */
     getExperiences(filters = {}) {
         let filteredExperiences = [...this.experiences];
@@ -909,9 +891,9 @@ class ContentModel {
      * @brief Searches content across all content types
      * @public
      * @param {string} searchTerm - Term to search for
-     * @param {Object} options - Search options
-     * @param {Array} options.contentTypes - Types of content to search
-     * @param {number} options.maxResults - Maximum number of results to return
+     * @param {Object} [options={}] - Search options
+     * @param {Array<string>} [options.contentTypes=['sections', 'projects', 'experiences']] - Types of content to search
+     * @param {number} [options.maxResults=10] - Maximum number of results to return
      * @returns {Object} Search results organized by content type
      */
     searchContent(searchTerm, options = {}) {
@@ -961,55 +943,11 @@ class ContentModel {
     }
 
     /**
-     * @brief Gets available content types and their configurations
-     * @public
-     * @returns {Object} Object containing all content type configurations
-     */
-    getContentTypes() {
-        return { ...CONTENT_TYPES };
-    }
-
-    /**
-     * @brief Checks if content model is fully initialized
-     * @public
-     * @returns {boolean} True if content model is initialized and ready
-     */
-    isContentModelReady() {
-        return this.isInitialized;
-    }
-
-    /**
-     * @brief Gets content statistics for monitoring and analytics
-     * @public
-     * @returns {Object} Object containing content statistics
-     */
-    getContentStatistics() {
-        return {
-            sections: {
-                total: this.sections.length,
-                byType: this.groupContentByType(this.sections, 'type')
-            },
-            projects: {
-                total: this.projects.length,
-                byCategory: this.groupContentByType(this.projects, 'category')
-            },
-            experiences: {
-                total: this.experiences.length,
-                byInstitution: this.groupContentByType(this.experiences, 'institution')
-            },
-            cache: {
-                size: this.contentCache.size,
-                hits: this.calculateCacheHitRate()
-            }
-        };
-    }
-
-    /**
      * @brief Groups content by a specific property
      * @private
-     * @param {Array} contentArray - Array of content items to group
+     * @param {Array<Object>} contentArray - Array of content items to group
      * @param {string} property - Property to group by
-     * @returns {Object} Grouped content counts
+     * @returns {Object<string, number>} Grouped content counts
      */
     groupContentByType(contentArray, property) {
         return contentArray.reduce((groups, item) => {
