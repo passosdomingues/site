@@ -19,7 +19,7 @@
   position: absolute; 
   top: -40px; 
   left: 6px; 
-  background: var(--color-primary-700); 
+  background: #264B93; 
   color: white; 
   padding: 8px 12px; 
   text-decoration: none; 
@@ -33,11 +33,11 @@
 }
 
 .noscript-warning { 
-  background: var(--color-warning-light); 
-  color: var(--color-text-primary); 
+  background: #ffeb3b; 
+  color: #333; 
   padding: 1rem; 
   text-align: center; 
-  border-bottom: 2px solid var(--color-warning-dark);
+  border-bottom: 2px solid #ffc107;
 }
 
 /* Hide dynamic content until JS loads */
