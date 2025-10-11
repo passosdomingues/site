@@ -8,7 +8,6 @@
 import MainController from './controllers/MainController.js';
 import NavigationController from './controllers/NavigationController.js';
 import SectionController from './controllers/SectionController.js';
-import './css/main.css';
 
 import ViewManager from './modules/ViewManager.js';
 import Router from './modules/Router.js';
