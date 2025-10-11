@@ -7,7 +7,7 @@
  * and integrates interactions between NavigationView and SectionView with performance optimizations.
  */
 
-import SectionView from '../views/SectionView.js';
+import SectionView from './SectionView.js';
 
 /**
  * @constant {Object} SECTION_CONFIG

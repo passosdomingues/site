@@ -6,50 +6,42 @@
     
     <title>Rafael Passos Domingues | Physicist & Computer Science Researcher | Astrophysics & Data Science</title>
 
+    <!-- SEO Meta Tags -->
     <meta name="description" content="Rafael Passos Domingues - Physicist and Computer Scientist specializing in Astrophysics research, Data Science innovation, and Maker Education. Bridging scientific research with computational methodologies.">
     <meta name="keywords" content="Rafael Passos Domingues, Physics, Computer Science, Astrophysics, Data Science, Research, Maker Education, Data Analysis, Computational Physics, Scientific Innovation">
     <meta name="author" content="Rafael Passos Domingues">
     <meta name="robots" content="index, follow, max-image-preview:large">
     <meta name="theme-color" content="#264B93">
     
+    <!-- Canonical URL for SEO -->
     <link rel="canonical" href="https://rafaeldomingues.dev">
 
+    <!-- Open Graph Meta Tags for social sharing -->
     <meta property="og:title" content="Rafael Passos Domingues | Physicist & Computer Science Researcher">
     <meta property="og:description" content="Physicist and Computer Scientist specializing in Astrophysics research, Data Science innovation, and Maker Education.">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="en_US">
     <meta property="og:url" content="https://rafaeldomingues.dev">
     <meta property="og:site_name" content="Rafael Passos Domingues">
-    <meta property="og:image" content="https://rafaeldomingues.dev/assets/images/profile-photo-social.jpg">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
-    <meta property="og:image:type" content="image/jpeg">
-
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="@yourtwitterhandle">
-    <meta name="twitter:creator" content="@yourtwitterhandle">
-    <meta name="twitter:title" content="Rafael Passos Domingues | Physicist & Computer Science Researcher">
-    <meta name="twitter:description" content="Specializing in Astrophysics, Data Science, and Maker Education.">
-    <meta name="twitter:image" content="https://rafaeldomingues.dev/assets/images/profile-photo-social.jpg">
-
+    
+    <!-- Favicon and Icons -->
     <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
     <link rel="manifest" href="/site.webmanifest">
 
+    <!-- Preconnect for performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     
-    <link rel="stylesheet" href="./main.css">
+    <!-- === CAMINHO CORRIGIDO PARA O CSS === -->
+    <link rel="stylesheet" href="/src/main.css">
     
+    <!-- Critical Scripts -->
     <script>
-        // Early JS for theme and feature detection
         (function() {
-            // Remove 'no-js' class to indicate JS is enabled
             document.documentElement.classList.remove('no-js');
             document.documentElement.classList.add('js');
-
-            // Apply theme from localStorage or system preference
             const theme = localStorage.getItem('theme');
             if (theme) {
                 document.documentElement.setAttribute('data-theme', theme);
@@ -69,48 +61,7 @@
         </div>
     </div>
     
-    <script>
-        // Legacy Browser Support Message
-        const isModuleSupported = 'noModule' in HTMLScriptElement.prototype;
-        if (!isModuleSupported) {
-            const legacyBrowserMessage = `
-            <div class="legacy-browser-warning" role="alert">
-                <div class="legacy-browser-content">
-                    <h2>Your Browser is Outdated</h2>
-                    <p>
-                        This site is built with modern web technologies that your browser does not support. 
-                        Please consider upgrading to a modern browser for the best experience.
-                    </p>
-                    <div class="browser-links">
-                        <a href="https://www.google.com/chrome/" target="_blank" rel="noopener" class="browser-link">
-                            Google Chrome
-                        </a>
-                        <a href="https://www.mozilla.org/firefox/" target="_blank" rel="noopener" class="browser-link">
-                            Mozilla Firefox
-                        </a>
-                        <a href="https://www.apple.com/safari/" target="_blank" rel="noopener" class="browser-link">
-                            Apple Safari
-                        </a>
-                        <a href="https://www.microsoft.com/edge" target="_blank" rel="noopener" class="browser-link">
-                            Microsoft Edge
-                        </a>
-                    </div>
-                    <p class="browser-support-note">
-                        You can still view the basic content, but some interactive features may be limited.
-                    </p>
-                </div>
-            </div>
-        `;
-        }
-
-        const appContainer = document.getElementById("app");
-        if (appContainer) {
-            appContainer.innerHTML = legacyBrowserMessage + appContainer.innerHTML;
-        }
-
-        console.warn("Legacy browser detected: Some features may be unavailable");
-    </script>
-    
-    <script type="module" src="./app.js"></script>
+    <!-- === CAMINHO CORRIGIDO PARA O JAVASCRIPT === -->
+    <script type="module" src="/src/app.js"></script>
 </body>
 </html>

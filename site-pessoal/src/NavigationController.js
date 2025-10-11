@@ -78,7 +78,7 @@ class NavigationController {
         this.handleScroll = this.handleScroll.bind(this);
         this.handleHashChange = this.handleHashChange.bind(this);
         this.handleIntersectionUpdate = this.handleIntersectionUpdate.bind(this);
-
+        this.handleFlashbackTriggered = this.handleFlashbackTriggered.bind(this);
     }
 
     /**
@@ -229,10 +229,11 @@ class NavigationController {
      */
     updateActiveSectionState(sectionId) {
         if (this.currentActiveSection !== sectionId) {
+            const previousSectionId = this.currentActiveSection;
             this.currentActiveSection = sectionId;
             this.dispatchNavigationEvent('sectionChanged', { 
                 sectionId,
-                previousSectionId: this.currentActiveSection 
+                previousSectionId
             });
         }
     }
@@ -255,7 +256,7 @@ class NavigationController {
      * @brief Handles scroll events with performance optimizations
      * @private
      */
-    handleScroll = () => {
+    handleScroll() {
         if (this.isScrollHandlerRunning) return;
 
         this.isScrollHandlerRunning = true;
@@ -271,7 +272,7 @@ class NavigationController {
                 this.isScrollHandlerRunning = false;
             });
         }, this.navigationConfig.scrollDebounceDelay);
-    };
+    }
 
     /**
      * @brief Determines the currently active section based on scroll position
@@ -366,7 +367,7 @@ class NavigationController {
      * @brief Handles URL hash changes for navigation
      * @private
      */
-    handleHashChange = () => {
+    handleHashChange() {
         const sectionIdFromHash = window.location.hash.slice(1);
         
         if (sectionIdFromHash && sectionIdFromHash !== this.currentActiveSection) {
@@ -375,7 +376,7 @@ class NavigationController {
                 smoothScroll: true 
             });
         }
-    };
+    }
 
     /**
      * @brief Sets up keyboard navigation for accessibility
@@ -529,6 +530,34 @@ class NavigationController {
     }
 
     /**
+     * @brief Handles the flashback triggered event from NavigationView.
+     * @public
+     * @param {Object} eventData - Data from the flashback event, including the sectionId.
+     */
+    handleFlashbackTriggered(eventData) {
+        if (eventData && eventData.sectionId) {
+            console.debug(`NavigationController: Flashback triggered to section: ${eventData.sectionId}`);
+            this.navigateToSection(eventData.sectionId);
+        } else {
+            console.warn("NavigationController: Flashback triggered without a valid sectionId.");
+        }
+    }
+
+    /**
+     * @brief Registers an observer to listen for events from the NavigationView.
+     * @public
+     * @param {Object} navigationView - The NavigationView instance to observe.
+     */
+    registerNavigationViewObserver(navigationView) {
+        if (navigationView && typeof navigationView.addObserver === 'function') {
+            navigationView.addObserver('flashbackTriggered', this.handleFlashbackTriggered.bind(this));
+            console.info("NavigationController: Registered as observer for 'flashbackTriggered' event.");
+        } else {
+            console.error("NavigationController: Invalid NavigationView instance provided for observer registration.");
+        }
+    }
+
+    /**
      * @brief Gets the currently active section ID
      * @public
      * @returns {string} The current active section ID
@@ -580,43 +609,3 @@ class NavigationController {
 }
 
 export default NavigationController;
-
-    /**
-     * @brief Handles the flashback triggered event from NavigationView.
-     * @public
-     * @param {Object} eventData - Data from the flashback event, including the sectionId.
-     */
-
-
-
-
-
-
-    /**
-     * @brief Handles the flashback triggered event from NavigationView.
-     * @public
-     * @param {Object} eventData - Data from the flashback event, including the sectionId.
-     */
-    handleFlashbackTriggered(eventData) {
-        if (eventData && eventData.sectionId) {
-            console.debug(`NavigationController: Flashback triggered to section: ${eventData.sectionId}`);
-            this.navigateToSection(eventData.sectionId);
-        } else {
-            console.warn("NavigationController: Flashback triggered without a valid sectionId.");
-        }
-    }
-
-    /**
-     * @brief Registers an observer to listen for events from the NavigationView.
-     * @public
-     * @param {NavigationView} navigationView - The NavigationView instance to observe.
-     */
-    registerNavigationViewObserver(navigationView) {
-        if (navigationView && typeof navigationView.addObserver === 'function') {
-            navigationView.addObserver('flashbackTriggered', this.handleFlashbackTriggered);
-            console.info("NavigationController: Registered as observer for 'flashbackTriggered' event.");
-        } else {
-            console.error("NavigationController: Invalid NavigationView instance provided for observer registration.");
-        }
-    }
-
