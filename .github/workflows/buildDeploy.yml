@@ -33,7 +33,7 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-          cache-dependency-path: 'site/site-pessoal/package-lock.json'
+          cache-dependency-path: './site-pessoal/package-lock.json'
 
       - name: Install dependencies
         working-directory: ./site/site-pessoal
