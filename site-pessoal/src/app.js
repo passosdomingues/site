@@ -23,7 +23,7 @@ import UserModel from './UserModel.js';
 import NavigationView from './NavigationView.js';
 import HeroView from './HeroView.js';
 import FooterView from './FooterView.js';
-import SectionView from './SectionView.js'; // Import SectionView
+import SectionView from './SectionView.js';
 
 /**
  * @class App
@@ -37,105 +37,34 @@ class App {
      * @constructor
      */
     constructor() {
-        /**
-         * @private
-         * @type {ViewManager|null}
-         * @description Manages view rendering and transitions
-         */
         this.viewManager = null;
-
-        /**
-         * @private
-         * @type {Router|null}
-         * @description Handles client-side routing and navigation
-         */
         this.router = null;
-
-        /**
-         * @private
-         * @type {ThemeManager|null}
-         * @description Manages theme switching and persistence
-         */
         this.themeManager = null;
-
-        /**
-         * @private
-         * @type {AccessibilityManager|null}
-         * @description Enhances accessibility features and screen reader support
-         */
         this.accessibilityManager = null;
-
-        /**
-         * @private
-         * @type {PerformanceMonitor|null}
-         * @description Tracks application performance metrics
-         */
         this.performanceMonitor = null;
-
-        /**
-         * @private
-         * @type {ErrorReporter|null}
-         * @description Handles error tracking and reporting
-         */
         this.errorReporter = null;
-
-        /**
-         * @private
-         * @type {MainController|null}
-         * @description The main application controller
-         */
         this.mainController = null;
-
-        /**
-         * @private
-         * @type {NavigationController|null}
-         * @description Controller for navigation elements
-         */
         this.navigationController = null;
-
-        /**
-         * @private
-         * @type {SectionController|null}
-         * @description Controller for content sections
-         */
         this.sectionController = null;
-
-        /**
-         * @private
-         * @type {Object}
-         * @description Stores instances of data models
-         */
         this.models = {};
-
-        /**
-         * @private
-         * @type {Object}
-         * @description Stores instances of view classes
-         */
         this.views = {};
-
-        /**
-         * @private
-         * @type {boolean}
-         * @description Tracks initialization status
-         */
         this.isInitialized = false;
-
-        /**
-         * @private
-         * @type {boolean}
-         * @description Tracks if the application is in a healthy state
-         */
         this.isHealthy = true;
-
-        /**
-         * @private
-         * @type {AbortController}
-         * @description Controls cleanup of event listeners
-         */
         this.eventAbortController = new AbortController();
 
+        // Proper binding
         this.initializeApplication = this.initializeApplication.bind(this);
+        this.handleInitializationFailure = this.handleInitializationFailure.bind(this);
+        this.handleViewChangeEvent = this.handleViewChangeEvent.bind(this);
+        this.handleThemeChangeEvent = this.handleThemeChangeEvent.bind(this);
+        this.handleAccessibilityChangeEvent = this.handleAccessibilityChangeEvent.bind(this);
+        this.handleGlobalErrorEvent = this.handleGlobalErrorEvent.bind(this);
+        this.handleUnhandledRejectionEvent = this.handleUnhandledRejectionEvent.bind(this);
+        this.handleWindowLoadEvent = this.handleWindowLoadEvent.bind(this);
+        this.handleVisibilityChangeEvent = this.handleVisibilityChangeEvent.bind(this);
+        this.handleOnlineStatusEvent = this.handleOnlineStatusEvent.bind(this);
+        this.handleOfflineStatusEvent = this.handleOfflineStatusEvent.bind(this);
+        this.handleViewRenderError = this.handleViewRenderError.bind(this);
     }
 
     /**
@@ -151,8 +80,16 @@ class App {
         }
 
         try {
+            // Initialize error reporter first to catch any initialization errors
+            this.errorReporter = new ErrorReporter();
+            await this.errorReporter.initialize().catch(error => {
+                console.warn('Error reporter initialization failed, continuing without it:', error);
+            });
+
             this.performanceMonitor = new PerformanceMonitor();
-            await this.performanceMonitor.startMonitoring();
+            await this.performanceMonitor.startMonitoring().catch(error => {
+                console.warn('Performance monitor initialization failed, continuing without it:', error);
+            });
 
             // Validate critical browser features before proceeding
             if (!this.checkBrowserCompatibility()) {
@@ -217,6 +154,27 @@ class App {
     }
 
     /**
+     * @brief Gets names of missing browser features for error reporting
+     * @method getMissingBrowserFeatures
+     * @returns {Array} Array of missing feature names
+     * @private
+     */
+    getMissingBrowserFeatures() {
+        const requiredFeatures = {
+            promises: typeof Promise !== 'undefined',
+            fetch: typeof fetch !== 'undefined',
+            intersectionObserver: typeof IntersectionObserver !== 'undefined',
+            customElements: typeof customElements !== 'undefined',
+            cssVariables: window.CSS && CSS.supports && CSS.supports('--test', '0'),
+            es6: typeof Map !== 'undefined' && typeof Set !== 'undefined'
+        };
+
+        return Object.entries(requiredFeatures)
+            .filter(([, isSupported]) => !isSupported)
+            .map(([feature]) => feature);
+    }
+
+    /**
      * @brief Handles browser incompatibility gracefully
      * @method handleBrowserIncompatibility
      * @private
@@ -271,11 +229,10 @@ class App {
             await this.initializeInfrastructureManagers();
             await this.initializeViewLayer();
             await this.initializeRouter();
-            await this.initializeControllers(); // New method for controllers
+            await this.initializeControllers();
             
             // After all controllers are initialized, pass them to MainController
-            // This ensures MainController has references to fully initialized sub-controllers
-            if (this.mainController) {
+            if (this.mainController && typeof this.mainController.setControllers === 'function') {
                 this.mainController.setControllers({
                     navigation: this.navigationController,
                     section: this.sectionController
@@ -290,6 +247,7 @@ class App {
             console.info('App: All core managers initialized successfully!');
 
         } catch (error) {
+            console.error('App: Core managers initialization failed:', error);
             await this.handleInitializationFailure(error);
             throw error;
         }
@@ -309,20 +267,17 @@ class App {
                 user: new UserModel()
             };
 
-            // Inicialize modelos com timeout
-            await this.executeWithTimeout(
-                Promise.allSettled([
-                    this.models.content.initializeContentModel?.() || this.models.content.initialize?.(),
-                    this.models.user.initialize?.()
-                ]),
-                'DataModels'
-            );
+            // Initialize models with fallback
+            await Promise.allSettled([
+                this.models.content.initialize?.() || Promise.resolve(),
+                this.models.user.initialize?.() || Promise.resolve()
+            ]);
 
-            console.info('App: Data models initialization attempted.');
+            console.info('App: Data models initialization completed.');
             
         } catch (error) {
             console.error('App: Data models initialization failed, continuing with fallback:', error);
-            // Não lance erro aqui - permita que o app continue com dados de fallback
+            // Don't throw error here - allow app to continue with fallback data
         }
     }
 
@@ -334,19 +289,23 @@ class App {
     async initializeInfrastructureManagers() {
         console.info('App: Initializing infrastructure managers...');
 
-        this.errorReporter = new ErrorReporter();
+        // Re-initialize if not already done in main initializeApplication
+        if (!this.errorReporter) {
+            this.errorReporter = new ErrorReporter();
+        }
+        if (!this.performanceMonitor) {
+            this.performanceMonitor = new PerformanceMonitor();
+        }
+        
         this.accessibilityManager = new AccessibilityManager();
         this.themeManager = new ThemeManager();
 
-        // Initialize infrastructure managers in parallel
-        await this.executeWithTimeout(
-            Promise.allSettled([
-                this.errorReporter.initialize(),
-                this.accessibilityManager.initialize(),
-                this.themeManager.initialize()
-            ]),
-            'InfrastructureManagers'
-        );
+        // Initialize infrastructure managers in parallel with fallbacks
+        await Promise.allSettled([
+            this.errorReporter.initialize?.() || Promise.resolve(),
+            this.accessibilityManager.initialize?.() || Promise.resolve(),
+            this.themeManager.initialize?.() || Promise.resolve()
+        ]);
     }
 
     /**
@@ -367,43 +326,28 @@ class App {
             enableCaching: true
         });
 
-        let viewManagerInitialized = true;
-
-        // Verifica se viewManager possui o método initialize antes de chamá-lo
+        // Initialize ViewManager if it has an initialize method
         if (typeof this.viewManager.initialize === 'function') {
             try {
-                await this.executeWithTimeout(
-                    this.viewManager.initialize(),
-                    'ViewManager'
-                );
-                // Se o ViewManager tem uma propriedade isInitialized, usamos ela, caso contrário, assumimos que inicializou
-                viewManagerInitialized = this.viewManager.isInitialized !== false;
+                await this.viewManager.initialize();
             } catch (error) {
                 console.error('App: ViewManager initialization failed:', error);
-                viewManagerInitialized = false;
+                throw error;
             }
-        } else {
-            console.warn('App: ViewManager does not have an initialize method. Assuming it is ready.');
         }
 
-        if (!viewManagerInitialized) {
-            throw new Error('ViewManager failed to initialize');
+        // Instantiate views with proper error handling
+        try {
+            this.views = {
+                navigation: new NavigationView(document.getElementById('main-nav')),
+                hero: new HeroView(document.getElementById('hero-section')),
+                footer: new FooterView(document.getElementById('main-footer')),
+                section: new SectionView(mainContentElement)
+            };
+        } catch (error) {
+            console.error('App: View instantiation failed:', error);
+            throw new Error(`Failed to instantiate views: ${error.message}`);
         }
-
-        // Instantiate specific views and register them with ViewManager if needed
-        // For SectionView, we will instantiate it directly and pass to SectionController
-        this.views = {
-            navigation: new NavigationView(document.getElementById('main-nav')), // Assuming main-nav exists
-            hero: new HeroView(document.getElementById('hero-section')), // Assuming hero-section exists
-            footer: new FooterView(document.getElementById('main-footer')), // Assuming main-footer exists
-            section: new SectionView(mainContentElement) // SectionView takes the main content container
-        };
-
-        // Register views that ViewManager should manage (e.g., for routing if they were separate pages)
-        // For this project, SectionView is managed by SectionController, not directly by ViewManager's renderView
-        // this.viewManager.registerView('navigation', this.views.navigation);
-        // this.viewManager.registerView('hero', this.views.hero);
-        // this.viewManager.registerView('footer', this.views.footer);
     }
 
     /**
@@ -416,10 +360,9 @@ class App {
 
         this.router = new Router();
         
-        await this.executeWithTimeout(
-            this.router.initialize(),
-            'Router'
-        );
+        if (typeof this.router.initialize === 'function') {
+            await this.router.initialize();
+        }
     }
 
     /**
@@ -430,33 +373,39 @@ class App {
     async initializeControllers() {
         console.info('App: Initializing application controllers...');
 
-        // NavigationController needs navigation view and router
-        this.navigationController = new NavigationController(this.views.navigation, this.router);
-        // Register NavigationController as an observer for NavigationView events
-        this.navigationController.registerNavigationViewObserver(this.views.navigation);
-        await this.executeWithTimeout(
-            this.navigationController.initialize(),
-            'NavigationController'
-        );
+        // Initialize controllers with proper error handling
+        try {
+            // NavigationController
+            this.navigationController = new NavigationController(this.views.navigation, this.router);
+            if (typeof this.navigationController.initialize === 'function') {
+                await this.navigationController.initialize();
+            }
 
-        // SectionController needs content model and section view
-        this.sectionController = new SectionController(this.models.content, this.views.section);
-        await this.executeWithTimeout(
-            this.sectionController.initialize(),
-            'SectionController'
-        );
+            // SectionController
+            this.sectionController = new SectionController(this.models.content, this.views.section);
+            if (typeof this.sectionController.initialize === 'function') {
+                await this.sectionController.initialize();
+            }
 
-        // MainController needs models, viewManager, and *all* sub-controllers
-        this.mainController = new MainController(this.models, this.viewManager, {
-            navigation: this.navigationController,
-            section: this.sectionController
-        });
-        await this.executeWithTimeout(
-            this.mainController.initializeApplication(),
-            'MainController'
-        );
-        if (!this.mainController.getInitializationState()) {
-            throw new Error('MainController failed to initialize');
+            // MainController
+            this.mainController = new MainController(this.models, this.viewManager, {
+                navigation: this.navigationController,
+                section: this.sectionController
+            });
+            
+            if (typeof this.mainController.initializeApplication === 'function') {
+                await this.mainController.initializeApplication();
+            }
+
+            // Verify controller initialization state
+            if (this.mainController && typeof this.mainController.getInitializationState === 'function' && 
+                !this.mainController.getInitializationState()) {
+                throw new Error('MainController failed to initialize properly');
+            }
+
+        } catch (error) {
+            console.error('App: Controller initialization failed:', error);
+            throw error;
         }
     }
 
@@ -468,18 +417,16 @@ class App {
     async renderInitialContent() {
         console.info('App: Rendering initial application content...');
 
-        if (this.mainController && this.mainController.getInitializationState()) {
+        if (this.mainController && typeof this.mainController.renderInitialContent === 'function') {
             try {
-                // The MainController will now use the SectionController to render sections
                 await this.mainController.renderInitialContent();
                 console.info('App: Initial content rendered successfully.');
             } catch (error) {
                 console.error('App: Initial content rendering failed:', error);
                 this.showContentLoadingError(error);
-                // Don't throw here - allow application to continue in degraded mode
             }
         } else {
-            const errorMessage = 'App: MainController not initialized, cannot render initial content.';
+            const errorMessage = 'App: MainController not properly initialized, cannot render initial content.';
             console.error(errorMessage);
             this.showContentLoadingError(new Error(errorMessage));
         }
@@ -509,10 +456,16 @@ class App {
         // Check router
         initializationStatus.Router = this.router?.isInitialized ? 'SUCCESS' : 'FAILED';
 
-        // Check controllers
-        initializationStatus.MainController = this.mainController?.getInitializationState() ? 'SUCCESS' : 'FAILED';
+        // Check controllers - use safe method calls
+        initializationStatus.MainController = 
+            (this.mainController && typeof this.mainController.getInitializationState === 'function' && 
+             this.mainController.getInitializationState()) ? 'SUCCESS' : 'FAILED';
+        
         initializationStatus.NavigationController = this.navigationController?.isInitialized ? 'SUCCESS' : 'FAILED';
-        initializationStatus.SectionController = this.sectionController?.getInitializationState() ? 'SUCCESS' : 'FAILED';
+        
+        initializationStatus.SectionController = 
+            (this.sectionController && typeof this.sectionController.getInitializationState === 'function' && 
+             this.sectionController.getInitializationState()) ? 'SUCCESS' : 'FAILED';
 
         console.debug('App: Initialization status:', initializationStatus);
 
@@ -526,7 +479,7 @@ class App {
             console.warn('App:', errorMessage);
             
             // Check for critical failures
-            const criticalComponents = ['ContentModel', 'MainController', 'ViewManager', 'SectionController'];
+            const criticalComponents = ['MainController', 'ViewManager', 'SectionController'];
             const criticalFailures = failedManagers.filter(manager => 
                 criticalComponents.includes(manager)
             );
@@ -540,43 +493,24 @@ class App {
     }
 
     /**
-     * @brief Executes initialization with timeout protection
-     * @private
-     * @param {Promise} promise - Promise to execute with timeout
-     * @param {string} componentName - Name of the component for error reporting
-     * @returns {Promise<void>}
-     */
-    async executeWithTimeout(promise, componentName) {
-        const timeoutDuration = 10000; // 10 seconds
-        
-        try {
-            await Promise.race([
-                promise,
-                new Promise((_, reject) =>
-                    setTimeout(() => reject(new Error(`${componentName} initialization timeout`)), timeoutDuration)
-                )
-            ]);
-        } catch (error) {
-            console.error(`App: ${componentName} initialization failed:`, error);
-            throw error;
-        }
-    }
-
-    /**
      * @brief Handles initialization failures comprehensively
      * @private
      * @param {Error} error - The initialization error
      * @returns {Promise<void>}
      */
-    handleInitializationFailure = async (error) => {
-        this.errorReporter?.captureError(error, {
-            type: 'initialization',
-            severity: 'critical',
-            timestamp: Date.now()
-        });
+    async handleInitializationFailure(error) {
+        console.error('App: Handling initialization failure:', error);
+        
+        if (this.errorReporter) {
+            this.errorReporter.captureError(error, {
+                type: 'initialization',
+                severity: 'critical',
+                timestamp: Date.now()
+            });
+        }
 
         await this.renderCriticalErrorFallback(error);
-    };
+    }
 
     /**
      * @brief Helper method to show content loading errors to users
@@ -586,15 +520,13 @@ class App {
     showContentLoadingError(error) {
         console.error('App: Content loading error:', error);
         
-        const loadingIndicator = document.querySelector('.content-loading-indicator');
-        if (loadingIndicator) {
-            loadingIndicator.innerHTML = `
+        const mainContent = document.getElementById('main-content');
+        if (mainContent) {
+            mainContent.innerHTML = `
                 <div class="content-error-state">
-                    <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
                     <h3>Content Loading Issue</h3>
                     <p>Some content could not be loaded. Please refresh the page or try again later.</p>
                     <button onclick="window.location.reload()" class="btn btn--primary">
-                        <i class="fas fa-redo" aria-hidden="true"></i>
                         Reload Page
                     </button>
                     <details class="error-details">
@@ -603,361 +535,32 @@ class App {
                     </details>
                 </div>
             `;
-            loadingIndicator.hidden = false;
         }
     }
-
-    /**
-     * @brief Helper method to show initialization errors
-     * @private
-     * @param {Error} error - The initialization error
-     */
-    showInitializationError(error) {
-        const appContainer = document.getElementById('app');
-        if (appContainer) {
-            appContainer.innerHTML = `
-                <div class="initialization-error-container">
-                    <div class="error-content">
-                        <h1>Application Startup Error</h1>
-                        <p>We're having trouble starting the application. This might be due to:</p>
-                        <ul>
-                            <li>Network connectivity issues</li>
-                            <li>Browser compatibility problems</li>
-                            <li>Temporary server unavailability</li>
-                        </ul>
-                        <div class="error-actions">
-                            <button onclick="window.location.reload()" class="btn btn--primary">
-                                Try Again
-                            </button>
-                            <button onclick="localStorage.clear(); sessionStorage.clear(); window.location.reload()" 
-                                    class="btn btn--secondary">
-                                Clear Cache & Reload
-                            </button>
-                        </div>
-                        <details class="error-details">
-                            <summary>Technical Information</summary>
-                            <pre>${error.message}</pre>
-                        </details>
-                    </div>
-                </div>
-            `;
-        }
-    }
-
-    /**
-     * @brief Helper method to get names of failed managers for error reporting
-     * @private
-     * @returns {Array} Array of failed manager names
-     */
-    getFailedManagerNames() {
-        const failed = [];
-        if (this.models?.content && !this.models.content.isInitialized) failed.push('ContentModel');
-        if (this.models?.user && !this.models.user.isInitialized) failed.push('UserModel');
-        if (this.errorReporter && !this.errorReporter.isInitialized) failed.push('ErrorReporter');
-        if (this.accessibilityManager && !this.accessibilityManager.isInitialized) failed.push('AccessibilityManager');
-        if (this.themeManager && !this.themeManager.isInitialized) failed.push('ThemeManager');
-        if (this.viewManager && !this.viewManager.isInitialized) failed.push('ViewManager');
-        if (this.router && !this.router.isInitialized) failed.push('Router');
-        if (this.mainController && !this.mainController.getInitializationState()) failed.push('MainController');
-        if (this.navigationController && !this.navigationController.isInitialized) failed.push('NavigationController');
-        if (this.sectionController && !this.sectionController.getInitializationState()) failed.push('SectionController');
-        return failed;
-    }
-
-    /**
-     * @brief Sets up global event listeners for application lifecycle
-     * @method setupGlobalEventListeners
-     * @private
-     */
-    setupGlobalEventListeners() {
-        const { signal } = this.eventAbortController;
-
-        // Handle view changes from router
-        window.addEventListener('router:viewchange', this.handleViewChangeEvent.bind(this), { signal });
-
-        // Handle theme changes
-        window.addEventListener('theme:changed', this.handleThemeChangeEvent.bind(this), { signal });
-
-        // Handle accessibility changes
-        window.addEventListener('accessibility:changed', this.handleAccessibilityChangeEvent.bind(this), { signal });
-
-        // Global error handling
-        window.addEventListener('error', this.handleGlobalErrorEvent.bind(this), { signal });
-        window.addEventListener('unhandledrejection', this.handleUnhandledRejectionEvent.bind(this), { signal });
-
-        // Performance and visibility monitoring
-        window.addEventListener('load', this.handleWindowLoadEvent.bind(this), { signal });
-        document.addEventListener('visibilitychange', this.handleVisibilityChangeEvent.bind(this), { signal });
-
-        // Online/offline status monitoring
-        window.addEventListener('online', this.handleOnlineStatusEvent.bind(this), { signal });
-        window.addEventListener('offline', this.handleOfflineStatusEvent.bind(this), { signal });
-    }
-
-    /**
-     * @brief Sets up communication channels between different managers
-     * @method setupInterManagerCommunication
-     * @private
-     */
-    setupInterManagerCommunication() {
-        // Router to MainController (which now orchestrates section rendering)
-        this.router.onRouteChange((routeData) => {
-            // The router should ideally trigger a method in MainController
-            // that then decides how to render the content (e.g., using SectionController)
-            this.mainController.handleRouteChange(routeData)
-                .catch(error => this.handleViewRenderError(error, routeData));
-        });
-
-        // ThemeManager to ViewManager communication
-        this.themeManager.onThemeChange((themeData) => {
-            // ViewManager doesn't directly update theme, it's handled by App or ThemeManager
-            // This might be a place to notify SectionView or other views if they need to react
-            console.debug('App: Theme change detected, notifying relevant components.');
-            // Example: this.views.section.updateTheme(themeData);
-        });
-
-        // AccessibilityManager to ViewManager communication
-        this.accessibilityManager.onAccessibilityChange((accessibilitySettings) => {
-            // Similar to theme, ViewManager doesn't directly update accessibility
-            console.debug('App: Accessibility change detected, notifying relevant components.');
-            // Example: this.views.section.updateAccessibility(accessibilitySettings);
-        });
-
-        // SectionController to MainController/App communication (e.g., for lazy loading events)
-        this.sectionController.on('section:sectionVisible', (event) => {
-            this.performanceMonitor?.mark(`section-visible-${event.detail.sectionId}`);
-            console.debug(`App: Section ${event.detail.sectionId} became visible.`);
-            // Potentially trigger lazy content loading here if not already handled by SectionController
-        });
-
-        this.sectionController.on('section:contentLoadError', (event) => {
-            console.error(`App: Content load error in section ${event.detail.sectionId}:`, event.detail.error);
-            this.errorReporter?.captureError(new Error(event.detail.error), {
-                type: 'sectionContentLoad',
-                sectionId: event.detail.sectionId
-            });
-        });
-    }
-
-    /**
-     * @brief Handles view change events from the router
-     * @method handleViewChangeEvent
-     * @param {CustomEvent} event - View change event with route details
-     * @private
-     */
-    handleViewChangeEvent = async (event) => {
-        const { viewName, viewData, routeParameters } = event.detail;
-        
-        try {
-            this.performanceMonitor?.mark(`view-change-start-${viewName}`);
-            
-            // The MainController is now responsible for handling view rendering based on route
-            await this.mainController.handleRouteChange({ viewName, viewData, routeParameters });
-            
-            this.performanceMonitor?.mark(`view-change-end-${viewName}`);
-            this.performanceMonitor?.measure(
-                `view-render-${viewName}`,
-                `view-change-start-${viewName}`,
-                `view-change-end-${viewName}`
-            );
-
-            // Update accessibility announcements
-            this.accessibilityManager.announceViewChange(viewName);
-            
-            // Track analytics for view changes
-            this.trackViewAnalytics(viewName, routeParameters);
-
-        } catch (viewRenderError) {
-            console.error(`Error rendering view ${viewName}:`, viewRenderError);
-            await this.handleViewRenderError(viewRenderError, { viewName, viewData });
-        }
-    };
-
-    /**
-     * @brief Handles theme change events
-     * @method handleThemeChangeEvent
-     * @param {CustomEvent} event - Theme change event
-     * @private
-     */
-    handleThemeChangeEvent = (event) => {
-        const themeData = event.detail;
-        
-        // Update document theme attribute for CSS theming
-        document.documentElement.setAttribute('data-theme', themeData.themeName);
-        document.documentElement.style.setProperty('color-scheme', themeData.colorScheme);
-
-        // Persist theme preference
-        this.persistUserPreference('theme', themeData);
-    };
-
-    /**
-     * @brief Handles accessibility preference changes
-     * @method handleAccessibilityChangeEvent
-     * @param {CustomEvent} event - Accessibility change event
-     * @private
-     */
-    handleAccessibilityChangeEvent = (event) => {
-        const accessibilitySettings = event.detail;
-        
-        // Update document with accessibility attributes
-        Object.entries(accessibilitySettings).forEach(([key, value]) => {
-            if (value) {
-                document.documentElement.setAttribute(`data-a11y-${key}`, value);
-            } else {
-                document.documentElement.removeAttribute(`data-a11y-${key}`);
-            }
-        });
-
-        this.persistUserPreference('accessibility', accessibilitySettings);
-    };
-
-    /**
-     * @brief Handles global JavaScript errors
-     * @method handleGlobalErrorEvent
-     * @param {ErrorEvent} errorEvent - Global error event
-     * @private
-     */
-    handleGlobalErrorEvent = (errorEvent) => {
-        const errorContext = {
-            filename: errorEvent.filename,
-            lineno: errorEvent.lineno,
-            colno: errorEvent.colno,
-            userAgent: navigator.userAgent,
-            timestamp: Date.now()
-        };
-
-        console.error('Global error occurred:', errorEvent.error, errorContext);
-        this.errorReporter?.captureError(errorEvent.error, errorContext);
-    };
-
-    /**
-     * @brief Handles unhandled promise rejections
-     * @method handleUnhandledRejectionEvent
-     * @param {PromiseRejectionEvent} rejectionEvent - Promise rejection event
-     * @private
-     */
-    handleUnhandledRejectionEvent = (rejectionEvent) => {
-        console.error('Unhandled promise rejection:', rejectionEvent.reason);
-        
-        this.errorReporter?.captureError(rejectionEvent.reason, {
-            type: 'unhandledRejection',
-            timestamp: Date.now()
-        });
-
-        // Prevent browser default handling
-        rejectionEvent.preventDefault();
-    };
-
-    /**
-     * @brief Handles window load completion
-     * @method handleWindowLoadEvent
-     * @private
-     */
-    handleWindowLoadEvent = () => {
-        this.performanceMonitor?.mark('window-loaded');
-        this.dispatchApplicationEvent('app:windowLoaded', {
-            loadTime: performance.now()
-        });
-    };
-
-    /**
-     * @brief Handles page visibility changes
-     * @method handleVisibilityChangeEvent
-     * @private
-     */
-    handleVisibilityChangeEvent = () => {
-        const isVisible = !document.hidden;
-        this.dispatchApplicationEvent('app:visibilityChange', {
-            isVisible,
-            timestamp: Date.now()
-        });
-
-        // Optimize performance when tab is not visible
-        if (!isVisible) {
-            this.viewManager?.reducePerformanceWhenHidden();
-        }
-    };
-
-    /**
-     * @brief Handles online status restoration
-     * @method handleOnlineStatusEvent
-     * @private
-     */
-    handleOnlineStatusEvent = () => {
-        this.dispatchApplicationEvent('app:online');
-        this.isHealthy = true;
-        
-        // Retry any failed network operations
-        this.retryFailedOperations();
-    };
-
-    /**
-     * @brief Handles offline status detection
-     * @method handleOfflineStatusEvent
-     * @private
-     */
-    handleOfflineStatusEvent = () => {
-        this.dispatchApplicationEvent('app:offline');
-        this.isHealthy = false;
-        
-        // Show offline indicator
-        this.showOfflineIndicator();
-    };
-
-    /**
-     * @brief Handles view rendering errors with fallback strategies
-     * @method handleViewRenderError
-     * @param {Error} error - Rendering error
-     * @param {Object} routeData - Original route data for recovery
-     * @returns {Promise<void>}
-     * @private
-     */
-    handleViewRenderError = async (error, routeData) => {
-        this.errorReporter?.captureError(error, {
-            type: 'viewRender',
-            viewName: routeData.viewName,
-            routeData: routeData
-        });
-
-        // Attempt to render error view
-        try {
-            // The ViewManager's renderErrorView is a placeholder. Implement actual error view rendering.
-            // For now, we'll just log and show a generic error.
-            console.error(`App: Failed to render view ${routeData.viewName}. Displaying generic error.`, error);
-            const mainContent = document.getElementById('main-content');
-            if (mainContent) {
-                mainContent.innerHTML = `
-                    <div class="error-fallback">
-                        <h2>Error Loading Content</h2>
-                        <p>We encountered an issue while trying to display this page. Please try again.</p>
-                        <button onclick="window.location.reload()" class="btn btn--primary">Reload</button>
-                        <details><summary>Details</summary><pre>${error.message}</pre></details>
-                    </div>
-                `;
-            }
-        } catch (fallbackError) {
-            console.error('App: Failed to render error fallback view:', fallbackError);
-        }
-    };
 
     /**
      * @brief Renders a critical error fallback page
      * @private
      * @param {Error} error - The critical error that occurred
      */
-    renderCriticalErrorFallback = async (error) => {
+    async renderCriticalErrorFallback(error) {
+        // Clear any existing content
+        document.body.innerHTML = '';
+        
         document.body.innerHTML = `
-            <div class="critical-error-page">
+            <div class="critical-error-page" style="padding: 2rem; text-align: center; font-family: system-ui;">
                 <h1>Application Error</h1>
                 <p>A critical error occurred during application startup. We apologize for the inconvenience.</p>
-                <button onclick="window.location.reload()">Reload Application</button>
-                <details>
+                <button onclick="window.location.reload()" style="padding: 0.5rem 1rem; margin: 1rem;">
+                    Reload Application
+                </button>
+                <details style="margin-top: 1rem;">
                     <summary>Technical Details</summary>
-                    <pre>${error.message}</pre>
+                    <pre style="text-align: left; background: #f5f5f5; padding: 1rem; overflow: auto;">${error.message}</pre>
                 </details>
             </div>
         `;
-    };
+    }
 
     /**
      * @brief Persists user preferences to local storage
@@ -1052,20 +655,34 @@ class App {
     }
 
     /**
+     * @brief Tracks analytics for view changes
+     * @method trackViewAnalytics
+     * @param {string} viewName - Name of the view
+     * @param {Object} routeParameters - Route parameters
+     * @private
+     */
+    trackViewAnalytics(viewName, routeParameters) {
+        // Implementation for analytics tracking
+        console.debug(`App: Tracking analytics for view ${viewName}`, routeParameters);
+    }
+
+    /**
      * @brief Cleans up resources and event listeners when the app is destroyed
      * @public
      */
     destroy() {
         this.eventAbortController.abort();
-        this.viewManager?.destroy();
-        this.router?.destroy();
-        this.themeManager?.destroy();
-        this.accessibilityManager?.destroy();
-        this.performanceMonitor?.destroy();
-        this.errorReporter?.destroy();
-        this.mainController?.destroy();
-        this.navigationController?.destroy();
-        this.sectionController?.destroy();
+        
+        // Safe destruction calls
+        this.viewManager?.destroy?.();
+        this.router?.destroy?.();
+        this.themeManager?.destroy?.();
+        this.accessibilityManager?.destroy?.();
+        this.performanceMonitor?.destroy?.();
+        this.errorReporter?.destroy?.();
+        this.mainController?.destroy?.();
+        this.navigationController?.destroy?.();
+        this.sectionController?.destroy?.();
 
         // Clear models and views
         this.models = {};
@@ -1077,17 +694,29 @@ class App {
     }
 }
 
-// Application bootstrap with enhanced error handling
+// Enhanced application bootstrap with better error handling
 document.addEventListener('DOMContentLoaded', async () => {
-    const applicationInstance = new App();
-    
-    // Make app instance globally available for debugging and emergency access
-    if (process.env.NODE_ENV === 'development') {
-        window.app = applicationInstance;
+    // Show loading state immediately
+    const loadingOverlay = document.getElementById('loading-overlay');
+    if (loadingOverlay) {
+        loadingOverlay.style.display = 'block';
     }
 
+    let applicationInstance;
+    
     try {
+        applicationInstance = new App();
+        
+        // Make app instance globally available for debugging
+        if (typeof process !== 'undefined' && process.env && process.env.NODE_ENV === 'development') {
+            window.app = applicationInstance;
+        } else if (typeof window !== 'undefined') {
+            // For browser environment without process.env
+            window.app = applicationInstance;
+        }
+
         await applicationInstance.initializeApplication();
+        
     } catch (bootstrapError) {
         console.error('Application bootstrap failed:', bootstrapError);
         
@@ -1099,6 +728,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <button onclick="window.location.reload()" style="padding: 0.5rem 1rem;">
                     Reload Page
                 </button>
+                <details style="margin-top: 1rem;">
+                    <summary>Technical Details</summary>
+                    <pre style="text-align: left; background: #f5f5f5; padding: 1rem; overflow: auto;">${bootstrapError.message}</pre>
+                </details>
             </div>
         `;
     }
