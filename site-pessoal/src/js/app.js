@@ -1,107 +1,26 @@
 /**
- * @file App.js
- * @brief Main application initialization and view management
- * @description Orchestrates SPA functionality and coordinates between modules with enhanced
- *              error handling, performance monitoring, and accessibility features
+ * @file app.js
+ * @brief Main application entry point with robust initialization
  */
 
 import MainController from './controllers/MainController.js';
-import '../css/main.css';
-
 import ViewManager from './modules/ViewManager.js';
-import Router from './modules/Router.js';
 import ThemeManager from './modules/ThemeManager.js';
 import AccessibilityManager from './modules/AccessibilityManager.js';
-import PerformanceMonitor from './modules/PerformanceMonitor.js';
-import ErrorReporter from './modules/ErrorReporter.js';
 
 import ContentModel from './models/ContentModel.js';
 import UserModel from './models/UserModel.js';
 
-/**
- * @class App
- * @brief Central application controller and coordinator
- * @description Initializes all application subsystems, manages lifecycle events,
- *              and handles cross-module communication with robust error handling
- */
 class App {
-    /**
-     * @brief Creates a new App instance
-     * @constructor
-     */
     constructor() {
-        /**
-         * @private
-         * @type {ViewManager|null}
-         * @description Manages view rendering and transitions
-         */
         this.viewManager = null;
-
-        /**
-         * @private
-         * @type {Router|null}
-         * @description Handles client-side routing and navigation
-         */
-        this.router = null;
-
-        /**
-         * @private
-         * @type {ThemeManager|null}
-         * @description Manages theme switching and persistence
-         */
         this.themeManager = null;
-
-        /**
-         * @private
-         * @type {AccessibilityManager|null}
-         * @description Enhances accessibility features and screen reader support
-         */
         this.accessibilityManager = null;
-
-        /**
-         * @private
-         * @type {PerformanceMonitor|null}
-         * @description Tracks application performance metrics
-         */
-        this.performanceMonitor = null;
-
-        /**
-         * @private
-         * @type {ErrorReporter|null}
-         * @description Handles error tracking and reporting
-         */
-        this.errorReporter = null;
-
-        /**
-         * @private
-         * @type {boolean}
-         * @description Tracks initialization status
-         */
+        this.mainController = null;
         this.isInitialized = false;
-
-        /**
-         * @private
-         * @type {boolean}
-         * @description Tracks if the application is in a healthy state
-         */
-        this.isHealthy = true;
-
-        /**
-         * @private
-         * @type {AbortController}
-         * @description Controls cleanup of event listeners
-         */
         this.eventAbortController = new AbortController();
-
-        this.initializeApplication = this.initializeApplication.bind(this);
     }
 
-    /**
-     * @brief Initializes all application subsystems with dependency order
-     * @method initializeApplication
-     * @returns {Promise<void>}
-     * @public
-     */
     async initializeApplication() {
         if (this.isInitialized) {
             console.warn('Application already initialized');
@@ -109,61 +28,50 @@ class App {
         }
 
         try {
-            this.performanceMonitor = new PerformanceMonitor();
-            await this.performanceMonitor.startMonitoring();
+            console.info('App: Starting application initialization...');
 
-            // Validate critical browser features before proceeding
+            // 1. Validar compatibilidade do navegador
             if (!this.checkBrowserCompatibility()) {
                 this.handleBrowserIncompatibility();
                 return;
             }
 
-            // Initialize core managers in proper dependency order
-            await this.initializeCoreManagers();
-            
-            // Set up application-wide event system
+            // 2. Inicializar gerenciadores de infraestrutura
+            await this.initializeInfrastructureManagers();
+
+            // 3. Inicializar modelos de dados
+            await this.initializeDataModels();
+
+            // 4. Inicializar controlador principal
+            await this.initializeMainController();
+
+            // 5. Renderizar conteúdo inicial
+            await this.renderInitialContent();
+
+            // 6. Configurar eventos globais
             this.setupGlobalEventListeners();
-            
-            // Initialize cross-manager communication
-            this.setupInterManagerCommunication();
 
-            this.hideLoadingOverlay();
+            // 7. Finalizar inicialização
+            await this.finalizeInitialization();
 
-            this.isInitialized = true;
-            this.isHealthy = true;
+            console.info('App: Application initialized successfully');
 
-            console.info('Application initialized successfully');
-            
-            // Notify other components that app is ready
-            this.dispatchApplicationEvent('app:initialized', {
-                timestamp: Date.now(),
-                initializationDuration: performance.now()
-            });
-
-        } catch (initializationError) {
-            console.error('Application initialization failed:', initializationError);
-            await this.handleInitializationFailure(initializationError);
+        } catch (error) {
+            console.error('App: Initialization failed:', error);
+            await this.handleInitializationFailure(error);
         }
     }
 
-    /**
-     * @brief Checks for required browser features and APIs
-     * @method checkBrowserCompatibility
-     * @returns {boolean} True if browser meets minimum requirements
-     * @private
-     */
     checkBrowserCompatibility() {
         const requiredFeatures = {
             promises: typeof Promise !== 'undefined',
+            modules: 'noModule' in HTMLScriptElement.prototype,
             fetch: typeof fetch !== 'undefined',
-            intersectionObserver: typeof IntersectionObserver !== 'undefined',
-            customElements: typeof customElements !== 'undefined',
-            cssVariables: window.CSS && CSS.supports && CSS.supports('--test', '0'),
-            es6: typeof Map !== 'undefined' && typeof Set !== 'undefined'
+            intersectionObserver: typeof IntersectionObserver !== 'undefined'
         };
 
         const missingFeatures = Object.entries(requiredFeatures)
-            .filter(([, isSupported]) => !isSupported)
+            .filter(([, supported]) => !supported)
             .map(([feature]) => feature);
 
         if (missingFeatures.length > 0) {
@@ -174,867 +82,193 @@ class App {
         return true;
     }
 
-    /**
-     * @brief Handles browser incompatibility gracefully
-     * @method handleBrowserIncompatibility
-     * @private
-     */
     handleBrowserIncompatibility() {
-        const applicationContainer = document.getElementById('app');
-        if (!applicationContainer) return;
-
-        applicationContainer.innerHTML = `
-            <div class="browser-compatibility-error" role="alert" aria-live="polite">
-                <div class="error-container">
-                    <h1 class="error-title">Browser Update Recommended</h1>
-                    <p class="error-description">
-                        Your current browser doesn't support all the features required 
-                        for this application. Please update to a modern browser for 
-                        the best experience.
-                    </p>
-                    <div class="browser-recommendations">
-                        <p>Recommended browsers:</p>
-                        <ul class="browser-list">
-                            <li>Google Chrome (latest)</li>
-                            <li>Mozilla Firefox (latest)</li>
-                            <li>Microsoft Edge (latest)</li>
-                            <li>Safari (latest)</li>
-                        </ul>
-                    </div>
-                    <button class="retry-button" onclick="window.location.reload()">
-                        Retry Application Load
-                    </button>
-                </div>
-            </div>
-        `;
-
-        this.dispatchApplicationEvent('app:browserIncompatible', {
-            missingFeatures: this.getMissingBrowserFeatures(),
-            userAgent: navigator.userAgent
-        });
-    }
-
-    /**
-     * @brief Gets list of missing browser features for analytics
-     * @method getMissingBrowserFeatures
-     * @returns {Array<string>} List of missing features
-     * @private
-     */
-    getMissingBrowserFeatures() {
-        const featureTests = {
-            promises: () => typeof Promise === 'undefined',
-            fetch: () => typeof fetch === 'undefined',
-            intersectionObserver: () => typeof IntersectionObserver === 'undefined',
-            cssVariables: () => !(window.CSS && CSS.supports && CSS.supports('--test', '0'))
-        };
-
-        return Object.entries(featureTests)
-            .filter(([, test]) => test())
-            .map(([feature]) => feature);
-    }
-
-    /**
-     * @brief Initializes core application managers with proper error handling and dependency injection
-     * @method initializeCoreManagers
-     * @returns {Promise<void>}
-     * @private
-     */
-    async initializeCoreManagers() {
-        try {
-            console.info('App: Starting core managers initialization...');
-
-            // Execute initialization steps in proper sequence
-            await this.initializeDataModels();
-            await this.initializeInfrastructureManagers();
-            await this.initializeViewLayer();
-            await this.initializeRouter();
-            await this.initializeMainController();
-            await this.renderInitialContent();
-            
-            // Verify overall initialization status
-            await this.verifyInitializationStatus();
-
-            console.info('App: All core managers initialized successfully!');
-
-        } catch (error) {
-            await this.handleInitializationFailure(error);
-            throw error;
-        }
-    }
-
-    /**
-     * @brief Initializes data models (foundation layer)
-     * @private
-     * @returns {Promise<void>}
-     */
-    async initializeDataModels() {
-        console.info('App: Initializing data models...');
-        
-        try {
-            this.models = {
-                content: new ContentModel(),
-                user: new UserModel()
-            };
-
-            // Inicialize modelos com timeout
-            await this.executeWithTimeout(
-                Promise.allSettled([
-                    this.models.content.initializeContentModel?.() || this.models.content.initialize?.(),
-                    this.models.user.initialize?.()
-                ]),
-                'DataModels'
-            );
-
-            console.info('App: Data models initialization attempted.');
-            
-        } catch (error) {
-            console.error('App: Data models initialization failed, continuing with fallback:', error);
-            // Não lance erro aqui - permita que o app continue com dados de fallback
-        }
-    }
-
-    /**
-     * @brief Initializes infrastructure managers (support services layer)
-     * @private
-     * @returns {Promise<void>}
-     */
-    async initializeInfrastructureManagers() {
-        console.info('App: Initializing infrastructure managers...');
-
-        this.errorReporter = new ErrorReporter();
-        this.accessibilityManager = new AccessibilityManager();
-        this.themeManager = new ThemeManager();
-
-        // Initialize infrastructure managers in parallel
-        await this.executeWithTimeout(
-            Promise.allSettled([
-                this.errorReporter.initialize(),
-                this.accessibilityManager.initialize(),
-                this.themeManager.initialize()
-            ]),
-            'InfrastructureManagers'
-        );
-    }
-
-    /**
-     * @brief Initializes view layer components
-     * @private
-     * @returns {Promise<void>}
-     */
-    async initializeViewLayer() {
-        console.info('App: Initializing view layer...');
-
-        this.viewManager = new ViewManager({
-            viewContainer: document.getElementById('dynamic-content'),
-            enableCaching: true
-        });
-
-        await this.executeWithTimeout(
-            this.viewManager.initialize(),
-            'ViewManager'
-        );
-
-        if (!this.viewManager.isInitialized) {
-            throw new Error('ViewManager failed to initialize');
-        }
-    }
-
-    /**
-     * @brief Initializes routing system
-     * @private
-     * @returns {Promise<void>}
-     */
-    async initializeRouter() {
-        console.info('App: Initializing router...');
-
-        this.router = new Router();
-        
-        await this.executeWithTimeout(
-            this.router.initialize(),
-            'Router'
-        );
-    }
-
-    /**
-     * @brief Initializes main application controller
-     * @private
-     * @returns {Promise<void>}
-     */
-    async initializeMainController() {
-        console.info('App: Initializing MainController with data models...');
-
-        this.mainController = new MainController(this.models);
-        
-        await this.executeWithTimeout(
-            this.mainController.initializeApplication(),
-            'MainController'
-        );
-
-        if (!this.mainController.getInitializationState()) {
-            throw new Error('MainController failed to initialize');
-        }
-    }
-
-    /**
-     * @brief Renders initial application content
-     * @private
-     * @returns {Promise<void>}
-     */
-    async renderInitialContent() {
-        console.info('App: Rendering initial application content...');
-
-        if (this.mainController && this.mainController.getInitializationState()) {
-            try {
-                await this.mainController.renderInitialContent();
-                console.info('App: Initial content rendered successfully.');
-            } catch (error) {
-                console.error('App: Initial content rendering failed:', error);
-                this.showContentLoadingError(error);
-                // Don't throw here - allow application to continue in degraded mode
-            }
-        } else {
-            const errorMsg = 'App: MainController not available or not initialized for rendering.';
-            console.error(errorMsg);
-            this.showContentLoadingError(new Error(errorMsg));
-        }
-    }
-
-    /**
-     * @brief Verifies initialization status of all components
-     * @private
-     * @returns {Promise<void>}
-     */
-    async verifyInitializationStatus() {
-        console.info('App: Verifying initialization status of all managers...');
-
-        const initializationStatus = {
-            ContentModel: this.models.content?.isInitialized ? 'OK' : 'FAILED',
-            UserModel: this.models.user?.isInitialized ? 'OK' : 'FAILED',
-            ErrorReporter: this.errorReporter?.isInitialized ? 'OK' : 'FAILED',
-            AccessibilityManager: this.accessibilityManager?.isInitialized ? 'OK' : 'FAILED',
-            ThemeManager: this.themeManager?.isInitialized ? 'OK' : 'FAILED',
-            ViewManager: this.viewManager?.isInitialized ? 'OK' : 'FAILED',
-            Router: this.router?.isInitialized ? 'OK' : 'FAILED',
-            MainController: this.mainController?.getInitializationState() ? 'OK' : 'FAILED'
-        };
-
-        // Log comprehensive initialization status
-        console.info('App: Initialization status report:', initializationStatus);
-
-        // Identify failed components
-        const failedManagers = Object.entries(initializationStatus)
-            .filter(([_, status]) => status === 'FAILED')
-            .map(([manager]) => manager);
-
-        if (failedManagers.length > 0) {
-            const errorMessage = `Application initialization partially failed. Failed components: ${failedManagers.join(', ')}`;
-            console.warn('App:', errorMessage);
-            
-            // Check for critical failures
-            const criticalComponents = ['ContentModel', 'MainController', 'ViewManager'];
-            const criticalFailures = failedManagers.filter(manager => 
-                criticalComponents.includes(manager)
-            );
-
-            if (criticalFailures.length > 0) {
-                throw new Error(`Critical initialization failure: ${criticalFailures.join(', ')}`);
-            } else {
-                console.warn('App: Non-critical initialization failures, application continuing in degraded mode.');
-            }
-        }
-    }
-
-    /**
-     * @brief Executes initialization with timeout protection
-     * @private
-     * @param {Promise} promise - Promise to execute with timeout
-     * @param {string} componentName - Name of the component for error reporting
-     * @returns {Promise<void>}
-     */
-    async executeWithTimeout(promise, componentName) {
-        const timeoutDuration = 10000; // 10 seconds
-        
-        try {
-            await Promise.race([
-                promise,
-                new Promise((_, reject) =>
-                    setTimeout(() => reject(new Error(`${componentName} initialization timeout`)), timeoutDuration)
-                )
-            ]);
-        } catch (error) {
-            console.error(`App: ${componentName} initialization failed:`, error);
-            throw error;
-        }
-    }
-
-    /**
-     * @brief Handles initialization failures comprehensively
-     * @private
-     * @param {Error} error - The initialization error
-     * @returns {Promise<void>}
-     */
-    async handleInitializationFailure(error) {
-        console.error('App: Critical failure during core managers initialization:', error);
-        
-        // Report error through error reporter if available
-        if (this.errorReporter && this.errorReporter.isInitialized) {
-            this.errorReporter.captureError(error, {
-                context: 'initializeCoreManagers',
-                timestamp: Date.now(),
-                failedManagers: this.getFailedManagerNames()
-            });
-        }
-
-        // Show user-friendly error message
-        this.showInitializationError(error);
-    }
-
-    /**
-     * @brief Gets names of failed managers for error reporting
-     * @private
-     * @returns {Array} Array of failed manager names
-     */
-    getFailedManagerNames() {
-        const failed = [];
-        if (this.models?.content && !this.models.content.isInitialized) failed.push('ContentModel');
-        if (this.models?.user && !this.models.user.isInitialized) failed.push('UserModel');
-        if (this.errorReporter && !this.errorReporter.isInitialized) failed.push('ErrorReporter');
-        if (this.accessibilityManager && !this.accessibilityManager.isInitialized) failed.push('AccessibilityManager');
-        if (this.themeManager && !this.themeManager.isInitialized) failed.push('ThemeManager');
-        if (this.viewManager && !this.viewManager.isInitialized) failed.push('ViewManager');
-        if (this.router && !this.router.isInitialized) failed.push('Router');
-        if (this.mainController && !this.mainController.getInitializationState()) failed.push('MainController');
-        return failed;
-    }
-
-    /**
-     * @brief Helper method to show content loading errors to users
-     * @private
-     * @param {Error} error - The error that occurred during content loading
-     */
-    showContentLoadingError(error) {
-        console.error('App: Content loading error:', error);
-        
-        const loadingIndicator = document.querySelector('.content-loading-indicator');
-        if (loadingIndicator) {
-            loadingIndicator.innerHTML = `
-                <div class="content-error-state">
-                    <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
-                    <h3>Content Loading Issue</h3>
-                    <p>Some content could not be loaded. Please refresh the page or try again later.</p>
-                    <button onclick="window.location.reload()" class="btn btn--primary">
-                        <i class="fas fa-redo" aria-hidden="true"></i>
-                        Reload Page
-                    </button>
-                    <details class="error-details">
-                        <summary>Technical Details</summary>
-                        <pre>${error.message}</pre>
-                    </details>
-                </div>
-            `;
-            loadingIndicator.hidden = false;
-        }
-    }
-
-    /**
-     * @brief Helper method to show initialization errors
-     * @private
-     * @param {Error} error - The initialization error
-     */
-    showInitializationError(error) {
         const appContainer = document.getElementById('app');
         if (appContainer) {
             appContainer.innerHTML = `
-                <div class="initialization-error-container">
-                    <div class="error-content">
-                        <h1>Application Startup Error</h1>
-                        <p>We're having trouble starting the application. This might be due to:</p>
-                        <ul>
-                            <li>Network connectivity issues</li>
-                            <li>Browser compatibility problems</li>
-                            <li>Temporary server unavailability</li>
-                        </ul>
-                        <div class="error-actions">
-                            <button onclick="window.location.reload()" class="btn btn--primary">
-                                Try Again
-                            </button>
-                            <button onclick="localStorage.clear(); sessionStorage.clear(); window.location.reload()" 
-                                    class="btn btn--secondary">
-                                Clear Cache & Reload
-                            </button>
-                        </div>
-                        <details class="error-details">
-                            <summary>Technical Information</summary>
-                            <pre>${error.message}</pre>
-                        </details>
+                <div class="browser-compatibility-error">
+                    <div class="error-container">
+                        <h1>Browser Update Recommended</h1>
+                        <p>Your browser doesn't support all features required for this application.</p>
+                        <p>Please update to a modern browser like Chrome, Firefox, Safari, or Edge.</p>
+                        <button onclick="window.location.reload()" class="btn btn-primary">
+                            Try Anyway
+                        </button>
                     </div>
                 </div>
             `;
         }
     }
 
-    /**
-     * @brief Helper method to get names of failed managers for error reporting
-     * @private
-     * @returns {Array} Array of failed manager names
-     */
-    getFailedManagerNames() {
-        const failed = [];
-        if (this.models?.content && !this.models.content.isInitialized) failed.push('ContentModel');
-        if (this.models?.user && !this.models.user.isInitialized) failed.push('UserModel');
-        if (this.errorReporter && !this.errorReporter.isInitialized) failed.push('ErrorReporter');
-        if (this.accessibilityManager && !this.accessibilityManager.isInitialized) failed.push('AccessibilityManager');
-        if (this.themeManager && !this.themeManager.isInitialized) failed.push('ThemeManager');
-        if (this.viewManager && !this.viewManager.isInitialized) failed.push('ViewManager');
-        if (this.router && !this.router.isInitialized) failed.push('Router');
-        if (this.mainController && !this.mainController.getInitializationState()) failed.push('MainController');
-        return failed;
+    async initializeInfrastructureManagers() {
+        console.info('App: Initializing infrastructure managers...');
+
+        // ViewManager primeiro - é crítico
+        this.viewManager = new ViewManager();
+        await this.viewManager.initialize();
+
+        // Outros gerenciadores em paralelo
+        [this.themeManager, this.accessibilityManager] = await Promise.all([
+            this.initializeManager(ThemeManager),
+            this.initializeManager(AccessibilityManager)
+        ]);
     }
 
-    /**
-     * @brief Sets up global event listeners for application lifecycle
-     * @method setupGlobalEventListeners
-     * @private
-     */
-    setupGlobalEventListeners() {
-        const { signal } = this.eventAbortController;
-
-        // Handle view changes from router
-        window.addEventListener('router:viewchange', this.handleViewChangeEvent.bind(this), { signal });
-
-        // Handle theme changes
-        window.addEventListener('theme:changed', this.handleThemeChangeEvent.bind(this), { signal });
-
-        // Handle accessibility changes
-        window.addEventListener('accessibility:changed', this.handleAccessibilityChangeEvent.bind(this), { signal });
-
-        // Global error handling
-        window.addEventListener('error', this.handleGlobalErrorEvent.bind(this), { signal });
-        window.addEventListener('unhandledrejection', this.handleUnhandledRejectionEvent.bind(this), { signal });
-
-        // Performance and visibility monitoring
-        window.addEventListener('load', this.handleWindowLoadEvent.bind(this), { signal });
-        document.addEventListener('visibilitychange', this.handleVisibilityChangeEvent.bind(this), { signal });
-
-        // Online/offline status monitoring
-        window.addEventListener('online', this.handleOnlineStatusEvent.bind(this), { signal });
-        window.addEventListener('offline', this.handleOfflineStatusEvent.bind(this), { signal });
-    }
-
-    /**
-     * @brief Sets up communication channels between different managers
-     * @method setupInterManagerCommunication
-     * @private
-     */
-    setupInterManagerCommunication() {
-        // Router to ViewManager communication
-        this.router.onRouteChange((routeData) => {
-            this.viewManager.renderView(routeData.viewName, routeData.viewData)
-                .catch(error => this.handleViewRenderError(error, routeData));
-        });
-
-        // ThemeManager to ViewManager communication
-        this.themeManager.onThemeChange((themeData) => {
-            this.viewManager.updateTheme(themeData);
-        });
-
-        // AccessibilityManager to ViewManager communication
-        this.accessibilityManager.onAccessibilityChange((accessibilitySettings) => {
-            this.viewManager.updateAccessibility(accessibilitySettings);
-        });
-    }
-
-    /**
-     * @brief Handles view change events from the router
-     * @method handleViewChangeEvent
-     * @param {CustomEvent} event - View change event with route details
-     * @private
-     */
-    handleViewChangeEvent = async (event) => {
-        const { viewName, viewData, routeParameters } = event.detail;
-        
+    async initializeManager(ManagerClass) {
         try {
-            this.performanceMonitor?.mark(`view-change-start-${viewName}`);
-            
-            await this.viewManager.renderView(viewName, viewData);
-            
-            this.performanceMonitor?.mark(`view-change-end-${viewName}`);
-            this.performanceMonitor?.measure(
-                `view-render-${viewName}`,
-                `view-change-start-${viewName}`,
-                `view-change-end-${viewName}`
-            );
-
-            // Update accessibility announcements
-            this.accessibilityManager.announceViewChange(viewName);
-            
-            // Track analytics for view changes
-            this.trackViewAnalytics(viewName, routeParameters);
-
-        } catch (viewRenderError) {
-            console.error(`Error rendering view ${viewName}:`, viewRenderError);
-            await this.handleViewRenderError(viewRenderError, { viewName, viewData });
-        }
-    };
-
-    /**
-     * @brief Handles theme change events
-     * @method handleThemeChangeEvent
-     * @param {CustomEvent} event - Theme change event
-     * @private
-     */
-    handleThemeChangeEvent = (event) => {
-        const themeData = event.detail;
-        
-        // Update document theme attribute for CSS theming
-        document.documentElement.setAttribute('data-theme', themeData.themeName);
-        document.documentElement.style.setProperty('color-scheme', themeData.colorScheme);
-
-        // Persist theme preference
-        this.persistUserPreference('theme', themeData);
-    };
-
-    /**
-     * @brief Handles accessibility preference changes
-     * @method handleAccessibilityChangeEvent
-     * @param {CustomEvent} event - Accessibility change event
-     * @private
-     */
-    handleAccessibilityChangeEvent = (event) => {
-        const accessibilitySettings = event.detail;
-        
-        // Update document with accessibility attributes
-        Object.entries(accessibilitySettings).forEach(([key, value]) => {
-            if (value) {
-                document.documentElement.setAttribute(`data-a11y-${key}`, value);
-            } else {
-                document.documentElement.removeAttribute(`data-a11y-${key}`);
+            const manager = new ManagerClass();
+            if (typeof manager.initialize === 'function') {
+                await manager.initialize();
             }
-        });
+            return manager;
+        } catch (error) {
+            console.warn(`Failed to initialize ${ManagerClass.name}:`, error);
+            return null;
+        }
+    }
 
-        this.persistUserPreference('accessibility', accessibilitySettings);
-    };
+    async initializeDataModels() {
+        console.info('App: Initializing data models...');
 
-    /**
-     * @brief Handles global JavaScript errors
-     * @method handleGlobalErrorEvent
-     * @param {ErrorEvent} errorEvent - Global error event
-     * @private
-     */
-    handleGlobalErrorEvent = (errorEvent) => {
-        const errorContext = {
-            filename: errorEvent.filename,
-            lineno: errorEvent.lineno,
-            colno: errorEvent.colno,
-            userAgent: navigator.userAgent,
-            timestamp: Date.now()
+        this.models = {
+            content: new ContentModel(),
+            user: new UserModel()
         };
 
-        console.error('Global error occurred:', errorEvent.error, errorContext);
-        this.errorReporter?.captureError(errorEvent.error, errorContext);
-    };
+        // Inicialização tolerante a falhas
+        await Promise.allSettled([
+            this.models.content.initialize?.().catch(error => 
+                console.warn('ContentModel initialization warning:', error)
+            ),
+            this.models.user.initialize?.().catch(error =>
+                console.warn('UserModel initialization warning:', error)
+            )
+        ]);
+    }
 
-    /**
-     * @brief Handles unhandled promise rejections
-     * @method handleUnhandledRejectionEvent
-     * @param {PromiseRejectionEvent} rejectionEvent - Promise rejection event
-     * @private
-     */
-    handleUnhandledRejectionEvent = (rejectionEvent) => {
-        console.error('Unhandled promise rejection:', rejectionEvent.reason);
+    async initializeMainController() {
+        console.info('App: Initializing main controller...');
+
+        this.mainController = new MainController(this.models, {
+            viewManager: this.viewManager,
+            themeManager: this.themeManager,
+            accessibilityManager: this.accessibilityManager
+        });
+
+        await this.mainController.initializeApplication();
+    }
+
+    async renderInitialContent() {
+        console.info('App: Rendering initial content...');
         
-        this.errorReporter?.captureError(rejectionEvent.reason, {
-            type: 'unhandledRejection',
-            timestamp: Date.now()
-        });
+        if (this.mainController && this.mainController.getInitializationState()) {
+            await this.mainController.renderInitialContent();
+        } else {
+            throw new Error('MainController not ready for rendering');
+        }
+    }
 
-        // Prevent browser default handling
-        rejectionEvent.preventDefault();
-    };
+    setupGlobalEventListeners() {
+        const signal = this.eventAbortController.signal;
 
-    /**
-     * @brief Handles window load completion
-     * @method handleWindowLoadEvent
-     * @private
-     */
-    handleWindowLoadEvent = () => {
-        this.performanceMonitor?.mark('window-loaded');
-        this.dispatchApplicationEvent('app:windowLoaded', {
-            loadTime: performance.now()
-        });
-    };
+        // Gerenciar mudanças de rota
+        window.addEventListener('popstate', this.handlePopState.bind(this), { signal });
 
-    /**
-     * @brief Handles page visibility changes
-     * @method handleVisibilityChangeEvent
-     * @private
-     */
-    handleVisibilityChangeEvent = () => {
+        // Gerenciar visibilidade da página
+        document.addEventListener('visibilitychange', this.handleVisibilityChange.bind(this), { signal });
+
+        // Gerenciar status online/offline
+        window.addEventListener('online', this.handleOnlineStatus.bind(this), { signal });
+        window.addEventListener('offline', this.handleOfflineStatus.bind(this), { signal });
+    }
+
+    handlePopState(event) {
+        // Navegação do browser (avançar/voltar)
+        console.debug('App: Pop state event', event.state);
+    }
+
+    handleVisibilityChange() {
         const isVisible = !document.hidden;
-        this.dispatchApplicationEvent('app:visibilityChange', {
-            isVisible,
-            timestamp: Date.now()
-        });
+        console.debug('App: Visibility changed:', isVisible);
+    }
 
-        // Optimize performance when tab is not visible
-        if (!isVisible) {
-            this.viewManager?.reducePerformanceWhenHidden();
-        }
-    };
+    handleOnlineStatus() {
+        console.info('App: Online - resuming normal operation');
+    }
 
-    /**
-     * @brief Handles online status restoration
-     * @method handleOnlineStatusEvent
-     * @private
-     */
-    handleOnlineStatusEvent = () => {
-        this.dispatchApplicationEvent('app:online');
-        this.isHealthy = true;
+    handleOfflineStatus() {
+        console.warn('App: Offline - some features may be unavailable');
+    }
+
+    async finalizeInitialization() {
+        // Esconder loading indicator
+        this.hideLoadingOverlay();
+
+        // Marcar aplicação como inicializada
+        this.isInitialized = true;
         
-        // Retry any failed network operations
-        this.retryFailedOperations();
-    };
+        // Disparar evento de aplicação pronta
+        window.dispatchEvent(new CustomEvent('app:initialized', {
+            detail: { timestamp: Date.now() }
+        }));
 
-    /**
-     * @brief Handles offline status detection
-     * @method handleOfflineStatusEvent
-     * @private
-     */
-    handleOfflineStatusEvent = () => {
-        this.dispatchApplicationEvent('app:offline');
-        this.isHealthy = false;
-        
-        // Show offline indicator
-        this.showOfflineIndicator();
-    };
-
-    /**
-     * @brief Handles view rendering errors with fallback strategies
-     * @method handleViewRenderError
-     * @param {Error} error - Rendering error
-     * @param {Object} routeData - Original route data for recovery
-     * @returns {Promise<void>}
-     * @private
-     */
-    handleViewRenderError = async (error, routeData) => {
-        this.errorReporter?.captureError(error, {
-            type: 'viewRender',
-            viewName: routeData.viewName,
-            routeData: routeData
-        });
-
-        // Attempt to render error view
-        try {
-            await this.viewManager.renderErrorView({
-                error,
-                viewName: routeData.viewName,
-                suggestion: 'Please try navigating to a different section.'
-            });
-        } catch (fallbackError) {
-            console.error('Even error view failed:', fallbackError);
-            this.renderCriticalErrorFallback(error);
-        }
-    };
-
-    /**
-     * @brief Handles complete application initialization failure
-     * @method handleInitializationFailure
-     * @param {Error} error - Initialization error
-     * @returns {Promise<void>}
-     * @private
-     */
-    handleInitializationFailure = async (error) => {
-        this.errorReporter?.captureError(error, {
-            type: 'initialization',
-            severity: 'critical',
-            timestamp: Date.now()
-        });
-
-        await this.renderCriticalErrorFallback(error);
-    };
-
-    /**
-     * @brief Renders critical error fallback when all else fails
-     * @method renderCriticalErrorFallback
-     * @param {Error} error - The critical error
-     * @private
-     */
-    renderCriticalErrorFallback = (error) => {
-        const applicationContainer = document.getElementById('app');
-        if (!applicationContainer) return;
-
-        applicationContainer.innerHTML = `
-            <div class="critical-error-container" role="alert" aria-live="assertive">
-                <div class="error-content">
-                    <h1 class="error-title">Application Error</h1>
-                    <p class="error-description">
-                        We're experiencing technical difficulties. Our team has been notified.
-                    </p>
-                    <div class="error-actions">
-                        <button class="retry-button" onclick="window.location.reload()">
-                            Reload Application
-                        </button>
-                        <button class="support-button" onclick="window.open('/support', '_blank')">
-                            Contact Support
-                        </button>
-                    </div>
-                    <details class="error-details">
-                        <summary>Technical Details</summary>
-                        <pre>${error.message}</pre>
-                    </details>
-                </div>
-            </div>
-        `;
-    };
-
-    /**
-     * @brief Persists user preferences to storage
-     * @method persistUserPreference
-     * @param {string} preferenceType - Type of preference (theme, accessibility, etc.)
-     * @param {Object} preferenceData - Preference data to store
-     * @private
-     */
-    persistUserPreference = (preferenceType, preferenceData) => {
-        try {
-            const storageKey = `user-preferences-${preferenceType}`;
-            localStorage.setItem(storageKey, JSON.stringify(preferenceData));
-        } catch (storageError) {
-            console.warn('Failed to persist user preference:', storageError);
-        }
-    };
-
-    /**
-     * @brief Tracks view analytics for user behavior monitoring
-     * @method trackViewAnalytics
-     * @param {string} viewName - Name of the view being tracked
-     * @param {Object} routeParameters - Route parameters for context
-     * @private
-     */
-    trackViewAnalytics = (viewName, routeParameters) => {
-        this.dispatchApplicationEvent('app:viewTracked', {
-            viewName,
-            routeParameters,
-            timestamp: Date.now()
-        });
-    };
-
-    /**
-     * @brief Shows offline indicator to user
-     * @method showOfflineIndicator
-     * @private
-     */
-    showOfflineIndicator = () => {
-        // Implementation for showing offline UI
-        const existingIndicator = document.getElementById('offline-indicator');
-        if (existingIndicator) return;
-
-        const indicator = document.createElement('div');
-        indicator.id = 'offline-indicator';
-        indicator.className = 'offline-indicator';
-        indicator.setAttribute('role', 'status');
-        indicator.setAttribute('aria-live', 'polite');
-        indicator.textContent = 'You are currently offline. Some features may be unavailable.';
-        
-        document.body.prepend(indicator);
-    };
-
-    /**
-     * @brief Retries failed operations when coming back online
-     * @method retryFailedOperations
-     * @private
-     */
-    retryFailedOperations = () => {
-        // Remove offline indicator
-        const offlineIndicator = document.getElementById('offline-indicator');
-        if (offlineIndicator) {
-            offlineIndicator.remove();
-        }
-
-        // Retry any queued operations
-        this.dispatchApplicationEvent('app:retryOperations');
-    };
-
-    /**
-     * @brief Dispatches custom application events
-     * @method dispatchApplicationEvent
-     * @param {string} eventName - Name of the event to dispatch
-     * @param {Object} eventDetail - Event detail data
-     * @private
-     */
-    dispatchApplicationEvent = (eventName, eventDetail = {}) => {
-        const applicationEvent = new CustomEvent(eventName, {
-            detail: {
-                ...eventDetail,
-                appInstance: this,
-                timestamp: eventDetail.timestamp || Date.now()
-            },
-            bubbles: true
-        });
-
-        window.dispatchEvent(applicationEvent);
-    };
-
-    /**
-     * @brief Cleans up application resources and event listeners
-     * @method destroy
-     * @returns {void}
-     * @public
-     */
-    destroy() {
-        // Abort all event listeners
-        this.eventAbortController.abort();
-
-        // Clean up managers
-        this.viewManager?.destroy();
-        this.router?.destroy();
-        this.themeManager?.destroy();
-        this.accessibilityManager?.destroy();
-        this.performanceMonitor?.stopMonitoring();
-        this.errorReporter?.destroy();
-
-        this.isInitialized = false;
-        this.isHealthy = false;
-
-        console.info('Application destroyed successfully');
+        console.info('App: Initialization sequence completed');
     }
 
     hideLoadingOverlay() {
-        const overlay = document.querySelector('[data-loading-overlay]');
-        if (overlay) {
-            overlay.style.opacity = '0';
-            overlay.addEventListener('transitionend', () => overlay.remove());
+        const loadingIndicator = document.querySelector('.content-loading-indicator');
+        if (loadingIndicator) {
+            loadingIndicator.style.opacity = '0';
+            setTimeout(() => {
+                loadingIndicator.hidden = true;
+            }, 300);
         }
     }
-}
 
-// Application bootstrap with enhanced error handling
-document.addEventListener('DOMContentLoaded', async () => {
-    const applicationInstance = new App();
-    
-    // Make app instance globally available for debugging and emergency access
-    if (process.env.NODE_ENV === 'development') {
-        window.app = applicationInstance;
-    }
+    async handleInitializationFailure(error) {
+        console.error('App: Critical initialization failure:', error);
 
-    try {
-        await applicationInstance.initializeApplication();
-    } catch (bootstrapError) {
-        console.error('Application bootstrap failed:', bootstrapError);
-        
-        // Final fallback for complete bootstrap failure
+        // Fallback extremo
         document.body.innerHTML = `
             <div style="padding: 2rem; text-align: center; font-family: system-ui;">
                 <h1>Application Failed to Load</h1>
-                <p>Please refresh the page or try again later.</p>
-                <button onclick="window.location.reload()" style="padding: 0.5rem 1rem;">
-                    Reload Page
+                <p>We're experiencing technical difficulties. Please try again later.</p>
+                <button onclick="window.location.reload()" style="padding: 0.5rem 1rem; margin: 1rem;">
+                    Reload Application
                 </button>
+                <details style="margin-top: 1rem; text-align: left;">
+                    <summary>Technical Details</summary>
+                    <pre style="background: #f5f5f5; padding: 1rem; border-radius: 4px;">${error.message}</pre>
+                </details>
             </div>
         `;
     }
+
+    destroy() {
+        this.eventAbortController.abort();
+        
+        if (this.mainController) this.mainController.destroy();
+        if (this.viewManager) this.viewManager.destroy();
+        
+        this.isInitialized = false;
+        console.info('App: Application destroyed');
+    }
+}
+
+// Bootstrap da aplicação
+document.addEventListener('DOMContentLoaded', async () => {
+    const app = new App();
+    
+    // Expor para debugging em desenvolvimento
+    if (process.env.NODE_ENV === 'development') {
+        window.app = app;
+    }
+
+    try {
+        await app.initializeApplication();
+    } catch (error) {
+        console.error('App: Bootstrap failed:', error);
+    }
 });
 
-// Export for testing and potential module usage
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { App };
-}
+export default App;
