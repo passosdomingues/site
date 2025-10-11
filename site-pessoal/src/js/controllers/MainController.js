@@ -19,15 +19,16 @@ import NavigationController from './NavigationController.js';
 import SectionController from './SectionController.js';
 
 // Constants
+
 /**
  * @constant {Object} VIEW_SELECTORS
- * @brief CSS selectors for DOM elements associated with views
- * @description Maps view names to their corresponding DOM selectors for dynamic element resolution
+ * @brief CSS selectors for DOM elements associated with views.
+ * @description Maps view names to their corresponding DOM selectors for dynamic element resolution.
  */
 const VIEW_SELECTORS = {
     navigation: '[data-view="navigation"]',
     hero: '[data-view="hero"]',
-    mainContent: '#main-content',
+    section: '#main-content', // CORRECTED: Changed 'mainContent' to 'section'
     footer: '[data-view="footer"]'
 };
 
@@ -282,27 +283,28 @@ class MainController {
     }
 
     /**
-     * @brief Initializes all sub-controllers with their required dependencies
+     * @brief Initializes all sub-controllers with their required dependencies.
      * @private
-     * @returns {Promise<void>} Resolves when all controllers are initialized
-     * @throws {Error} When critical controller initialization fails
+     * @async
+     * @returns {Promise<void>} Resolves when all controllers are initialized.
+     * @throws {Error} When critical controller initialization fails, particularly if a required view is missing.
      */
     async initializeSubControllers() {
         try {
             this.controllers.navigation = new NavigationController();
             
-            // Section controller requires both models and section view
+            // The SectionController has a dependency on both the models and the SectionView.
+            // We must verify that the SectionView was successfully instantiated before proceeding.
             if (!this.views.section) {
-                throw new Error('SectionView is not inicialized');
+                throw new Error('MainController Error: The SectionView instance is required but was not found. Check VIEW_SELECTORS and view instantiation logic.');
             }
             
-            // Section controller requer ambos os models e a section view
             this.controllers.section = new SectionController(
                 this.models,
-                { section: this.views.section }  // as object
+                { section: this.views.section } // Pass views as an object
             );
 
-            // Initialize controllers that have async initialization
+            // Await any controllers that have an asynchronous initialization method.
             const initializationPromises = Object.values(this.controllers).map(
                 controller => {
                     if (controller.initialize && typeof controller.initialize === 'function') {
@@ -318,6 +320,7 @@ class MainController {
             
         } catch (error) {
             console.error(ERROR_MESSAGES.controllerInitializationFailed, error);
+            // Re-throw the error to be caught by the main initialization sequence handler.
             throw new Error(ERROR_MESSAGES.controllerInitializationFailed);
         }
     }
