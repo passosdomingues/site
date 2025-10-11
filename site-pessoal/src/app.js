@@ -367,12 +367,26 @@ class App {
             enableCaching: true
         });
 
-        await this.executeWithTimeout(
-            this.viewManager.initialize(),
-            'ViewManager'
-        );
+        let viewManagerInitialized = true;
 
-        if (!this.viewManager.isInitialized) {
+        // Verifica se viewManager possui o método initialize antes de chamá-lo
+        if (typeof this.viewManager.initialize === 'function') {
+            try {
+                await this.executeWithTimeout(
+                    this.viewManager.initialize(),
+                    'ViewManager'
+                );
+                // Se o ViewManager tem uma propriedade isInitialized, usamos ela, caso contrário, assumimos que inicializou
+                viewManagerInitialized = this.viewManager.isInitialized !== false;
+            } catch (error) {
+                console.error('App: ViewManager initialization failed:', error);
+                viewManagerInitialized = false;
+            }
+        } else {
+            console.warn('App: ViewManager does not have an initialize method. Assuming it is ready.');
+        }
+
+        if (!viewManagerInitialized) {
             throw new Error('ViewManager failed to initialize');
         }
 
@@ -1094,4 +1108,3 @@ document.addEventListener('DOMContentLoaded', async () => {
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = { App };
 }
-
