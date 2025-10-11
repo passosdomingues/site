@@ -137,27 +137,27 @@ class ContentModel {
         // As imagens devem estar na pasta `public/` para que o Vite as copie para a `dist/`
         return [
             {
-                imageUrl: '/img/observatory-01.jpg',
+                imageUrl: '/images/obs1.jpg',
                 caption: 'Telescópio principal do Observatório da UNIFAL-MG'
             },
             {
-                imageUrl: '/img/observatory-02.jpg',
+                imageUrl: '/images/obs2.jpg',
                 caption: 'Noite de observação aberta ao público'
             },
             {
-                imageUrl: '/img/observatory-03.jpg',
+                imageUrl: '/images/obs3.jpg',
                 caption: 'Registro da Nebulosa de Órion (M42)'
             },
             {
-                imageUrl: '/img/observatory-04.jpg',
+                imageUrl: '/images/obs4.jpg',
                 caption: 'Equipe de pesquisa e extensão do observatório'
             },
             {
-                imageUrl: '/img/observatory-05.jpg',
+                imageUrl: '/images/obs5.jpg',
                 caption: 'Cúpula do observatório sob o céu estrelado'
             },
             {
-                imageUrl: '/img/observatory-06.jpg',
+                imageUrl: '/images/obs6.jpg',
                 caption: 'Palestra de divulgação científica para escolas'
             }
         ];
@@ -346,7 +346,7 @@ class ViewManager {
     renderGallery(content) {
         const items = content.map(item => `
             <div class="gallery-item">
-                <img src="${item.imageUrl}" alt="${item.caption}" class="gallery-image" loading="lazy">
+                <images src="${item.imageUrl}" alt="${item.caption}" class="gallery-image" loading="lazy">
                 <div class="gallery-caption">${item.caption}</div>
             </div>
         `).join('');
@@ -453,9 +453,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Para debugging
         window.app = app;
         
-        console.log('🚀 Portfólio carregado com sucesso!');
+        console.log('Portfólio carregado com sucesso!');
     } catch (error) {
-        console.error('❌ Erro ao inicializar aplicação:', error);
+        console.error('Erro ao inicializar aplicação:', error);
         document.getElementById('loading-overlay').innerHTML = `
             <div style="text-align: center; color: white;">
                 <h2>Erro ao carregar</h2>
