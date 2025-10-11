@@ -5,26 +5,10 @@
 
 // Corrected import paths to be relative
 import MainController from './MainController.js';
-// Assuming the other files are also in the same directory.
-// If files like NavigationController.js don't exist, the build will fail here.
-// import NavigationController from './NavigationController.js'; 
-// import SectionController from './SectionController.js';
-import './main.css';
-
 import ViewManager from './ViewManager.js';
-// import Router from './Router.js';
-// import ThemeManager from './ThemeManager.js';
-// import AccessibilityManager from './AccessibilityManager.js';
-// import PerformanceMonitor from './PerformanceMonitor.js';
-// import ErrorReporter from './ErrorReporter.js';
 
-// import ContentModel from './ContentModel.js';
-// import UserModel from './UserModel.js';
-
-// import NavigationView from './NavigationView.js';
-// import HeroView from './HeroView.js';
-// import FooterView from './FooterView.js';
-// import SectionView from './SectionView.js';
+// Corrected path for the CSS file
+import './src/main.css';
 
 /**
  * @class App
@@ -45,8 +29,6 @@ class App {
         try {
             console.log("App: Initializing...");
 
-            // Since many imported files are missing, we will simplify this
-            // to only use the files we have: MainController and ViewManager.
             this.viewManager = new ViewManager();
             
             // Mock models and controllers for demonstration
