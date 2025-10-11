@@ -36,18 +36,18 @@ jobs:
           cache-dependency-path: './site-pessoal/package-lock.json'
 
       - name: Install dependencies
-        working-directory: ./site/site-pessoal
+        working-directory: ./site-pessoal
         run: npm install
 
       - name: Build project
-        working-directory: ./site/site-pessoal
+        working-directory: ./site-pessoal
         run: npm run build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           # Pasta que será enviada para o deploy (resultado do build)
-          path: ./site/site-pessoal/dist
+          path: ./site-pessoal/dist
 
       - name: Deploy to GitHub Pages
         id: deployment
