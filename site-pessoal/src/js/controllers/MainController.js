@@ -9,10 +9,10 @@
  */
 
 // View Imports
-import NavigationView from './views/NavigationView.js';
-import HeroView from './views/HeroView.js';
-import SectionView from './views/SectionView.js';
-import FooterView from './views/FooterView.js';
+import NavigationView from '../views/NavigationView.js';
+import HeroView from '../views/HeroView.js';
+import SectionView from '../views/SectionView.js';
+import FooterView from '../views/FooterView.js';
 
 // Controller Imports
 import NavigationController from './NavigationController.js';
