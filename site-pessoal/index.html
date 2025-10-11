@@ -55,10 +55,31 @@
     <a href="#main-content" class="skip-link">Skip to Main Content</a>
 
     <div id="app">
-        <div class="app-loading-placeholder">
-            <h1>Loading Rafael's Portfolio...</h1>
-            <p>Please wait a moment.</p>
+        <div class="app-loading-overlay" id="loading-overlay">
+            <div class="app-loading-placeholder">
+                <h1>Loading Rafael's Portfolio...</h1>
+                <p>Please wait a moment.</p>
+            </div>
         </div>
+        
+        <!-- Elemento main-content adicionado -->
+        <main id="main-content" class="main-content" role="main" aria-label="Main content" data-app-initialized="false">
+            <!-- Navigation será injetada aqui -->
+            <nav id="main-nav" class="main-navigation-container" aria-label="Main navigation"></nav>
+            
+            <!-- Hero section será injetada aqui -->
+            <section id="hero-section" class="hero-section" aria-label="Hero introduction"></section>
+            
+            <!-- Conteúdo das seções será injetado aqui -->
+            <div class="sections-container" data-section-container="true">
+                <div class="content-loading-indicator" hidden>
+                    <p>Loading content...</p>
+                </div>
+            </div>
+            
+            <!-- Footer será injetado aqui -->
+            <footer id="main-footer" class="main-footer" aria-label="Footer"></footer>
+        </main>
     </div>
     
     <!-- === CAMINHO CORRIGIDO PARA O JAVASCRIPT === -->
