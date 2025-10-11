@@ -107,11 +107,11 @@
     <meta name="apple-mobile-web-app-title" content="Rafael Domingues">
 
     <!-- Fonts with Performance Optimization -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Inconsolata:wght@400;700&family=Press+Start+2P&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=VT323&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
     
     <!-- Icons with Fallback -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" 
-          integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6TaYlQdGBlFjL+KjWTwngRABtfJaHlAAB8j+Ym8O7zPqFzw==" 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
+          integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" 
           crossorigin="anonymous" referrerpolicy="no-referrer"
           onerror="this.remove();">
 </head>
@@ -202,9 +202,7 @@
                 <span class="loading-text">Loading content...</span>
             </div>
 
-            <!-- The SectionView will render all sections directly into main-content -->
-            <!-- The #dynamic-content div is no longer needed as a separate container for sections -->
-            <!-- The sections themselves will contain a .dynamic-content-area for their specific content -->
+            <div id="dynamic-content" class="dynamic-content-container"></div>
         </main>
 
         <aside id="accessibility-menu" 
@@ -300,12 +298,555 @@
              hidden></div>
     </div>
 
+    <script>
+        /**
+         * @file core.js
+         * @brief Core JavaScript functionality for progressive enhancement
+         * @description Essential JavaScript for basic functionality, theme management, and accessibility
+         */
 
+        // Immediately enhance HTML with JS-enabled class
+        document.documentElement.classList.remove('no-js');
+        document.documentElement.classList.add('js-enabled');
 
+        /**
+         * @brief Theme management utility for persistent user preferences
+         * @description Handles theme switching, persistence, and system preference detection
+         */
+        const themeManager = {
+            /**
+             * @brief Available theme options
+             * @type {Object}
+             */
+            themes: {
+                light: 'light',
+                dark: 'dark'
+            },
 
+            /**
+             * @brief Storage key for user theme preference
+             * @type {string}
+             */
+            storageKey: 'user-theme-preference',
 
+            /**
+             * @brief Initializes theme management system
+             * @returns {void}
+             */
+            initialize: () => {
+                const savedTheme = themeManager.getSavedTheme();
+                const systemPreference = themeManager.getSystemThemePreference();
+                const initialTheme = savedTheme || systemPreference || themeManager.themes.light;
+                
+                themeManager.applyTheme(initialTheme);
+                themeManager.initializeThemeToggle();
+            },
 
+            /**
+             * @brief Retrieves saved theme preference from localStorage
+             * @returns {string|null} Saved theme or null if not found
+             */
+            getSavedTheme: () => {
+                try {
+                    return localStorage.getItem(themeManager.storageKey);
+                } catch (error) {
+                    console.warn('Could not access localStorage for theme preference:', error);
+                    return null;
+                }
+            },
 
+            /**
+             * @brief Detects system-level theme preference
+             * @returns {string} System theme preference
+             */
+            getSystemThemePreference: () => {
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    return themeManager.themes.dark;
+                }
+                return themeManager.themes.light;
+            },
+
+            /**
+             * @brief Applies specified theme to document
+             * @param {string} themeName - Theme to apply
+             * @returns {void}
+             */
+            applyTheme: (themeName) => {
+                const htmlElement = document.documentElement;
+                const themeToggle = document.getElementById('theme-toggle');
+                
+                htmlElement.setAttribute('data-theme', themeName);
+                
+                if (themeToggle) {
+                    const isDarkTheme = themeName === themeManager.themes.dark;
+                    themeToggle.setAttribute('aria-pressed', isDarkTheme);
+                    themeManager.updateThemeToggleIcon(isDarkTheme);
+                }
+
+                themeManager.saveThemePreference(themeName);
+            },
+
+            /**
+             * @brief Updates theme toggle button icons based on current theme
+             * @param {boolean} isDarkTheme - Whether dark theme is active
+             * @returns {void}
+             */
+            updateThemeToggleIcon: (isDarkTheme) => {
+                const darkIcons = document.querySelectorAll('[data-theme-icon="dark"]');
+                const lightIcons = document.querySelectorAll('[data-theme-icon="light"]');
+                
+                if (isDarkTheme) {
+                    darkIcons.forEach(icon => icon.style.display = 'none');
+                    lightIcons.forEach(icon => icon.style.display = 'inline-block');
+                } else {
+                    darkIcons.forEach(icon => icon.style.display = 'inline-block');
+                    lightIcons.forEach(icon => icon.style.display = 'none');
+                }
+            },
+
+            /**
+             * @brief Saves theme preference to persistent storage
+             * @param {string} themeName - Theme to save
+             * @returns {void}
+             */
+            saveThemePreference: (themeName) => {
+                try {
+                    localStorage.setItem(themeManager.storageKey, themeName);
+                } catch (error) {
+                    console.warn('Could not save theme preference to localStorage:', error);
+                }
+            },
+
+            /**
+             * @brief Initializes theme toggle button event listener
+             * @returns {void}
+             */
+            initializeThemeToggle: () => {
+                const themeToggle = document.getElementById('theme-toggle');
+                if (!themeToggle) return;
+
+                themeToggle.addEventListener('click', () => {
+                    const currentTheme = document.documentElement.getAttribute('data-theme');
+                    const newTheme = currentTheme === themeManager.themes.dark ? 
+                                   themeManager.themes.light : 
+                                   themeManager.themes.dark;
+                    
+                    themeManager.applyTheme(newTheme);
+                });
+            }
+        };
+
+        /**
+         * @brief Accessibility manager for user preference controls
+         * @description Handles accessibility features like font size, contrast, and motion preferences
+         */
+        const accessibilityManager = {
+            /**
+             * @brief Storage key for accessibility preferences
+             * @type {string}
+             */
+            storageKey: 'accessibility-preferences',
+
+            /**
+             * @brief Default accessibility preferences
+             * @type {Object}
+             */
+            defaultPreferences: {
+                fontSize: 1.0,
+                highContrast: false,
+                reducedMotion: false,
+                dyslexiaFont: false
+            },
+
+            /**
+             * @brief Initializes accessibility management system
+             * @returns {void}
+             */
+            initialize: () => {
+                accessibilityManager.loadPreferences();
+                accessibilityManager.initializeEventListeners();
+                accessibilityManager.initializeModalBehavior();
+            },
+
+            /**
+             * @brief Loads saved accessibility preferences
+             * @returns {void}
+             */
+            loadPreferences: () => {
+                try {
+                    const savedPreferences = localStorage.getItem(accessibilityManager.storageKey);
+                    const preferences = savedPreferences ? 
+                        { ...accessibilityManager.defaultPreferences, ...JSON.parse(savedPreferences) } : 
+                        accessibilityManager.defaultPreferences;
+                    
+                    accessibilityManager.applyPreferences(preferences);
+                    accessibilityManager.updateControlValues(preferences);
+                } catch (error) {
+                    console.warn('Could not load accessibility preferences:', error);
+                    accessibilityManager.applyPreferences(accessibilityManager.defaultPreferences);
+                }
+            },
+
+            /**
+             * @brief Applies accessibility preferences to document
+             * @param {Object} preferences - Accessibility preferences to apply
+             * @returns {void}
+             */
+            applyPreferences: (preferences) => {
+                const htmlElement = document.documentElement;
+                const bodyElement = document.body;
+
+                // Apply font size
+                bodyElement.style.setProperty('--font-size-multiplier', preferences.fontSize);
+                
+                // Apply high contrast
+                if (preferences.highContrast) {
+                    htmlElement.setAttribute('data-a11y-contrast', 'high');
+                } else {
+                    htmlElement.removeAttribute('data-a11y-contrast');
+                }
+
+                // Apply reduced motion
+                if (preferences.reducedMotion) {
+                    htmlElement.setAttribute('data-a11y-motion', 'reduced');
+                } else {
+                    htmlElement.removeAttribute('data-a11y-motion');
+                }
+
+                // Apply dyslexia-friendly font
+                if (preferences.dyslexiaFont) {
+                    htmlElement.setAttribute('data-a11y-font', 'dyslexia');
+                } else {
+                    htmlElement.removeAttribute('data-a11y-font');
+                }
+            },
+
+            /**
+             * @brief Updates control values in accessibility menu
+             * @param {Object} preferences - Current accessibility preferences
+             * @returns {void}
+             */
+            updateControlValues: (preferences) => {
+                const fontSizeControl = document.getElementById('font-size-control');
+                const contrastToggle = document.getElementById('contrast-toggle');
+                const motionToggle = document.getElementById('reduced-motion-toggle');
+                const fontToggle = document.getElementById('font-family-toggle');
+                const fontSizeValue = document.querySelector('.font-size-value');
+
+                if (fontSizeControl) {
+                    fontSizeControl.value = preferences.fontSize;
+                }
+                if (contrastToggle) {
+                    contrastToggle.checked = preferences.highContrast;
+                    contrastToggle.setAttribute('aria-checked', preferences.highContrast);
+                }
+                if (motionToggle) {
+                    motionToggle.checked = preferences.reducedMotion;
+                    motionToggle.setAttribute('aria-checked', preferences.reducedMotion);
+                }
+                if (fontToggle) {
+                    fontToggle.checked = preferences.dyslexiaFont;
+                    fontToggle.setAttribute('aria-checked', preferences.dyslexiaFont);
+                }
+                if (fontSizeValue) {
+                    fontSizeValue.textContent = `${Math.round(preferences.fontSize * 100)}%`;
+                }
+            },
+
+            /**
+             * @brief Initializes event listeners for accessibility controls
+             * @returns {void}
+             */
+            initializeEventListeners: () => {
+                // Font size control
+                const fontSizeControl = document.getElementById('font-size-control');
+                if (fontSizeControl) {
+                    fontSizeControl.addEventListener('input', (event) => {
+                        const fontSize = parseFloat(event.target.value);
+                        accessibilityManager.updatePreference('fontSize', fontSize);
+                    });
+                }
+
+                // Toggle controls
+                const toggleControls = [
+                    { id: 'contrast-toggle', key: 'highContrast' },
+                    { id: 'reduced-motion-toggle', key: 'reducedMotion' },
+                    { id: 'font-family-toggle', key: 'dyslexiaFont' }
+                ];
+
+                toggleControls.forEach(({ id, key }) => {
+                    const control = document.getElementById(id);
+                    if (control) {
+                        control.addEventListener('change', (event) => {
+                            accessibilityManager.updatePreference(key, event.target.checked);
+                        });
+                    }
+                });
+
+                // Reset button
+                const resetButton = document.getElementById('accessibility-reset');
+                if (resetButton) {
+                    resetButton.addEventListener('click', () => {
+                        accessibilityManager.resetPreferences();
+                    });
+                }
+            },
+
+            /**
+             * @brief Updates a specific preference and saves it
+             * @param {string} key - Preference key to update
+             * @param {any} value - New preference value
+             * @returns {void}
+             */
+            updatePreference: (key, value) => {
+                const currentPreferences = accessibilityManager.getCurrentPreferences();
+                const newPreferences = { ...currentPreferences, [key]: value };
+                
+                accessibilityManager.savePreferences(newPreferences);
+                accessibilityManager.applyPreferences(newPreferences);
+                accessibilityManager.updateControlValues(newPreferences);
+            },
+
+            /**
+             * @brief Gets current accessibility preferences from DOM
+             * @returns {Object} Current accessibility preferences
+             */
+            getCurrentPreferences: () => {
+                try {
+                    const saved = localStorage.getItem(accessibilityManager.storageKey);
+                    return saved ? JSON.parse(saved) : { ...accessibilityManager.defaultPreferences };
+                } catch (error) {
+                    return { ...accessibilityManager.defaultPreferences };
+                }
+            },
+
+            /**
+             * @brief Saves preferences to persistent storage
+             * @param {Object} preferences - Preferences to save
+             * @returns {void}
+             */
+            savePreferences: (preferences) => {
+                try {
+                    localStorage.setItem(accessibilityManager.storageKey, JSON.stringify(preferences));
+                } catch (error) {
+                    console.warn('Could not save accessibility preferences:', error);
+                }
+            },
+
+            /**
+             * @brief Resets all accessibility preferences to defaults
+             * @returns {void}
+             */
+            resetPreferences: () => {
+                accessibilityManager.applyPreferences(accessibilityManager.defaultPreferences);
+                accessibilityManager.updateControlValues(accessibilityManager.defaultPreferences);
+                accessibilityManager.savePreferences(accessibilityManager.defaultPreferences);
+            },
+
+            /**
+             * @brief Initializes accessibility modal behavior
+             * @returns {void}
+             */
+            initializeModalBehavior: () => {
+                const menuToggle = document.getElementById('accessibility-menu-toggle');
+                const menuClose = document.getElementById('accessibility-menu-close');
+                const menu = document.getElementById('accessibility-menu');
+
+                if (!menuToggle || !menuClose || !menu) return;
+
+                // Toggle menu visibility
+                menuToggle.addEventListener('click', () => {
+                    const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
+                    const newState = !isExpanded;
+                    
+                    menuToggle.setAttribute('aria-expanded', newState);
+                    menu.hidden = !newState;
+                    menu.setAttribute('aria-hidden', !newState);
+
+                    if (newState) {
+                        menu.focus();
+                    }
+                });
+
+                // Close menu
+                menuClose.addEventListener('click', () => {
+                    menuToggle.setAttribute('aria-expanded', 'false');
+                    menu.hidden = true;
+                    menu.setAttribute('aria-hidden', 'true');
+                    menuToggle.focus();
+                });
+
+                // Close menu on Escape key
+                menu.addEventListener('keydown', (event) => {
+                    if (event.key === 'Escape') {
+                        menuClose.click();
+                    }
+                });
+
+                // Trap focus within modal when open
+                menu.addEventListener('keydown', (event) => {
+                    if (event.key !== 'Tab') return;
+                    
+                    const focusableElements = menu.querySelectorAll(
+                        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+                    );
+                    const firstElement = focusableElements[0];
+                    const lastElement = focusableElements[focusableElements.length - 1];
+
+                    if (event.shiftKey) {
+                        if (document.activeElement === firstElement) {
+                            lastElement.focus();
+                            event.preventDefault();
+                        }
+                    } else {
+                        if (document.activeElement === lastElement) {
+                            firstElement.focus();
+                            event.preventDefault();
+                        }
+                    }
+                });
+            }
+        };
+
+        /**
+         * @brief Core application initializer
+         * @description Handles essential application setup and coordination
+         */
+        const appInitializer = {
+            /**
+             * @brief Initializes all core application functionality
+             * @returns {void}
+             */
+            initialize: () => {
+                // Initialize core managers
+                themeManager.initialize();
+                accessibilityManager.initialize();
+
+                // Set up enhanced skip link behavior
+                appInitializer.initializeSkipLink();
+
+                // Update app initialization state
+                const appContainer = document.getElementById('app');
+                if (appContainer) {
+                    appContainer.setAttribute('data-app-initialized', 'true');
+                }
+
+                // Dispatch app initialized event
+                window.dispatchEvent(new CustomEvent('app:coreInitialized', {
+                    detail: { timestamp: Date.now() }
+                }));
+
+                console.info('Core application functionality initialized successfully');
+            },
+
+            /**
+             * @brief Initializes enhanced skip link behavior
+             * @returns {void}
+             */
+            initializeSkipLink: () => {
+                const skipLink = document.getElementById('skip-link');
+                const mainContent = document.getElementById('main-content');
+                
+                if (!skipLink || !mainContent) return;
+
+                skipLink.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    
+                    // Ensure main content is focusable
+                    mainContent.setAttribute('tabindex', '-1');
+                    mainContent.focus({ preventScroll: true });
+                    
+                    // Remove tabindex after focus to maintain natural tab order
+                    setTimeout(() => {
+                        mainContent.removeAttribute('tabindex');
+                    }, 1000);
+                });
+            }
+        };
+
+        // Initialize core application when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', appInitializer.initialize);
+        } else {
+            appInitializer.initialize();
+        }
+    </script>
+
+    <script type="module">
+        /**
+         * @file app.js
+         * @brief Main application module loader
+         * @description Handles dynamic module loading with comprehensive error handling
+         */
+
+        /**
+         * @brief Enhanced module loader with error handling and fallbacks
+         * @returns {Promise<void>}
+         */
+        const initializeApplicationModules = async () => {
+            try {
+                // Load main application module
+                const appModule = await import('./src/js/app.js');
+                
+                // Initialize performance monitoring if available
+                if (appModule.performanceMonitor) {
+                    await appModule.performanceMonitor.startMonitoring();
+                }
+                
+                console.info('Application modules loaded successfully');
+                
+                // Dispatch module loaded event
+                window.dispatchEvent(new CustomEvent('app:modulesInitialized', {
+                    detail: { timestamp: Date.now() }
+                }));
+                
+            } catch (error) {
+                console.error('Failed to load application modules:', error);
+                await handleModuleLoadError(error);
+            }
+        };
+
+        /**
+         * @brief Handles module loading errors gracefully
+         * @param {Error} error - The error encountered during module loading
+         * @returns {Promise<void>}
+         */
+        const handleModuleLoadError = async (error) => {
+            // Show user-friendly error message
+            const notificationArea = document.getElementById('notification-area');
+            if (notificationArea) {
+                notificationArea.textContent = 'Some advanced features may not be available due to loading issues.';
+                notificationArea.hidden = false;
+                notificationArea.setAttribute('role', 'alert');
+                
+                // Auto-hide notification after 8 seconds
+                setTimeout(() => {
+                    notificationArea.hidden = true;
+                }, 8000);
+            }
+
+            // Report error to analytics if available
+            if (window.appConfig?.analyticsEndpoint) {
+                try {
+                    await fetch(window.appConfig.analyticsEndpoint, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            type: 'module_load_error',
+                            error: error.message,
+                            timestamp: Date.now(),
+                            url: window.location.href
+                        })
+                    });
+                } catch (reportingError) {
+                    console.warn('Could not report module load error:', reportingError);
+                }
+            }
+        };
+
+        // Initialize application modules
+        initializeApplicationModules();
+    </script>
 
     <script nomodule>
         /**
@@ -344,18 +885,13 @@
             </div>
         `;
 
-        const appContainer = document.getElementById("app");
+        // Apply legacy browser message
+        const appContainer = document.getElementById('app');
         if (appContainer) {
             appContainer.innerHTML = legacyBrowserMessage + appContainer.innerHTML;
         }
 
-        console.warn("Legacy browser detected: Some features may be unavailable");
+        console.warn('Legacy browser detected: Some features may be unavailable');
     </script>
 </body>
 </html>
-
-
-
-
-    <script type="module" src="./app.js"></script>
-

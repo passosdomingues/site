@@ -1,55 +1,6 @@
-/**
- * @file main.css
- * @brief Main stylesheet for the retro-futuristic website.
- * @description This file imports all other CSS modules and defines global styles and effects,
- *              including the unique flashback transition for navigation.
- */
-
 @import './critical.css';
 @import './variables.css';
 @import './base.css';
 @import './layout.css';
 @import './components.css';
 @import './utilities.css';
-
-/* ===== Flashback Effect for Navigation ===== */
-/**
- * @brief Applies a visual flashback effect to the body during navigation.
- * @description This class modifies the visual filter of the body and introduces a pseudo-element
- *              to simulate a CRT scanline animation, enhancing the retro transition experience.
- */
-.flashback-active {
-  filter: contrast(1.5) brightness(0.8) saturate(1.2) hue-rotate(5deg); /* Retro CRT filter */
-  transition: filter 0.3s ease-out;
-}
-
-/**
- * @brief Pseudo-element for the flashback scanline animation.
- * @description Creates a fixed overlay with a radial gradient and animates a scanline effect
- *              to complement the flashback filter during page transitions.
- */
-.flashback-active::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: radial-gradient(circle, transparent 75%, rgba(0, 0, 0, 0.5) 100%);
-  pointer-events: none;
-  z-index: 9999;
-  opacity: 0;
-  animation: flashbackScanline 0.3s forwards; /* Renamed to camelCase */
-}
-
-/**
- * @brief Keyframes for the flashback scanline animation.
- * @description Defines the animation sequence for the scanline effect, making it appear and disappear
- *              across the screen to simulate a retro display transition.
- */
-@keyframes flashbackScanline {
-  0% { opacity: 0; transform: translateY(-100%); }
-  50% { opacity: 1; transform: translateY(0); }
-  100% { opacity: 0; transform: translateY(100%); }
-}
-

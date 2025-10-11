@@ -1,85 +1,76 @@
 /**
  * @file variables.css
  * @brief CSS Custom Properties and Design System Tokens
- * @description Centralized design tokens for consistent theming, spacing, and typography.
- *              Inspired by a retro-futuristic aesthetic with a Top Gun 80s/90s vibe.
+ * @description Centralized design tokens for consistent theming, spacing, and typography
  */
 
 :root {
-  /* ===== Color Palette - Top Gun Inspired (80s/90s Retro-Futuristic) ===== */
+  /* ===== Color Palette - Professional & Accessible ===== */
   
-  /* Primary Colors (Night Sky Blues - Deep, Muted) */
-  --color-primary-50: #e0f2f7; /* Very light blue */
-  --color-primary-100: #b3e0ed; /* Light blue */
-  --color-primary-200: #80cbe0; /* Medium light blue */
-  --color-primary-300: #4db7d3; /* Medium blue */
-  --color-primary-400: #1a9ec6; /* Darker medium blue */
-  --color-primary-500: #0088b3; /* Main deep blue - reminiscent of night sky */
-  --color-primary-600: #007099; /* Dark blue */
-  --color-primary-700: #005880; /* Very dark blue */
-  --color-primary-800: #004066; /* Almost black blue */
-  --color-primary-900: #00284d; /* Deepest blue */
+  /* Primary Colors */
+  --color-primary-50: #e8edf7;
+  --color-primary-100: #c5d4ee;
+  --color-primary-200: #9fb8e3;
+  --color-primary-300: #799cd8;
+  --color-primary-400: #5c87d0;
+  --color-primary-500: #4073c8;
+  --color-primary-600: #3a6bc2;
+  --color-primary-700: #3260bb;
+  --color-primary-800: #2a56b4;
+  --color-primary-900: #1c43a7;
   
-  /* Secondary Colors (Warm Oranges/Ambers - Energetic, Glowing) */
-  --color-secondary-50: #fff8e1; /* Very light orange */
-  --color-secondary-100: #ffe082; /* Light orange */
-  --color-secondary-200: #ffcc80; /* Medium light orange */
-  --color-secondary-300: #ffb74d; /* Medium orange */
-  --color-secondary-400: #ffa726; /* Darker medium orange */
-  --color-secondary-500: #ff9800; /* Main warm orange - reminiscent of sunset/fire */
-  --color-secondary-600: #fb8c00; /* Dark orange */
-  --color-secondary-700: #f57c00; /* Very dark orange */
-  --color-secondary-800: #ef6c00; /* Almost brown orange */
-  --color-secondary-900: #e65100; /* Deepest orange */
+  /* Secondary Colors */
+  --color-secondary-50: #f5e8f4;
+  --color-secondary-100: #e6c6e3;
+  --color-secondary-200: #d5a1d1;
+  --color-secondary-300: #c47bbf;
+  --color-secondary-400: #b75eb1;
+  --color-secondary-500: #aa42a3;
+  --color-secondary-600: #a33c9b;
+  --color-secondary-700: #993391;
+  --color-secondary-800: #902b88;
+  --color-secondary-900: #7f1d77;
   
-  /* Neutral Colors (Darker, more muted for contrast and depth) */
-  --color-neutral-50: #f0f2f5; /* Off-white */
-  --color-neutral-100: #e0e4e8; /* Light gray */
-  --color-neutral-200: #cdd3d9; /* Medium light gray */
-  --color-neutral-300: #aeb6bf; /* Medium gray */
-  --color-neutral-400: #8d97a3; /* Medium dark gray */
-  --color-neutral-500: #6c7786; /* Dark gray */
-  --color-neutral-600: #4b5563; /* Very dark gray */
-  --color-neutral-700: #2a3340; /* Almost black gray */
-  --color-neutral-800: #1a202c; /* Deep gray */
-  --color-neutral-900: #0a0d14; /* Near black */
+  /* Neutral Colors */
+  --color-neutral-50: #f8fafc;
+  --color-neutral-100: #f1f5f9;
+  --color-neutral-200: #e2e8f0;
+  --color-neutral-300: #cbd5e1;
+  --color-neutral-400: #94a3b8;
+  --color-neutral-500: #64748b;
+  --color-neutral-600: #475569;
+  --color-neutral-700: #334155;
+  --color-neutral-800: #1e293b;
+  --color-neutral-900: #0f172a;
   
-  /* Neon Color for Retro Elements (Vibrant Amber/Orange - for glow effects) */
-  --color-neon-soft: #ffcc00; /* A vibrant amber neon glow */
-
-  /* Semantic Colors (Standard UI feedback) */
-  --color-warning-light: #fff3cd;
-  --color-warning-dark: #ffc107;
+  /* Semantic Colors */
   --color-success: #10b981;
   --color-warning: #f59e0b;
   --color-error: #ef4444;
   --color-info: #3b82f6;
   
-  /* Background Colors (Derived from neutrals for theme consistency) */
+  /* Background Colors */
   --color-background-primary: var(--color-neutral-50);
   --color-background-secondary: var(--color-neutral-100);
   --color-background-tertiary: var(--color-neutral-200);
   --color-background-surface: #ffffff;
   --color-background-overlay: rgba(0, 0, 0, 0.5);
   
-  /* Text Colors (Derived from neutrals for readability) */
+  /* Text Colors */
   --color-text-primary: var(--color-neutral-900);
   --color-text-secondary: var(--color-neutral-700);
   --color-text-tertiary: var(--color-neutral-500);
   --color-text-inverse: #ffffff;
   --color-text-muted: var(--color-neutral-400);
   
-  /* Border Colors (Derived from neutrals for subtle separation) */
+  /* Border Colors */
   --color-border-primary: var(--color-neutral-200);
   --color-border-secondary: var(--color-neutral-300);
   --color-border-focus: var(--color-primary-500);
   
   /* ===== Typography Scale ===== */
   --font-family-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-family-narrative: 'Georgia', 'Palatino Linotype', Palatino, serif;
-  --font-family-mono: 'Inconsolata', 'Space Mono', 'VT323', 'Press Start 2P', 'SF Mono', 'Roboto Mono', Consolas, 'Liberation Mono', Menlo, monospace;
-  --font-family-retro-terminal: 'VT323', monospace;
-  --font-family-retro-display: 'Press Start 2P', cursive;
+  --font-family-mono: 'SF Mono', 'Roboto Mono', Consolas, 'Liberation Mono', Menlo, monospace;
   
   /* Font Sizes - Modular Scale (1.25 ratio) */
   --font-size-xs: 0.75rem;     /* 12px */

@@ -78,7 +78,6 @@ class NavigationController {
         this.handleScroll = this.handleScroll.bind(this);
         this.handleHashChange = this.handleHashChange.bind(this);
         this.handleIntersectionUpdate = this.handleIntersectionUpdate.bind(this);
-
     }
 
     /**
@@ -129,11 +128,6 @@ class NavigationController {
         }
 
         try {
-            document.body.classList.add('flashback-active');
-            setTimeout(() => {
-                document.body.classList.remove('flashback-active');
-            }, 300);
-
             await this.executeScrollToSection(targetSectionId, smoothScroll);
             
             if (updateUrl) {
@@ -580,43 +574,3 @@ class NavigationController {
 }
 
 export default NavigationController;
-
-    /**
-     * @brief Handles the flashback triggered event from NavigationView.
-     * @public
-     * @param {Object} eventData - Data from the flashback event, including the sectionId.
-     */
-
-
-
-
-
-
-    /**
-     * @brief Handles the flashback triggered event from NavigationView.
-     * @public
-     * @param {Object} eventData - Data from the flashback event, including the sectionId.
-     */
-    handleFlashbackTriggered(eventData) {
-        if (eventData && eventData.sectionId) {
-            console.debug(`NavigationController: Flashback triggered to section: ${eventData.sectionId}`);
-            this.navigateToSection(eventData.sectionId);
-        } else {
-            console.warn("NavigationController: Flashback triggered without a valid sectionId.");
-        }
-    }
-
-    /**
-     * @brief Registers an observer to listen for events from the NavigationView.
-     * @public
-     * @param {NavigationView} navigationView - The NavigationView instance to observe.
-     */
-    registerNavigationViewObserver(navigationView) {
-        if (navigationView && typeof navigationView.addObserver === 'function') {
-            navigationView.addObserver('flashbackTriggered', this.handleFlashbackTriggered);
-            console.info("NavigationController: Registered as observer for 'flashbackTriggered' event.");
-        } else {
-            console.error("NavigationController: Invalid NavigationView instance provided for observer registration.");
-        }
-    }
-

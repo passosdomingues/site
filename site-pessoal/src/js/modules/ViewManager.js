@@ -13,9 +13,9 @@
  * @description Defines view loading strategies, performance settings, and behavior thresholds
  */
 const VIEW_CONFIGURATION = {
-    CRITICAL_VIEWS: ["navigation", "hero", "footer"],
+    CRITICAL_VIEWS: ['navigation', 'hero', 'footer'],
     LAZY_LOADING: {
-        rootMargin: "50px 0px",
+        rootMargin: '50px 0px',
         threshold: 0.1,
         preloadBuffer: 3 // Number of adjacent views to preload
     },
@@ -28,7 +28,7 @@ const VIEW_CONFIGURATION = {
     ERROR_HANDLING: {
         maxRetryAttempts: 2,
         retryDelay: 1000,
-        fallbackView: "error"
+        fallbackView: 'error'
     }
 };
 
@@ -38,12 +38,12 @@ const VIEW_CONFIGURATION = {
  * @description Defines standardized event names for view lifecycle and state changes
  */
 const VIEW_EVENTS = {
-    VIEW_CHANGED: "viewmanager:viewchanged",
-    VIEW_LOADING_START: "viewmanager:loadingstart",
-    VIEW_LOADING_END: "viewmanager:loadingend",
-    VIEW_ERROR: "viewmanager:error",
-    VIEW_PRELOADED: "viewmanager:preloaded",
-    VIEW_CACHED: "viewmanager:cached"
+    VIEW_CHANGED: 'viewmanager:viewchanged',
+    VIEW_LOADING_START: 'viewmanager:loadingstart',
+    VIEW_LOADING_END: 'viewmanager:loadingend',
+    VIEW_ERROR: 'viewmanager:error',
+    VIEW_PRELOADED: 'viewmanager:preloaded',
+    VIEW_CACHED: 'viewmanager:cached'
 };
 
 /**
@@ -83,7 +83,7 @@ class ViewManager {
          * @type {HTMLElement}
          * @brief DOM container element for view content rendering
          */
-        this.viewContainer = configuration.viewContainer || document.getElementById("main-content");
+        this.viewContainer = configuration.viewContainer || document.getElementById('main-content');
 
         /**
          * @private
@@ -139,11 +139,11 @@ class ViewManager {
      */
     validateConfiguration(configuration) {
         if (configuration.viewContainer && !(configuration.viewContainer instanceof HTMLElement)) {
-            throw new Error("ViewManager: viewContainer must be a valid HTMLElement");
+            throw new Error('ViewManager: viewContainer must be a valid HTMLElement');
         }
 
-        if (!configuration.viewContainer && !document.getElementById("main-content")) {
-            throw new Error("ViewManager: viewContainer not provided and main-content element not found");
+        if (!configuration.viewContainer && !document.getElementById('main-content')) {
+            throw new Error('ViewManager: viewContainer not provided and main-content element not found');
         }
     }
 
@@ -152,7 +152,7 @@ class ViewManager {
      * @private
      */
     initializeViewManager() {
-        console.info("ViewManager: Initializing view management system...");
+        console.info('ViewManager: Initializing view management system...');
         
         // Set up accessibility attributes for view container
         this.setupViewContainerAccessibility();
@@ -164,9 +164,9 @@ class ViewManager {
      */
     setupViewContainerAccessibility() {
         if (this.viewContainer) {
-            this.viewContainer.setAttribute("role", "main");
-            this.viewContainer.setAttribute("aria-live", "polite");
-            this.viewContainer.setAttribute("aria-atomic", "true");
+            this.viewContainer.setAttribute('role', 'main');
+            this.viewContainer.setAttribute('aria-live', 'polite');
+            this.viewContainer.setAttribute('aria-atomic', 'true');
         }
     }
 
@@ -185,10 +185,10 @@ class ViewManager {
 
             await Promise.allSettled(initializationTasks);
             
-            console.info("ViewManager: Successfully initialized view management system.");
+            console.info('ViewManager: Successfully initialized view management system.');
             
         } catch (error) {
-            console.error("ViewManager: Failed to initialize:", error);
+            console.error('ViewManager: Failed to initialize:', error);
             throw error;
         }
     }
@@ -207,7 +207,7 @@ class ViewManager {
         
         results.forEach((result, index) => {
             const viewName = this.configuration.CRITICAL_VIEWS[index];
-            if (result.status === "fulfilled") {
+            if (result.status === 'fulfilled') {
                 console.debug(`ViewManager: Successfully preloaded critical view: ${viewName}`);
             } else {
                 console.warn(`ViewManager: Failed to preload critical view ${viewName}:`, result.reason);
@@ -238,7 +238,7 @@ class ViewManager {
             });
         }, observerOptions);
 
-        console.debug("ViewManager: Lazy loading observer initialized.");
+        console.debug('ViewManager: Lazy loading observer initialized.');
     }
 
     /**
@@ -248,11 +248,11 @@ class ViewManager {
     setupGlobalErrorHandling() {
         const signal = this.operationAbortController.signal;
 
-        window.addEventListener("error", (event) => {
+        window.addEventListener('error', (event) => {
             this.handleGlobalError(event);
         }, { signal });
 
-        window.addEventListener("unhandledrejection", (event) => {
+        window.addEventListener('unhandledrejection', (event) => {
             this.handleUnhandledRejection(event);
         }, { signal });
     }
@@ -263,7 +263,7 @@ class ViewManager {
      * @param {ErrorEvent} errorEvent - Global error event
      */
     handleGlobalError = (errorEvent) => {
-        console.error("ViewManager: Global error captured:", errorEvent.error);
+        console.error('ViewManager: Global error captured:', errorEvent.error);
         this.performanceMetrics.errorCount++;
     };
 
@@ -273,7 +273,7 @@ class ViewManager {
      * @param {PromiseRejectionEvent} rejectionEvent - Unhandled rejection event
      */
     handleUnhandledRejection = (rejectionEvent) => {
-        console.error("ViewManager: Unhandled promise rejection:", rejectionEvent.reason);
+        console.error('ViewManager: Unhandled promise rejection:', rejectionEvent.reason);
         this.performanceMetrics.errorCount++;
         rejectionEvent.preventDefault();
     };
@@ -300,7 +300,7 @@ class ViewManager {
             throw new Error(`ViewManager: Invalid view name: ${targetViewName}`);
         }
 
-        // Skip if view is already active and not forced to reload
+        // Skip if view is already active
         if (this.currentActiveView === targetViewName && !options.forceReload) {
             console.debug(`ViewManager: View ${targetViewName} is already active, skipping render.`);
             return;
@@ -384,7 +384,7 @@ class ViewManager {
      * @returns {boolean} True if view name is valid and safe
      */
     isValidViewName(viewName) {
-        if (typeof viewName !== "string" || viewName.trim() === "") {
+        if (typeof viewName !== 'string' || viewName.trim() === '') {
             return false;
         }
 
@@ -443,7 +443,7 @@ class ViewManager {
      * @private
      * @param {string} viewName - The name of the view module to load
      * @param {Object} options - Loading options
-     * @returns {Promise<Object>} The loaded view module or class
+     * @returns {Promise<Object>} The loaded view module
      * @throws {Error} When view module cannot be loaded
      */
     async loadViewModule(viewName, options = {}) {
@@ -463,69 +463,72 @@ class ViewManager {
             // Dynamic import with error handling
             const module = await import(`../views/${viewName}.js`);
             
-            // Check if the module exports a class (e.g., SectionView) or a plain object (e.g., HeroView)
-            const ViewClassOrObject = module.default || module;
-            this.performanceMetrics.viewLoadTimes.set(viewName, loadDuration);
+            const loadDuration = performance.now() - loadStartTime;
+            console.debug(`ViewManager: Loaded view module ${viewName} in ${loadDuration.toFixed(2)}ms`);
 
-            // If it's a class, we store the class itself, not an instance, in the cache.
-            // Instances will be created in renderViewContent.
+            // Cache the module if enabled
             if (enableCaching) {
-                this.viewModuleCache.set(viewName, ViewClassOrObject);
-                this.dispatchViewEvent(VIEW_EVENTS.VIEW_CACHED, { viewName, timestamp: Date.now() });
+                this.cacheViewModule(viewName, module);
             }
 
-            return ViewClassOrObject;     }
-
-            return ViewClassOrObject;
+            return module;
 
         } catch (error) {
             console.error(`ViewManager: Failed to load view module ${viewName}:`, error);
-            throw new Error(`Failed to load view module ${viewName}: ${error.message}`);
+            throw new Error(`View module '${viewName}' could not be loaded: ${error.message}`);
         }
+    }
+
+    /**
+     * @brief Caches a view module with size management
+     * @private
+     * @param {string} viewName - The name of the view to cache
+     * @param {Object} viewModule - The view module to cache
+     */
+    cacheViewModule(viewName, viewModule) {
+        // Manage cache size
+        if (this.viewModuleCache.size >= this.configuration.PERFORMANCE.cacheSize) {
+            const firstKey = this.viewModuleCache.keys().next().value;
+            this.viewModuleCache.delete(firstKey);
+        }
+
+        this.viewModuleCache.set(viewName, viewModule);
+        
+        // Dispatch caching event
+        this.dispatchViewEvent(VIEW_EVENTS.VIEW_CACHED, {
+            viewName,
+            cacheSize: this.viewModuleCache.size,
+            timestamp: Date.now()
+        });
     }
 
     /**
      * @brief Renders view content using the view module's render method
      * @private
-     * @param {Object|Class} viewModuleOrClass - The loaded view module or class
+     * @param {Object} viewModule - The loaded view module
      * @param {Object} viewData - Data to pass to the render method
      * @param {string} viewName - The name of the view being rendered
      * @returns {Promise<string>} Rendered HTML content
      * @throws {Error} When render method fails or returns invalid content
      */
-    async renderViewContent(viewModuleOrClass, viewData, viewName, enableCaching = true) {
-        let viewInstance;
-
-        // Check if it\'s a class constructor
-        if (typeof viewModuleOrClass === \'function\' && viewModuleOrClass.prototype && viewModuleOrClass.prototype.constructor === viewModuleOrClass) {
-            // If it\'s a class, check if an instance is already cached
-            viewInstance = this.viewModuleCache.get(viewName);
-            if (!viewInstance) {
-                // If not, create a new instance and cache it
-                viewInstance = new viewModuleOrClass(this.viewContainer);
-                if (enableCaching) {
-                    this.viewModuleCache.set(viewName, viewInstance);
-                }
-            }
-            // Now call the render method on the instance
-            if (typeof viewInstance.render === \'function\') {
-                return await viewInstance.render(viewData);
-            } else {
-                console.warn(`ViewManager: Class-based view ${viewName} instance does not have a render method.`);
-                return \'\';
-            }
-        } else if (typeof viewModuleOrClass === \'object\' && viewModuleOrClass !== null) {
-            // It\'s a plain object (or already an instantiated object)
-            viewInstance = viewModuleOrClass;
-            if (typeof viewInstance.render === \'function\') {
-                return await viewInstance.render(viewData);
-            } else {
-                console.warn(`ViewManager: Object-based view ${viewName} does not have a render method.`);
-                return \'\';
-            }
+    async renderViewContent(viewModule, viewData, viewName) {
+        if (typeof viewModule.render !== 'function') {
+            throw new Error(`View module ${viewName} does not export a render function`);
         }
-        console.error(`ViewManager: Invalid view module type for ${viewName}.`);
-        return \'\';
+
+        try {
+            const renderedContent = await viewModule.render(viewData);
+            
+            if (typeof renderedContent !== 'string') {
+                throw new Error(`View ${viewName} render method did not return a string`);
+            }
+
+            return renderedContent;
+
+        } catch (renderError) {
+            console.error(`ViewManager: View ${viewName} render method failed:`, renderError);
+            throw new Error(`Failed to render view ${viewName}: ${renderError.message}`);
+        }
     }
 
     /**
@@ -605,34 +608,20 @@ class ViewManager {
     /**
      * @brief Initializes view module functionality if available
      * @private
-     * @param {Object|Class} viewModuleOrClass - The loaded view module or class
+     * @param {Object} viewModule - The loaded view module
      * @param {Object} viewData - Data to pass to the init method
      * @param {string} viewName - The name of the view being initialized
      * @returns {Promise<void>} Resolves when initialization completes
      */
-    async initializeViewModule(viewModuleOrClass, viewData, viewName) {
-        let viewInstance;
-
-        // If it\'s a class, retrieve the instance from the cache, which should have been created by renderViewContent
-        if (typeof viewModuleOrClass === \'function\' && viewModuleOrClass.prototype && viewModuleOrClass.prototype.constructor === viewModuleOrClass) {
-            viewInstance = this.viewModuleCache.get(viewName);
-            if (!viewInstance) {
-                console.warn(`ViewManager: Instance for class-based view ${viewName} not found in cache during initialization. This should not happen if renderViewContent was called correctly.`);
-                // Fallback: create a new instance, though this indicates a potential issue in flow
-                viewInstance = new viewModuleOrClass(this.viewContainer);
-                this.viewModuleCache.set(viewName, viewInstance); // Cache it for future use in this session
+    async initializeViewModule(viewModule, viewData, viewName) {
+        if (typeof viewModule.init === 'function') {
+            try {
+                await viewModule.init(viewData);
+                console.debug(`ViewManager: Initialized view module: ${viewName}`);
+            } catch (initError) {
+                console.warn(`ViewManager: View ${viewName} init method failed:`, initError);
+                // Don't throw error - initialization failure shouldn't break rendering
             }
-        } else {
-            // It\'s a plain object or an already instantiated object
-            viewInstance = viewModuleOrClass;
-        }
-
-        // Call init method if it exists
-        if (typeof viewInstance.init === \'function\') {
-            await viewInstance.init(viewData);
-            console.debug(`ViewManager: Initialized view module: ${viewName}`);
-        } else {
-            console.debug(`ViewManager: View module ${viewName} has no init method.`);
         }
     }
 
@@ -960,6 +949,6 @@ class ViewManager {
 
         console.info('ViewManager: View manager destroyed and resources cleaned up.');
     }
+}
 
 export default ViewManager;
-

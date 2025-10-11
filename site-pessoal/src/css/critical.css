@@ -1,82 +1,48 @@
 /**
  * @file critical.css
- * @brief Critical above-the-fold CSS for initial page load.
- * @description This file contains the minimal styles required for the initial rendering of the page,
- *              ensuring a fast and smooth user experience before full styles are loaded.
+ * @brief Critical above-the-fold CSS
+ * @description Minimal styles required for initial page render
  */
 
-/* ===== Critical Layout and Typography ===== */
-/**
- * @brief Base styles for the main application container.
- * @description Initially sets opacity to 0 to prevent flash of unstyled content (FOUC)
- *              and ensures the container takes up at least the full viewport height.
- */
-.app-container {
+/* Critical layout and typography only */
+.app-container { 
   opacity: 0;
   min-height: 100vh;
 }
 
-/**
- * @brief Styles for JavaScript-enabled application container.
- * @description Fades in the application container once JavaScript is enabled and ready,
- *              providing a smooth visual transition.
- */
-.js-enabled .app-container {
-  opacity: 1;
-  transition: opacity 0.3s ease-in;
+.js-enabled .app-container { 
+  opacity: 1; 
+  transition: opacity 0.3s ease-in; 
 }
 
-/**
- * @brief Styles for the accessibility skip link.
- * @description Positions the skip link off-screen by default and makes it visible on focus,
- *              allowing keyboard users to bypass repetitive content.
- */
-.skip-link {
-  position: absolute;
-  top: -40px;
-  left: 6px;
-  background: var(--color-primary-700);
-  color: white;
-  padding: 8px 12px;
-  text-decoration: none;
-  border-radius: 4px;
+.skip-link { 
+  position: absolute; 
+  top: -40px; 
+  left: 6px; 
+  background: #264B93; 
+  color: white; 
+  padding: 8px 12px; 
+  text-decoration: none; 
+  border-radius: 4px; 
   z-index: 10000;
   font-weight: 600;
 }
 
-/**
- * @brief Focus styles for the accessibility skip link.
- * @description Brings the skip link into view when it receives keyboard focus.
- */
-.skip-link:focus {
-  top: 6px;
+.skip-link:focus { 
+  top: 6px; 
 }
 
-/**
- * @brief Styles for the no-script warning message.
- * @description Provides a prominent warning banner for users with JavaScript disabled,
- *              informing them about potential functionality limitations.
- */
-.noscript-warning {
-  background: var(--color-warning-light);
-  color: var(--color-text-primary);
-  padding: 1rem;
-  text-align: center;
-  border-bottom: 2px solid var(--color-warning-dark);
+.noscript-warning { 
+  background: #ffeb3b; 
+  color: #333; 
+  padding: 1rem; 
+  text-align: center; 
+  border-bottom: 2px solid #ffc107;
 }
 
-/* ===== Hide Dynamic Content Until JS Loads ===== */
-/**
- * @brief Hides dynamic content containers until JavaScript initialization.
- * @description Prevents content from being displayed before the JavaScript application
- *              has fully initialized and rendered it, avoiding layout shifts and unstyled content.
- * @param {string} data-app-initialized - Attribute indicating application initialization status.
- * @param {string} data-hero-initialized - Attribute indicating hero section initialization status.
- * @param {string} data-main-initialized - Attribute indicating main content initialization status.
- */
+/* Hide dynamic content until JS loads */
 [data-app-initialized="false"] .dynamic-content-container,
 [data-hero-initialized="false"] .hero-content-container,
 [data-main-initialized="false"] .main-content > *:not(.content-loading-indicator) {
   display: none;
 }
-

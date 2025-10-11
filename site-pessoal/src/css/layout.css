@@ -1,15 +1,10 @@
 /**
  * @file layout.css
- * @brief Layout system and responsive grid for the retro-futuristic website.
- * @description This file defines the container system, grid layouts, and responsive spacing,
- *              ensuring a flexible and adaptive structure across various screen sizes.
+ * @brief Layout system and responsive grid
+ * @description Container system, grid layouts, and responsive spacing
  */
 
 /* ===== Container System ===== */
-/**
- * @brief Base container styles.
- * @description Sets maximum width, centers the container, and applies horizontal padding.
- */
 .container {
   width: 100%;
   max-width: var(--container-max-width);
@@ -17,111 +12,59 @@
   padding: 0 var(--container-padding);
 }
 
-/**
- * @brief Fluid container variant.
- * @description Removes maximum width constraint, allowing the container to span the full viewport width.
- */
 .container--fluid {
   max-width: none;
 }
 
-/**
- * @brief Narrow container variant.
- * @description Sets a smaller maximum width for more focused content areas.
- */
 .container--narrow {
   max-width: 48rem; /* 768px */
 }
 
 /* ===== Grid System ===== */
-/**
- * @brief Base grid styles.
- * @description Establishes a CSS Grid display with a default gap between grid items.
- */
 .grid {
   display: grid;
   gap: var(--space-6);
 }
 
-/**
- * @brief 2-column responsive grid.
- * @description Creates a grid with auto-fitting columns, each at least 250px wide.
- */
 .grid--2 {
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 }
 
-/**
- * @brief 3-column responsive grid.
- * @description Creates a grid with auto-fitting columns, each at least 200px wide.
- */
 .grid--3 {
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 }
 
-/**
- * @brief 4-column responsive grid.
- * @description Creates a grid with auto-fitting columns, each at least 150px wide.
- */
 .grid--4 {
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
 }
 
 /* ===== Flexbox Utilities ===== */
-/**
- * @brief Base flexbox styles.
- * @description Sets display to flex for flexible box layout.
- */
 .flex {
   display: flex;
 }
 
-/**
- * @brief Flexbox column direction.
- * @description Arranges flex items vertically.
- */
 .flex--column {
   flex-direction: column;
 }
 
-/**
- * @brief Flexbox wrap behavior.
- * @description Allows flex items to wrap onto multiple lines.
- */
 .flex--wrap {
   flex-wrap: wrap;
 }
 
-/**
- * @brief Flexbox center alignment.
- * @description Centers flex items both horizontally and vertically.
- */
 .flex--center {
   justify-content: center;
   align-items: center;
 }
 
-/**
- * @brief Flexbox space-between alignment.
- * @description Distributes space evenly between flex items.
- */
 .flex--between {
   justify-content: space-between;
 }
 
-/**
- * @brief Flexbox space-around alignment.
- * @description Distributes space evenly around flex items.
- */
 .flex--around {
   justify-content: space-around;
 }
 
 /* ===== App Layout ===== */
-/**
- * @brief Main application container styles.
- * @description Sets minimum height to fill the viewport and arranges content in a column layout.
- */
 .app-container {
   min-height: 100vh;
   display: flex;
@@ -129,10 +72,6 @@
 }
 
 /* ===== Header Layout ===== */
-/**
- * @brief Global header styles.
- * @description Positions the header sticky at the top, sets z-index, background, and border.
- */
 .global-header {
   position: sticky;
   top: 0;
@@ -143,18 +82,10 @@
   background-color: rgba(255, 255, 255, 0.8);
 }
 
-/**
- * @brief Dark theme adjustments for the global header.
- * @description Sets a darker background color for the header in dark mode.
- */
 [data-theme="dark"] .global-header {
   background-color: rgba(15, 23, 42, 0.8);
 }
 
-/**
- * @brief Container within the global header.
- * @description Arranges header content with flexbox, aligning items and distributing space.
- */
 .global-header .container {
   display: flex;
   align-items: center;
@@ -163,10 +94,6 @@
 }
 
 /* ===== Hero Section Layout ===== */
-/**
- * @brief Hero section styles.
- * @description Sets relative positioning, minimum height, flex display for content alignment, and hides overflow.
- */
 .hero-section {
   position: relative;
   min-height: 80vh;
@@ -175,10 +102,6 @@
   overflow: hidden;
 }
 
-/**
- * @brief Hero background styles.
- * @description Positions a background element absolutely, applies a gradient, and sets a low opacity.
- */
 .hero-background {
   position: absolute;
   top: 0;
@@ -190,29 +113,17 @@
   z-index: -1;
 }
 
-/**
- * @brief Hero content container styles.
- * @description Sets full width and vertical padding for the content within the hero section.
- */
 .hero-content-container {
   width: 100%;
   padding: var(--space-20) 0;
 }
 
 /* ===== Main Content Layout ===== */
-/**
- * @brief Main content area styles.
- * @description Allows the main content to grow, applies vertical padding.
- */
 .main-content {
   flex: 1;
   padding: var(--space-12) 0;
 }
 
-/**
- * @brief Dynamic content container styles.
- * @description Arranges dynamic content sections in a column with defined spacing.
- */
 .dynamic-content-container {
   display: flex;
   flex-direction: column;
@@ -220,35 +131,19 @@
 }
 
 /* ===== Section Spacing ===== */
-/**
- * @brief Base section styles.
- * @description Applies default vertical padding to sections.
- */
 .section {
   padding: var(--space-12) 0;
 }
 
-/**
- * @brief Condensed section variant.
- * @description Applies reduced vertical padding for more compact sections.
- */
 .section--condensed {
   padding: var(--space-8) 0;
 }
 
-/**
- * @brief Spacious section variant.
- * @description Applies increased vertical padding for more prominent sections.
- */
 .section--spacious {
   padding: var(--space-20) 0;
 }
 
 /* ===== Footer Layout ===== */
-/**
- * @brief Global footer styles.
- * @description Sets background, top border, vertical padding, and pushes the footer to the bottom of the page.
- */
 .global-footer {
   background: var(--color-background-secondary);
   border-top: 1px solid var(--color-border-primary);
@@ -257,10 +152,6 @@
 }
 
 /* ===== Accessibility Menu Layout ===== */
-/**
- * @brief Accessibility menu styles.
- * @description Positions the menu fixed in the center of the screen, sets z-index, background, and styling.
- */
 .accessibility-menu {
   position: fixed;
   top: 50%;
@@ -276,19 +167,11 @@
   overflow-y: auto;
 }
 
-/**
- * @brief Accessibility menu content area styles.
- * @description Applies padding to the content within the accessibility menu.
- */
 .accessibility-menu-content {
   padding: var(--space-6);
 }
 
 /* ===== Loading States ===== */
-/**
- * @brief Content loading indicator styles.
- * @description Centers loading content and applies padding and spacing.
- */
 .content-loading-indicator {
   display: flex;
   flex-direction: column;
@@ -298,10 +181,6 @@
   gap: var(--space-4);
 }
 
-/**
- * @brief Loading spinner animation.
- * @description Creates a spinning animation for visual loading feedback.
- */
 .loading-spinner {
   width: 2rem;
   height: 2rem;
@@ -311,20 +190,12 @@
   animation: spin 1s linear infinite;
 }
 
-/**
- * @brief Keyframes for the spinning animation.
- * @description Defines the rotation animation for the loading spinner.
- */
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
 
 /* ===== Notification Area ===== */
-/**
- * @brief Notification area styles.
- * @description Positions notifications fixed at the top-right, sets z-index, background, and styling.
- */
 .notification-area {
   position: fixed;
   top: var(--space-4);
@@ -340,11 +211,7 @@
 
 /* ===== Responsive Breakpoints ===== */
 
-/**
- * @brief Small devices media query (landscape phones, 640px and up).
- * @description Adjusts container padding and hero content padding for small screens.
- * @param {number} min-width - 640px
- */
+/* Small devices (landscape phones, 640px and up) */
 @media (min-width: 640px) {
   .container {
     padding: 0 var(--space-6);
@@ -359,11 +226,7 @@
   }
 }
 
-/**
- * @brief Medium devices media query (tablets, 768px and up).
- * @description Further adjusts container padding, grid columns, and hero section minimum height for medium screens.
- * @param {number} min-width - 768px
- */
+/* Medium devices (tablets, 768px and up) */
 @media (min-width: 768px) {
   .container {
     padding: 0 var(--space-8);
@@ -382,11 +245,7 @@
   }
 }
 
-/**
- * @brief Large devices media query (desktops, 1024px and up).
- * @description Adjusts grid columns and section padding for large screens.
- * @param {number} min-width - 1024px
- */
+/* Large devices (desktops, 1024px and up) */
 @media (min-width: 1024px) {
   .grid--2-lg {
     grid-template-columns: repeat(2, 1fr);
@@ -405,11 +264,7 @@
   }
 }
 
-/**
- * @brief Extra large devices media query (large desktops, 1280px and up).
- * @description Adjusts container padding and grid columns for extra large screens.
- * @param {number} min-width - 1280px
- */
+/* Extra large devices (large desktops, 1280px and up) */
 @media (min-width: 1280px) {
   .container {
     padding: 0 var(--space-10);
@@ -425,11 +280,6 @@
 }
 
 /* ===== High Contrast Mode Adjustments ===== */
-/**
- * @brief High contrast mode adjustments.
- * @description Increases border width and opacity for better visibility in high contrast mode.
- * @param {string} prefers-contrast - high
- */
 @media (prefers-contrast: high) {
   .global-header {
     border-bottom-width: 2px;
@@ -441,15 +291,9 @@
 }
 
 /* ===== Reduced Motion Adjustments ===== */
-/**
- * @brief Reduced motion adjustments.
- * @description Disables animation for loading spinner for users who prefer reduced motion.
- * @param {string} prefers-reduced-motion - reduce
- */
 @media (prefers-reduced-motion: reduce) {
   .loading-spinner {
     animation: none;
     border-top-color: transparent;
   }
 }
-

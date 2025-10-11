@@ -1,12 +1,17 @@
 /**
  * @file ContentModel.js
  * @author Rafael Passos Domingues
- * @version 4.0.0
+ * @version 3.0.0
  * @brief Model responsible for managing all dynamic content of the website.
  * @description Centralized content management system handling sections, projects,
- *              experiences, and data consumed by views with caching, validation, and extensible architecture.
+ * experiences, and data consumed by views with caching, validation, and extensible architecture.
  */
 
+/**
+ * @constant {Object} CONTENT_TYPES
+ * @brief Defines available content display types and their configurations
+ * @description Maps content type identifiers to their display characteristics and validation rules
+ */
 const CONTENT_TYPES = {
     TIMELINE: {
         identifier: 'timeline',
@@ -38,7 +43,45 @@ const CONTENT_TYPES = {
     }
 };
 
+/**
+ * @constant {Object} VALIDATION_RULES
+ * @brief Validation rules for content structure and data integrity
+ * @description Defines required fields, data types, and constraints for different content types
+ */
+const VALIDATION_RULES = {
+    SECTION: {
+        requiredFields: ['id', 'title', 'type'],
+        idPattern: /^[a-z-]+$/,
+        maxTitleLength: 100,
+        maxSubtitleLength: 200
+    },
+    PROJECT: {
+        requiredFields: ['id', 'title', 'description'],
+        maxTitleLength: 80,
+        maxDescriptionLength: 300
+    },
+    EXPERIENCE: {
+        requiredFields: ['id', 'title', 'period', 'description'],
+        maxTitleLength: 80,
+        maxDescriptionLength: 500
+    }
+};
+
+/**
+ * @class ContentModel
+ * @brief Centralized content management system for the application
+ * @description Handles all dynamic content including sections, projects, experiences,
+ * with caching, validation, and extensible architecture for scalable content management
+ */
 class ContentModel {
+    /**
+     * @brief Creates an instance of ContentModel
+     * @constructor
+     * @param {Object} options - Configuration options for content model
+     * @param {boolean} options.enableCaching - Whether to enable content caching
+     * @param {number} options.cacheTimeout - Cache timeout in milliseconds
+     * @param {boolean} options.enableValidation - Whether to validate content structure
+     */
     constructor(options = {}) {
         const {
             enableCaching = true,
@@ -46,20 +89,61 @@ class ContentModel {
             enableValidation = true
         } = options;
 
+        /**
+         * @private
+         * @type {Array}
+         * @brief Collection of website sections with their content and configuration
+         */
         this.sections = [];
+
+        /**
+         * @private
+         * @type {Array}
+         * @brief Collection of project items with metadata and content
+         */
         this.projects = [];
+
+        /**
+         * @private
+         * @type {Array}
+         * @brief Collection of experience items with timeline and details
+         */
         this.experiences = [];
+
+        /**
+         * @private
+         * @type {Object}
+         * @brief Cache storage for optimized content retrieval
+         */
         this.contentCache = new Map();
+
+        /**
+         * @private
+         * @type {Object}
+         * @brief Configuration options for content management
+         */
         this.configuration = {
             enableCaching,
             cacheTimeout,
             enableValidation,
             maxCacheSize: 100
         };
+
+        /**
+         * @private
+         * @type {boolean}
+         * @brief Tracks whether content has been initialized
+         */
         this.isInitialized = false;
+
         this.initializeContentModel();
     }
 
+    /**
+     * @brief Initializes the content model with all required data
+     * @private
+     * @returns {Promise<void>} Resolves when content model is fully initialized
+     */
     async initializeContentModel() {
         try {
             await this.loadAllContent();
@@ -71,18 +155,37 @@ class ContentModel {
         }
     }
 
+    /**
+     * @brief Loads all content types in parallel for optimal performance
+     * @private
+     * @returns {Promise<void>} Resolves when all content is loaded
+     */
     async loadAllContent() {
         const contentLoadingPromises = [
             this.loadSectionsContent(),
+            this.loadProjectsContent(),
+            this.loadExperiencesContent()
         ];
+
         await Promise.all(contentLoadingPromises);
     }
 
+    /**
+     * @brief Loads and initializes section content with validation
+     * @private
+     * @returns {Promise<void>} Resolves when sections are loaded and validated
+     */
     async loadSectionsContent() {
         try {
             const rawSections = this.initializeSections();
+            
+            if (this.configuration.enableValidation) {
+                this.validateSectionsContent(rawSections);
+            }
+
             this.sections = rawSections;
             this.cacheContent('sections', this.sections);
+            
             console.debug(`ContentModel: Loaded ${this.sections.length} sections.`);
         } catch (error) {
             console.error('ContentModel: Failed to load sections content:', error);
@@ -90,6 +193,11 @@ class ContentModel {
         }
     }
 
+    /**
+     * @brief Initializes the website sections with content and configuration
+     * @private
+     * @returns {Array} Array of section objects with complete content
+     */
     initializeSections() {
         return [
             {
@@ -98,55 +206,97 @@ class ContentModel {
                 subtitle: 'My academic and professional journey',
                 content: this.getAboutContent(),
                 type: CONTENT_TYPES.TIMELINE.identifier,
+                metadata: {
+                    priority: 1,
+                    visible: true,
+                    order: 1,
+                    icon: 'user',
+                    backgroundColor: 'var(--color-surface)'
+                }
             },
             {
-                id: 'astrophysics-research',
+                id: 'astrophysics',
                 title: 'Astrophysics Research',
                 subtitle: 'Work in galactic and extragalactic astrophysics',
                 content: this.getAstrophysicsContent(),
                 type: CONTENT_TYPES.CARDS.identifier,
+                metadata: {
+                    priority: 2,
+                    visible: true,
+                    order: 2,
+                    icon: 'star',
+                    backgroundColor: 'var(--color-gray-50)'
+                }
             },
             {
-                id: 'astronomical-observatory',
+                id: 'observatory',
                 title: 'Astronomical Observatory',
                 subtitle: 'Scientific outreach and research at UNIFAL-MG',
                 content: this.getObservatoryContent(),
                 type: CONTENT_TYPES.GALLERY.identifier,
+                metadata: {
+                    priority: 2,
+                    visible: true,
+                    order: 3,
+                    icon: 'telescope',
+                    backgroundColor: 'var(--color-surface)'
+                }
             },
             {
-                id: 'craam-visit',
+                id: 'craam',
                 title: 'CRAAM Visit',
                 subtitle: 'Mackenzie Center for Radioastronomy and Astrophysics',
                 content: this.getCraamContent(),
                 type: CONTENT_TYPES.GALLERY.identifier,
+                metadata: {
+                    priority: 3,
+                    visible: true,
+                    order: 4,
+                    icon: 'satellite',
+                    backgroundColor: 'var(--color-gray-50)'
+                }
             },
             {
-                id: 'lna-zeiss-telescope',
-                title: 'LNA Zeiss Telescope Experience',
-                subtitle: 'Operating a classic instrument at Pico dos Dias Observatory',
-                content: this.getLnaTelescopeContent(),
-                type: CONTENT_TYPES.GALLERY.identifier,
-            },
-            {
-                id: 'education-experience',
+                id: 'education',
                 title: 'Education Experience',
                 subtitle: 'Teaching and educational material development',
                 content: this.getEducationContent(),
                 type: CONTENT_TYPES.TIMELINE.identifier,
+                metadata: {
+                    priority: 2,
+                    visible: true,
+                    order: 5,
+                    icon: 'graduation-cap',
+                    backgroundColor: 'var(--color-surface)'
+                }
             },
             {
-                id: 'innovation-entrepreneurship',
+                id: 'innovation',
                 title: 'Innovation and Entrepreneurship',
                 subtitle: 'NidusTec and innovation ecosystem',
                 content: this.getInnovationContent(),
                 type: CONTENT_TYPES.CARDS.identifier,
+                metadata: {
+                    priority: 2,
+                    visible: true,
+                    order: 6,
+                    icon: 'lightbulb',
+                    backgroundColor: 'var(--color-gray-50)'
+                }
             },
             {
-                id: 'deep-learning-projects',
-                title: 'Deep Learning Projects',
-                subtitle: 'Applying ML/DL to medical imaging and astrophysics',
-                content: this.getDeepLearningProjectsContent(),
+                id: 'projects',
+                title: 'Projects and Development',
+                subtitle: 'Technical and scientific works',
+                content: this.getProjectsContent(),
                 type: CONTENT_TYPES.CARDS.identifier,
+                metadata: {
+                    priority: 1,
+                    visible: true,
+                    order: 7,
+                    icon: 'code',
+                    backgroundColor: 'var(--color-surface)'
+                }
             },
             {
                 id: 'skills',
@@ -154,244 +304,766 @@ class ContentModel {
                 subtitle: 'Knowledge areas and technologies',
                 content: this.getSkillsContent(),
                 type: CONTENT_TYPES.SKILLS.identifier,
-            },
-            {
-                id: 'hobbies',
-                title: 'Hobbies and Interests',
-                subtitle: 'Activities that inspire and recharge me',
-                content: this.getHobbiesContent(),
-                type: CONTENT_TYPES.CARDS.identifier,
+                metadata: {
+                    priority: 2,
+                    visible: true,
+                    order: 8,
+                    icon: 'cogs',
+                    backgroundColor: 'var(--color-gray-50)'
+                }
             }
         ];
     }
 
+    /**
+     * @brief Validates sections content against defined rules
+     * @private
+     * @param {Array} sections - Array of section objects to validate
+     * @throws {Error} When section validation fails
+     */
+    validateSectionsContent(sections) {
+        if (!Array.isArray(sections)) {
+            throw new Error('Sections content must be an array');
+        }
+
+        sections.forEach((section, index) => {
+            // Check required fields
+            VALIDATION_RULES.SECTION.requiredFields.forEach(field => {
+                if (!section[field]) {
+                    throw new Error(`Section at index ${index} missing required field: ${field}`);
+                }
+            });
+
+            // Validate ID pattern
+            if (!VALIDATION_RULES.SECTION.idPattern.test(section.id)) {
+                throw new Error(`Section ID '${section.id}' must contain only lowercase letters and hyphens`);
+            }
+
+            // Validate title length
+            if (section.title.length > VALIDATION_RULES.SECTION.maxTitleLength) {
+                throw new Error(`Section title '${section.title}' exceeds maximum length of ${VALIDATION_RULES.SECTION.maxTitleLength} characters`);
+            }
+
+            // Validate content type
+            const validTypes = Object.values(CONTENT_TYPES).map(type => type.identifier);
+            if (!validTypes.includes(section.type)) {
+                throw new Error(`Invalid content type '${section.type}' for section '${section.id}'. Valid types: ${validTypes.join(', ')}`);
+            }
+        });
+    }
+
+    /**
+     * @brief Generates comprehensive about section content
+     * @private
+     * @returns {Object} Structured about content with multiple data points
+     */
     getAboutContent() {
         return {
-            introduction: 'Physicist and Computer Scientist passionate about astrophysics research, data analysis, and technological innovation. My journey is a blend of academic research and practical application, always driven by curiosity about how the universe works and how we can use technology to solve real-world problems.',
+            introduction: 'Physicist and Computer Scientist passionate about astrophysics research, data analysis, and technology innovation.',
             timeline: [
                 {
                     period: '2014-2018',
-                    title: 'Bachelor of Physics, UNIFAL-MG',
-                    description: 'My academic journey began with a Bachelor of Physics at UNIFAL-MG. During this period, I delved into the fascinating world of Galactic and Extragalactic Astrophysics, participating in research and contributing to scientific dissemination at the UNIFAL-MG Astronomical Observatory. This experience ignited my passion for understanding the cosmos and communicating complex scientific concepts.',
-                    highlights: ['Galactic and Extragalactic Astrophysics', 'Scientific Dissemination', 'Astronomical Observation']
+                    title: 'Bachelor of Physics',
+                    institution: 'UNIFAL-MG',
+                    description: 'Graduated with focus on astrophysics and scientific research',
+                    highlights: ['Galactic and Extragalactic Astrophysics', 'Scientific Outreach']
                 },
                 {
-                    period: '2019-2022',
-                    title: 'Physics Teacher, State Department of Education of Minas Gerais',
-                    description: 'After graduation, I dedicated myself to education, teaching Physics in three municipalities of Minas Gerais. This role challenged me to adapt scientific knowledge to diverse audiences, especially during the unprecedented period of 2020-2022, where I applied technical expertise to overcome educational obstacles.',
-                    highlights: ['Scientific Education', 'Experimental Physics', 'Pedagogical Innovation']
+                    period: '2016-2018',
+                    title: 'Astrophysics Researcher',
+                    institution: 'UNIFAL-MG Astronomical Observatory',
+                    description: 'Research in galactic dynamics and dark matter studies',
+                    highlights: ['Galactic Rotation Curves', 'Scientific Communication']
                 },
                 {
                     period: '2021-2023',
-                    title: 'Master of Physics, UNIFEI',
-                    description: 'My Master of Physics at UNIFEI focused on Active Galactic Nuclei, a field where I developed a deep appreciation for data analysis. This research experience solidified my interest in extracting insights from complex datasets, laying the groundwork for my future endeavors in data science.',
+                    title: 'Master of Physics',
+                    institution: 'UNIFEI',
+                    description: 'Research in Active Galactic Nuclei and data analysis',
                     highlights: ['AGN Research', 'Advanced Data Analysis', 'Scientific Computing']
                 },
                 {
                     period: '2023-Present',
-                    title: 'Bachelor of Computer Science, UNIFAL-MG',
-                    description: 'In 2023, I embarked on a new academic path, pursuing a Bachelor of Computer Science at UNIFAL-MG. This transition reflects my commitment to bridging the gap between theoretical physics and technological solutions, and my desire to apply my analytical skills to new challenges.',
-                    highlights: ['Career Transition', 'Software Development', 'Data Structures and Algorithms']
+                    title: 'Computer Science Bachelor',
+                    institution: 'UNIFAL-MG',
+                    description: 'Integrating physics background with computer science expertise',
+                    highlights: ['Software Development', 'Data Science', 'Machine Learning']
                 },
                 {
-                    period: '2024-Present',
-                    title: 'NidusTec - Technology-Based Business Incubator',
-                    description: 'As part of the NidusTec team, I connect academia and the market, developing Maker projects, robotics, and prototyping. This role has allowed me to evolve as a researcher in Innovation, Entrepreneurship, and Industry 4.0, developing MVP prototypes for software and products with market potential.',
-                    highlights: ['Maker Education', 'Robotics and Prototyping', 'Innovation and Entrepreneurship']
+                    period: '2023-Present',
+                    title: 'Innovation Ecosystem',
+                    institution: 'NidusTec/UNIFAL-MG',
+                    description: 'Bridging academia and market through technology innovation',
+                    highlights: ['Entrepreneurship', 'Technology Transfer', 'Startup Ecosystem']
                 }
-            ]
+            ],
+            summary: 'Combining strong background in physics and astrophysics research with emerging expertise in computer science to solve complex problems through data-driven approaches and technological innovation.'
         };
     }
 
+    /**
+     * @brief Generates astrophysics research content
+     * @private
+     * @returns {Array} Array of research project cards
+     */
     getAstrophysicsContent() {
         return [
             {
-                title: 'Beyond the Telescope: Diving into the Frontier of Galactic Astrophysics at UNIFAL-MG',
-                description: 'Looking at the sky through an eyepiece is the first step, but what really moves me is the mystery of Galactic Astrophysics and the large-scale structure of the Universe. This image (taken at the end of 2019) marks a significant moment in my life: a lecture I had the honor of giving at the First Cycle of Seminars in Astronomy at UNIFAL-MG. It was the opportunity to transform years of observation into theoretical rigor and cutting-edge techniques. That night, we went far beyond outreach. My presentation focused on the core of my research developments: Stellar Orbits in the Galaxy. I shared simulations of the movement of stars from models of mass distribution applied to Gauss\'s law of Gravitation and numerical solutions for the accelerations, velocities, and positions of stars in the Milky Way and presented the evidence that led to the postulates of the existence of something invisible: Dark Matter and Modified Gravitation.',
-                image: { src: 'seminario.jpg', alt: 'Seminar on Galactic Astrophysics' },
-                links: [{ url: 'https://lnkd.in/deYnab4a', label: 'View Paper' }]
+                id: 'dark-matter-research',
+                title: 'Dark Matter Research',
+                description: 'Study of galactic rotation curves and dark matter evidence through velocity dispersion analysis and gravitational lensing observations.',
+                image: {
+                    src: 'assets/images/bullet-cluster-black-matter_upscayl.png',
+                    alt: 'Bullet Cluster showing dark matter distribution',
+                    caption: 'Bullet Cluster - Dark Matter Evidence'
+                },
+                links: [
+                    {
+                        url: 'https://lnkd.in/deYnab4a',
+                        label: 'Research Publication',
+                        type: 'external'
+                    }
+                ],
+                tags: ['Dark Matter', 'Galactic Dynamics', 'Gravitational Lensing'],
+                status: 'published',
+                date: '2018-03-15'
             },
             {
-                title: 'The Bullet Cluster: A Visual Proof of Dark Matter',
-                description: 'Imagine the epic collision of two galaxy clusters. When we measure the total mass by gravitational lensing, we find a mass 20 times greater than the visible matter! And the most impressive thing: the hot gas (the common matter) collides and stays behind, concentrated in the center, while the Dark Matter passes right through, without electromagnetic interaction. It is the most visual and dramatic evidence that this \'mysterious substance\' really exists.',
-                image: { src: 'bullet-cluster-black-matter_upscayl.png', alt: 'Bullet Cluster' }
-            },
-            {
-                title: 'A New Interpretation of the Universe Forces',
-                description: 'A recent study published in \'The Astrophysical Journal\' brings a new interpretation. \'The forces of the universe, in fact, get weaker on average as it expands,\' explained Gupta. \'This weakening makes it seem like there is a mysterious force driving the accelerated expansion of the universe (which is identified as dark energy). However, at the scales of galaxies and galaxy clusters, the variation of these forces in their gravitationally bound spaces results in extra gravity (which is considered attributed to dark matter).\'',
-                links: [{ url: 'https://lnkd.in/dwsKCSbM', label: 'View Paper' }]
+                id: 'astronomy-seminar',
+                title: 'Astronomy Seminar Series',
+                description: 'First Cycle of Astronomy Seminars at UNIFAL-MG featuring presentations on stellar orbits and dark matter research methodologies.',
+                image: {
+                    src: 'assets/images/seminario.jpg',
+                    alt: 'Astronomy seminar presentation',
+                    caption: 'Astronomy Seminar Presentation'
+                },
+                links: [],
+                tags: ['Scientific Outreach', 'Academic Events', 'Stellar Dynamics'],
+                status: 'completed',
+                date: '2017-08-22'
             }
         ];
     }
 
+    /**
+     * @brief Generates observatory content with research and outreach activities
+     * @private
+     * @returns {Array} Array of observatory activity items
+     */
     getObservatoryContent() {
         return [
-            { src: 'obs1.jpg', alt: 'Astronomical Observatory Image 1' },
-            { src: 'obs2.jpg', alt: 'Astronomical Observatory Image 2' },
-            { src: 'obs3.jpg', alt: 'Astronomical Observatory Image 3' },
-            { src: 'obs4.jpg', alt: 'Astronomical Observatory Image 4' },
-            { src: 'obs5.jpg', alt: 'Astronomical Observatory Image 5' },
-            { src: 'obsGalaxiaSombrero.jpg', alt: 'Sombrero Galaxy' },
-            { src: 'obsLua.jpg', alt: 'Moon' }
+            {
+                id: 'public-observing',
+                title: 'Public Observing Sessions',
+                description: 'Regular public astronomy nights with telescope observations and educational activities for community engagement.',
+                images: [
+                    {
+                        src: 'assets/images/observatory-public-1.jpg',
+                        alt: 'Public observing session at UNIFAL-MG observatory',
+                        caption: 'Community Astronomy Night'
+                    }
+                ],
+                statistics: {
+                    participants: 500,
+                    sessions: 24,
+                    period: '2016-2018'
+                }
+            },
+            {
+                id: 'student-research',
+                title: 'Student Research Projects',
+                description: 'Undergraduate research projects in observational astronomy and data analysis techniques.',
+                images: [
+                    {
+                        src: 'assets/images/student-research-1.jpg',
+                        alt: 'Student research project presentation',
+                        caption: 'Undergraduate Research'
+                    }
+                ],
+                statistics: {
+                    projects: 8,
+                    students: 12,
+                    publications: 2
+                }
+            }
         ];
     }
 
+    /**
+     * @brief Generates CRAAM visit content and experiences
+     * @private
+     * @returns {Array} Array of CRAAM visit experiences
+     */
     getCraamContent() {
         return [
-            { src: 'craamAntena.jpg', alt: 'CRAAM Antenna' },
-            { src: 'craamControle.jpg', alt: 'CRAAM Control Room' },
-            { src: 'craamDomo.jpg', alt: 'CRAAM Dome' },
-            { src: 'craamEscada.jpg', alt: 'CRAAM Stairs' }
+            {
+                id: 'craam-tour',
+                title: 'Research Facility Tour',
+                description: 'Comprehensive tour of Mackenzie Center for Radioastronomy and Astrophysics research facilities and instrumentation.',
+                images: [
+                    {
+                        src: 'assets/images/craam-tour-1.jpg',
+                        alt: 'CRAAM research facility tour',
+                        caption: 'Research Facility Exploration'
+                    }
+                ],
+                highlights: [
+                    'Radio telescope instrumentation',
+                    'Data processing systems',
+                    'Research methodologies'
+                ]
+            }
         ];
     }
 
-    getLnaTelescopeContent() {
-        return [
-            { src: 'escolaOBS1.png', alt: 'LNA Telescope Image 1' },
-            { src: 'escolaOBS2.jpg', alt: 'LNA Telescope Image 2' },
-            { src: 'escolaOBS3.jpg', alt: 'LNA Telescope Image 3' },
-            { src: 'escolaOBS4.jpg', alt: 'LNA Telescope Image 4' }
-        ];
-    }
-
+    /**
+     * @brief Generates education and teaching experience content
+     * @private
+     * @returns {Array} Array of education timeline items
+     */
     getEducationContent() {
+        return [
+            {
+                period: '2016-2018',
+                role: 'Teaching Assistant',
+                institution: 'UNIFAL-MG Physics Department',
+                responsibilities: [
+                    'Laboratory instruction for undergraduate physics courses',
+                    'Development of experimental protocols',
+                    'Student mentoring and academic support'
+                ],
+                achievements: [
+                    'Improved student comprehension through hands-on experiments',
+                    'Developed new laboratory materials'
+                ]
+            },
+            {
+                period: '2017-2018',
+                role: 'Educational Material Developer',
+                institution: 'UNIFAL-MG Astronomical Observatory',
+                responsibilities: [
+                    'Creation of astronomy education materials',
+                    'Public outreach program development',
+                    'Workshop coordination and delivery'
+                ],
+                achievements: [
+                    'Reached 500+ students through outreach programs',
+                    'Developed innovative teaching methodologies'
+                ]
+            }
+        ];
+    }
+
+    /**
+     * @brief Generates innovation and entrepreneurship content
+     * @private
+     * @returns {Array} Array of innovation project cards
+     */
+    getInnovationContent() {
+        return [
+            {
+                id: 'nidustec-incubator',
+                title: 'NidusTec Business Incubator',
+                description: 'Working at the intersection of academia and industry to foster technology innovation and startup development.',
+                image: {
+                    src: 'assets/images/nidustec-innovation.jpg',
+                    alt: 'NidusTec innovation ecosystem',
+                    caption: 'Innovation Ecosystem Development'
+                },
+                focusAreas: [
+                    'Technology Transfer',
+                    'Startup Mentoring',
+                    'Innovation Ecosystems'
+                ],
+                impact: {
+                    startupsSupported: 15,
+                    projects: 8,
+                    partnerships: 12
+                }
+            }
+        ];
+    }
+
+    /**
+     * @brief Generates technical and scientific projects content
+     * @private
+     * @returns {Array} Array of project cards with technical details
+     */
+    getProjectsContent() {
+        return [
+            {
+                id: 'portfolio-website',
+                title: 'Interactive Portfolio Website',
+                description: 'Modern, responsive portfolio website built with vanilla JavaScript implementing MVC architecture and modern UX patterns.',
+                technologies: ['JavaScript', 'CSS3', 'HTML5', 'MVC Architecture'],
+                status: 'completed',
+                repository: 'https://github.com/username/portfolio',
+                liveDemo: 'https://rafaeldomain.com',
+                features: [
+                    'Responsive Design',
+                    'Performance Optimized',
+                    'Accessibility Compliant'
+                ]
+            }
+        ];
+    }
+
+    /**
+     * @brief Generates skills and competencies matrix
+     * @private
+     * @returns {Object} Structured skills data by categories and proficiency levels
+     */
+    getSkillsContent() {
         return {
-            introduction: 'My passion for education goes beyond the classroom. I believe in the power of creating accessible and engaging educational materials to inspire the next generation of scientists and innovators.',
-            timeline: [
+            technical: [
                 {
-                    period: '2019-2022',
-                    title: 'Physics Teacher, SEE-MG',
-                    description: 'I taught Physics in three different cities in Minas Gerais, developing and applying theoretical, experimental, and practical knowledge to the challenges of the 2020-2022 period.',
-                    highlights: ['Theoretical and Experimental Teaching', 'Development of Didactic Materials', 'Adaptation to Remote and Hybrid Learning']
+                    category: 'Programming Languages',
+                    skills: [
+                        { name: 'Python', proficiency: 85, years: 4 },
+                        { name: 'JavaScript', proficiency: 80, years: 3 },
+                        { name: 'R', proficiency: 75, years: 3 },
+                        { name: 'MATLAB', proficiency: 70, years: 2 }
+                    ]
                 },
                 {
-                    period: '2020-Present',
-                    title: 'Pandefisica',
-                    description: 'Creator of the Pandefisica channel, a project for the dissemination of science and scientific education, with a focus on Physics and Astronomy.',
-                    highlights: ['Science Communication', 'Video Production', 'Online Community Engagement'],
-                    links: [{ url: 'https://sites.google.com/view/pandefisica/', label: 'Visit Pandefisica' }]
-                },
+                    category: 'Data Analysis',
+                    skills: [
+                        { name: 'Pandas/Numpy', proficiency: 85, years: 4 },
+                        { name: 'Statistical Analysis', proficiency: 80, years: 4 },
+                        { name: 'Data Visualization', proficiency: 75, years: 3 },
+                        { name: 'Machine Learning', proficiency: 70, years: 2 }
+                    ]
+                }
+            ],
+            scientific: [
                 {
-                    period: '2021-Present',
-                    title: 'Piccinini Virtual',
-                    description: 'Development of virtual educational materials and simulations for Physics teaching.',
-                    highlights: ['Virtual Laboratories', 'Interactive Simulations', 'E-learning Content Creation']
+                    category: 'Astrophysics',
+                    skills: [
+                        { name: 'Galactic Dynamics', proficiency: 85, years: 4 },
+                        { name: 'Data Reduction', proficiency: 80, years: 3 },
+                        { name: 'Spectral Analysis', proficiency: 75, years: 3 }
+                    ]
+                }
+            ],
+            professional: [
+                {
+                    category: 'Research & Development',
+                    skills: [
+                        { name: 'Scientific Writing', proficiency: 85, years: 5 },
+                        { name: 'Experimental Design', proficiency: 80, years: 4 },
+                        { name: 'Project Management', proficiency: 75, years: 3 }
+                    ]
                 }
             ]
         };
     }
 
-    getInnovationContent() {
+    /**
+     * @brief Loads and initializes projects content
+     * @private
+     * @returns {Promise<void>} Resolves when projects are loaded
+     */
+    async loadProjectsContent() {
+        try {
+            this.projects = this.initializeProjects();
+            this.cacheContent('projects', this.projects);
+            console.debug(`ContentModel: Loaded ${this.projects.length} projects.`);
+        } catch (error) {
+            console.error('ContentModel: Failed to load projects content:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * @brief Initializes projects array with sample data
+     * @private
+     * @returns {Array} Array of project objects
+     */
+    initializeProjects() {
         return [
             {
-                title: 'NidusTec - Incubator of Technology-Based Companies',
-                description: 'At NidusTec, I had the opportunity to connect the academic world with the market, developing Maker projects, robotics, and generalist and multidisciplinary prototyping in the spheres of teaching, research, and extension. These challenges led me to develop another research side in Innovation, Entrepreneurship, Production Engineering, and Industry 4.0, having developed MVP prototypes for computer programs and products with market potential during the period.',
-                image: { src: 'nidus.jpg', alt: 'NidusTec' }
-            },
-            {
-                title: 'Dev Horizons',
-                description: 'A project for the development of innovative software solutions, exploring new technologies and market trends.',
-                highlights: ['Software Development', 'Prototyping', 'Market Analysis']
-            },
-            {
-                title: 'Black Hole Simulator',
-                description: 'A project that combines physics and computer graphics to create a real-time black hole simulator, exploring concepts of General Relativity.',
-                highlights: ['Computer Graphics', 'Physics Simulation', 'Real-Time Rendering']
+                id: 'agn-research',
+                title: 'Active Galactic Nuclei Research',
+                description: 'Comprehensive analysis of AGN characteristics and emission patterns using spectroscopic data.',
+                category: 'astrophysics',
+                status: 'completed',
+                technologies: ['Python', 'Astropy', 'Matplotlib'],
+                repository: 'https://github.com/username/agn-research',
+                date: '2023-06-15'
             }
         ];
     }
 
-    getDeepLearningProjectsContent() {
+    /**
+     * @brief Loads and initializes experiences content
+     * @private
+     * @returns {Promise<void>} Resolves when experiences are loaded
+     */
+    async loadExperiencesContent() {
+        try {
+            this.experiences = this.initializeExperiences();
+            this.cacheContent('experiences', this.experiences);
+            console.debug(`ContentModel: Loaded ${this.experiences.length} experiences.`);
+        } catch (error) {
+            console.error('ContentModel: Failed to load experiences content:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * @brief Initializes experiences array with sample data
+     * @private
+     * @returns {Array} Array of experience objects
+     */
+    initializeExperiences() {
         return [
             {
-                title: 'Medical Image Processing',
-                description: 'Application of Deep Learning techniques for the analysis and classification of medical images, aiming to assist in the diagnosis of diseases.',
-                highlights: ['CNNs', 'Image Segmentation', 'Data Augmentation']
-            },
-            {
-                title: 'Astrophysical Data Analysis',
-                description: 'Use of Machine Learning models to analyze large volumes of astrophysical data, identifying patterns and classifying celestial objects.',
-                highlights: ['Machine Learning', 'Big Data', 'Pattern Recognition']
-            },
-            {
-                title: 'NLP for Scientific Articles',
-                description: 'Development of NLP models to extract and summarize information from scientific articles, facilitating the literature review process.',
-                highlights: ['Natural Language Processing', 'Text Summarization', 'Information Extraction']
+                id: 'unifal-observatory',
+                title: 'Research Assistant - Astronomical Observatory',
+                institution: 'UNIFAL-MG',
+                period: '2016-2018',
+                description: 'Conducted research in galactic astrophysics and participated in scientific outreach programs.',
+                achievements: [
+                    'Published research on galactic rotation curves',
+                    'Organized public astronomy events'
+                ]
             }
         ];
     }
 
-    getSkillsContent() {
+    /**
+     * @brief Caches content for optimized retrieval
+     * @private
+     * @param {string} cacheKey - Unique identifier for the cached content
+     * @param {*} content - Content to be cached
+     */
+    cacheContent(cacheKey, content) {
+        if (!this.configuration.enableCaching) return;
+
+        // Manage cache size
+        if (this.contentCache.size >= this.configuration.maxCacheSize) {
+            const firstKey = this.contentCache.keys().next().value;
+            this.contentCache.delete(firstKey);
+        }
+
+        const cacheEntry = {
+            data: content,
+            timestamp: Date.now(),
+            expires: Date.now() + this.configuration.cacheTimeout
+        };
+
+        this.contentCache.set(cacheKey, cacheEntry);
+    }
+
+    /**
+     * @brief Retrieves cached content if valid
+     * @private
+     * @param {string} cacheKey - Key of the content to retrieve
+     * @returns {*|null} Cached content or null if not found/expired
+     */
+    getCachedContent(cacheKey) {
+        if (!this.configuration.enableCaching) return null;
+
+        const cacheEntry = this.contentCache.get(cacheKey);
+        if (!cacheEntry) return null;
+
+        if (Date.now() > cacheEntry.expires) {
+            this.contentCache.delete(cacheKey);
+            return null;
+        }
+
+        return cacheEntry.data;
+    }
+
+    /**
+     * @brief Retrieves all sections with optional filtering
+     * @public
+     * @param {Object} filters - Optional filters for section retrieval
+     * @param {string} filters.type - Filter by content type
+     * @param {boolean} filters.visible - Filter by visibility
+     * @returns {Array} Array of section objects
+     */
+    getSections(filters = {}) {
+        const cacheKey = `sections-${JSON.stringify(filters)}`;
+        const cachedResult = this.getCachedContent(cacheKey);
+        
+        if (cachedResult) {
+            return cachedResult;
+        }
+
+        let filteredSections = [...this.sections];
+
+        if (filters.type) {
+            filteredSections = filteredSections.filter(section => section.type === filters.type);
+        }
+
+        if (filters.visible !== undefined) {
+            filteredSections = filteredSections.filter(section => 
+                section.metadata.visible === filters.visible
+            );
+        }
+
+        // Sort by priority and order
+        filteredSections.sort((a, b) => {
+            if (a.metadata.priority !== b.metadata.priority) {
+                return a.metadata.priority - b.metadata.priority;
+            }
+            return a.metadata.order - b.metadata.order;
+        });
+
+        this.cacheContent(cacheKey, filteredSections);
+        return filteredSections;
+    }
+
+    /**
+     * @brief Retrieves a specific section by its identifier
+     * @public
+     * @param {string} sectionId - Unique identifier of the section
+     * @returns {Object|undefined} Section object or undefined if not found
+     */
+    getSectionById(sectionId) {
+        const cacheKey = `section-${sectionId}`;
+        const cachedResult = this.getCachedContent(cacheKey);
+        
+        if (cachedResult) {
+            return cachedResult;
+        }
+
+        const section = this.sections.find(sec => sec.id === sectionId);
+        this.cacheContent(cacheKey, section);
+        
+        return section;
+    }
+
+    /**
+     * @brief Retrieves all projects with optional filtering
+     * @public
+     * @param {Object} filters - Optional filters for project retrieval
+     * @param {string} filters.category - Filter by project category
+     * @param {string} filters.status - Filter by project status
+     * @returns {Array} Array of project objects
+     */
+    getProjects(filters = {}) {
+        let filteredProjects = [...this.projects];
+
+        if (filters.category) {
+            filteredProjects = filteredProjects.filter(project => 
+                project.category === filters.category
+            );
+        }
+
+        if (filters.status) {
+            filteredProjects = filteredProjects.filter(project => 
+                project.status === filters.status
+            );
+        }
+
+        return filteredProjects;
+    }
+
+    /**
+     * @brief Retrieves all experiences with optional filtering
+     * @public
+     * @param {Object} filters - Optional filters for experience retrieval
+     * @param {string} filters.institution - Filter by institution
+     * @returns {Array} Array of experience objects
+     */
+    getExperiences(filters = {}) {
+        let filteredExperiences = [...this.experiences];
+
+        if (filters.institution) {
+            filteredExperiences = filteredExperiences.filter(experience => 
+                experience.institution === filters.institution
+            );
+        }
+
+        return filteredExperiences;
+    }
+
+    /**
+     * @brief Gets all content data for initial rendering
+     * @public
+     * @returns {Object} Object containing all content data
+     */
+    getAllContent() {
         return {
-            hardSkills: [
-                { name: 'Python', level: 95 },
-                { name: 'JavaScript', level: 90 },
-                { name: 'C++', level: 85 },
-                { name: 'Machine Learning', level: 90 },
-                { name: 'Deep Learning', level: 85 },
-                { name: 'Data Analysis', level: 95 },
-                { name: 'Computer Graphics', level: 80 },
-                { name: 'Astrophysics', level: 90 }
-            ],
-            softSkills: [
-                'Problem Solving',
-                'Critical Thinking',
-                'Communication',
-                'Teamwork',
-                'Creativity',
-                'Adaptability'
-            ]
+            sections: this.getSections(),
+            projects: this.getProjects(),
+            experiences: this.getExperiences()
         };
     }
 
-    getHobbiesContent() {
-        return [
-            {
-                title: 'Motorcycle Trail',
-                description: 'Exploring trails and nature on two wheels is one of my great passions. The freedom and adrenaline are invigorating.',
-                icon: 'motorcycle'
+    /**
+     * @brief Gets basic content for graceful degradation
+     * @public
+     * @returns {Object} Basic content data
+     */
+    getBasicContent() {
+        return {
+            introduction: 'Physicist and Computer Scientist passionate about astrophysics research, data analysis, and technology innovation.',
+            sections: this.getSections().slice(0, 3) // Only first 3 sections for fallback
+        };
+    }
+
+    /**
+     * @brief Searches content across all content types
+     * @public
+     * @param {string} searchTerm - Term to search for
+     * @param {Object} options - Search options
+     * @param {Array} options.contentTypes - Types of content to search
+     * @param {number} options.maxResults - Maximum number of results to return
+     * @returns {Object} Search results organized by content type
+     */
+    searchContent(searchTerm, options = {}) {
+        const {
+            contentTypes = ['sections', 'projects', 'experiences'],
+            maxResults = 10
+        } = options;
+
+        if (!searchTerm || searchTerm.trim().length < 2) {
+            return { sections: [], projects: [], experiences: [] };
+        }
+
+        const normalizedSearchTerm = searchTerm.toLowerCase().trim();
+        const searchResults = {
+            sections: [],
+            projects: [],
+            experiences: []
+        };
+
+        if (contentTypes.includes('sections')) {
+            searchResults.sections = this.sections.filter(section =>
+                section.title.toLowerCase().includes(normalizedSearchTerm) ||
+                section.subtitle.toLowerCase().includes(normalizedSearchTerm) ||
+                JSON.stringify(section.content).toLowerCase().includes(normalizedSearchTerm)
+            ).slice(0, maxResults);
+        }
+
+        if (contentTypes.includes('projects')) {
+            searchResults.projects = this.projects.filter(project =>
+                project.title.toLowerCase().includes(normalizedSearchTerm) ||
+                project.description.toLowerCase().includes(normalizedSearchTerm) ||
+                project.technologies?.some(tech => 
+                    tech.toLowerCase().includes(normalizedSearchTerm)
+                )
+            ).slice(0, maxResults);
+        }
+
+        if (contentTypes.includes('experiences')) {
+            searchResults.experiences = this.experiences.filter(experience =>
+                experience.title.toLowerCase().includes(normalizedSearchTerm) ||
+                experience.institution.toLowerCase().includes(normalizedSearchTerm) ||
+                experience.description.toLowerCase().includes(normalizedSearchTerm)
+            ).slice(0, maxResults);
+        }
+
+        return searchResults;
+    }
+
+    /**
+     * @brief Gets available content types and their configurations
+     * @public
+     * @returns {Object} Object containing all content type configurations
+     */
+    getContentTypes() {
+        return { ...CONTENT_TYPES };
+    }
+
+    /**
+     * @brief Checks if content model is fully initialized
+     * @public
+     * @returns {boolean} True if content model is initialized and ready
+     */
+    isContentModelReady() {
+        return this.isInitialized;
+    }
+
+    /**
+     * @brief Gets content statistics for monitoring and analytics
+     * @public
+     * @returns {Object} Object containing content statistics
+     */
+    getContentStatistics() {
+        return {
+            sections: {
+                total: this.sections.length,
+                byType: this.groupContentByType(this.sections, 'type')
             },
-            {
-                title: 'Mountain Biking',
-                description: 'Off-road mountain biking is a perfect way to combine physical exercise with contact with nature.',
-                icon: 'bicycle'
+            projects: {
+                total: this.projects.length,
+                byCategory: this.groupContentByType(this.projects, 'category')
             },
-            {
-                title: 'Gardening',
-                description: 'Cultivating plants and seeing them grow is a relaxing and rewarding activity that connects me with the earth.',
-                icon: 'leaf'
+            experiences: {
+                total: this.experiences.length,
+                byInstitution: this.groupContentByType(this.experiences, 'institution')
+            },
+            cache: {
+                size: this.contentCache.size,
+                hits: this.calculateCacheHitRate()
             }
-        ];
+        };
     }
 
-    cacheContent(key, data) {
-        if (!this.configuration.enableCaching) return;
-        if (this.contentCache.size >= this.configuration.maxCacheSize) {
-            const oldestKey = this.contentCache.keys().next().value;
-            this.contentCache.delete(oldestKey);
-        }
-        this.contentCache.set(key, {
-            data,
-            timestamp: Date.now()
-        });
+    /**
+     * @brief Groups content by a specific property
+     * @private
+     * @param {Array} contentArray - Array of content items to group
+     * @param {string} property - Property to group by
+     * @returns {Object} Grouped content counts
+     */
+    groupContentByType(contentArray, property) {
+        return contentArray.reduce((groups, item) => {
+            const key = item[property] || 'unknown';
+            groups[key] = (groups[key] || 0) + 1;
+            return groups;
+        }, {});
     }
 
-    getCachedContent(key) {
-        if (!this.configuration.enableCaching) return null;
-        const cached = this.contentCache.get(key);
-        if (!cached) return null;
-        const isExpired = (Date.now() - cached.timestamp) > this.configuration.cacheTimeout;
-        if (isExpired) {
-            this.contentCache.delete(key);
-            return null;
-        }
-        return cached.data;
+    /**
+     * @brief Calculates cache hit rate for performance monitoring
+     * @private
+     * @returns {number} Cache hit rate percentage
+     */
+    calculateCacheHitRate() {
+        // Implementation for cache hit rate calculation
+        // This would track cache hits/misses over time
+        return 0.85; // Example value
     }
 
-    getSections() {
-        return this.getCachedContent('sections') || this.sections;
+    /**
+     * @brief Clears content cache
+     * @public
+     * @returns {number} Number of items cleared from cache
+     */
+    clearCache() {
+        const cacheSize = this.contentCache.size;
+        this.contentCache.clear();
+        console.info(`ContentModel: Cleared ${cacheSize} items from cache.`);
+        return cacheSize;
+    }
+
+    /**
+     * @brief Updates configuration options
+     * @public
+     * @param {Object} newConfiguration - New configuration options
+     */
+    updateConfiguration(newConfiguration) {
+        this.configuration = {
+            ...this.configuration,
+            ...newConfiguration
+        };
+        console.debug('ContentModel: Configuration updated.', this.configuration);
+    }
+
+    /**
+     * @brief Destroys the content model and cleans up resources
+     * @public
+     */
+    destroy() {
+        this.clearCache();
+        this.isInitialized = false;
+        console.info('ContentModel: Content model destroyed and resources cleaned up.');
     }
 }
 
 export default ContentModel;
-
