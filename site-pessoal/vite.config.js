@@ -18,15 +18,37 @@ export default defineConfig({
             },
             output: {
                 manualChunks: {
-                    'mvc-core': ['./src/js/core/*.js'],
-                    'mvc-models': ['./src/js/models/*.js'],
-                    'mvc-controllers': ['./src/js/controllers/*.js'],
-                    'mvc-views': ['./src/js/views/*.js'],
-                    'mvc-services': ['./src/js/services/*.js']
+                    'mvc-core': [
+                        './src/js/core/App.js',
+                        './src/js/core/EventBus.js',
+                        './src/js/core/Router.js'
+                    ],
+                    'mvc-models': [
+                        './src/js/models/ContentModel.js',
+                        './src/js/models/UserModel.js'
+                    ],
+                    'mvc-controllers': [
+                        './src/js/controllers/MainController.js',
+                        './src/js/controllers/NavigationController.js',
+                        './src/js/controllers/SectionController.js'
+                    ],
+                    'mvc-views': [
+                        './src/js/views/BaseView.js',
+                        './src/js/views/FooterView.js',
+                        './src/js/views/HeroView.js',
+                        './src/js/views/NavigationView.js',
+                        './src/js/views/ViewManager.js'
+                    ],
+                    'mvc-services': [
+                        './src/js/services/AccessibilityManager.js',
+                        './src/js/services/ErrorReporter.js',
+                        './src/js/services/PerformanceMonitor.js',
+                        './src/js/services/ThemeManager.js'
+                    ]
                 },
-                chunkFileNames: 'assets/js/[name]-[hash].js',
-                entryFileNames: 'assets/js/[name]-[hash].js',
-                assetFileNames: 'assets/[ext]/[name]-[hash].[ext]'
+                chunkFileNames: 'public/images/js/[name]-[hash].js',
+                entryFileNames: 'public/images/js/[name]-[hash].js',
+                assetFileNames: 'public/images/[ext]/[name]-[hash].[ext]'
             }
         }
     },
