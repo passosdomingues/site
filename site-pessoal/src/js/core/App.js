@@ -1,10 +1,16 @@
-import { eventBus } from './EventBus.js';
+import eventBus from './EventBus.js';
 
 /**
  * @brief Main application coordinator
- * @description Manages application lifecycle and coordinates MVC components
+ * @description Manages the application lifecycle, services, and controllers.
  */
 class App {
+    /**
+     * @brief Constructs the App instance.
+     * @param {Object} [config={}] - The application configuration object.
+     * @param {Object} [config.services] - A map of service names to service classes.
+     * @param {Object} [config.controllers] - A map of controller names to controller classes.
+     */
     constructor(config = {}) {
         this.config = config;
         this.controllers = new Map();
@@ -14,41 +20,35 @@ class App {
     }
 
     /**
-     * @brief Initialize the application
-     * @description Sets up all components in proper order
+     * @brief Initialize the application.
+     * @description Sets up all services and controllers in the proper order.
      * @returns {Promise<void>}
      */
     async initialize() {
         if (this.isInitialized) {
-            console.warn('App: Application already initialized');
+            console.warn('App: Application has already been initialized.');
             return;
         }
 
         try {
             console.info('App: Starting application initialization...');
             
-            // Initialize services first
             await this.initializeServices();
-            
-            // Initialize controllers
             await this.initializeControllers();
-            
-            // Start application
             await this.start();
             
             this.isInitialized = true;
-            console.info('App: Application initialized successfully');
+            console.info('App: Application initialized successfully. 🎉');
             
         } catch (error) {
             console.error('App: Initialization failed:', error);
-            this.eventBus.publish('app:error', error);
+            this.eventBus.publish('app:error', { error });
             throw error;
         }
     }
 
     /**
-     * @brief Initialize service modules
-     * @description Loads and initializes all service modules
+     * @brief Initialize all registered services.
      * @returns {Promise<void>}
      */
     async initializeServices() {
@@ -63,17 +63,16 @@ class App {
                     await serviceInstance.init();
                 }
                 
-                console.info(`App: Service ${serviceName} initialized`);
+                console.info(`App: Service '${serviceName}' initialized.`);
             } catch (error) {
-                console.error(`App: Failed to initialize service ${serviceName}:`, error);
+                console.error(`App: Failed to initialize service '${serviceName}':`, error);
                 throw error;
             }
         }
     }
 
     /**
-     * @brief Initialize controller modules
-     * @description Loads and initializes all controller modules
+     * @brief Initialize all registered controllers.
      * @returns {Promise<void>}
      */
     async initializeControllers() {
@@ -89,18 +88,18 @@ class App {
                     await controllerInstance.init();
                 }
                 
-                console.info(`App: Controller ${controllerName} initialized`);
+                console.info(`App: Controller '${controllerName}' initialized.`);
             } catch (error) {
-                console.error(`App: Failed to initialize controller ${controllerName}:`, error);
+                console.error(`App: Failed to initialize controller '${controllerName}':`, error);
                 throw error;
             }
         }
     }
 
     /**
-     * @brief Build dependencies for controllers
-     * @param {string} controllerName - Name of the controller
-     * @returns {Object} Dependency object
+     * @brief Build a dependency object for a specific controller.
+     * @param {string} controllerName - The name of the controller.
+     * @returns {Object} An object containing the dependencies for the controller.
      */
     buildControllerDependencies(controllerName) {
         const dependencies = {
@@ -108,67 +107,60 @@ class App {
             services: Object.fromEntries(this.services)
         };
 
-        // Add specific service dependencies based on controller
-        switch (controllerName) {
-            case 'mainController':
-                dependencies.contentModel = this.services.get('contentModel');
-                break;
-            case 'navigationController':
-                dependencies.contentModel = this.services.get('contentModel');
-                break;
+        // Example of providing specific dependencies based on controller needs
+        // You can expand this as your application grows.
+        if (controllerName === 'mainController' || controllerName === 'navigationController') {
+            dependencies.contentModel = this.services.get('contentModel');
         }
 
         return dependencies;
     }
 
     /**
-     * @brief Start the application
-     * @description Begins application execution
+     * @brief Start the application's main logic.
      * @returns {Promise<void>}
      */
     async start() {
         this.eventBus.publish('app:start');
-        
-        // Hide loading overlay
         this.eventBus.publish('ui:loading:hide');
-        
-        console.info('App: Application started');
+        console.info('App: Application started.');
     }
 
     /**
-     * @brief Get a controller instance
-     * @param {string} controllerName - Name of the controller
-     * @returns {Object|null} Controller instance
+     * @brief Get a controller instance by name.
+     * @param {string} controllerName - The name of the controller.
+     * @returns {Object|null} The controller instance or null if not found.
      */
     getController(controllerName) {
         return this.controllers.get(controllerName) || null;
     }
 
     /**
-     * @brief Get a service instance
-     * @param {string} serviceName - Name of the service
-     * @returns {Object|null} Service instance
+     * @brief Get a service instance by name.
+     * @param {string} serviceName - The name of the service.
+     * @returns {Object|null} The service instance or null if not found.
      */
     getService(serviceName) {
         return this.services.get(serviceName) || null;
     }
 
     /**
-     * @brief Gracefully shutdown the application
-     * @description Cleans up resources and event listeners
+     * @brief Gracefully shut down the application.
+     * @description Cleans up resources and event listeners from all components.
+     * @returns {Promise<void>}
      */
     async shutdown() {
+        if (!this.isInitialized) return;
+        
         this.eventBus.publish('app:shutdown');
         
-        // Cleanup controllers
-        for (const [name, controller] of this.controllers) {
+        for (const [, controller] of this.controllers) {
             if (typeof controller.destroy === 'function') {
                 await controller.destroy();
             }
         }
         
-        // Cleanup services
-        for (const [name, service] of this.services) {
+        for (const [, service] of this.services) {
             if (typeof service.destroy === 'function') {
                 await service.destroy();
             }
@@ -178,7 +170,7 @@ class App {
         this.services.clear();
         this.isInitialized = false;
         
-        console.info('App: Application shutdown complete');
+        console.info('App: Application shutdown complete.');
     }
 }
 
