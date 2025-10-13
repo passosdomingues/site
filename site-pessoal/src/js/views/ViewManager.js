@@ -195,21 +195,35 @@ class ViewManager {
         const items = content.map(item => {
             const images = item.images || [];
             const mainImage = item.image || images[0] || {};
-            
+
+            const imageElements = images.length
+                ? images.map(img => `
+                    <div class="gallery-subitem">
+                        <img src="${this.escapeHtml(img.src)}" 
+                            alt="${this.escapeHtml(img.alt || item.title)}" 
+                            class="gallery-image" 
+                            loading="lazy">
+                        ${img.caption ? `
+                            <div class="gallery-caption">${this.escapeHtml(img.caption)}</div>
+                        ` : ''}
+                    </div>
+                `).join('')
+                : mainImage.src ? `
+                    <img src="${this.escapeHtml(mainImage.src)}" 
+                        alt="${this.escapeHtml(mainImage.alt || item.title)}" 
+                        class="gallery-image" 
+                        loading="lazy">
+                    ${mainImage.caption ? `
+                        <div class="gallery-caption">${this.escapeHtml(mainImage.caption)}</div>
+                    ` : ''}
+                ` : '';
+
             return `
                 <div class="gallery-item">
-                    ${mainImage.src ? `
-                        <img src="${this.escapeHtml(mainImage.src)}" 
-                             alt="${this.escapeHtml(mainImage.alt || item.title)}" 
-                             class="gallery-image" 
-                             loading="lazy">
-                    ` : ''}
+                    ${imageElements}
                     <div class="gallery-content">
                         <h3 class="gallery-title">${this.escapeHtml(item.title)}</h3>
                         <p class="gallery-description">${this.escapeHtml(item.description)}</p>
-                        ${mainImage.caption ? `
-                            <div class="gallery-caption">${this.escapeHtml(mainImage.caption)}</div>
-                        ` : ''}
                     </div>
                 </div>
             `;
