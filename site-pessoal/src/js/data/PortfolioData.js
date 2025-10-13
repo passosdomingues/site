@@ -1,194 +1,96 @@
 /**
  * @file PortfolioData.js
  * @author Rafael Passos Domingues
- * @brief Centralized content data for the portfolio website
- * @description Contains all static content, texts, images, and metadata
+ * @brief Centralized content data for the portfolio website sections.
+ * @description Contains all static content including detailed professional journey,
+ * research projects, innovation initiatives, and educational experiences.
  */
 
-/**
- * @constant {Object} PORTFOLIO_DATA
- * @brief Complete portfolio content structure
- */
 export const PORTFOLIO_DATA = {
     sections: [
         {
             id: 'about',
-            title: 'About Me',
-            subtitle: 'My academic and professional journey',
             type: 'timeline',
-            metadata: {
-                priority: 1,
-                visible: true,
-                order: 1,
-                icon: 'atom',
-                backgroundColor: 'var(--color-surface)'
-            },
+            title: 'About Me',
+            subtitle: 'An Interdisciplinary Journey in Science and Technology',
+            metadata: { visible: true, order: 1 },
             content: {
                 introduction: 'Physicist and Computer Scientist passionate about astrophysics research, data analysis, and technological innovation. My journey is a blend of academic research and practical application, always driven by curiosity about how the universe works and how we can use technology to solve real-world problems.',
                 timeline: [
-                    {
-                        period: '2014-2018',
-                        title: 'Bachelor\'s Degree in Physics, UNIFAL-MG',
-                        description: 'My academic journey began with a Bachelor\'s Degree in Physics at UNIFAL-MG. During this period, I immersed myself in the fascinating world of Galactic and Extragalactic Astrophysics, participating in research and contributing to scientific outreach at the UNIFAL-MG Astronomical Observatory.',
-                        highlights: ['Galactic and Extragalactic Astrophysics', 'Scientific Outreach', 'Astronomical Observation']
-                    },
-                    {
-                        period: '2019-2022',
-                        title: 'Physics Teacher, State Department of Education of Minas Gerais',
-                        description: 'After graduation, I dedicated myself to education, teaching Physics in three municipalities of Minas Gerais. This role challenged me to adapt scientific knowledge to diverse audiences.',
-                        highlights: ['Science Education', 'Experimental Physics', 'Pedagogical Innovation']
-                    },
-                    {
-                        period: '2021-2023',
-                        title: 'Master\'s Degree in Physics, UNIFEI',
-                        description: 'My Master\'s in Physics at UNIFEI focused on Active Galactic Nuclei, a field where I developed a deep appreciation for data analysis.',
-                        highlights: ['AGN Research', 'Advanced Data Analysis', 'Scientific Computing']
-                    },
-                    {
-                        period: '2023-Present',
-                        title: 'Bachelor\'s Degree in Computer Science, UNIFAL-MG',
-                        description: 'In 2023, I embarked on a new academic path, pursuing a Bachelor\'s Degree in Computer Science at UNIFAL-MG.',
-                        highlights: ['Software Development', 'Data Science', 'Machine Learning', 'Academia-Industry Connection']
-                    },
-                    {
-                        period: '2024-2025',
-                        title: 'Innovation Ecosystem and Maker Educator, NidusTec/UNIFAL-MG Incubator',
-                        description: 'At NidusTec, I embraced the role of Maker Educator, leading robotics, 3D modeling, and CNC workshop projects.',
-                        highlights: ['Entrepreneurship', 'Technology Transfer', 'Maker Education', '3D Modeling and CNC', 'Robotics']
-                    }
+                    { period: '2014-2018', title: "Bachelor's Degree in Physics, UNIFAL-MG", description: 'Immersed myself in Galactic and Extragalactic Astrophysics, contributing to research and scientific outreach at the UNIFAL-MG Astronomical Observatory.', highlights: ['Astrophysics', 'Scientific Outreach', 'Observation'] },
+                    { period: '2019-2022', title: 'Physics Teacher, State Dept. of Education of MG', description: 'Dedicated myself to education, teaching Physics and adapting scientific knowledge to diverse audiences, especially during the challenging 2020-2022 period.', highlights: ['Science Education', 'Pedagogical Innovation'] },
+                    { period: '2021-2023', title: "Master's Degree in Physics, UNIFEI", description: 'Focused on Active Galactic Nuclei, developing a deep appreciation for data analysis and laying the foundation for my ventures into data science.', highlights: ['AGN Research', 'Advanced Data Analysis', 'Scientific Computing'] },
+                    { period: '2023-Present', title: "Bachelor's Degree in Computer Science, UNIFAL-MG", description: 'Bridging the gap between theoretical physics and practical technological solutions. Joined the NidusTec/UNIFAL-MG Incubator to connect academia with the market.', highlights: ['Software Development', 'Data Science', 'Machine Learning'] },
+                    { period: '2024-2025', title: 'Innovation Educator, NidusTec/UNIFAL-MG', description: 'Led robotics, 3D modeling, and CNC projects as a Maker Educator, developing multidisciplinary prototypes and transforming ideas into tangible solutions.', highlights: ['Entrepreneurship', 'Maker Education', 'Innovation Management'] }
                 ],
-                currentFocus: 'Currently, I am a Computer Science student, specializing in image processing and computer graphics.',
-                reflection: 'My journey, seemingly disparate at first glance, is a testament to the power of interdisciplinary thinking.',
-                summary: 'A unique blend of academic rigor in physics and astrophysics with practical expertise in computer science.'
+                summary: 'My journey is a testament to interdisciplinary thinking. The convergence of physics, astrophysics, education, and computer science has equipped me with a unique perspective to leverage diverse knowledge and create impactful solutions.'
             }
         },
         {
             id: 'astrophysics-research',
-            title: 'Astrophysics Research',
-            subtitle: 'Work in galactic and extragalactic astrophysics',
-            type: 'cards',
-            metadata: {
-                priority: 2,
-                visible: true,
-                order: 2,
-                icon: 'galaxy',
-                backgroundColor: 'var(--color-gray-50)'
-            },
+            type: 'gallery',
+            title: 'Astrophysics Research & Outreach',
+            subtitle: 'Exploring the Cosmos from Dark Matter to Solar Flares',
+            metadata: { visible: true, order: 2 },
             content: [
                 {
-                    id: 'dark-matter-research',
-                    title: 'Unveiling the Invisible: My Journey in Dark Matter Research',
-                    description: 'My research in Dark Matter began with a deep dive into galactic rotation curves. The anomalous velocities of stars in galactic halos presented a profound enigma.',
-                    image: {
-                        src: 'bullet-cluster-black-matter_upscayl.png',
-                        alt: 'Bullet Cluster showing dark matter distribution',
-                        caption: 'Bullet Cluster: Visual Evidence of Dark Matter'
-                    },
-                    links: [
-                        { url: 'https://lnkd.in/deYnab4a', label: 'Related Research Publication', type: 'external' }
-                    ],
-                    tags: ['Dark Matter', 'Galactic Dynamics', 'Cosmology', 'Gravitational Lensing'],
-                    status: 'published',
-                    date: '2018-03-15'
+                    title: 'Dark Matter Research',
+                    description: 'My research began with galactic rotation curves, leading to an exploration of Dark Matter. Studying the Bullet Cluster provided compelling visual evidence, which I presented at the First Cycle of Astronomy Seminars at UNIFAL-MG.',
+                    image: { src: 'public/images/bullet-cluster-black-matter_upscayl.png', alt: 'Bullet Cluster showing dark matter distribution' },
+                    tags: ['Dark Matter', 'Cosmology', 'Gravitational Lensing']
+                },
+                {
+                    title: 'UNIFAL-MG Astronomical Observatory',
+                    description: 'As a science communicator from 2015 to 2018, I connected over 2,000 visitors to the cosmos using our 380mm Cassegrain telescope, making science accessible and inspiring curiosity in all ages.',
+                    image: { src: 'public/images/observatorio-unifal.jpg', alt: 'UNIFAL-MG Astronomical Observatory' },
+                    tags: ['Scientific Outreach', 'Astronomy', 'Public Engagement']
+                },
+                {
+                    title: 'Solar Radio Astronomy at CRAAM',
+                    description: 'In 2019, I visited CRAAM and operated the 7 GHz Solar Radio Polarimeter, gaining invaluable insights into solar data processing and the precision engineering required for radio astronomy.',
+                    image: { src: 'public/images/craamAntena.jpg', alt: 'Solar Radio Polarimeter antenna at CRAAM' },
+                    tags: ['Radio Astronomy', 'Solar Physics', 'Instrumentation']
+                },
+                {
+                    title: 'Operating the Historic LNA Zeiss Telescope',
+                    description: 'In 2016, I had the extraordinary opportunity to operate a historic Zeiss telescope at the National Astrophysics Laboratory (LNA), gaining hands-on experience in photometry, polarimetry, and instrument calibration.',
+                    image: { src: 'public/images/obs4.jpg', alt: 'LNA Observatory at sunset' },
+                    tags: ['Observational Astronomy', 'Photometry', 'Data Collection']
                 }
             ]
         },
         {
-            id: 'deep-learning-projects',
-            title: 'Deep Learning Projects',
-            subtitle: 'Applying ML/DL to medical imaging and astrophysics',
+            id: 'innovation-entrepreneurship',
             type: 'cards',
-            metadata: {
-                priority: 1,
-                visible: true,
-                order: 8,
-                icon: 'brain-outline',
-                backgroundColor: 'var(--color-gray-50)'
-            },
+            title: 'Innovation & Entrepreneurship',
+            subtitle: 'Connecting Academia with the Market at NidusTec Incubator',
+            metadata: { visible: true, order: 3 },
             content: [
                 {
-                    id: 'medical-image-diagnosis',
-                    title: 'Deep Learning for Medical Image Diagnosis',
-                    description: 'My exploration in Machine Learning and Deep Learning led me to a compelling application: skin cancer diagnosis from medical images.',
-                    links: [
-                        { url: 'https://lnkd.in/dcUAP2gw', label: 'Kaggle Notebook [Code]', type: 'external' }
-                    ],
-                    tags: ['Deep Learning', 'Medical Imaging', 'Skin Cancer Diagnosis', 'Machine Learning'],
-                    status: 'ongoing',
-                    date: '2021-Present'
+                    title: 'NidusTec Business Incubator (2024-2025)',
+                    description: 'As a Maker generalist, I led Robotics, 3D Modeling, and CNC projects, developing multidisciplinary prototypes and supporting incubated startups. This role expanded my expertise in Intellectual Property, Technology Transfer, and Open Innovation.',
+                    tags: ['Technology Transfer', 'Startup Mentoring', 'Maker Education'],
+                    status: 'Completed',
+                    date: '2025-01-01',
+                    links: [{ label: 'UNIFAL-MG News', url: 'https://jornal.unifal-mg.edu.br/capacitacoes-promovidas-pela-agencia-de-inovacao-e-a-incubadora-de-empresas-no-mes-de-junho-estimulam-a-cultura-empreendedora-e-a-inovacao-tecnologica-junto-a-comunidade/' }]
+                },
+                {
+                    title: 'ANPROTEC National Award for Innovative Entrepreneurship',
+                    description: 'A highlight of my time at NidusTec was receiving the prestigious Adelino Medeiros Trophy for "Incubator of Companies," recognizing our success in fostering new innovative ventures and building a robust innovation ecosystem.',
+                    tags: ['Award', 'ANPROTEC', 'Innovation Ecosystems'],
+                    status: 'Awarded',
+                    date: '2024-12-04',
+                    links: [{ label: 'Award News', url: 'https://anprotec.org.br/site/2024/12/premio-nacional-anprotec-de-empreendedorismo-inovador-2024-revela-vencedores-em-sao-jose-dos-campos/' }]
+                },
+                {
+                    title: 'Academic Publication on CERNE Model Validation',
+                    description: 'I co-authored and presented research on a methodology for measuring the impacts of the CERNE model in technology-based incubators at the 34th ANPROTEC Conference, contributing to the theoretical understanding of innovation.',
+                    tags: ['Publication', 'Research', 'CERNE Model', 'Entrepreneurship'],
+                    status: 'Published',
+                    date: '2024-12-04',
+                    links: [{ label: 'Conference Proceedings', url: 'https://anprotec.org.br/site/2024/12/premio-nacional-anprotec-de-empreendedorismo-inovador-2024-revela-vencedores-em-sao-jose-dos-campos/' }]
                 }
             ]
-        },
-        {
-            id: 'skills',
-            title: 'Skills and Competencies',
-            subtitle: 'Knowledge areas and technologies',
-            type: 'skills',
-            metadata: {
-                priority: 2,
-                visible: true,
-                order: 9,
-                icon: 'gears',
-                backgroundColor: 'var(--color-surface)'
-            },
-            content: {
-                categories: [
-                    {
-                        category: 'Technical Skills',
-                        skills: [
-                            { name: 'Physics and Astrophysics', proficiency: 95, years: 8, description: 'Deep understanding of physical laws and astronomical phenomena.' },
-                            { name: 'Data Science and Analysis', proficiency: 90, years: 6, description: 'Expertise in statistical analysis, data modeling, and extracting insights from complex datasets.' },
-                            { name: 'Python (NumPy, Pandas, Scikit-learn)', proficiency: 88, years: 5, description: 'Advanced proficiency in Python for scientific computing.' }
-                        ]
-                    },
-                    {
-                        category: 'Interpersonal and Creative Skills',
-                        skills: [
-                            { name: 'Analytical and Conceptual Thinking', proficiency: 96, years: 8, description: 'Ability to deconstruct complex problems and develop innovative solutions.' },
-                            { name: 'Creative Ideation and Ambition', proficiency: 91, years: 7, description: 'Driven to generate new ideas and pursue ambitious goals.' }
-                        ]
-                    }
-                ]
-            }
         }
-    ],
-
-    projects: [
-        {
-            id: 'interactive-portfolio-website',
-            title: 'Interactive Portfolio Website',
-            description: 'This personal portfolio website built with modern, minimalist, and responsive design philosophy.',
-            technologies: ['JavaScript', 'CSS3', 'HTML5', 'MVC Architecture', 'Vite'],
-            status: 'completed',
-            repository: 'https://github.com/rafaelpassosdomingues/rafaelpassosdomingues.github.io',
-            liveDemo: 'https://rafaelpassosdomingues.github.io',
-            features: [
-                'Responsive Design across all devices',
-                'Optimized Performance for fast loading times',
-                'Dynamic Content Loading with storytelling approach'
-            ]
-        }
-    ],
-
-    experiences: [],
-
-    hobbies: {
-        description: 'Beyond my academic and professional activities, I cultivate a variety of hobbies that enrich my life and provide new perspectives.',
-        items: [
-            {
-                id: 'gardening',
-                title: 'Gardening',
-                description: 'I find immense joy in cultivating a vegetable garden, a practice that connects me with nature.',
-                icon: 'leaf',
-                image: 'hobbies/gardening.jpg'
-            },
-            {
-                id: 'reading',
-                title: 'Reading',
-                description: 'I am an avid reader of science fiction, fantasy, and popular science.',
-                icon: 'book-open',
-                image: 'hobbies/reading.jpg'
-            }
-        ]
-    }
+    ]
 };
