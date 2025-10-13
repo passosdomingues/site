@@ -1,10 +1,10 @@
-import eventBus from './EventBus.js';
+import { eventBus } from './EventBus.js';
 
 /**
  * @brief Main application coordinator
  * @description Manages application lifecycle and coordinates MVC components
  */
-export class App {
+class App {
     constructor(config = {}) {
         this.config = config;
         this.controllers = new Map();
@@ -181,3 +181,5 @@ export class App {
         console.info('App: Application shutdown complete');
     }
 }
+
+export { App };

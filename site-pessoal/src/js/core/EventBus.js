@@ -2,7 +2,7 @@
  * @brief Global event bus for component communication
  * @description Implements publish-subscribe pattern for loose coupling between MVC components
  */
-export class EventBus {
+class EventBus {
     constructor() {
         this.events = new Map();
     }
@@ -68,4 +68,6 @@ export class EventBus {
 }
 
 // Singleton instance
-export const eventBus = new EventBus();
+const eventBus = new EventBus();
+
+export { EventBus, eventBus };

@@ -1,11 +1,11 @@
-import eventBus from '../core/EventBus.js';
-import ViewManager from '../views/ViewManager.js';
+import { eventBus } from '../core/EventBus.js';
+import { ViewManager } from '../views/ViewManager.js';
 
 /**
  * @brief Main application controller
  * @description Orchestrates views and models for the main content
  */
-export class MainController {
+class MainController {
     constructor(dependencies = {}) {
         this.eventBus = dependencies.eventBus || eventBus;
         this.contentModel = dependencies.contentModel;
@@ -183,3 +183,5 @@ export class MainController {
         console.info('MainController: Destroyed');
     }
 }
+
+export { MainController };

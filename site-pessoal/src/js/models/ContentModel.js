@@ -1131,4 +1131,4 @@ class ContentModel {
     }
 }
 
-export default ContentModel;
+export { ContentModel };
