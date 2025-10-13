@@ -77,7 +77,7 @@ export const PORTFOLIO_DATA = {
                     title: 'Unveiling the Invisible: My Journey in Dark Matter Research',
                     description: 'My research in Dark Matter began with a deep dive into galactic rotation curves. The anomalous velocities of stars in galactic halos presented a profound enigma: either the laws of gravity needed revision, or a vast amount of invisible matter was at play. This led me to explore the concept of Dark Matter, a mysterious substance that interacts gravitationally but not electromagnetically. A crucial moment in my understanding came from studying the Bullet Cluster, a cosmic collision where gravitational lensing revealed a mass distribution far greater than visible matter. The separation of ordinary and dark matter during this collision provided compelling visual evidence for the existence of Dark Matter. I had the privilege of presenting these findings at the First Cycle of Astronomy Seminars at UNIFAL-MG, transforming years of observation into theoretical rigor and sharing the frontiers of cosmology with a captivated audience.',
                     image: { 
-                        src: 'public/images/bullet-cluster-black-matter_upscayl.png', 
+                        src: 'images/bullet-cluster-black-matter_upscayl.png', 
                         alt: 'Bullet Cluster showing dark matter distribution, key evidence for dark matter',
                         caption: 'Bullet Cluster: Visual Evidence of Dark Matter (Credit: NASA/CXC/M.Weiss)'
                     },
@@ -93,7 +93,7 @@ export const PORTFOLIO_DATA = {
                     title: 'Astronomy Seminar Series: Stellar Orbits and the Dark Universe',
                     description: 'This image captures a significant moment: a lecture I delivered at the First Cycle of Astronomy Seminars at UNIFAL-MG. My presentation focused on Stellar Orbits in the Galaxy, where I shared simulations of stellar movements based on mass distribution models and numerical solutions for stellar accelerations, velocities, and positions in the Milky Way. I discussed the evidence that led to the postulates of Dark Matter and Modified Gravity, particularly highlighting the Rotation Curves of galaxies.',
                     image: { 
-                        src: 'public/images/seminario.jpg', 
+                        src: 'images/seminario.jpg', 
                         alt: 'Astronomy seminar presentation on stellar orbits and dark matter',
                         caption: 'Presentation on Stellar Orbits and Dark Matter at UNIFAL-MG Seminar (2019)'
                     },
@@ -132,7 +132,7 @@ export const PORTFOLIO_DATA = {
                     title: 'A Window to the Universe: Scientific Outreach and Research at UNIFAL-MG',
                     description: 'During my time as a member of the UNIFAL-MG Astronomical Observatory team (2015 to 2018), I had the privilege of connecting over 2,000 visitors from Alfenas and the surrounding region to the wonders of the cosmos. As a science communicator, I used our magnificent 380mm Cassegrain telescope to reveal the impressive craters of the Moon, the majestic rings of Saturn, the Galilean moons of Jupiter, and the beauty of star clusters. These experiences, shared with colleagues like José Carlos da Silva and Professor Artur Justiniano, reinforced my belief in open science and non-formal education.',
                     image: { 
-                        src: 'public/images/observatorio-unifal.jpg', 
+                        src: 'images/observatorio-unifal.jpg', 
                         alt: 'UNIFAL-MG Astronomical Observatory with a Cassegrain telescope',
                         caption: 'UNIFAL-MG Astronomical Observatory: Inspiring the next generation of scientists'
                     },
@@ -146,12 +146,12 @@ export const PORTFOLIO_DATA = {
                     description: 'Beyond public outreach, the UNIFAL-MG Observatory was a center for research and astrophotography. I witnessed and contributed to significant achievements, including the pioneering work of my colleague José Carlos in detecting the transit of exoplanet WASP-76b. My own efforts in astrophotography led me to capture impressive images, such as the Sombrero Galaxy (M104/NGC 4594) in a 34-minute exposure and the spiral arms of the Southern Pinwheel Galaxy (M83/NGC 5236).',
                     images: [
                         { 
-                            src: 'obsLua.jpg', 
+                            src: 'images/obsLua.jpg', 
                             alt: 'Moon observation', 
                             caption: 'Detailed view of the Moon captured at UNIFAL-MG Observatory' 
                         },
                         { 
-                            src: 'public/images/obsGalaxiaSombrero.jpg', 
+                            src: 'images/obsGalaxiaSombrero.jpg', 
                             alt: 'Sombrero Galaxy', 
                             caption: 'Sombrero Galaxy (M104/NGC 4594) captured through astrophotography' 
                         }
@@ -184,17 +184,17 @@ export const PORTFOLIO_DATA = {
                     description: 'In 2019, shortly after completing my Physics degree at UNIFAL-MG, I had the distinct honor of visiting CRAAM (Mackenzie Center for Radio Astronomy and Astrophysics). The highlight was the opportunity to learn and operate the 7 GHz Solar Radio Polarimeter, a critical instrument for monitoring our host star. Guided by colleague Raphael Cesar Pimenta and engineer Amauri Shossei Kudaka, I gained invaluable insights into the intricate electronic and computational systems that process solar data.',
                     images: [
                         { 
-                            src: 'public/images/craamAntena.jpg', 
+                            src: 'images/craamAntena.jpg', 
                             alt: 'Solar Radio Polarimeter antenna at CRAAM', 
                             caption: '7 GHz Solar Radio Polarimeter (CRAAM)' 
                         },
                         { 
-                            src: 'public/images/craamControle.jpg', 
+                            src: 'images/craamControle.jpg', 
                             alt: 'CRAAM control room', 
                             caption: 'CRAAM Control Room: Inspecting electronic and computational systems' 
                         },
                         { 
-                            src: 'public/images/craamDomo.jpg', 
+                            src: 'images/craamDomo.jpg', 
                             alt: 'Inside CRAAM dome', 
                             caption: 'Inside CRAAM Dome: 1.5-meter antenna' 
                         }
@@ -227,12 +227,12 @@ export const PORTFOLIO_DATA = {
                     description: 'During my Physics course at UNIFAL-MG (2014-2018), I had the extraordinary opportunity to operate, for two nights in 2016, a truly special instrument at the National Astrophysics Laboratory (LNA/OPD). This was a historic Zeiss, acquired from former East Germany in the 1960s/70s through fascinating negotiations involving coffee. This classic Cassegrain telescope, with its parabolic primary and hyperbolic secondary, features an f/12.5 focal ratio and requires manual pointing.',
                     images: [
                         { 
-                            src: 'public/images/obs4.jpg', 
+                            src: 'images/obs4.jpg', 
                             alt: 'LNA Observatory at sunset', 
                             caption: 'Pico dos Dias Observatory (LNA) at sunset, a serene setting for scientific discovery' 
                         },
                         { 
-                            src: 'public/images/obs5.jpg', 
+                            src: 'images/obs5.jpg', 
                             alt: 'Aerial view of LNA Observatory', 
                             caption: 'Aerial view of National Astrophysics Laboratory (LNA), showing its impressive infrastructure' 
                         }
@@ -311,7 +311,7 @@ export const PORTFOLIO_DATA = {
                     title: 'NidusTec Business Incubator: Connecting Academia and Entrepreneurship',
                     description: 'In 2023, I began a new academic journey, pursuing a Bachelor\'s Degree in Computer Science at UNIFAL-MG (2023–2029). Concurrently, I had the invaluable opportunity to join the team at the NidusTec/UNIFAL-MG Technology-Based Business Incubator (2024–2025). This period was transformative, allowing me to transition from operational tasks to strategic contributions. As a Maker generalist, I led Robotics, 3D Modeling, and CNC workshop projects, applying Computer Graphics and Image Processing techniques to develop multidisciplinary prototypes.',
                     image: { 
-                        src: 'public/images/nidus.jpg', 
+                        src: 'images/nidus.jpg', 
                         alt: 'Rafael at NidusTec Laboratory', 
                         caption: 'Working as a Maker generalist at NidusTec, fostering innovation and entrepreneurship'
                     },
@@ -453,28 +453,28 @@ export const PORTFOLIO_DATA = {
                         title: 'Gardening',
                         description: 'I find immense joy in cultivating a vegetable garden, a practice that connects me with nature and teaches me patience and resilience. It\'s a tangible way to see the results of care and dedication.',
                         icon: 'leaf',
-                        image: 'public/images/hobbies/gardening.jpg'
+                        image: 'images/hobbies/gardening.jpg'
                     },
                     {
                         id: 'reading',
                         title: 'Reading',
                         description: 'I am an avid reader of science fiction, fantasy, and popular science. Books are my gateway to new worlds and ideas, fueling my imagination and passion for learning.',
                         icon: 'book-open',
-                        image: 'public/images/hobbies/reading.jpg'
+                        image: 'images/hobbies/reading.jpg'
                     },
                     {
                         id: 'tinkering',
                         title: 'DIY Projects and Electronics',
                         description: 'As a hands-on person, I love tinkering with electronics, building circuits, and working on DIY projects. This maker spirit is a constant source of creativity and problem-solving.',
                         icon: 'tools',
-                        image: 'public/images/hobbies/tinkering.jpg'
+                        image: 'images/hobbies/tinkering.jpg'
                     },
                     {
                         id: 'astrophotography',
                         title: 'Astrophotography',
                         description: 'Combining my love for astronomy and technology, I enjoy capturing images of the night sky. It\'s a challenging but rewarding hobby that allows me to share the beauty of the cosmos with others.',
                         icon: 'camera',
-                        image: 'public/images/hobbies/astrophotography.jpg'
+                        image: 'images/hobbies/astrophotography.jpg'
                     }
                 ]
             }
