@@ -46,7 +46,7 @@
   background: var(--color-primary-700);
   border-color: var(--color-primary-700);
   transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-md), 0 0 8px var(--color-neon-soft);
 }
 
 .btn--secondary {
@@ -59,7 +59,7 @@
   background: var(--color-primary-600);
   color: var(--color-text-inverse);
   transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-md), 0 0 8px var(--color-neon-soft);
 }
 
 .btn--tertiary {
@@ -98,7 +98,7 @@
 
 .card:hover {
   transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--shadow-lg), 0 0 10px var(--color-neon-soft);
   border-color: var(--color-border-secondary);
 }
 
@@ -554,3 +554,65 @@
     transition: none;
   }
 }
+
+/* ===== Neon Icon Style ===== */
+.icon-neon {
+  color: var(--color-neon-soft);
+  text-shadow: 0 0 5px var(--color-neon-soft), 0 0 10px var(--color-neon-soft), 0 0 15px var(--color-neon-soft);
+  transition: text-shadow 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.icon-neon:hover {
+  color: var(--color-primary-500); /* Slightly change color on hover */
+  text-shadow: 0 0 8px var(--color-primary-500), 0 0 15px var(--color-primary-500), 0 0 25px var(--color-primary-500);
+}
+
+
+/* ===== Smooth Transitions ===== */
+.btn, .card, .navigation-link {
+  transition: all 0.3s ease-in-out;
+}
+
+.btn:hover, .card:hover, .navigation-link:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Ensure images also have smooth transitions for hover effects if any */
+.card-image {
+  transition: transform 0.3s ease-in-out;
+}
+
+.card:hover .card-image {
+  transform: scale(1.02);
+}
+
+
+
+/* ===== Neon Effects ===== */
+.neon-text {
+  color: var(--color-neon-soft);
+  text-shadow: 
+    0 0 5px var(--color-neon-soft),
+    0 0 10px var(--color-neon-soft),
+    0 0 20px var(--color-neon-soft),
+    0 0 40px rgba(0, 240, 255, 0.5),
+    0 0 80px rgba(0, 240, 255, 0.3);
+}
+
+.neon-border {
+  border: 2px solid var(--color-neon-soft);
+  box-shadow: 
+    0 0 5px var(--color-neon-soft),
+    0 0 10px var(--color-neon-soft),
+    0 0 20px var(--color-neon-soft),
+    0 0 40px rgba(0, 240, 255, 0.5);
+}
+
+.neon-icon {
+  color: var(--color-neon-soft);
+  text-shadow: 
+    0 0 3px var(--color-neon-soft),
+    0 0 6px var(--color-neon-soft);
+}
+
