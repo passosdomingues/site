@@ -5,6 +5,12 @@ import eventBus from '../core/EventBus.js';
  * @description Provides common functionality and lifecycle methods for views
  */
 export class BaseView {
+    /**
+     * @brief Constructs a BaseView instance.
+     * @param {Object} config - The configuration object.
+     * @param {HTMLElement} [config.container] - The main DOM container for the view.
+     * @param {Object} [config.eventBus] - The event bus instance for communication.
+     */
     constructor(config = {}) {
         this.container = config.container;
         this.eventBus = config.eventBus || eventBus;
@@ -16,25 +22,26 @@ export class BaseView {
     }
 
     /**
-     * @brief Initialize the view
-     * @description Called before first render, sets up initial state
+     * @brief Initialize the view.
+     * @description Called before the first render, sets up initial state.
+     * @returns {Promise<void>}
      */
     async init() {
         if (this.isDestroyed) {
-            throw new Error('BaseView: Cannot initialize destroyed view');
+            throw new Error('BaseView: Cannot initialize a destroyed view.');
         }
         
         console.info(`BaseView: Initializing ${this.constructor.name}`);
     }
 
     /**
-     * @brief Render the view
-     * @description Main render method to be implemented by subclasses
+     * @brief Render the view.
+     * @description Main render method to be implemented by subclasses.
      * @returns {Promise<void>}
      */
     async render() {
         if (this.isDestroyed) {
-            throw new Error('BaseView: Cannot render destroyed view');
+            throw new Error('BaseView: Cannot render a destroyed view.');
         }
         
         this.isRendered = true;
@@ -42,14 +49,14 @@ export class BaseView {
     }
 
     /**
-     * @brief Update the view
-     * @description Updates view with new data
-     * @param {Object} data - Update data
+     * @brief Update the view.
+     * @description Updates the view with new data.
+     * @param {Object} data - The data for the update.
      * @returns {Promise<void>}
      */
     async update(data) {
         if (!this.isRendered || this.isDestroyed) {
-            console.warn(`BaseView: Cannot update ${this.constructor.name} - not rendered or destroyed`);
+            console.warn(`BaseView: Cannot update ${this.constructor.name} - not rendered or is destroyed.`);
             return;
         }
         
@@ -57,29 +64,29 @@ export class BaseView {
     }
 
     /**
-     * @brief Register DOM element
-     * @param {string} key - Element identifier
-     * @param {HTMLElement} element - DOM element
+     * @brief Register a DOM element for easy access.
+     * @param {string} key - The identifier for the element.
+     * @param {HTMLElement} element - The DOM element to register.
      */
     registerElement(key, element) {
         this.elements.set(key, element);
     }
 
     /**
-     * @brief Get registered element
-     * @param {string} key - Element identifier
-     * @returns {HTMLElement|undefined} Registered element
+     * @brief Get a registered DOM element.
+     * @param {string} key - The identifier for the element.
+     * @returns {HTMLElement|undefined} The registered element or undefined if not found.
      */
     getElement(key) {
         return this.elements.get(key);
     }
 
     /**
-     * @brief Add event listener to element
-     * @param {HTMLElement|string} element - Element or element key
-     * @param {string} event - Event type
-     * @param {Function} handler - Event handler
-     * @param {Object} options - Event listener options
+     * @brief Add an event listener to an element and track it for cleanup.
+     * @param {HTMLElement|string} element - The element or its registered key.
+     * @param {string} event - The event type (e.g., 'click').
+     * @param {Function} handler - The event handler function.
+     * @param {Object} [options={}] - The event listener options.
      */
     addEventListener(element, event, handler, options = {}) {
         const actualElement = typeof element === 'string' ? this.getElement(element) : element;
@@ -100,24 +107,22 @@ export class BaseView {
     }
 
     /**
-     * @brief Remove event listener
-     * @param {HTMLElement|string} element - Element or element key
-     * @param {string} event - Event type
-     * @param {Function} handler - Event handler to remove
+     * @brief Remove a specific event listener from an element.
+     * @param {HTMLElement|string} element - The element or its registered key.
+     * @param {string} event - The event type.
+     * @param {Function} handler - The handler function to remove.
      */
     removeEventListener(element, event, handler) {
         const actualElement = typeof element === 'string' ? this.getElement(element) : element;
         
-        if (!actualElement) {
-            return;
+        if (actualElement) {
+            actualElement.removeEventListener(event, handler);
         }
-        
-        actualElement.removeEventListener(event, handler);
     }
 
     /**
-     * @brief Show the view
-     * @description Makes the view visible
+     * @brief Show the view.
+     * @description Makes the view's container visible.
      */
     show() {
         if (this.container) {
@@ -129,8 +134,8 @@ export class BaseView {
     }
 
     /**
-     * @brief Hide the view
-     * @description Hides the view
+     * @brief Hide the view.
+     * @description Hides the view's container.
      */
     hide() {
         if (this.container) {
@@ -141,16 +146,15 @@ export class BaseView {
     }
 
     /**
-     * @brief Create DOM element with attributes
-     * @param {string} tag - HTML tag name
-     * @param {Object} attributes - Element attributes
-     * @param {string} textContent - Text content
-     * @returns {HTMLElement} Created element
+     * @brief Create a DOM element with specified attributes and content.
+     * @param {string} tag - The HTML tag name (e.g., 'div').
+     * @param {Object} [attributes={}] - An object of element attributes.
+     * @param {string} [textContent=''] - The text content for the element.
+     * @returns {HTMLElement} The created DOM element.
      */
     createElement(tag, attributes = {}, textContent = '') {
         const element = document.createElement(tag);
         
-        // Set attributes
         Object.entries(attributes).forEach(([key, value]) => {
             if (key === 'className') {
                 element.className = value;
@@ -166,7 +170,6 @@ export class BaseView {
             }
         });
         
-        // Set text content
         if (textContent) {
             element.textContent = textContent;
         }
@@ -175,9 +178,9 @@ export class BaseView {
     }
 
     /**
-     * @brief Escape HTML to prevent XSS
-     * @param {string} text - Text to escape
-     * @returns {string} Escaped text
+     * @brief Escape HTML to prevent XSS vulnerabilities.
+     * @param {string} text - The text to escape.
+     * @returns {string} The escaped HTML string.
      */
     escapeHtml(text) {
         if (!text) return '';
@@ -188,79 +191,79 @@ export class BaseView {
     }
 
     /**
-     * @brief Add CSS class to element
-     * @param {HTMLElement|string} element - Element or element key
-     * @param {string} className - CSS class to add
+     * @brief Add a CSS class to an element.
+     * @param {HTMLElement|string} element - The element or its registered key.
+     * @param {string} className - The CSS class to add.
      */
     addClass(element, className) {
         const actualElement = typeof element === 'string' ? this.getElement(element) : element;
-        
         if (actualElement) {
             actualElement.classList.add(className);
         }
     }
 
     /**
-     * @brief Remove CSS class from element
-     * @param {HTMLElement|string} element - Element or element key
-     * @param {string} className - CSS class to remove
+     * @brief Remove a CSS class from an element.
+     * @param {HTMLElement|string} element - The element or its registered key.
+     * @param {string} className - The CSS class to remove.
      */
     removeClass(element, className) {
         const actualElement = typeof element === 'string' ? this.getElement(element) : element;
-        
         if (actualElement) {
             actualElement.classList.remove(className);
         }
     }
 
     /**
-     * @brief Toggle CSS class on element
-     * @param {HTMLElement|string} element - Element or element key
-     * @param {string} className - CSS class to toggle
+     * @brief Toggle a CSS class on an element.
+     * @param {HTMLElement|string} element - The element or its registered key.
+     * @param {string} className - The CSS class to toggle.
      */
     toggleClass(element, className) {
         const actualElement = typeof element === 'string' ? this.getElement(element) : element;
-        
         if (actualElement) {
             actualElement.classList.toggle(className);
         }
     }
 
     /**
-     * @brief Set element text content
-     * @param {HTMLElement|string} element - Element or element key
-     * @param {string} text - Text content
+     * @brief Set the text content of an element safely.
+     * @param {HTMLElement|string} element - The element or its registered key.
+     * @param {string} text - The text content to set.
      */
     setText(element, text) {
         const actualElement = typeof element === 'string' ? this.getElement(element) : element;
-        
         if (actualElement) {
-            actualElement.textContent = this.escapeHtml(text);
+            actualElement.textContent = text; // textContent automatically escapes HTML
         }
     }
 
     /**
-     * @brief Set element HTML content
-     * @param {HTMLElement|string} element - Element or element key
-     * @param {string} html - HTML content
+     * @brief Set the inner HTML of an element.
+     * @param {HTMLElement|string} element - The element or its registered key.
+     * @param {string} html - The HTML string to set. Use with caution.
      */
     setHTML(element, html) {
         const actualElement = typeof element === 'string' ? this.getElement(element) : element;
-        
         if (actualElement) {
             actualElement.innerHTML = html;
         }
     }
 
     /**
-     * @brief Destroy the view
-     * @description Cleans up event listeners and references
+     * @brief Destroy the view and clean up resources.
+     * @description Removes all registered event listeners and clears element references.
      */
     destroy() {
-        // Remove all event listeners
-        this.eventHandlers.forEach((handlers, key) => {
+        if (this.isDestroyed) return;
+
+        // Remove all tracked event listeners
+        this.eventHandlers.forEach((handlers) => {
             handlers.forEach(({ element, handler, options }) => {
-                element.removeEventListener(key.split('_')[1], handler, options);
+                const eventName = [...element.getAttributeNames()].find(attr => attr.startsWith('on'))?.substring(2);
+                if (eventName) {
+                    element.removeEventListener(eventName, handler, options);
+                }
             });
         });
         

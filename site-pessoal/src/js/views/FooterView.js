@@ -1,10 +1,15 @@
-import BaseView from './BaseView.js';
+import { BaseView } from './BaseView.js';
 
 /**
  * @brief Footer view
- * @description Renders application footer with links and copyright
+ * @description Renders the application footer with links and copyright information.
  */
 export class FooterView extends BaseView {
+    /**
+     * @brief Constructs a FooterView instance.
+     * @param {Object} [config={}] - The configuration object.
+     * @param {Object} [config.footerData] - The data used to render the footer.
+     */
     constructor(config = {}) {
         super(config);
         this.footerData = config.footerData || {};
@@ -12,7 +17,9 @@ export class FooterView extends BaseView {
     }
 
     /**
-     * @brief Initialize footer view
+     * @brief Initialize the footer view.
+     * @description Sets up default data if none is provided.
+     * @returns {Promise<void>}
      */
     async init() {
         await super.init();
@@ -25,17 +32,19 @@ export class FooterView extends BaseView {
     }
 
     /**
-     * @brief Render footer
+     * @brief Render the footer into its container.
+     * @description Generates the footer HTML and attaches event listeners.
+     * @returns {Promise<void>}
      */
     async render() {
         await super.render();
         
         if (!this.container) {
-            throw new Error('FooterView: Container not available');
+            throw new Error('FooterView: Container is not available for rendering.');
         }
 
         const footerHTML = this.createFooterHTML();
-        this.container.innerHTML = footerHTML;
+        this.setHTML(this.container, footerHTML);
         
         this.setupEventListeners();
         
@@ -43,8 +52,8 @@ export class FooterView extends BaseView {
     }
 
     /**
-     * @brief Create footer HTML
-     * @returns {string} HTML string
+     * @brief Create the main footer HTML structure.
+     * @returns {string} The complete HTML string for the footer.
      */
     createFooterHTML() {
         return `
@@ -64,8 +73,8 @@ export class FooterView extends BaseView {
     }
 
     /**
-     * @brief Create info section
-     * @returns {string} Info section HTML
+     * @brief Create the info section HTML.
+     * @returns {string} The HTML for the info section.
      */
     createInfoSection() {
         return `
@@ -77,8 +86,8 @@ export class FooterView extends BaseView {
     }
 
     /**
-     * @brief Create links section
-     * @returns {string} Links section HTML
+     * @brief Create the links section HTML.
+     * @returns {string} The HTML for the navigation links section.
      */
     createLinksSection() {
         if (!this.footerData.links) return '';
@@ -104,8 +113,8 @@ export class FooterView extends BaseView {
     }
 
     /**
-     * @brief Create social links section
-     * @returns {string} Social links HTML
+     * @brief Create the social media links section HTML.
+     * @returns {string} The HTML for the social links section.
      */
     createSocialSection() {
         if (!this.footerData.social) return '';
@@ -116,8 +125,8 @@ export class FooterView extends BaseView {
                target="_blank" 
                rel="noopener noreferrer"
                aria-label="${this.escapeHtml(social.name)}">
-                <span class="footer-social-icon">${social.icon || '🔗'}</span>
-                <span class="footer-social-name">${this.escapeHtml(social.name)}</span>
+                <span class="footer-social-icon" aria-hidden="true">${social.icon || '🔗'}</span>
+                <span class="footer-social-name sr-only">${this.escapeHtml(social.name)}</span>
             </a>
         `).join('');
         
@@ -130,15 +139,15 @@ export class FooterView extends BaseView {
     }
 
     /**
-     * @brief Create copyright section
-     * @returns {string} Copyright HTML
+     * @brief Create the copyright section HTML.
+     * @returns {string} The HTML for the copyright section.
      */
     createCopyrightSection() {
         return `
             <div class="footer-copyright">
                 <p class="footer-text">
                     &copy; ${this.currentYear} ${this.escapeHtml(this.footerData.name)}. 
-                    ${this.footerData.copyrightText || 'All rights reserved.'}
+                    ${this.escapeHtml(this.footerData.copyrightText) || 'All rights reserved.'}
                 </p>
                 ${this.footerData.additionalText ? `
                     <p class="footer-additional-text">${this.escapeHtml(this.footerData.additionalText)}</p>
@@ -148,10 +157,9 @@ export class FooterView extends BaseView {
     }
 
     /**
-     * @brief Set up event listeners
+     * @brief Set up event listeners for footer elements.
      */
     setupEventListeners() {
-        // Add click listeners to footer links
         const footerLinks = this.container.querySelectorAll('.footer-link, .footer-social-link');
         footerLinks.forEach(link => {
             this.addEventListener(link, 'click', (event) => {
@@ -161,27 +169,27 @@ export class FooterView extends BaseView {
     }
 
     /**
-     * @brief Handle footer link clicks
-     * @param {Event} event - Click event
-     * @param {HTMLElement} link - Clicked link element
+     * @brief Handle clicks on footer links.
+     * @param {Event} event - The click event object.
+     * @param {HTMLElement} link - The clicked link element.
      */
     onFooterLinkClick(event, link) {
         const url = link.getAttribute('href');
-        const isExternal = link.getAttribute('target') === '_blank';
+        const isExternal = link.target === '_blank';
         
         this.eventBus.publish('footer:link:clicked', {
             url,
             isExternal,
-            text: link.textContent,
-            event
+            text: link.textContent.trim(),
+            element: link
         });
         
         console.info('FooterView: Footer link clicked', { url, isExternal });
     }
 
     /**
-     * @brief Get default footer data
-     * @returns {Object} Default footer data
+     * @brief Get the default data for the footer.
+     * @returns {Object} An object containing default footer content.
      */
     getDefaultFooterData() {
         return {
@@ -201,48 +209,39 @@ export class FooterView extends BaseView {
                 {
                     title: 'Resources',
                     links: [
-                        { label: 'GitHub', url: 'https://github.com', external: true },
-                        { label: 'LinkedIn', url: 'https://linkedin.com', external: true },
-                        { label: 'CV/Resume', url: '#', external: false }
+                        { label: 'GitHub', url: 'https://github.com/rafaelpassosdomingues', external: true },
+                        { label: 'LinkedIn', url: 'https://www.linkedin.com/in/rafael-passos-domingues/', external: true },
+                        { label: 'CV/Resume', url: '/path-to-cv.pdf', external: true }
                     ]
                 }
             ],
             social: [
-                {
-                    name: 'GitHub',
-                    url: 'https://github.com',
-                    icon: '🐙'
-                },
-                {
-                    name: 'LinkedIn',
-                    url: 'https://linkedin.com',
-                    icon: '💼'
-                },
-                {
-                    name: 'Email',
-                    url: 'mailto:contact@example.com',
-                    icon: '✉️'
-                }
+                { name: 'GitHub', url: 'https://github.com/rafaelpassosdomingues', icon: '🐙' },
+                { name: 'LinkedIn', url: 'https://www.linkedin.com/in/rafael-passos-domingues/', icon: '💼' },
+                { name: 'Email', url: 'mailto:rafael.passos.domingues@gmail.com', icon: '✉️' }
             ]
         };
     }
 
     /**
-     * @brief Update copyright year
+     * @brief Update the copyright year in the rendered footer.
      */
     updateCopyrightYear() {
-        this.currentYear = new Date().getFullYear();
+        const newYear = new Date().getFullYear();
+        if (this.currentYear === newYear) return;
+
+        this.currentYear = newYear;
         const copyrightElement = this.container.querySelector('.footer-copyright .footer-text');
         
         if (copyrightElement) {
-            copyrightElement.textContent = 
-                `© ${this.currentYear} ${this.footerData.name}. ${this.footerData.copyrightText || 'All rights reserved.'}`;
+            copyrightElement.innerHTML = `&copy; ${this.currentYear} ${this.escapeHtml(this.footerData.name)}. ${this.escapeHtml(this.footerData.copyrightText) || 'All rights reserved.'}`;
         }
     }
 
     /**
-     * @brief Update footer data
-     * @param {Object} newData - New footer data
+     * @brief Update the footer with new data and re-render if necessary.
+     * @param {Object} newData - The new data to merge with existing footer data.
+     * @returns {Promise<void>}
      */
     async update(newData) {
         await super.update(newData);
