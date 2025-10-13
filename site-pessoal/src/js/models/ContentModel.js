@@ -7,6 +7,8 @@
  * experiences, and data consumed by views with caching, validation, and extensible architecture.
  */
 
+import { eventBus } from '../core/EventBus.js';
+
 /**
  * @constant {Object} CONTENT_TYPES
  * @brief Defines available content display types and their configurations
