@@ -1,4 +1,4 @@
-import { BaseView } from './BaseView.js';
+import BaseView from './BaseView.js';
 
 /**
  * @brief Footer view

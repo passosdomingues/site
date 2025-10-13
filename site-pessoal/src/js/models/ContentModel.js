@@ -7,7 +7,7 @@
  * experiences, and data consumed by views with caching, validation, and extensible architecture.
  */
 
-import { eventBus } from '../core/EventBus.js';
+import eventBus from '../core/EventBus.js';
 
 /**
  * @constant {Object} CONTENT_TYPES
@@ -389,37 +389,37 @@ class ContentModel {
      */
     getAboutContent() {
         return {
-            introduction: 'Físico e Cientista da Computação apaixonado por pesquisa em astrofísica, análise de dados e inovação tecnológica. Minha jornada é uma mistura de pesquisa acadêmica e aplicação prática, sempre impulsionada pela curiosidade sobre como o universo funciona e como podemos usar a tecnologia para resolver problemas do mundo real.',
+            introduction: 'Physicist and Computer Scientist passionate about astrophysics research, data analysis, and technological innovation. My journey is a blend of academic research and practical application, always driven by curiosity about how the universe works and how we can use technology to solve real-world problems.',
             timeline: [
                 {
                     period: '2014-2018',
-                    title: 'Bacharelado em Física, UNIFAL-MG',
-                    description: 'Minha jornada acadêmica começou com o Bacharelado em Física na UNIFAL-MG. Durante este período, mergulhei no fascinante mundo da Astrofísica Galáctica e Extragaláctica, participando de pesquisas e contribuindo para a divulgação científica no Observatório Astronômico da UNIFAL-MG. Esta experiência acendeu minha paixão por compreender o cosmos e comunicar conceitos científicos complexos.',
-                    highlights: ['Astrofísica Galáctica e Extragaláctica', 'Divulgação Científica', 'Observação Astronômica']
+                    title: 'Bachelor\'s Degree in Physics, UNIFAL-MG',
+                    description: 'My academic journey began with a Bachelor\'s Degree in Physics at UNIFAL-MG. During this period, I immersed myself in the fascinating world of Galactic and Extragalactic Astrophysics, participating in research and contributing to scientific outreach at the UNIFAL-MG Astronomical Observatory. This experience ignited my passion for understanding the cosmos and communicating complex scientific concepts.',
+                    highlights: ['Galactic and Extragalactic Astrophysics', 'Scientific Outreach', 'Astronomical Observation']
                 },
                 {
                     period: '2019-2022',
-                    title: 'Professor de Física, Secretaria de Estado de Educação de Minas Gerais',
-                    description: 'Após a graduação, dediquei-me à educação, lecionando Física em três municípios de Minas Gerais. Este papel me desafiou a adaptar o conhecimento científico a diversas audiências, especialmente durante o período sem precedentes de 2020-2022, onde apliquei expertise técnica para superar obstáculos educacionais.',
-                    highlights: ['Educação Científica', 'Física Experimental', 'Inovação Pedagógica']
+                    title: 'Physics Teacher, State Department of Education of Minas Gerais',
+                    description: 'After graduation, I dedicated myself to education, teaching Physics in three municipalities of Minas Gerais. This role challenged me to adapt scientific knowledge to diverse audiences, especially during the unprecedented period of 2020-2022, where I applied technical expertise to overcome educational obstacles.',
+                    highlights: ['Science Education', 'Experimental Physics', 'Pedagogical Innovation']
                 },
                 {
                     period: '2021-2023',
-                    title: 'Mestrado em Física, UNIFEI',
-                    description: 'Meu Mestrado em Física na UNIFEI focou em Núcleos Ativos de Galáxias, um campo onde desenvolvi uma profunda apreciação pela análise de dados. Esta experiência de pesquisa solidificou meu interesse em extrair insights de conjuntos de dados complexos, lançando as bases para meus futuros empreendimentos em ciência de dados.',
-                    highlights: ['Pesquisa em AGN', 'Análise Avançada de Dados', 'Computação Científica']
+                    title: 'Master\'s Degree in Physics, UNIFEI',
+                    description: 'My Master\'s in Physics at UNIFEI focused on Active Galactic Nuclei, a field where I developed a deep appreciation for data analysis. This research experience solidified my interest in extracting insights from complex datasets, laying the foundation for my future ventures in data science.',
+                    highlights: ['AGN Research', 'Advanced Data Analysis', 'Scientific Computing']
                 },
                 {
-                    period: '2023-Presente',
-                    title: 'Bacharelado em Ciência da Computação, UNIFAL-MG',
-                    description: 'Em 2023, embarquei em um novo caminho acadêmico, cursando Bacharelado em Ciência da Computação na UNIFAL-MG. Esta transição reflete meu compromisso em preencher a lacuna entre a física teórica e as soluções tecnológicas práticas. Concomitantemente, juntei-me à Incubadora de Empresas de Base Tecnológica NidusTec/UNIFAL-MG, conectando a academia com o mercado e fomentando a inovação.',
-                    highlights: ['Desenvolvimento de Software', 'Ciência de Dados', 'Aprendizado de Máquina', 'Conexão Academia-Indústria']
+                    period: '2023-Present',
+                    title: 'Bachelor\'s Degree in Computer Science, UNIFAL-MG',
+                    description: 'In 2023, I embarked on a new academic path, pursuing a Bachelor\'s Degree in Computer Science at UNIFAL-MG. This transition reflects my commitment to bridging the gap between theoretical physics and practical technological solutions. Concurrently, I joined the NidusTec/UNIFAL-MG Technology-Based Business Incubator, connecting academia with the market and fostering innovation.',
+                    highlights: ['Software Development', 'Data Science', 'Machine Learning', 'Academia-Industry Connection']
                 },
                 {
                     period: '2024-2025',
-                    title: 'Ecossistema de Inovação e Educador Maker, Incubadora NidusTec/UNIFAL-MG',
-                    description: 'Na NidusTec, abracei o papel de educador Maker, liderando projetos de robótica, modelagem 3D e oficinas de CNC. Esta experiência me permitiu aplicar técnicas de computação gráfica e processamento de imagens em protótipos multidisciplinares, abordando necessidades de infraestrutura institucional e explorando pesquisas em Inovação, Empreendedorismo, Engenharia de Produção e Indústria 4.0. Desenvolvi MVPs com potencial de mercado, demonstrando minha capacidade de transformar ideias em soluções tangíveis.',
-                    highlights: ['Empreendedorismo', 'Transferência de Tecnologia', 'Educação Maker', 'Modelagem 3D e CNC', 'Robótica', 'Gestão da Inovação']
+                    title: 'Innovation Ecosystem and Maker Educator, NidusTec/UNIFAL-MG Incubator',
+                    description: 'At NidusTec, I embraced the role of Maker Educator, leading robotics, 3D modeling, and CNC workshop projects. This experience allowed me to apply computer graphics and image processing techniques in multidisciplinary prototypes, addressing institutional infrastructure needs and exploring research in Innovation, Entrepreneurship, Production Engineering, and Industry 4.0. I developed MVPs with market potential, demonstrating my ability to transform ideas into tangible solutions.',
+                    highlights: ['Entrepreneurship', 'Technology Transfer', 'Maker Education', '3D Modeling and CNC', 'Robotics', 'Innovation Management']
                 }
             ],
             currentFocus: 'Currently, I am a Computer Science student, specializing in image processing and computer graphics. My focus is on applying my knowledge in multidisciplinary interfaces that combine Machine Learning, Deep Learning, Natural Language Processing (NLP), Convolutional Neural Networks (CNNs), and Large Language Models (LLMs), with a keen interest in exploring their integration with Smart Contracts and blockchain technologies.',
@@ -437,28 +437,28 @@ class ContentModel {
         return [
             {
                 id: 'dark-matter-research',
-                title: 'Desvendando o Invisível: Minha Jornada na Pesquisa de Matéria Escura',
-                description: 'Minha pesquisa em Matéria Escura começou com um mergulho profundo nas curvas de rotação galácticas. As velocidades anômalas das estrelas nos halos galácticos apresentaram um enigma profundo: ou as leis da gravidade precisavam de revisão, ou uma vasta quantidade de matéria invisível estava em jogo. Isso me levou a explorar o conceito de Matéria Escura, uma substância misteriosa que interage gravitacionalmente, mas não eletromagneticamente. Um momento crucial em minha compreensão veio do estudo do Aglomerado Bala, uma colisão cósmica onde o lenteamento gravitacional revelou uma distribuição de massa muito superior à matéria visível. A separação da matéria comum e escura durante esta colisão forneceu evidências visuais convincentes para a existência da Matéria Escura. Tive o privilégio de apresentar essas descobertas no Primeiro Ciclo de Seminários de Astronomia da UNIFAL-MG, transformando anos de observação em rigor teórico e compartilhando as fronteiras da cosmologia com uma audiência cativada. Esta experiência reforçou minha crença na educação superior como um motor vital para pesquisa e extensão, preenchendo a lacuna entre o fascínio telescópico e a astrofísica teórica.',
+                title: 'Unveiling the Invisible: My Journey in Dark Matter Research',
+                description: 'My research in Dark Matter began with a deep dive into galactic rotation curves. The anomalous velocities of stars in galactic halos presented a profound enigma: either the laws of gravity needed revision, or a vast amount of invisible matter was at play. This led me to explore the concept of Dark Matter, a mysterious substance that interacts gravitationally but not electromagnetically. A crucial moment in my understanding came from studying the Bullet Cluster, a cosmic collision where gravitational lensing revealed a mass distribution far greater than visible matter. The separation of ordinary and dark matter during this collision provided compelling visual evidence for the existence of Dark Matter. I had the privilege of presenting these findings at the First Cycle of Astronomy Seminars at UNIFAL-MG, transforming years of observation into theoretical rigor and sharing the frontiers of cosmology with a captivated audience. This experience reinforced my belief in higher education as a vital engine for research and outreach, bridging the gap between telescopic fascination and theoretical astrophysics.',
                 image: {
                     src: 'bullet-cluster-black-matter_upscayl.png',
-                    alt: 'Aglomerado Bala mostrando a distribuição de matéria escura, uma evidência chave para a matéria escura',
-                    caption: 'Aglomerado Bala: Evidência visual de Matéria Escura (Crédito: NASA/CXC/M.Weiss)'
+                    alt: 'Bullet Cluster showing dark matter distribution, key evidence for dark matter',
+                    caption: 'Bullet Cluster: Visual Evidence of Dark Matter (Credit: NASA/CXC/M.Weiss)'
                 },
                 links: [
-                    { url: 'https://lnkd.in/deYnab4a', label: 'Publicação de Pesquisa Relacionada', type: 'external' }
+                    { url: 'https://lnkd.in/deYnab4a', label: 'Related Research Publication', type: 'external' }
                 ],
-                tags: ['Matéria Escura', 'Dinâmica Galáctica', 'Cosmologia', 'Lenteamento Gravitacional', 'Comunicação Científica'],
+                tags: ['Dark Matter', 'Galactic Dynamics', 'Cosmology', 'Gravitational Lensing', 'Science Communication'],
                 status: 'published',
                 date: '2018-03-15'
             },
             {
                 id: 'astronomy-seminar',
-                title: 'Série de Seminários de Astronomia: Órbitas Estelares e o Universo Escuro',
-                description: 'Esta imagem captura um momento significativo: uma palestra que proferi no Primeiro Ciclo de Seminários de Astronomia da UNIFAL-MG. Minha apresentação focou em Órbitas Estelares na Galáxia, onde compartilhei simulações de movimentos estelares baseadas em modelos de distribuição de massa e soluções numéricas para acelerações, velocidades e posições estelares na Via Láctea. Discuti as evidências que levaram aos postulados de Matéria Escura e Gravidade Modificada, destacando particularmente as Curvas de Rotação de galáxias. Esta anomalia, onde as estrelas no halo galáctico se movem muito rápido, sugere que a maior parte da massa da Via Láctea é invisível. Compartilhar essas ideias complexas e desafiar a audiência com os mistérios do cosmos foi uma experiência profunda, reforçando o papel do ensino superior em impulsionar tanto a pesquisa quanto o engajamento público.',
+                title: 'Astronomy Seminar Series: Stellar Orbits and the Dark Universe',
+                description: 'This image captures a significant moment: a lecture I delivered at the First Cycle of Astronomy Seminars at UNIFAL-MG. My presentation focused on Stellar Orbits in the Galaxy, where I shared simulations of stellar movements based on mass distribution models and numerical solutions for stellar accelerations, velocities, and positions in the Milky Way. I discussed the evidence that led to the postulates of Dark Matter and Modified Gravity, particularly highlighting the Rotation Curves of galaxies. This anomaly, where stars in the galactic halo move too fast, suggests that most of the Milky Way\'s mass is invisible. Sharing these complex ideas and challenging the audience with the mysteries of the cosmos was a profound experience, reinforcing the role of higher education in driving both research and public engagement.',
                 image: {
                     src: 'seminario.jpg',
-                    alt: 'Apresentação de seminário de astronomia sobre órbitas estelares e matéria escura',
-                    caption: 'Apresentação sobre Órbitas Estelares e Matéria Escura no Seminário da UNIFAL-MG (2019)'
+                    alt: 'Astronomy seminar presentation on stellar orbits and dark matter',
+                    caption: 'Presentation on Stellar Orbits and Dark Matter at UNIFAL-MG Seminar (2019)'
                 },
                 links: [],
                 tags: ['Scientific Outreach', 'Academic Events', 'Stellar Dynamics', 'Dark Matter', 'Public Speaking'],
@@ -468,7 +468,7 @@ class ContentModel {
             {
                 id: 'ccc-tl-cosmology',
                 title: 'Exploring Alternative Cosmologies: CCC+TL and Baryon Acoustic Oscillations',
-                description: 'Beyond Dark Matter, my curiosity extends to alternative cosmological models. A recent study in \"The Astrophysical Journal\" on \"Testing CCC+TL Cosmology with Baryon Acoustic Oscillation Features\" offers a fascinating perspective. It proposes that the universe\´s forces weaken as it expands, creating an illusion of dark energy driving accelerated expansion. On galactic scales, this variation in forces within gravitationally bound systems could explain the \"extra gravity\" attributed to dark matter. This research highlights the ongoing quest to understand the fundamental forces shaping our universe and the intricate interplay between theory and observation in modern cosmology.',
+                description: 'Beyond Dark Matter, my curiosity extends to alternative cosmological models. A recent study in "The Astrophysical Journal" on "Testing CCC+TL Cosmology with Baryon Acoustic Oscillation Features" offers a fascinating perspective. It proposes that the universe\'s forces weaken as it expands, creating an illusion of dark energy driving accelerated expansion. On galactic scales, this variation in forces within gravitationally bound systems could explain the "extra gravity" attributed to dark matter. This research highlights the ongoing quest to understand the fundamental forces shaping our universe and the intricate interplay between theory and observation in modern cosmology.',
                 links: [
                     { url: 'https://lnkd.in/dwsKCSbM', label: 'The Astrophysical Journal Publication', type: 'external' }
                 ],
@@ -488,30 +488,30 @@ class ContentModel {
         return [
             {
                 id: 'unifal-observatory-outreach',
-                title: 'Uma Janela para o Universo: Extensão Científica e Pesquisa na UNIFAL-MG',
-                description: 'Durante meu tempo como membro da equipe do Observatório Astronômico da UNIFAL-MG (2015 a 2018), tive o privilégio de conectar mais de 2.000 visitantes de Alfenas e região às maravilhas do cosmos. Como divulgador científico, utilizei nosso magnífico telescópio Cassegrain de 380mm para revelar as impressionantes crateras da Lua, os majestosos anéis de Saturno, as luas galileanas de Júpiter e a beleza dos aglomerados estelares. Essas experiências, compartilhadas com colegas como José Carlos da Silva e o Professor Artur Justiniano, reforçaram minha crença na ciência aberta e na educação não formal. Era mais do que apenas observar; era sobre inspirar curiosidade, reflexão e pensamento crítico em todas as idades, desde crianças fascinadas até membros da comunidade acadêmica e idosos. Este período foi fundamental para moldar meu compromisso em tornar a ciência acessível e envolvente.',
+                title: 'A Window to the Universe: Scientific Outreach and Research at UNIFAL-MG',
+                description: 'During my time as a member of the UNIFAL-MG Astronomical Observatory team (2015 to 2018), I had the privilege of connecting over 2,000 visitors from Alfenas and the surrounding region to the wonders of the cosmos. As a science communicator, I used our magnificent 380mm Cassegrain telescope to reveal the impressive craters of the Moon, the majestic rings of Saturn, the Galilean moons of Jupiter, and the beauty of star clusters. These experiences, shared with colleagues like José Carlos da Silva and Professor Artur Justiniano, reinforced my belief in open science and non-formal education. It was more than just observing; it was about inspiring curiosity, reflection, and critical thinking in all ages, from fascinated children to academic community members and seniors. This period was fundamental in shaping my commitment to making science accessible and engaging.',
                 image: {
                     src: 'observatorio-unifal.jpg',
-                    alt: 'Observatório Astronômico da UNIFAL-MG com um telescópio Cassegrain',
-                    caption: 'Observatório Astronômico da UNIFAL-MG: Inspirando a próxima geração de cientistas'
+                    alt: 'UNIFAL-MG Astronomical Observatory with a Cassegrain telescope',
+                    caption: 'UNIFAL-MG Astronomical Observatory: Inspiring the next generation of scientists'
                 },
                 links: [],
-                tags: ['Extensão Científica', 'Astronomia', 'Educação', 'Engajamento Público', 'Telescópio Cassegrain'],
+                tags: ['Scientific Outreach', 'Astronomy', 'Education', 'Public Engagement', 'Cassegrain Telescope'],
                 status: 'completed',
                 date: '2018-12-01'
             },
             {
                 id: 'observatory-astrophotography',
-                title: 'Astrofotografia e Pesquisa de Exoplanetas no Observatório da UNIFAL-MG',
-                description: 'Além da extensão pública, o Observatório da UNIFAL-MG foi um centro de pesquisa e astrofotografia. Testemunhei e contribuí para conquistas significativas, incluindo o trabalho pioneiro do meu colega José Carlos na detecção do trânsito do exoplaneta WASP-76b. Meus próprios esforços em astrofotografia me levaram a capturar imagens impressionantes, como a Galáxia do Sombreiro (M104/NGC 4594) em uma exposição de 34 minutos e os braços espirais da Galáxia do Catavento do Sul (M83/NGC 5236). Também tive a oportunidade única de guiar minha primeira turma, o 3º EJA de Divisa Nova - MG, através de uma sessão prática de observação no observatório. Mesmo após o término do meu envolvimento institucional, minha paixão pela observação continuou, culminando na experiência emocionante de contemplar o cometa de longo período C/2020 F3 (NEOWISE) em 2020. Essas experiências solidificaram minhas habilidades em aquisição de dados, processamento de imagens e análise científica.',
+                title: 'Astrophotography and Exoplanet Research at UNIFAL-MG Observatory',
+                description: 'Beyond public outreach, the UNIFAL-MG Observatory was a center for research and astrophotography. I witnessed and contributed to significant achievements, including the pioneering work of my colleague José Carlos in detecting the transit of exoplanet WASP-76b. My own efforts in astrophotography led me to capture impressive images, such as the Sombrero Galaxy (M104/NGC 4594) in a 34-minute exposure and the spiral arms of the Southern Pinwheel Galaxy (M83/NGC 5236). I also had the unique opportunity to guide my first class, the 3rd EJA from Divisa Nova - MG, through a practical observation session at the observatory. Even after my institutional involvement ended, my passion for observation continued, culminating in the exciting experience of observing the long-period comet C/2020 F3 (NEOWISE) in 2020. These experiences solidified my skills in data acquisition, image processing, and scientific analysis.',
                 images: [
-                    { src: 'obsLua.jpg', alt: 'Observação da Lua', caption: 'Vista detalhada da Lua capturada no Observatório da UNIFAL-MG' },
-                    { src: 'obsGalaxiaSombrero.jpg', alt: 'Galáxia do Sombreiro', caption: 'Galáxia do Sombreiro (M104/NGC 4594) capturada por astrofotografia' }
+                    { src: 'obsLua.jpg', alt: 'Moon observation', caption: 'Detailed view of the Moon captured at UNIFAL-MG Observatory' },
+                    { src: 'obsGalaxiaSombrero.jpg', alt: 'Sombrero Galaxy', caption: 'Sombrero Galaxy (M104/NGC 4594) captured through astrophotography' }
                 ],
                 highlights: [
-                    'Contribuição para a detecção de trânsito de exoplanetas (WASP-76b)',
-                    'Realização de astrofotografia de objetos de céu profundo (Galáxia do Sombreiro, Galáxia do Catavento do Sul)',
-                    'Condução de aulas práticas de astronomia e observação do Cometa C/2020 F3 (NEOWISE)'
+                    'Contribution to exoplanet transit detection (WASP-76b)',
+                    'Deep-sky object astrophotography (Sombrero Galaxy, Southern Pinwheel Galaxy)',
+                    'Conducted practical astronomy classes and observed Comet C/2020 F3 (NEOWISE)'
                 ],
                 date: '2015-2020'
             }
@@ -527,18 +527,18 @@ class ContentModel {
         return [
             {
                 id: 'craam-radio-polarimeter',
-                title: 'Explorando a Radioastronomia Solar no CRAAM: Um Mergulho Profundo na Instrumentação',
-                description: 'Em 2019, pouco depois de concluir meu curso de Física na UNIFAL-MG, tive a distinta honra de visitar o CRAAM (Centro de Rádio Astronomia e Astrofísica Mackenzie), uma instituição de pesquisa pioneira no Brasil desde 1960. O ponto alto desta visita foi a oportunidade de aprender e operar o Polarímetro Solar de Rádio de 7 GHz, um instrumento crítico para monitorar nossa estrela hospedeira. Guiado pelo colega Raphael Cesar Pimenta e pelo engenheiro Amauri Shossei Kudaka, obtive insights inestimáveis sobre os intrincados sistemas eletrônicos e computacionais que processam dados solares. A engenharia de precisão necessária para a aquisição e análise de dados foi realmente impressionante. Subindo ao local de instalação do polarímetro, protegido por sua cúpula, testemunhei em primeira mão a escala da infraestrutura de pesquisa. A antena de 1,5 metro, posicionada em direção ao céu, capta emissões de rádio polarizadas circularmente do Sol. Este equipamento, operando a 7 GHz, é crucial para a pesquisa do CRAAM, que se concentra no monitoramento da atividade solar, detecção de fenômenos energéticos como explosões solares e revelação das propriedades magnéticas da atmosfera solar. Esta experiência foi uma lição profunda em Instrumentação e Radioastronomia, reforçando minha paixão pela Física Solar e destacando as significativas contribuições da pesquisa brasileira no cenário internacional. As colaborações do CRAAM com instituições como o INPE e seu envolvimento em projetos como o voo do balão estratosférico Solar-T na Antártica são verdadeiramente inspiradoras.',
+                title: 'Exploring Solar Radio Astronomy at CRAAM: A Deep Dive into Instrumentation',
+                description: 'In 2019, shortly after completing my Physics degree at UNIFAL-MG, I had the distinct honor of visiting CRAAM (Mackenzie Center for Radio Astronomy and Astrophysics), a pioneering research institution in Brazil since 1960. The highlight of this visit was the opportunity to learn and operate the 7 GHz Solar Radio Polarimeter, a critical instrument for monitoring our host star. Guided by colleague Raphael Cesar Pimenta and engineer Amauri Shossei Kudaka, I gained invaluable insights into the intricate electronic and computational systems that process solar data. The precision engineering required for data acquisition and analysis was truly impressive. Climbing to the polarimeter installation site, protected by its dome, I witnessed firsthand the scale of research infrastructure. The 1.5-meter antenna, positioned toward the sky, captures circularly polarized radio emissions from the Sun. This equipment, operating at 7 GHz, is crucial for CRAAM\'s research, which focuses on monitoring solar activity, detecting energetic phenomena like solar flares, and revealing the magnetic properties of the solar atmosphere. This experience was a profound lesson in Instrumentation and Radio Astronomy, reinforcing my passion for Solar Physics and highlighting the significant contributions of Brazilian research on the international stage. CRAAM\'s collaborations with institutions like INPE and its involvement in projects like the Solar-T stratospheric balloon flight in Antarctica are truly inspiring.',
                 images: [
-                    { src: 'craamAntena.jpg', alt: 'Antena do Polarímetro Solar de Rádio no CRAAM', caption: 'Polarímetro Solar de Rádio de 7 GHz (CRAAM)' },
-                    { src: 'craamControle.jpg', alt: 'Sala de controle do CRAAM', caption: 'Sala de Controle do CRAAM: Inspecionando sistemas eletrônicos e computacionais' },
-                    { src: 'craamDomo.jpg', alt: 'Interior da cúpula do CRAAM', caption: 'Dentro da Cúpula do CRAAM: Antena de 1,5 metro' },
-                    { src: 'craamEscada.jpg', alt: 'Escada externa do CRAAM', caption: 'Escada externa para o deck de observação' }
+                    { src: 'craamAntena.jpg', alt: 'Solar Radio Polarimeter antenna at CRAAM', caption: '7 GHz Solar Radio Polarimeter (CRAAM)' },
+                    { src: 'craamControle.jpg', alt: 'CRAAM control room', caption: 'CRAAM Control Room: Inspecting electronic and computational systems' },
+                    { src: 'craamDomo.jpg', alt: 'Inside CRAAM dome', caption: 'Inside CRAAM Dome: 1.5-meter antenna' },
+                    { src: 'craamEscada.jpg', alt: 'CRAAM external staircase', caption: 'External staircase to observation deck' }
                 ],
                 highlights: [
-                    'Operou o Polarímetro Solar de Rádio de 7 GHz',
-                    'Obteve insights sobre o monitoramento da atividade solar e análise de propriedades magnéticas',
-                    'Explorou a aquisição e processamento complexo de dados em radioastronomia'
+                    'Operated the 7 GHz Solar Radio Polarimeter',
+                    'Gained insights into solar activity monitoring and magnetic property analysis',
+                    'Explored complex data acquisition and processing in radio astronomy'
                 ],
                 date: '2019'
             }
@@ -554,16 +554,16 @@ class ContentModel {
         return [
             {
                 id: 'lna-zeiss-operation',
-                title: 'Operando o Histórico Telescópio Zeiss no LNA: Uma Jornada Através do Tempo e da Ciência',
-                description: 'Durante meu curso de Física na UNIFAL-MG (2014-2018), tive a extraordinária oportunidade de operar, por duas noites em 2016, um instrumento verdadeiramente especial no Laboratório Nacional de Astrofísica (LNA/OPD). Este não era um telescópio comum; era um Zeiss histórico, adquirido da antiga Alemanha Oriental nas décadas de 1960/70 através de uma fascinante negociação envolvendo café. Após anos em armazenamento, foi finalmente montado em 1983 no Observatório do Pico dos Dias. Este clássico telescópio Cassegrain, com sua primária parabólica e secundária hiperbólica, apresenta uma razão focal de f/12.5 no foco Cassegrain e requer apontamento manual. É exclusivamente dedicado à fotometria e polarimetria, permitindo estudos precisos da luz de estrelas e galáxias, revelando detalhes intrincados que apenas instrumentos meticulosamente calibrados podem capturar. Operar o Zeiss foi uma experiência profunda: desde a preparação das observações e coleta de dados até a calibração do instrumento, cada detalhe e ajuste ressaltou a busca essencial pelo conhecimento. Mais do que apenas habilidade técnica, foi uma imersão no rico legado científico que ele incorpora, um poderoso lembrete de que a ciência prospera com paciência, precisão e curiosidade insaciável. Esta experiência não apenas aprofundou minha paixão por dados e por observar o universo, mas também permanece como uma das memórias mais queridas da minha jornada acadêmica, destacando o fascínio duradouro da exploração astronômica.',
+                title: 'Operating the Historic Zeiss Telescope at LNA: A Journey Through Time and Science',
+                description: 'During my Physics course at UNIFAL-MG (2014-2018), I had the extraordinary opportunity to operate, for two nights in 2016, a truly special instrument at the National Astrophysics Laboratory (LNA/OPD). This was no ordinary telescope; it was a historic Zeiss, acquired from former East Germany in the 1960s/70s through fascinating negotiations involving coffee. After years in storage, it was finally assembled in 1983 at the Pico dos Dias Observatory. This classic Cassegrain telescope, with its parabolic primary and hyperbolic secondary, features an f/12.5 focal ratio at the Cassegrain focus and requires manual pointing. It is exclusively dedicated to photometry and polarimetry, enabling precise studies of light from stars and galaxies, revealing intricate details that only meticulously calibrated instruments can capture. Operating the Zeiss was a profound experience: from preparing observations and collecting data to instrument calibration, every detail and adjustment emphasized the essential pursuit of knowledge. More than just technical skill, it was an immersion in the rich scientific legacy it embodies, a powerful reminder that science thrives with patience, precision, and insatiable curiosity. This experience not only deepened my passion for data and observing the universe but also remains one of the most cherished memories of my academic journey, highlighting the enduring fascination of astronomical exploration.',
                 images: [
-                    { src: 'obs4.jpg', alt: 'Observatório do LNA ao pôr do sol', caption: 'Observatório do Pico dos Dias (LNA) ao pôr do sol, um cenário sereno para a descoberta científica' },
-                    { src: 'obs5.jpg', alt: 'Vista aérea do Observatório do LNA', caption: 'Vista aérea do Laboratório Nacional de Astrofísica (LNA), mostrando sua impressioante infraestrutura' }
+                    { src: 'obs4.jpg', alt: 'LNA Observatory at sunset', caption: 'Pico dos Dias Observatory (LNA) at sunset, a serene setting for scientific discovery' },
+                    { src: 'obs5.jpg', alt: 'Aerial view of LNA Observatory', caption: 'Aerial view of National Astrophysics Laboratory (LNA), showing its impressive infrastructure' }
                 ],
                 highlights: [
-                    'Operou um telescópio Cassegrain Zeiss histórico para fotometria e polarimetria',
-                    'Adquiriu experiência prática na coleta de dados astronômicos e calibração de instrumentos',
-                    'Imersão no legado científico de um dos principais observatórios do Brasil'
+                    'Operated a historic Zeiss Cassegrain telescope for photometry and polarimetry',
+                    'Gained practical experience in astronomical data collection and instrument calibration',
+                    'Immersion in the scientific legacy of one of Brazil\'s leading observatories'
                 ],
                 date: '2016'
             }
@@ -579,32 +579,32 @@ class ContentModel {
         return [
             {
                 period: '2016-2018',
-                role: 'Monitor de Ensino, Departamento de Física da UNIFAL-MG',
-                description: 'Durante meus estudos de graduação, atuei como Monitor de Ensino no Departamento de Física da UNIFAL-MG. Este papel foi fundamental para o desenvolvimento das minhas habilidades pedagógicas, pois fui responsável pela instrução laboratorial para cursos de física de graduação, desenvolvimento de protocolos experimentais e fornecimento de mentoria e apoio acadêmico aos alunos. Encontrei imensa satisfação em ajudar os alunos a compreender conceitos complexos através de experimentos práticos, e contribuí para a criação de novos e envolventes materiais de laboratório. Esta experiência solidificou minha compreensão dos princípios fundamentais da física e minha capacidade de comunicá-los de forma eficaz.',
+                role: 'Teaching Assistant, Physics Department at UNIFAL-MG',
+                description: 'During my undergraduate studies, I served as a Teaching Assistant in the Physics Department at UNIFAL-MG. This role was fundamental to the development of my pedagogical skills, as I was responsible for laboratory instruction for undergraduate physics courses, developing experimental protocols, and providing mentoring and academic support to students. I found immense satisfaction in helping students understand complex concepts through hands-on experiments, and I contributed to the creation of new and engaging laboratory materials. This experience solidified my understanding of fundamental physics principles and my ability to communicate them effectively.',
                 highlights: [
-                    'Forneceu instrução laboratorial e apoio acadêmico a estudantes de física de graduação',
-                    'Desenvolveu e refinou protocolos experimentais para cursos de física',
-                    'Orientou estudantes, promovendo uma compreensão mais profunda de conceitos científicos'
+                    'Provided laboratory instruction and academic support to undergraduate physics students',
+                    'Developed and refined experimental protocols for physics courses',
+                    'Mentored students, promoting deeper understanding of scientific concepts'
                 ]
             },
             {
                 period: '2017-2018',
-                role: 'Desenvolvedor de Material Educacional, Observatório Astronômico da UNIFAL-MG',
-                description: 'Minha paixão pela astronomia se estendeu à extensão educacional no Observatório Astronômico da UNIFAL-MG. Como Desenvolvedor de Material Educacional, liderei a criação de materiais envolventes de educação em astronomia e desempenhei um papel fundamental no desenvolvimento e coordenação de programas e workshops de extensão pública. Através dessas iniciativas, alcancei mais de 500 estudantes, fomentando a curiosidade científica e desenvolvendo metodologias de ensino inovadoras que tornaram fenômenos astronômicos complexos acessíveis e emocionantes. Esta experiência destacou a importância da comunicação científica e seu poder de inspirar a próxima geração.',
+                role: 'Educational Material Developer, UNIFAL-MG Astronomical Observatory',
+                description: 'My passion for astronomy extended to educational outreach at the UNIFAL-MG Astronomical Observatory. As an Educational Material Developer, I led the creation of engaging astronomy education materials and played a key role in developing and coordinating public outreach programs and workshops. Through these initiatives, I reached over 500 students, fostering scientific curiosity and developing innovative teaching methodologies that made complex astronomical phenomena accessible and exciting. This experience highlighted the importance of science communication and its power to inspire the next generation.',
                 highlights: [
-                    'Criou e implementou materiais de educação em astronomia para extensão pública',
-                    'Desenvolveu e coordenou programas e workshops de extensão pública bem-sucedidos',
-                    'Alcançou mais de 500 estudantes, fomentando a curiosidade científica e metodologias de ensino inovadoras'
+                    'Created and implemented astronomy education materials for public outreach',
+                    'Developed and coordinated successful public outreach programs and workshops',
+                    'Reached over 500 students, fostering scientific curiosity and innovative teaching methodologies'
                 ]
             },
             {
                 period: '2019-2022',
-                role: 'Professor de Física, Secretaria de Estado de Educação de Minas Gerais',
-                description: 'Após meus estudos de graduação, dediquei-me à educação, lecionando Física em três municípios de Minas Gerais. Este papel me desafiou a adaptar o conhecimento científico a diversas audiências, especialmente durante o período sem precedentes de 2020-2022, onde apliquei expertise técnica para superar obstáculos educacionais. Desenvolvi estratégias de ensino inovadoras, incluindo laboratórios virtuais e conteúdo online interativo, para garantir a aprendizagem contínua durante a educação remota. Esta experiência aprimorou significativamente minha capacidade de comunicar conceitos científicos complexos de forma acessível e envolvente, promovendo o pensamento crítico e habilidades de resolução de problemas entre meus alunos.',
+                role: 'Physics Teacher, State Department of Education of Minas Gerais',
+                description: 'After my undergraduate studies, I dedicated myself to education, teaching Physics in three municipalities of Minas Gerais. This role challenged me to adapt scientific knowledge to diverse audiences, especially during the unprecedented period of 2020-2022, where I applied technical expertise to overcome educational obstacles. I developed innovative teaching strategies, including virtual laboratories and interactive online content, to ensure continuous learning during remote education. This experience significantly enhanced my ability to communicate complex scientific concepts in an accessible and engaging manner, promoting critical thinking and problem-solving skills among my students.',
                 highlights: [
-                    'Lecionou Física em três municípios, adaptando o currículo às diversas necessidades dos alunos',
-                    'Desenvolveu estratégias de ensino inovadoras, incluindo laboratórios virtuais e conteúdo online interativo',
-                    'Navegou com sucesso os desafios da educação remota durante 2020-2022, garantindo a aprendizagem contínua'
+                    'Taught Physics in three municipalities, adapting curriculum to diverse student needs',
+                    'Developed innovative teaching strategies, including virtual laboratories and interactive online content',
+                    'Successfully navigated the challenges of remote education during 2020-2022, ensuring continuous learning'
                 ]
             }
         ];
@@ -619,31 +619,31 @@ class ContentModel {
         return [
             {
                 id: 'nidustec-incubator-experience',
-                title: 'Incubadora de Empresas NidusTec: Conectando Academia e Empreendedorismo',
-                description: 'Em 2023, iniciei uma nova jornada acadêmica, cursando Bacharelado em Ciência da Computação na UNIFAL-MG (2023–2029). Concomitantemente, tive a inestimável oportunidade de integrar a equipe da Incubadora de Empresas de Base Tecnológica NidusTec/UNIFAL-MG (2024–2025). Este período foi transformador, permitindo-me transitar de tarefas operacionais para contribuições estratégicas. Como generalista Maker, liderei projetos de Robótica, Modelagem 3D e oficinas de CNC, aplicando técnicas de Computação Gráfica e Processamento de Imagens para desenvolver protótipos multidisciplinares. Esses projetos não apenas enriqueceram as atividades de ensino, pesquisa e extensão, mas também atenderam às necessidades de infraestrutura institucional nos três campi da UNIFAL-MG. Esta experiência ampliou meus horizontes em Propriedade Intelectual, Empreendedorismo, dinâmica Universidade-Mercado, Inovação Aberta e Transferência de Tecnologia. Monitorei ativamente startups incubadas, apoiei estratégias de mobilização de recursos e contribuí para o alinhamento da incubadora com o modelo CERNE (Centro de Referência para Apoio a Novos Empreendimentos), gerenciando 29 procedimentos. Esta trajetória me moldou como um aplicador de conhecimento, unindo ciência e tecnologia para atender às demandas contemporâneas, fomentando novos negócios e iniciativas de inovação.',
+                title: 'NidusTec Business Incubator: Connecting Academia and Entrepreneurship',
+                description: 'In 2023, I began a new academic journey, pursuing a Bachelor\'s Degree in Computer Science at UNIFAL-MG (2023–2029). Concurrently, I had the invaluable opportunity to join the team at the NidusTec/UNIFAL-MG Technology-Based Business Incubator (2024–2025). This period was transformative, allowing me to transition from operational tasks to strategic contributions. As a Maker generalist, I led Robotics, 3D Modeling, and CNC workshop projects, applying Computer Graphics and Image Processing techniques to develop multidisciplinary prototypes. These projects not only enriched teaching, research, and outreach activities but also addressed institutional infrastructure needs across UNIFAL-MG\'s three campuses. This experience broadened my horizons in Intellectual Property, Entrepreneurship, University-Market dynamics, Open Innovation, and Technology Transfer. I actively monitored incubated startups, supported resource mobilization strategies, and contributed to aligning the incubator with the CERNE model (Reference Center for Supporting New Ventures), managing 29 procedures. This trajectory shaped me as a knowledge applicator, uniting science and technology to meet contemporary demands, fostering new businesses and innovation initiatives.',
                 image: {
                     src: 'nidus.jpg',
-                    alt: 'Rafael no Laboratório NidusTec', 
-                    caption: 'Trabalhando como generalista Maker na NidusTec, fomentando inovação e empreendedorismo'
+                    alt: 'Rafael at NidusTec Laboratory', 
+                    caption: 'Working as a Maker generalist at NidusTec, fostering innovation and entrepreneurship'
                 },
                 focusAreas: [
-                    'Transferência de Tecnologia',
-                    'Mentoria de Startups',
-                    'Ecossistemas de Inovação',
-                    'Educação Maker',
-                    'Modelagem 3D e CNC',
-                    'Propriedade Intelectual',
-                    'Empreendedorismo'
+                    'Technology Transfer',
+                    'Startup Mentoring',
+                    'Innovation Ecosystems',
+                    'Maker Education',
+                    '3D Modeling and CNC',
+                    'Intellectual Property',
+                    'Entrepreneurship'
                 ],
                 impact: {
-                    startupsSupported: 'Monitorou e apoiou startups incubadas',
-                    projects: 'Desenvolveu protótipos de Robótica, Modelagem 3D e CNC para aplicações multidisciplinares',
-                    partnerships: 'Gerenciou 29 procedimentos do modelo CERNE, alinhando a incubadora com os objetivos de inovação'
+                    startupsSupported: 'Monitored and supported incubated startups',
+                    projects: 'Developed Robotics, 3D Modeling, and CNC prototypes for multidisciplinary applications',
+                    partnerships: 'Managed 29 CERNE model procedures, aligning the incubator with innovation objectives'
                 },
                 links: [
-                    { url: 'https://jornal.unifal-mg.edu.br/capacitacoes-promovidas-pela-agencia-de-inovacao-e-a-incubadora-de-empresas-no-mes-de-junho-estimulam-a-cultura-empreendedora-e-a-inovacao-tecnologica-junto-a-comunidade/', label: 'Notícias UNIFAL-MG: Capacitações Junho', type: 'external' },
-                    { url: 'https://jornal.unifal-mg.edu.br/capacitacoes-promovidas-pela-agencia-de-inovacao-e-incubadora-de-empresas-de-base-tecnologica-impulsionam-a-criatividade-e-o-empreendedorismo/', label: 'Notícias UNIFAL-MG: Criatividade e Empreendedorismo', type: 'external' },
-                    { url: 'https://jornal.unifal-mg.edu.br/agencia-de-inovacao-e-empreendedorismo-da-unifal-mg-promove-visita-tecnica-no-espaco-maker-a-calouros-do-bacharelado-em-quimica-da-instituicao/', label: 'Notícias UNIFAL-MG: Visita ao Espaço Maker', type: 'external' },
+                    { url: 'https://jornal.unifal-mg.edu.br/capacitacoes-promovidas-pela-agencia-de-inovacao-e-a-incubadora-de-empresas-no-mes-de-junho-estimulam-a-cultura-empreendedora-e-a-inovacao-tecnologica-junto-a-comunidade/', label: 'UNIFAL-MG News: June Training', type: 'external' },
+                    { url: 'https://jornal.unifal-mg.edu.br/capacitacoes-promovidas-pela-agencia-de-inovacao-e-incubadora-de-empresas-de-base-tecnologica-impulsionam-a-criatividade-e-o-empreendedorismo/', label: 'UNIFAL-MG News: Creativity and Entrepreneurship', type: 'external' },
+                    { url: 'https://jornal.unifal-mg.edu.br/agencia-de-inovacao-e-empreendedorismo-da-unifal-mg-promove-visita-tecnica-no-espaco-maker-a-calouros-do-bacharelado-em-quimica-da-instituicao/', label: 'UNIFAL-MG News: Maker Space Visit', type: 'external' },
                     { url: 'https://jornal.unifal-mg.edu.br/calouros-vivenciam-inovacao-em-visitas-ao-laboratorio-maker-na-unifal-mg/', label: 'UNIFAL-MG News: Freshmen Innovation', type: 'external' },
                     { url: 'https://jornal.unifal-mg.edu.br/agencia-de-inovacao-de-empreendedorismo-da-unifal-mg-realiza-segunda-oficina-de-capacitacao-para-corte-a-laser-nos-laboratorios-maker-dos-campi-alfenas-e-pocos-de-caldas/', label: 'UNIFAL-MG News: Laser Cutting Workshop', type: 'external' },
                     { url: 'https://jornal.unifal-mg.edu.br/unifal-mg-realiza-workshop-de-empreendedorismo-e-inovacao-em-enfermagem-evento-e-promovido-pelo-programa-de-pos-graduacao-em-enfermagem-e-pela-liga-academica-de-enfermagem-neonatal-e-pediatrica-da-un/', label: 'UNIFAL-MG News: Nursing Entrepreneurship Workshop', type: 'external' },
@@ -656,7 +656,7 @@ class ContentModel {
             {
                 id: 'anprotec-award',
                 title: 'ANPROTEC National Award for Innovative Entrepreneurship: Recognizing Excellence',
-                description: 'A significant highlight of my involvement with NidusTec was the recognition received at the ANPROTEC National Award for Innovative Entrepreneurship. This prestigious award, specifically the Adelino Medeiros Trophy for \"Incubator of Companies,\" celebrates programs that successfully foster new innovative ventures. It acknowledges effective strategies in incubation, pre-incubation, pre-acceleration, and the selection and attraction of promising startups. This accolade underscores the impact of our collective efforts in building a robust innovation ecosystem and validates the innovative practices implemented at NidusTec during my tenure.',
+                description: 'A significant highlight of my involvement with NidusTec was the recognition received at the ANPROTEC National Award for Innovative Entrepreneurship. This prestigious award, specifically the Adelino Medeiros Trophy for "Incubator of Companies," celebrates programs that successfully foster new innovative ventures. It acknowledges effective strategies in incubation, pre-incubation, pre-acceleration, and the selection and attraction of promising startups. This accolade underscores the impact of our collective efforts in building a robust innovation ecosystem and validates the innovative practices implemented at NidusTec during my tenure.',
                 links: [
                     { url: 'https://anprotec.org.br/site/2024/12/premio-nacional-anprotec-de-empreendedorismo-inovador-2024-revela-vencedores-em-sao-jose-dos-campos/', label: 'ANPROTEC Award News', type: 'external' }
                 ],
@@ -667,7 +667,7 @@ class ContentModel {
             {
                 id: 'anprotec-publication',
                 title: 'Publication: Methodology for Impact Measurement and CERNE Model Validation',
-                description: 'My contributions to the innovation ecosystem also extended to academic publication. I co-authored a paper titled \"Development of Methodology for Measuring the Impacts and Validating the Implementation of the CERNE Model in Technology-Based Business Incubators.\" This research, presented at the 34th ANPROTEC Conference on December 4, 2024, in São José dos Campos, focused on refining metrics and validating the effectiveness of the CERNE model in fostering technology-based startups. Collaborating with Izabella Carneiro Bastos, Leonardo Contreras Pereira, and Laura de Bom Maimone dos Santos, this publication reflects my commitment to both practical application and theoretical understanding of innovation and entrepreneurship.',
+                description: 'My contributions to the innovation ecosystem also extended to academic publication. I co-authored a paper titled "Development of Methodology for Measuring the Impacts and Validating the Implementation of the CERNE Model in Technology-Based Business Incubators." This research, presented at the 34th ANPROTEC Conference on December 4, 2024, in São José dos Campos, focused on refining metrics and validating the effectiveness of the CERNE model in fostering technology-based startups. Collaborating with Izabella Carneiro Bastos, Leonardo Contreras Pereira, and Laura de Bom Maimone dos Santos, this publication reflects my commitment to both practical application and theoretical understanding of innovation and entrepreneurship.',
                 links: [
                     { url: 'https://anprotec.org.br/site/2024/12/premio-nacional-anprotec-de-empreendedorismo-inovador-2024-revela-vencedores-em-sao-jose-dos-campos/', label: 'ANPROTEC Award News', type: 'external' }
                 ],
@@ -687,24 +687,24 @@ class ContentModel {
         return [
             {
                 id: 'elliptical-galaxy-brightness-profiles',
-                title: 'Perfis de Brilho de Galáxias Elípticas: Desvendando Estruturas Galácticas com o Modelo de De Vaucouleurs',
-                description: 'Em 2021, durante meu Mestrado em Física na UNIFEI, tive a enriquecedora oportunidade de aprofundar na Astrofísica Extragaláctica. Um projeto significativo envolveu o ajuste de perfis de brilho de galáxias elípticas utilizando o clássico perfil de De Vaucouleurs (1991). Selecionei as galáxias NGC 3522 e NGC 5628 a partir de dados do VizieR (Université de Strasbourg / CNRS), aplicando filtros específicos para declinação, magnitude, redshift e classificação morfológica. As imagens foram obtidas do Sloan Digital Sky Survey (SDSS). Minha metodologia abrangeu o recorte de campo, utilizando rotinas de isófotas do Astropy (integrando a rotina ellipse do IRAF), convertendo intensidades de nanomaggies para Jansky, e transformando semieixos de pixels para segundos de arco. Este processo me permitiu estimar parâmetros físicos cruciais como raio efetivo, brilho superficial e luminosidade, que apresentaram excelente concordância com o NASA/IPAC Extragalactic Database (NED). Este projeto marcou minha primeira experiência prática com VizieR, rotinas IRAF do Astropy, Python para análise de dados astronômicos e visualização DS9. Foi realmente fascinante testemunhar como o ajuste de isófotas poderia revelar detalhes sutis, mas profundos, dentro de galáxias elípticas, aprofundando minha apreciação pela pesquisa astronômica baseada em dados.',
-                tags: ['Astrofísica', 'Astrofísica Extragaláctica', 'Morfologia de Galáxias', 'Análise de Dados', 'Python', 'Astropy', 'SDSS', 'VizieR'],
+                title: 'Elliptical Galaxy Brightness Profiles: Unveiling Galactic Structures with the De Vaucouleurs Model',
+                description: 'In 2021, during my Master\'s in Physics at UNIFEI, I had the enriching opportunity to delve into Extragalactic Astrophysics. A significant project involved fitting brightness profiles of elliptical galaxies using the classic De Vaucouleurs profile (1991). I selected galaxies NGC 3522 and NGC 5628 from VizieR data (Université de Strasbourg / CNRS), applying specific filters for declination, magnitude, redshift, and morphological classification. Images were obtained from the Sloan Digital Sky Survey (SDSS). My methodology encompassed field cropping, using Astropy isophote routines (integrating the IRAF ellipse routine), converting intensities from nanomaggies to Jansky, and transforming semi-axes from pixels to arcseconds. This process allowed me to estimate crucial physical parameters such as effective radius, surface brightness, and luminosity, which showed excellent agreement with the NASA/IPAC Extragalactic Database (NED). This project marked my first practical experience with VizieR, Astropy IRAF routines, Python for astronomical data analysis, and DS9 visualization. It was truly fascinating to witness how isophote fitting could reveal subtle yet profound details within elliptical galaxies, deepening my appreciation for data-driven astronomical research.',
+                tags: ['Astrophysics', 'Extragalactic Astrophysics', 'Galaxy Morphology', 'Data Analysis', 'Python', 'Astropy', 'SDSS', 'VizieR'],
                 status: 'completed',
                 date: '2021'
             },
             {
                 id: 'medical-image-diagnosis',
-                title: 'Deep Learning para Diagnóstico de Imagens Médicas: Uma Jornada na Detecção de Câncer de Pele',
-                description: 'Minha exploração em Machine Learning e Deep Learning me levou a uma aplicação convincente: o diagnóstico de câncer de pele a partir de imagens médicas. Utilizando conjuntos de dados de referência como ISIC 2018 Challenge e HAM10000 (Tschandl, Rosendahl & Kittler, 2018), desenvolvi um pipeline abrangente. Este pipeline integrou Astropy e Photutils para extração de brilho radial, t-SNE para redução de dimensionalidade, Random Forest como linha de base e CNNs em Keras/TensorFlow para combinar imagens com perfis radiais. O conjunto de dados inicial compreendia 10.015 imagens dermatoscópicas, servindo como um robusto conjunto de treinamento para aprendizado de máquina acadêmico. Os casos cobriam um amplo espectro de lesões pigmentadas, incluindo ceratoses actínicas, carcinoma basocelular, lesões benignas tipo ceratose, dermatofibroma, melanoma, nevos melanocíticos e lesões vasculares. \n\nInicialmente, os resultados não foram promissores, com precisão em torno de 0.498, F1-score (ponderado) ~0.334 e ROC AUC ~0.499, indicando que a rede aprendeu principalmente apenas uma classe. Este experimento fascinante, embora não imediatamente bem-sucedido, forneceu lições inestimáveis sobre integração de bibliotecas, limites de generalização e o processo científico de explorar o improvável. \n\n**Correção e Refatoração:**\nRefletindo sobre os desafios iniciais, percebi o erro em reduzir excessivamente a dimensionalidade do conjunto de dados sem agrupamento prévio. Isso levou o modelo a ignorar metadados cruciais de contexto clínico (7 características por imagem) e a reforçar o viés em relação à classe majoritária (nevos melanocíticos). Uma refatoração completa da arquitetura de treinamento foi necessária. Ao combinar tensores extraídos de isófotas (capturando perfis radiais de cor, textura de borda e intensidade) com metadados de contexto clínico, gerei quase 24 milhões de pontos de dados treináveis. Apesar das limitações de hardware (Intel© Core™ i7-8565U CPU @ 1.80GHz × 4, 8 GB RAM), otimizei o processamento em 50 épocas com 439 lotes cada, totalizando aproximadamente 25 horas de treinamento mais 11 horas de ajuste fino para validação. Ignorar temporariamente casos benignos forçou o modelo a aprender padrões de classes minoritárias (malignas). No final, alcancei um recall convergindo entre 82% e 85% para melanomas (casos malignos) e 95% a 98% para nevos (casos benignos). Embora muito ainda precise ser feito — incluindo a revisão da análise exploratória de dados, ajuste da arquitetura e exploração de novas estratégias de balanceamento de conjuntos de dados — este projeto continua sendo uma profunda experiência de aprendizado na construção de modelos de deep learning confiáveis e robustos para diagnóstico médico.',
+                title: 'Deep Learning for Medical Image Diagnosis: A Journey in Skin Cancer Detection',
+                description: 'My exploration in Machine Learning and Deep Learning led me to a compelling application: skin cancer diagnosis from medical images. Using reference datasets like ISIC 2018 Challenge and HAM10000 (Tschandl, Rosendahl & Kittler, 2018), I developed a comprehensive pipeline. This pipeline integrated Astropy and Photutils for radial brightness extraction, t-SNE for dimensionality reduction, Random Forest as a baseline, and CNNs in Keras/TensorFlow to combine images with radial profiles. The initial dataset comprised 10,015 dermoscopic images, serving as a robust training set for academic machine learning. Cases covered a broad spectrum of pigmented lesions, including actinic keratoses, basal cell carcinoma, benign keratosis-like lesions, dermatofibroma, melanoma, melanocytic nevi, and vascular lesions. \n\nInitially, results were not promising, with accuracy around 0.498, weighted F1-score ~0.334, and ROC AUC ~0.499, indicating the network learned mainly just one class. This fascinating experiment, though not immediately successful, provided invaluable lessons about library integration, generalization limits, and the scientific process of exploring the unlikely. \n\n**Correction and Refactoring:**\nReflecting on the initial challenges, I realized the error in excessively reducing dataset dimensionality without prior clustering. This led the model to ignore crucial clinical context metadata (7 features per image) and reinforce bias toward the majority class (melanocytic nevi). A complete refactoring of the training architecture was necessary. By combining tensors extracted from isophotes (capturing color radial profiles, edge texture, and intensity) with clinical context metadata, I generated nearly 24 million trainable data points. Despite hardware limitations (Intel© Core™ i7-8565U CPU @ 1.80GHz × 4, 8 GB RAM), I optimized processing over 50 epochs with 439 batches each, totaling approximately 25 hours of training plus 11 hours of fine-tuning for validation. Temporarily ignoring benign cases forced the model to learn patterns from minority classes (malignant). In the end, I achieved recall converging between 82% and 85% for melanomas (malignant cases) and 95% to 98% for nevi (benign cases). Although much remains to be done—including revisiting exploratory data analysis, architecture tuning, and exploring new dataset balancing strategies—this project continues to be a profound learning experience in building reliable and robust deep learning models for medical diagnosis.',
                 links: [
-                    { url: 'https://lnkd.in/dcUAP2gw', label: 'Notebook Kaggle [Código]', type: 'external' },
-                    { url: 'https://lnkd.in/d5jSmE2H', label: 'Referência do Conjunto de Dados [Artigo]', type: 'external' },
-                    { url: 'https://lnkd.in/dp4ubfGD', label: 'Contexto de Redução de Dimensionalidade', type: 'external' }
+                    { url: 'https://lnkd.in/dcUAP2gw', label: 'Kaggle Notebook [Code]', type: 'external' },
+                    { url: 'https://lnkd.in/d5jSmE2H', label: 'Dataset Reference [Paper]', type: 'external' },
+                    { url: 'https://lnkd.in/dp4ubfGD', label: 'Dimensionality Reduction Context', type: 'external' }
                 ],
-                tags: ['Deep Learning', 'Imagens Médicas', 'Diagnóstico de Câncer de Pele', 'Machine Learning', 'CNNs', 'Ciência de Dados', 'Astropy', 'Photutils', 'Keras', 'TensorFlow'],
+                tags: ['Deep Learning', 'Medical Imaging', 'Skin Cancer Diagnosis', 'Machine Learning', 'CNNs', 'Data Science', 'Astropy', 'Photutils', 'Keras', 'TensorFlow'],
                 status: 'ongoing',
-                date: '2021-Presente'
+                date: '2021-Present'
             }
         ];
     }
@@ -718,19 +718,19 @@ class ContentModel {
         return [
             {
                 id: 'interactive-portfolio-website',
-                title: 'Site de Portfólio Interativo: Uma Reflexão Digital',
-                description: 'Este site de portfólio pessoal é um testemunho da minha jornada e habilidades, construído com uma filosofia de design moderna, minimalista e responsiva. Ele utiliza JavaScript puro, aderindo estritamente ao padrão de arquitetura MVC, para garantir modularidade, manutenibilidade e entrega de conteúdo dinâmico. O site é projetado para contar minha história, destacando minhas diversas experiências em física, ciência da computação, astrofísica, educação, empreendedorismo e vários hobbies. Ele incorpora tipografia clássica, elementos sutis de computação retrô e transições suaves para criar uma experiência de usuário intuitiva e envolvente. A população dinâmica de conteúdo, incluindo texto rico e imagens, garante uma abordagem de contar histórias que conecta minha linha do tempo linearmente, permitindo uma exploração mais profunda de eventos específicos.',
-                technologies: ['JavaScript', 'CSS3', 'HTML5', 'Arquitetura MVC', 'Vite (Ferramenta de Build)', 'GitHub Pages (Implantação)'],
-                status: 'concluído',
+                title: 'Interactive Portfolio Website: A Digital Reflection',
+                description: 'This personal portfolio website is a testament to my journey and skills, built with a modern, minimalist, and responsive design philosophy. It uses pure JavaScript, strictly adhering to the MVC architecture pattern, to ensure modularity, maintainability, and dynamic content delivery. The site is designed to tell my story, highlighting my diverse experiences in physics, computer science, astrophysics, education, entrepreneurship, and various hobbies. It incorporates classic typography, subtle retro computing elements, and smooth transitions to create an intuitive and engaging user experience. Dynamic content population, including rich text and images, ensures a storytelling approach that connects my timeline linearly, allowing deeper exploration of specific events.',
+                technologies: ['JavaScript', 'CSS3', 'HTML5', 'MVC Architecture', 'Vite (Build Tool)', 'GitHub Pages (Deployment)'],
+                status: 'completed',
                 repository: 'https://github.com/rafaelpassosdomingues/rafaelpassosdomingues.github.io',
                 liveDemo: 'https://rafaelpassosdomingues.github.io',
                 features: [
-                    'Design Responsivo em todos os dispositivos',
-                    'Desempenho Otimizado para tempos de carregamento rápidos',
-                    'Conformidade com Acessibilidade para experiência de usuário inclusiva',
-                    'Carregamento Dinâmico de Conteúdo com abordagem de contar histórias',
-                    'Arquitetura MVC Modular para escalabilidade e manutenibilidade',
-                    'Elementos de UI/UX retro-futuristas com tipografia clássica'
+                    'Responsive Design across all devices',
+                    'Optimized Performance for fast loading times',
+                    'Accessibility Compliance for inclusive user experience',
+                    'Dynamic Content Loading with storytelling approach',
+                    'Modular MVC Architecture for scalability and maintainability',
+                    'Retro-futuristic UI/UX elements with classic typography'
                 ]
             }
         ];
@@ -743,33 +743,33 @@ class ContentModel {
      */
     getHobbiesContent() {
         return {
-            description: 'Além das minhas atividades acadêmicas e profissionais, cultivo uma variedade de hobbies que enriquecem minha vida e proporcionam novas perspectivas. Essas atividades não são apenas passatempos, mas partes integrantes de quem eu sou.',
+            description: 'Beyond my academic and professional activities, I cultivate a variety of hobbies that enrich my life and provide new perspectives. These activities are not just pastimes but integral parts of who I am.',
             items: [
                 {
                     id: 'gardening',
-                    title: 'Jardinagem',
-                    description: 'Encontro imensa alegria em cultivar uma horta, uma prática que me conecta com a natureza e me ensina paciência e resiliência. É uma forma tangível de ver os resultados do cuidado e da dedicação.',
+                    title: 'Gardening',
+                    description: 'I find immense joy in cultivating a vegetable garden, a practice that connects me with nature and teaches me patience and resilience. It\'s a tangible way to see the results of care and dedication.',
                     icon: 'leaf',
                     image: 'hobbies/gardening.jpg'
                 },
                 {
                     id: 'reading',
-                    title: 'Leitura',
-                    description: 'Sou um ávido leitor de ficção científica, fantasia e ciência popular. Livros são minha porta de entrada para novos mundos e ideias, alimentando minha imaginação e minha paixão por aprender.',
+                    title: 'Reading',
+                    description: 'I am an avid reader of science fiction, fantasy, and popular science. Books are my gateway to new worlds and ideas, fueling my imagination and passion for learning.',
                     icon: 'book-open',
                     image: 'hobbies/reading.jpg'
                 },
                 {
                     id: 'tinkering',
-                    title: 'Projetos DIY e Eletrônica',
-                    description: 'Como uma pessoa prática, adoro mexer com eletrônica, construir circuitos e trabalhar em projetos DIY. Esse espírito maker é uma fonte constante de criatividade e resolução de problemas.',
+                    title: 'DIY Projects and Electronics',
+                    description: 'As a hands-on person, I love tinkering with electronics, building circuits, and working on DIY projects. This maker spirit is a constant source of creativity and problem-solving.',
                     icon: 'tools',
                     image: 'hobbies/tinkering.jpg'
                 },
                 {
                     id: 'astrophotography',
-                    title: 'Astrofotografia',
-                    description: 'Combinando meu amor pela astronomia e tecnologia, gosto de capturar imagens do céu noturno. É um hobby desafiador, mas recompensador, que me permite compartilhar a beleza do cosmos com outras pessoas.',
+                    title: 'Astrophotography',
+                    description: 'Combining my love for astronomy and technology, I enjoy capturing images of the night sky. It\'s a challenging but rewarding hobby that allows me to share the beauty of the cosmos with others.',
                     icon: 'camera',
                     image: 'hobbies/astrophotography.jpg'
                 }
@@ -786,26 +786,26 @@ class ContentModel {
         return {
             categories: [
                 {
-                    category: 'Habilidades Técnicas',
+                    category: 'Technical Skills',
                     skills: [
-                        { name: 'Física e Astrofísica', proficiency: 95, years: 8, description: 'Profundo entendimento das leis físicas e fenômenos astronômicos.' },
-                        { name: 'Ciência e Análise de Dados', proficiency: 90, years: 6, description: 'Expertise em análise estatística, modelagem de dados e extração de insights de conjuntos de dados complexos.' },
-                        { name: 'Python (NumPy, Pandas, Scikit-learn)', proficiency: 88, years: 5, description: 'Proficiência avançada em Python para computação científica, manipulação de dados e aprendizado de máquina.' },
-                        { name: 'Machine Learning e Deep Learning', proficiency: 85, years: 4, description: 'Experiência no desenvolvimento e aplicação de modelos de ML/DL para tarefas como classificação de imagens e análise preditiva.' },
-                        { name: 'JavaScript (ES6+)', proficiency: 80, years: 3, description: 'Sólidas habilidades em JavaScript moderno para construir aplicações web interativas.' },
-                        { name: 'Modelagem 3D e CNC', proficiency: 78, years: 2, description: 'Proficiente na criação de modelos 3D para impressão e usinagem CNC.' },
-                        { name: 'Robótica e Prototipagem', proficiency: 75, years: 2, description: 'Experiência prática na construção e programação de sistemas robóticos e protótipos eletrônicos.' }
+                        { name: 'Physics and Astrophysics', proficiency: 95, years: 8, description: 'Deep understanding of physical laws and astronomical phenomena.' },
+                        { name: 'Data Science and Analysis', proficiency: 90, years: 6, description: 'Expertise in statistical analysis, data modeling, and extracting insights from complex datasets.' },
+                        { name: 'Python (NumPy, Pandas, Scikit-learn)', proficiency: 88, years: 5, description: 'Advanced proficiency in Python for scientific computing, data manipulation, and machine learning.' },
+                        { name: 'Machine Learning and Deep Learning', proficiency: 85, years: 4, description: 'Experience in developing and applying ML/DL models for tasks like image classification and predictive analysis.' },
+                        { name: 'JavaScript (ES6+)', proficiency: 80, years: 3, description: 'Solid skills in modern JavaScript for building interactive web applications.' },
+                        { name: '3D Modeling and CNC', proficiency: 78, years: 2, description: 'Proficient in creating 3D models for printing and CNC machining.' },
+                        { name: 'Robotics and Prototyping', proficiency: 75, years: 2, description: 'Hands-on experience in building and programming robotic systems and electronic prototypes.' }
                     ]
                 },
                 {
-                    category: 'Habilidades Interpessoais e Criativas',
+                    category: 'Interpersonal and Creative Skills',
                     skills: [
-                        { name: 'Pensamento Analítico e Conceitual', proficiency: 96, years: 8, description: 'Capacidade de desconstruir problemas complexos e desenvolver soluções inovadoras e conceituais.' },
-                        { name: 'Ideação Criativa e Ambição', proficiency: 91, years: 7, description: 'Impulsionado a gerar novas ideias e perseguir metas ambiciosas com determinação.' },
-                        { name: 'Estabilidade Emocional e Reflexão', proficiency: 89, years: 8, description: 'Mantém a compostura sob pressão e se envolve em autorreflexão ponderada para melhoria contínua.' },
-                        { name: 'Resolução de Problemas e Iniciativa', proficiency: 88, years: 7, description: 'Identifica proativamente desafios e toma a iniciativa para implementar soluções eficazes.' },
-                        { name: 'Arquitetura de Soluções', proficiency: 85, years: 4, description: 'Habilidoso em projetar e arquitetar soluções abrangentes que atendam aos requisitos técnicos e de negócios.' },
-                        { name: 'Flexibilidade e Adaptabilidade', proficiency: 80, years: 6, description: 'Adapta-se rapidamente a novos desafios e ambientes em mudança, demonstrando alta flexibilidade.' }
+                        { name: 'Analytical and Conceptual Thinking', proficiency: 96, years: 8, description: 'Ability to deconstruct complex problems and develop innovative, conceptual solutions.' },
+                        { name: 'Creative Ideation and Ambition', proficiency: 91, years: 7, description: 'Driven to generate new ideas and pursue ambitious goals with determination.' },
+                        { name: 'Emotional Stability and Reflection', proficiency: 89, years: 8, description: 'Maintains composure under pressure and engages in thoughtful self-reflection for continuous improvement.' },
+                        { name: 'Problem Solving and Initiative', proficiency: 88, years: 7, description: 'Proactively identifies challenges and takes initiative to implement effective solutions.' },
+                        { name: 'Solution Architecture', proficiency: 85, years: 4, description: 'Skilled in designing and architecting comprehensive solutions that meet technical and business requirements.' },
+                        { name: 'Flexibility and Adaptability', proficiency: 80, years: 6, description: 'Quickly adapts to new challenges and changing environments, demonstrating high flexibility.' }
                     ]
                 }
             ]

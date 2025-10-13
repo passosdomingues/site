@@ -1,5 +1,5 @@
-import { eventBus } from '../core/EventBus.js';
-import { NavigationView } from '../views/NavigationView.js';
+import eventBus from '../core/EventBus.js';
+import NavigationView from '../views/NavigationView.js';
 
 /**
  * @brief Navigation controller

@@ -1,4 +1,4 @@
-import { eventBus } from '../core/EventBus.js';
+import eventBus from '../core/EventBus.js';
 
 /**
  * @brief Theme manager service

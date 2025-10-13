@@ -2,18 +2,18 @@
  * @brief Main application entry point
  * @description Initializes and coordinates all MVC components
  */
-import { App } from './core/App.js';
-import { Router } from './core/Router.js';
+import App from './core/App.js';
+import Router from './core/Router.js';
 
 // Import controllers
-import { MainController } from './controllers/MainController.js';
-import { NavigationController } from './controllers/NavigationController.js';
+import MainController from './controllers/MainController.js';
+import NavigationController from './controllers/NavigationController.js';
 
 // Import services
-import { ContentModel } from './models/ContentModel.js';
-import { ThemeManager } from './services/ThemeManager.js';
-import { AccessibilityManager } from './services/AccessibilityManager.js';
-import { PerformanceMonitor } from './services/PerformanceMonitor.js';
+import ContentModel from './models/ContentModel.js';
+import ThemeManager from './services/ThemeManager.js';
+import AccessibilityManager from './services/AccessibilityManager.js';
+import PerformanceMonitor from './services/PerformanceMonitor.js';
 
 class Application {
     constructor() {

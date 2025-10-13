@@ -1,5 +1,5 @@
-import { eventBus } from '../core/EventBus.js';
-import { ViewManager } from '../views/ViewManager.js';
+import eventBus from '../core/EventBus.js';
+import ViewManager from '../views/ViewManager.js';
 
 /**
  * @brief Main application controller

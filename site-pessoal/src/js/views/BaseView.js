@@ -1,4 +1,4 @@
-import { eventBus } from '../core/EventBus.js';
+import eventBus from '../core/EventBus.js';
 
 /**
  * @brief Base view class for all views

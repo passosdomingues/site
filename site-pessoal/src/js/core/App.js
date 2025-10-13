@@ -1,4 +1,4 @@
-import { eventBus } from './EventBus.js';
+import eventBus from './EventBus.js';
 
 /**
  * @brief Main application coordinator
