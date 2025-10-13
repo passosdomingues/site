@@ -18,6 +18,9 @@ export default defineConfig({
             },
             output: {
                 manualChunks: {
+                    'mvc-data': [
+                        './src/js/data/PortfolioData.js'
+                    ],
                     'mvc-core': [
                         './src/js/core/App.js',
                         './src/js/core/EventBus.js',
