@@ -19,7 +19,7 @@
   position: absolute; 
   top: -40px; 
   left: 6px; 
-  background: var(--color-primary-700); 
+  background: #264B93; 
   color: white; 
   padding: 8px 12px; 
   text-decoration: none; 
@@ -33,52 +33,11 @@
 }
 
 .noscript-warning { 
-  background: var(--color-warning-light); 
-  color: var(--color-text-primary); 
+  background: #ffeb3b; 
+  color: #333; 
   padding: 1rem; 
   text-align: center; 
-  border-bottom: 2px solid var(--color-warning-dark);
-}
-
-/* Loading overlay styles */
-.app-loading-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: var(--color-background, #ffffff);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-  transition: opacity 0.5s ease;
-}
-
-.app-loading-placeholder {
-  text-align: center;
-  color: var(--color-text-primary, #333333);
-}
-
-.app-loading-placeholder h1 {
-  margin-bottom: 1rem;
-  font-size: 1.5rem;
-}
-
-.app-loading-placeholder p {
-  font-size: 1rem;
-  opacity: 0.8;
-}
-
-/* Main content structure */
-.main-content {
-  min-height: 100vh;
-  opacity: 0;
-  transition: opacity 0.3s ease-in;
-}
-
-[data-app-initialized="true"] .main-content {
-  opacity: 1;
+  border-bottom: 2px solid #ffc107;
 }
 
 /* Hide dynamic content until JS loads */
@@ -86,28 +45,4 @@
 [data-hero-initialized="false"] .hero-content-container,
 [data-main-initialized="false"] .main-content > *:not(.content-loading-indicator) {
   display: none;
-}
-
-/* Basic section container styles */
-.sections-container {
-  position: relative;
-}
-
-.content-loading-indicator {
-  text-align: center;
-  padding: 2rem;
-  color: var(--color-text-secondary, #666666);
-}
-
-/* Ensure main nav and footer are initially hidden until rendered */
-.main-navigation-container,
-.hero-section,
-.main-footer {
-  display: none;
-}
-
-[data-app-initialized="true"] .main-navigation-container,
-[data-app-initialized="true"] .hero-section,
-[data-app-initialized="true"] .main-footer {
-  display: block;
 }

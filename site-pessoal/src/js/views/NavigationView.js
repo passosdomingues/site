@@ -130,15 +130,6 @@ class NavigationView {
          */
         this.isInitialized = false;
 
-        // Bind methods to maintain context
-        this.toggleMobileMenuState = this.toggleMobileMenuState.bind(this);
-        this.closeMobileMenu = this.closeMobileMenu.bind(this);
-        this.handleWindowResize = this.handleWindowResize.bind(this);
-        this.handleNavigationKeydown = this.handleNavigationKeydown.bind(this);
-        this.updateNavigationScrollState = this.updateNavigationScrollState.bind(this);
-        this.handleNavigationClick = this.handleNavigationClick.bind(this);
-        this.triggerFlashback = this.triggerFlashback.bind(this);
-
         console.debug('NavigationView: Instance created with container:', containerElement);
     }
 
@@ -175,7 +166,6 @@ class NavigationView {
                     ${this.generateBrandSection()}
                     ${this.generateDesktopNavigation(currentPath)}
                     ${this.generateMobileNavigationToggle(isMobileMenuOpen)}
-                    ${this.generateFlashbackButton()}
                     ${this.generateMobileNavigationMenu(currentPath, isMobileMenuOpen)}
                 </div>
             </nav>
@@ -292,23 +282,6 @@ class NavigationView {
     }
 
     /**
-     * @brief Generates flashback button HTML
-     * @private
-     * @returns {string} Flashback button HTML string
-     */
-    generateFlashbackButton() {
-        return `
-            <button 
-                class="flashback-button btn btn--secondary btn--sm"
-                aria-label="Get a random flashback from my journey"
-            >
-                <i class="fas fa-random" aria-hidden="true"></i>
-                <span class="flashback-button-text">Flashback</span>
-            </button>
-        `;
-    }
-
-    /**
      * @brief Initializes navigation interactivity and event handlers
      * @public
      * @param {Object} initializationData - Data for initialization
@@ -340,8 +313,7 @@ class NavigationView {
             this.setupMobileMenuInteractions(navigationElement),
             this.setupKeyboardNavigation(navigationElement),
             this.setupScrollBehavior(navigationElement),
-            this.setupNavigationClickHandlers(navigationElement),
-            this.setupFlashbackInteractions(navigationElement)
+            this.setupNavigationClickHandlers(navigationElement)
         ];
 
         await Promise.all(setupPromises);
@@ -400,25 +372,10 @@ class NavigationView {
     }
 
     /**
-     * @brief Sets up flashback button interactions
-     * @private
-     * @param {HTMLElement} navigationElement - The navigation container element
-     * @returns {Promise<void>} Resolves when flashback interactions are set up
-     */
-    async setupFlashbackInteractions(navigationElement) {
-        const flashbackButton = navigationElement.querySelector(".flashback-button");
-        if (!flashbackButton) return;
-
-        flashbackButton.addEventListener("click", () => {
-            this.triggerFlashback();
-        }, { signal: this.eventAbortController.signal });
-    }
-
-    /**
      * @brief Toggles mobile menu open/closed state
      * @private
      */
-    toggleMobileMenuState() {
+    toggleMobileMenuState = () => {
         const newMenuState = !this.navigationState.isMobileMenuOpen;
         this.navigationState.isMobileMenuOpen = newMenuState;
 
@@ -432,13 +389,13 @@ class NavigationView {
         });
 
         console.debug(`NavigationView: Mobile menu ${newMenuState ? 'opened' : 'closed'}.`);
-    }
+    };
 
     /**
      * @brief Closes mobile menu and updates state
      * @private
      */
-    closeMobileMenu() {
+    closeMobileMenu = () => {
         if (!this.navigationState.isMobileMenuOpen) return;
 
         this.navigationState.isMobileMenuOpen = false;
@@ -450,7 +407,7 @@ class NavigationView {
         });
 
         console.debug('NavigationView: Mobile menu closed.');
-    }
+    };
 
     /**
      * @brief Updates DOM state for mobile menu visibility
@@ -488,14 +445,14 @@ class NavigationView {
      * @brief Handles window resize events for responsive behavior
      * @private
      */
-    handleWindowResize() {
+    handleWindowResize = () => {
         const windowWidth = window.innerWidth;
         
         // Close mobile menu when resizing to desktop breakpoint
         if (windowWidth >= NAVIGATION_CONSTANTS.MOBILE_MENU_BREAKPOINT && this.navigationState.isMobileMenuOpen) {
             this.closeMobileMenu();
         }
-    }
+    };
 
     /**
      * @brief Sets up keyboard navigation for accessibility
@@ -522,7 +479,7 @@ class NavigationView {
      * @param {NodeList} navigationLinks - Collection of navigation link elements
      * @param {number} currentIndex - Index of the currently focused link
      */
-    handleNavigationKeydown(event, navigationLinks, currentIndex) {
+    handleNavigationKeydown = (event, navigationLinks, currentIndex) => {
         const { key } = event;
         const linkCount = navigationLinks.length;
 
@@ -537,7 +494,7 @@ class NavigationView {
             event.preventDefault();
             this.handleHomeEndNavigation(key, navigationLinks, linkCount);
         }
-    }
+    };
 
     /**
      * @brief Handles arrow key navigation between menu items
@@ -632,7 +589,7 @@ class NavigationView {
      * @private
      * @param {HTMLElement} navigationElement - The navigation container element
      */
-    updateNavigationScrollState(navigationElement) {
+    updateNavigationScrollState = (navigationElement) => {
         const currentScrollY = window.scrollY;
         const scrollDelta = currentScrollY - this.navigationState.lastScrollPosition;
 
@@ -653,7 +610,7 @@ class NavigationView {
         }
 
         this.navigationState.lastScrollPosition = currentScrollY;
-    }
+    };
 
     /**
      * @brief Hides navigation with animation
@@ -711,7 +668,7 @@ class NavigationView {
      * @param {MouseEvent} event - Click event object
      * @param {HTMLElement} linkElement - The clicked navigation link element
      */
-    handleNavigationClick(event, linkElement) {
+    handleNavigationClick = (event, linkElement) => {
         event.preventDefault();
 
         const targetPath = linkElement.getAttribute('href');
@@ -726,31 +683,7 @@ class NavigationView {
         });
 
         console.debug(`NavigationView: Navigation requested to: ${targetPath}`);
-    }
-
-    /**
-     * @brief Triggers a random flashback, navigating to a random section
-     * @private
-     */
-    triggerFlashback() {
-        const sections = Array.from(document.querySelectorAll("[data-section]"));
-        if (sections.length === 0) {
-            console.warn('NavigationView: No sections found for flashback navigation');
-            return;
-        }
-
-        const randomSection = sections[Math.floor(Math.random() * sections.length)];
-        const sectionId = randomSection.id;
-
-        // Notify observers of flashback trigger
-        this.notifyObservers("flashbackTriggered", { 
-            sectionId,
-            sectionElement: randomSection,
-            totalSections: sections.length
-        });
-
-        console.debug(`NavigationView: Flashback triggered to section: ${sectionId}`);
-    }
+    };
 
     /**
      * @brief Updates navigation state based on current route

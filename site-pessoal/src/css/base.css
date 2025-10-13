@@ -42,7 +42,7 @@ html {
 
 body {
   /* Typography */
-  font-family: var(--font-family-narrative);
+  font-family: var(--font-family-primary);
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-normal);
   line-height: var(--line-height-normal);
@@ -58,7 +58,7 @@ body {
 
 /* ===== Typography Scale ===== */
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-family-narrative);
+  font-family: var(--font-family-primary);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-tight);
   color: var(--color-text-primary);
@@ -66,14 +66,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
-  font-family: var(--font-family-retro-display);
   font-size: var(--font-size-5xl);
   font-weight: var(--font-weight-bold);
   letter-spacing: var(--letter-spacing-tight);
 }
 
 h2 {
-  font-family: var(--font-family-retro-display);
   font-size: var(--font-size-4xl);
   font-weight: var(--font-weight-semibold);
 }
@@ -96,7 +94,6 @@ h6 {
 
 /* ===== Text Elements ===== */
 p {
-  font-family: var(--font-family-narrative);
   margin-bottom: var(--space-4);
   line-height: var(--line-height-relaxed);
   color: var(--color-text-secondary);
@@ -134,7 +131,7 @@ small {
 }
 
 code {
-  font-family: var(--font-family-retro-terminal);
+  font-family: var(--font-family-mono);
   font-size: var(--font-size-sm);
   background-color: var(--color-background-secondary);
   padding: var(--space-1) var(--space-2);
@@ -143,7 +140,7 @@ code {
 }
 
 pre {
-  font-family: var(--font-family-retro-terminal);
+  font-family: var(--font-family-mono);
   font-size: var(--font-size-sm);
   background-color: var(--color-background-secondary);
   padding: var(--space-4);
