@@ -185,7 +185,7 @@ class ViewManager {
     }
     
     /**
-     * @brief Render gallery content
+     * @brief Render gallery content compatible with PortfolioData.js
      * @param {Array} content - Gallery content array
      * @returns {string} HTML string
      */
@@ -193,38 +193,31 @@ class ViewManager {
         if (!Array.isArray(content)) return '';
 
         const items = content.map(item => {
-            const images = item.images || [];
-            const mainImage = item.image || images[0] || {};
+            const src = item.imageUrl || (item.image && item.image.src) || (item.images && item.images[0]?.src) || '';
+            const alt = item.alt || item.caption || item.title || 'Gallery image';
+            const caption = item.caption || (item.image && item.image.caption) || '';
 
-            const imageElements = images.length
-                ? images.map(img => `
-                    <div class="gallery-subitem">
-                        <img src="${this.escapeHtml(img.src)}" 
-                            alt="${this.escapeHtml(img.alt || item.title)}" 
-                            class="gallery-image" 
-                            loading="lazy">
-                        ${img.caption ? `
-                            <div class="gallery-caption">${this.escapeHtml(img.caption)}</div>
-                        ` : ''}
-                    </div>
-                `).join('')
-                : mainImage.src ? `
-                    <img src="${this.escapeHtml(mainImage.src)}" 
-                        alt="${this.escapeHtml(mainImage.alt || item.title)}" 
-                        class="gallery-image" 
+            // Se houver várias imagens em um mesmo item
+            const multipleImages = item.images?.length > 1 ? item.images.map(img => `
+                <div class="gallery-subitem">
+                    <img src="${this.escapeHtml(img.src)}"
+                        alt="${this.escapeHtml(img.alt || alt)}"
+                        class="gallery-image"
                         loading="lazy">
-                    ${mainImage.caption ? `
-                        <div class="gallery-caption">${this.escapeHtml(mainImage.caption)}</div>
-                    ` : ''}
-                ` : '';
+                    ${img.caption ? `<div class="gallery-caption">${this.escapeHtml(img.caption)}</div>` : ''}
+                </div>
+            `).join('') : '';
 
             return `
                 <div class="gallery-item">
-                    ${imageElements}
-                    <div class="gallery-content">
-                        <h3 class="gallery-title">${this.escapeHtml(item.title)}</h3>
-                        <p class="gallery-description">${this.escapeHtml(item.description)}</p>
-                    </div>
+                    ${src ? `
+                        <img src="${this.escapeHtml(src)}"
+                            alt="${this.escapeHtml(alt)}"
+                            class="gallery-image"
+                            loading="lazy">
+                    ` : ''}
+                    ${multipleImages}
+                    ${caption ? `<div class="gallery-caption">${this.escapeHtml(caption)}</div>` : ''}
                 </div>
             `;
         }).join('');
