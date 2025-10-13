@@ -146,7 +146,7 @@ export const PORTFOLIO_DATA = {
                     description: 'Beyond public outreach, the UNIFAL-MG Observatory was a center for research and astrophotography. I witnessed and contributed to significant achievements, including the pioneering work of my colleague José Carlos in detecting the transit of exoplanet WASP-76b. My own efforts in astrophotography led me to capture impressive images, such as the Sombrero Galaxy (M104/NGC 4594) in a 34-minute exposure and the spiral arms of the Southern Pinwheel Galaxy (M83/NGC 5236).',
                     images: [
                         { 
-                            src: 'public/images/obsLua.jpg', 
+                            src: 'obsLua.jpg', 
                             alt: 'Moon observation', 
                             caption: 'Detailed view of the Moon captured at UNIFAL-MG Observatory' 
                         },
