@@ -212,7 +212,7 @@ class ContentModel {
                     priority: 1,
                     visible: true,
                     order: 1,
-                    icon: 'atom', // Replace with a suitable icon from Noun Project for 'user' or 'profile'
+                    icon: 'atom',
                     backgroundColor: 'var(--color-surface)'
                 }
             },
@@ -226,7 +226,7 @@ class ContentModel {
                     priority: 2,
                     visible: true,
                     order: 2,
-                    icon: 'galaxy', // Icon for Astrophysics Research
+                    icon: 'galaxy',
                     backgroundColor: 'var(--color-gray-50)'
                 }
             },
@@ -240,7 +240,7 @@ class ContentModel {
                     priority: 2,
                     visible: true,
                     order: 3,
-                    icon: 'telescope-outline', // Icon for Astronomical Observatory
+                    icon: 'telescope-outline',
                     backgroundColor: 'var(--color-surface)'
                 }
             },
@@ -254,7 +254,7 @@ class ContentModel {
                     priority: 3,
                     visible: true,
                     order: 4,
-                    icon: 'satellite-dish', // Icon for CRAAM Visit
+                    icon: 'satellite-dish',
                     backgroundColor: 'var(--color-gray-50)'
                 }
             },
@@ -268,7 +268,7 @@ class ContentModel {
                     priority: 3,
                     visible: true,
                     order: 5,
-                    icon: 'telescope-solid', // Icon for LNA Zeiss Telescope Experience
+                    icon: 'telescope-solid',
                     backgroundColor: 'var(--color-surface)'
                 }
             },
@@ -282,7 +282,7 @@ class ContentModel {
                     priority: 2,
                     visible: true,
                     order: 6,
-                    icon: 'graduation-hat', // Icon for Education Experience
+                    icon: 'graduation-hat',
                     backgroundColor: 'var(--color-gray-50)'
                 }
             },
@@ -296,7 +296,7 @@ class ContentModel {
                     priority: 2,
                     visible: true,
                     order: 7,
-                    icon: 'idea', // Icon for Innovation and Entrepreneurship
+                    icon: 'idea',
                     backgroundColor: 'var(--color-surface)'
                 }
             },
@@ -310,7 +310,7 @@ class ContentModel {
                     priority: 1,
                     visible: true,
                     order: 8,
-                    icon: 'brain-outline', // Icon for Deep Learning Projects
+                    icon: 'brain-outline',
                     backgroundColor: 'var(--color-gray-50)'
                 }
             },
@@ -324,7 +324,7 @@ class ContentModel {
                     priority: 2,
                     visible: true,
                     order: 9,
-                    icon: 'gears', // Icon for Skills and Competencies
+                    icon: 'gears',
                     backgroundColor: 'var(--color-surface)'
                 }
             },
@@ -338,7 +338,7 @@ class ContentModel {
                     priority: 4,
                     visible: true,
                     order: 10,
-                    icon: 'puzzle-piece', // Icon for Hobbies and Interests
+                    icon: 'puzzle-piece',
                     backgroundColor: 'var(--color-gray-50)'
                 }
             }
@@ -463,7 +463,7 @@ class ContentModel {
                 links: [],
                 tags: ['Scientific Outreach', 'Academic Events', 'Stellar Dynamics', 'Dark Matter', 'Public Speaking'],
                 status: 'completed',
-                date: '2019-11-20' // Adjusted date to reflect the lecture event more accurately
+                date: '2019-11-20'
             },
             {
                 id: 'ccc-tl-cosmology',
@@ -474,7 +474,7 @@ class ContentModel {
                 ],
                 tags: ['Cosmology', 'Dark Energy', 'Dark Matter', 'Baryon Acoustic Oscillation', 'Theoretical Physics'],
                 status: 'published',
-                date: '2024-01-01' // Assuming a recent publication date
+                date: '2024-01-01'
             }
         ];
     }
@@ -504,16 +504,10 @@ class ContentModel {
                 id: 'observatory-astrophotography',
                 title: 'Astrofotografia e Pesquisa de Exoplanetas no Observatório da UNIFAL-MG',
                 description: 'Além da extensão pública, o Observatório da UNIFAL-MG foi um centro de pesquisa e astrofotografia. Testemunhei e contribuí para conquistas significativas, incluindo o trabalho pioneiro do meu colega José Carlos na detecção do trânsito do exoplaneta WASP-76b. Meus próprios esforços em astrofotografia me levaram a capturar imagens impressionantes, como a Galáxia do Sombreiro (M104/NGC 4594) em uma exposição de 34 minutos e os braços espirais da Galáxia do Catavento do Sul (M83/NGC 5236). Também tive a oportunidade única de guiar minha primeira turma, o 3º EJA de Divisa Nova - MG, através de uma sessão prática de observação no observatório. Mesmo após o término do meu envolvimento institucional, minha paixão pela observação continuou, culminando na experiência emocionante de contemplar o cometa de longo período C/2020 F3 (NEOWISE) em 2020. Essas experiências solidificaram minhas habilidades em aquisição de dados, processamento de imagens e análise científica.',
-                image: {
-                    src: 'obsLua.jpg',
-                    alt: 'Observação da Lua', 
-                    caption: 'Vista detalhada da Lua capturada no Observatório da UNIFAL-MG'
-                },
-                image: {
-                    src: 'obsGalaxiaSombrero.jpg',
-                    alt: 'Galáxia do Sombreiro', 
-                    caption: 'Galáxia do Sombreiro (M104/NGC 4594) capturada por astrofotografia'
-                },
+                images: [
+                    { src: 'obsLua.jpg', alt: 'Observação da Lua', caption: 'Vista detalhada da Lua capturada no Observatório da UNIFAL-MG' },
+                    { src: 'obsGalaxiaSombrero.jpg', alt: 'Galáxia do Sombreiro', caption: 'Galáxia do Sombreiro (M104/NGC 4594) capturada por astrofotografia' }
+                ],
                 highlights: [
                     'Contribuição para a detecção de trânsito de exoplanetas (WASP-76b)',
                     'Realização de astrofotografia de objetos de céu profundo (Galáxia do Sombreiro, Galáxia do Catavento do Sul)',
@@ -564,7 +558,7 @@ class ContentModel {
                 description: 'Durante meu curso de Física na UNIFAL-MG (2014-2018), tive a extraordinária oportunidade de operar, por duas noites em 2016, um instrumento verdadeiramente especial no Laboratório Nacional de Astrofísica (LNA/OPD). Este não era um telescópio comum; era um Zeiss histórico, adquirido da antiga Alemanha Oriental nas décadas de 1960/70 através de uma fascinante negociação envolvendo café. Após anos em armazenamento, foi finalmente montado em 1983 no Observatório do Pico dos Dias. Este clássico telescópio Cassegrain, com sua primária parabólica e secundária hiperbólica, apresenta uma razão focal de f/12.5 no foco Cassegrain e requer apontamento manual. É exclusivamente dedicado à fotometria e polarimetria, permitindo estudos precisos da luz de estrelas e galáxias, revelando detalhes intrincados que apenas instrumentos meticulosamente calibrados podem capturar. Operar o Zeiss foi uma experiência profunda: desde a preparação das observações e coleta de dados até a calibração do instrumento, cada detalhe e ajuste ressaltou a busca essencial pelo conhecimento. Mais do que apenas habilidade técnica, foi uma imersão no rico legado científico que ele incorpora, um poderoso lembrete de que a ciência prospera com paciência, precisão e curiosidade insaciável. Esta experiência não apenas aprofundou minha paixão por dados e por observar o universo, mas também permanece como uma das memórias mais queridas da minha jornada acadêmica, destacando o fascínio duradouro da exploração astronômica.',
                 images: [
                     { src: 'obs4.jpg', alt: 'Observatório do LNA ao pôr do sol', caption: 'Observatório do Pico dos Dias (LNA) ao pôr do sol, um cenário sereno para a descoberta científica' },
-                    { src: 'obs5.jpg', alt: 'Vista aérea do Observatório do LNA', caption: 'Vista aérea do Laboratório Nacional de Astrofísica (LNA), mostrando sua impressionante infraestrutura' }
+                    { src: 'obs5.jpg', alt: 'Vista aérea do Observatório do LNA', caption: 'Vista aérea do Laboratório Nacional de Astrofísica (LNA), mostrando sua impressioante infraestrutura' }
                 ],
                 highlights: [
                     'Operou um telescópio Cassegrain Zeiss histórico para fotometria e polarimetria',
@@ -621,7 +615,7 @@ class ContentModel {
      * @private
      * @returns {Array} Array of innovation project cards
      */
-getInnovationContent() {
+    getInnovationContent() {
         return [
             {
                 id: 'nidustec-incubator-experience',
@@ -668,14 +662,14 @@ getInnovationContent() {
                 ],
                 tags: ['Award', 'ANPROTEC', 'Entrepreneurship', 'Innovation', 'Ecosystem Development'],
                 status: 'awarded',
-                date: '2024-12-04' // Assuming the award date is the same as the conference
+                date: '2024-12-04'
             },
             {
                 id: 'anprotec-publication',
                 title: 'Publication: Methodology for Impact Measurement and CERNE Model Validation',
                 description: 'My contributions to the innovation ecosystem also extended to academic publication. I co-authored a paper titled \"Development of Methodology for Measuring the Impacts and Validating the Implementation of the CERNE Model in Technology-Based Business Incubators.\" This research, presented at the 34th ANPROTEC Conference on December 4, 2024, in São José dos Campos, focused on refining metrics and validating the effectiveness of the CERNE model in fostering technology-based startups. Collaborating with Izabella Carneiro Bastos, Leonardo Contreras Pereira, and Laura de Bom Maimone dos Santos, this publication reflects my commitment to both practical application and theoretical understanding of innovation and entrepreneurship.',
                 links: [
-                    { url: 'https://anprotec.org.br/site/2024/12/premio-nacional-anprotec-de-empreendedorismo-inovador-2024-revela-vencedores-em-sao-jose-dos-campos/', label: 'ANPROTEC Award News', type: 'external' } // Link to the news article about the award/conference
+                    { url: 'https://anprotec.org.br/site/2024/12/premio-nacional-anprotec-de-empreendedorismo-inovador-2024-revela-vencedores-em-sao-jose-dos-campos/', label: 'ANPROTEC Award News', type: 'external' }
                 ],
                 tags: ['Publication', 'ANPROTEC', 'CERNE Model', 'Incubators', 'Entrepreneurship', 'Research'],
                 status: 'published',
@@ -689,7 +683,7 @@ getInnovationContent() {
      * @private
      * @returns {Array} Array of deep learning project cards
      */
-getDeepLearningProjectsContent() {
+    getDeepLearningProjectsContent() {
         return [
             {
                 id: 'elliptical-galaxy-brightness-profiles',
@@ -720,42 +714,6 @@ getDeepLearningProjectsContent() {
      * @private
      * @returns {Array} Array of project cards with technical details
      */
-    getHobbiesContent() {
-        return {
-            description: 'Além das minhas atividades acadêmicas e profissionais, cultivo uma variedade de hobbies que enriquecem minha vida e proporcionam novas perspectivas. Essas atividades não são apenas passatempos, mas partes integrantes de quem eu sou.',
-            items: [
-                {
-                    id: 'gardening',
-                    title: 'Jardinagem',
-                    description: 'Encontro imensa alegria em cultivar uma horta, uma prática que me conecta com a natureza e me ensina paciência e resiliência. É uma forma tangível de ver os resultados do cuidado e da dedicação.',
-                    icon: 'leaf',
-                    image: '.hobbies/gardening.jpg'
-                },
-                {
-                    id: 'reading',
-                    title: 'Leitura',
-                    description: 'Sou um ávido leitor de ficção científica, fantasia e ciência popular. Livros são minha porta de entrada para novos mundos e ideias, alimentando minha imaginação e minha paixão por aprender.',
-                    icon: 'book-open',
-                    image: '.reading.jpg'
-                },
-                {
-                    id: 'tinkering',
-                    title: 'Projetos DIY e Eletrônica',
-                    description: 'Como uma pessoa prática, adoro mexer com eletrônica, construir circuitos e trabalhar em projetos DIY. Esse espírito maker é uma fonte constante de criatividade e resolução de problemas.',
-                    icon: 'tools',
-                    image: '.tinkering.jpg'
-                },
-                {
-                    id: 'astrophotography',
-                    title: 'Astrofotografia',
-                    description: 'Combinando meu amor pela astronomia e tecnologia, gosto de capturar imagens do céu noturno. É um hobby desafiador, mas recompensador, que me permite compartilhar a beleza do cosmos com outras pessoas.',
-                    icon: 'camera',
-                    image: '.astrophotography.jpg'
-                }
-            ]
-        };
-    }
-
     getProjectsContent() {
         return [
             {
@@ -776,6 +734,47 @@ getDeepLearningProjectsContent() {
                 ]
             }
         ];
+    }
+
+    /**
+     * @brief Generates hobbies and interests content
+     * @private
+     * @returns {Object} Structured hobbies content
+     */
+    getHobbiesContent() {
+        return {
+            description: 'Além das minhas atividades acadêmicas e profissionais, cultivo uma variedade de hobbies que enriquecem minha vida e proporcionam novas perspectivas. Essas atividades não são apenas passatempos, mas partes integrantes de quem eu sou.',
+            items: [
+                {
+                    id: 'gardening',
+                    title: 'Jardinagem',
+                    description: 'Encontro imensa alegria em cultivar uma horta, uma prática que me conecta com a natureza e me ensina paciência e resiliência. É uma forma tangível de ver os resultados do cuidado e da dedicação.',
+                    icon: 'leaf',
+                    image: 'hobbies/gardening.jpg'
+                },
+                {
+                    id: 'reading',
+                    title: 'Leitura',
+                    description: 'Sou um ávido leitor de ficção científica, fantasia e ciência popular. Livros são minha porta de entrada para novos mundos e ideias, alimentando minha imaginação e minha paixão por aprender.',
+                    icon: 'book-open',
+                    image: 'hobbies/reading.jpg'
+                },
+                {
+                    id: 'tinkering',
+                    title: 'Projetos DIY e Eletrônica',
+                    description: 'Como uma pessoa prática, adoro mexer com eletrônica, construir circuitos e trabalhar em projetos DIY. Esse espírito maker é uma fonte constante de criatividade e resolução de problemas.',
+                    icon: 'tools',
+                    image: 'hobbies/tinkering.jpg'
+                },
+                {
+                    id: 'astrophotography',
+                    title: 'Astrofotografia',
+                    description: 'Combinando meu amor pela astronomia e tecnologia, gosto de capturar imagens do céu noturno. É um hobby desafiador, mas recompensador, que me permite compartilhar a beleza do cosmos com outras pessoas.',
+                    icon: 'camera',
+                    image: 'hobbies/astrophotography.jpg'
+                }
+            ]
+        };
     }
 
     /**
@@ -811,7 +810,6 @@ getDeepLearningProjectsContent() {
                 }
             ]
         };
-
     }
 
     /**
@@ -821,9 +819,7 @@ getDeepLearningProjectsContent() {
      */
     async loadProjectsContent() {
         try {
-            // Projects are now primarily handled within specific section content getters (e.g., getDeepLearningProjectsContent)
-            // This method can be used for general projects not tied to a specific narrative section.
-            this.projects = this.getProjectsContent(); // Call the getter to populate projects if needed
+            this.projects = this.getProjectsContent();
             this.cacheContent('projects', this.projects);
             console.debug(`ContentModel: Loaded ${this.projects.length} projects.`);
         } catch (error) {
@@ -839,9 +835,7 @@ getDeepLearningProjectsContent() {
      */
     async loadExperiencesContent() {
         try {
-            // Experiences are now primarily handled within specific section content getters (e.g., getAboutContent timeline)
-            // This method can be used for general experiences not tied to a specific narrative section.
-            this.experiences = []; // No general experiences, all are in sections
+            this.experiences = [];
             this.cacheContent('experiences', this.experiences);
             console.debug(`ContentModel: Loaded ${this.experiences.length} experiences.`);
         } catch (error) {
@@ -859,7 +853,6 @@ getDeepLearningProjectsContent() {
     cacheContent(cacheKey, content) {
         if (!this.configuration.enableCaching) return;
 
-        // Manage cache size
         if (this.contentCache.size >= this.configuration.maxCacheSize) {
             const firstKey = this.contentCache.keys().next().value;
             this.contentCache.delete(firstKey);
@@ -922,7 +915,6 @@ getDeepLearningProjectsContent() {
             );
         }
 
-        // Sort by priority and order
         filteredSections.sort((a, b) => {
             if (a.metadata.priority !== b.metadata.priority) {
                 return a.metadata.priority - b.metadata.priority;
@@ -1020,7 +1012,7 @@ getDeepLearningProjectsContent() {
     getBasicContent() {
         return {
             introduction: 'Physicist and Computer Scientist passionate about astrophysics research, data analysis, and technology innovation. My journey is a blend of academic research and hands-on application, always driven by a curiosity for how the universe works and how we can use technology to solve real-world problems.',
-            sections: this.getSections().slice(0, 3) // Only first 3 sections for fallback
+            sections: this.getSections().slice(0, 3)
         };
     }
 
@@ -1100,9 +1092,7 @@ getDeepLearningProjectsContent() {
      * @returns {number} Cache hit rate percentage
      */
     calculateCacheHitRate() {
-        // Implementation for cache hit rate calculation
-        // This would track cache hits/misses over time
-        return 0.85; // Example value
+        return 0.85;
     }
 
     /**
@@ -1142,4 +1132,3 @@ getDeepLearningProjectsContent() {
 }
 
 export default ContentModel;
-
