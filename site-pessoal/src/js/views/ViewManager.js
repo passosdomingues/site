@@ -1,10 +1,16 @@
-import eventBus from '../core/EventBus.js';
+import { eventBus } from '../core/EventBus.js';
 
 /**
  * @brief View manager for rendering sections
  * @description Handles rendering of different section types with template methods
  */
-export class ViewManager {
+class ViewManager {
+    /**
+     * @brief Create a new ViewManager instance
+     * @param {Object} config - Configuration object
+     * @param {HTMLElement} config.container - Container element for sections
+     * @param {Object} config.eventBus - Event bus instance
+     */
     constructor(config = {}) {
         this.container = config.container;
         this.eventBus = config.eventBus || eventBus;
@@ -28,7 +34,7 @@ export class ViewManager {
 
     /**
      * @brief Handle section updates
-     * @param {Object} data - Update data
+     * @param {Object} data - Update data with sectionId and newContent
      */
     onSectionUpdated(data) {
         this.renderSection(data.sectionId, data.newContent);
@@ -146,13 +152,13 @@ export class ViewManager {
 
     /**
      * @brief Render skills content
-     * @param {Array} content - Skills content array
+     * @param {Object} content - Skills content object
      * @returns {string} HTML string
      */
     renderSkills(content) {
-        if (!Array.isArray(content)) return '';
+        if (!content.categories || !Array.isArray(content.categories)) return '';
 
-        const categories = content.map(category => `
+        const categories = content.categories.map(category => `
             <div class="skill-category">
                 <h3 class="category-title">${this.escapeHtml(category.category)}</h3>
                 <div class="skills-list">
@@ -186,15 +192,28 @@ export class ViewManager {
     renderGallery(content) {
         if (!Array.isArray(content)) return '';
 
-        const items = content.map(item => `
-            <div class="gallery-item">
-                <img src="${this.escapeHtml(item.imageUrl)}" 
-                     alt="${this.escapeHtml(item.caption)}" 
-                     class="gallery-image" 
-                     loading="lazy">
-                <div class="gallery-caption">${this.escapeHtml(item.caption)}</div>
-            </div>
-        `).join('');
+        const items = content.map(item => {
+            const images = item.images || [];
+            const mainImage = item.image || images[0] || {};
+            
+            return `
+                <div class="gallery-item">
+                    ${mainImage.src ? `
+                        <img src="${this.escapeHtml(mainImage.src)}" 
+                             alt="${this.escapeHtml(mainImage.alt || item.title)}" 
+                             class="gallery-image" 
+                             loading="lazy">
+                    ` : ''}
+                    <div class="gallery-content">
+                        <h3 class="gallery-title">${this.escapeHtml(item.title)}</h3>
+                        <p class="gallery-description">${this.escapeHtml(item.description)}</p>
+                        ${mainImage.caption ? `
+                            <div class="gallery-caption">${this.escapeHtml(mainImage.caption)}</div>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        }).join('');
 
         return `<div class="gallery-grid">${items}</div>`;
     }
@@ -222,7 +241,7 @@ export class ViewManager {
     }
 
     /**
-     * @brief Destroy view manager
+     * @brief Destroy view manager and clean up resources
      */
     destroy() {
         this.eventBus.unsubscribe('section:updated', this.onSectionUpdated);
@@ -230,3 +249,5 @@ export class ViewManager {
         console.info('ViewManager: Destroyed');
     }
 }
+
+export { ViewManager };
