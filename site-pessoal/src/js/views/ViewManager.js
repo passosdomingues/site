@@ -465,6 +465,7 @@ class ViewManager {
             
             // Check if the module exports a class (e.g., SectionView) or a plain object (e.g., HeroView)
             const ViewClassOrObject = module.default || module;
+            const loadDuration = performance.now() - loadStartTime;
             this.performanceMetrics.viewLoadTimes.set(viewName, loadDuration);
 
             // If it's a class, we store the class itself, not an instance, in the cache.
@@ -474,10 +475,7 @@ class ViewManager {
                 this.dispatchViewEvent(VIEW_EVENTS.VIEW_CACHED, { viewName, timestamp: Date.now() });
             }
 
-            return ViewClassOrObject;     }
-
             return ViewClassOrObject;
-
         } catch (error) {
             console.error(`ViewManager: Failed to load view module ${viewName}:`, error);
             throw new Error(`Failed to load view module ${viewName}: ${error.message}`);
@@ -496,9 +494,9 @@ class ViewManager {
     async renderViewContent(viewModuleOrClass, viewData, viewName, enableCaching = true) {
         let viewInstance;
 
-        // Check if it\'s a class constructor
-        if (typeof viewModuleOrClass === \'function\' && viewModuleOrClass.prototype && viewModuleOrClass.prototype.constructor === viewModuleOrClass) {
-            // If it\'s a class, check if an instance is already cached
+        // Check if it's a class constructor
+        if (typeof viewModuleOrClass === 'function' && viewModuleOrClass.prototype && viewModuleOrClass.prototype.constructor === viewModuleOrClass) {
+            // If it's a class, check if an instance is already cached
             viewInstance = this.viewModuleCache.get(viewName);
             if (!viewInstance) {
                 // If not, create a new instance and cache it
@@ -508,24 +506,24 @@ class ViewManager {
                 }
             }
             // Now call the render method on the instance
-            if (typeof viewInstance.render === \'function\') {
+            if (typeof viewInstance.render === 'function') {
                 return await viewInstance.render(viewData);
             } else {
                 console.warn(`ViewManager: Class-based view ${viewName} instance does not have a render method.`);
-                return \'\';
+                return '';
             }
-        } else if (typeof viewModuleOrClass === \'object\' && viewModuleOrClass !== null) {
-            // It\'s a plain object (or already an instantiated object)
+        } else if (typeof viewModuleOrClass === 'object' && viewModuleOrClass !== null) {
+            // It's a plain object (or already an instantiated object)
             viewInstance = viewModuleOrClass;
-            if (typeof viewInstance.render === \'function\') {
+            if (typeof viewInstance.render === 'function') {
                 return await viewInstance.render(viewData);
             } else {
                 console.warn(`ViewManager: Object-based view ${viewName} does not have a render method.`);
-                return \'\';
+                return '';
             }
         }
         console.error(`ViewManager: Invalid view module type for ${viewName}.`);
-        return \'\';
+        return '';
     }
 
     /**
@@ -613,8 +611,8 @@ class ViewManager {
     async initializeViewModule(viewModuleOrClass, viewData, viewName) {
         let viewInstance;
 
-        // If it\'s a class, retrieve the instance from the cache, which should have been created by renderViewContent
-        if (typeof viewModuleOrClass === \'function\' && viewModuleOrClass.prototype && viewModuleOrClass.prototype.constructor === viewModuleOrClass) {
+        // If it's a class, retrieve the instance from the cache, which should have been created by renderViewContent
+        if (typeof viewModuleOrClass === 'function' && viewModuleOrClass.prototype && viewModuleOrClass.prototype.constructor === viewModuleOrClass) {
             viewInstance = this.viewModuleCache.get(viewName);
             if (!viewInstance) {
                 console.warn(`ViewManager: Instance for class-based view ${viewName} not found in cache during initialization. This should not happen if renderViewContent was called correctly.`);
@@ -623,12 +621,12 @@ class ViewManager {
                 this.viewModuleCache.set(viewName, viewInstance); // Cache it for future use in this session
             }
         } else {
-            // It\'s a plain object or an already instantiated object
+            // It's a plain object or an already instantiated object
             viewInstance = viewModuleOrClass;
         }
 
         // Call init method if it exists
-        if (typeof viewInstance.init === \'function\') {
+        if (typeof viewInstance.init === 'function') {
             await viewInstance.init(viewData);
             console.debug(`ViewManager: Initialized view module: ${viewName}`);
         } else {
@@ -960,6 +958,6 @@ class ViewManager {
 
         console.info('ViewManager: View manager destroyed and resources cleaned up.');
     }
+}
 
 export default ViewManager;
-

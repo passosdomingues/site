@@ -438,7 +438,7 @@ class ContentModel {
                 title: 'Desvendando o Invisível: Minha Jornada na Pesquisa de Matéria Escura',
                 description: 'Minha pesquisa em Matéria Escura começou com um mergulho profundo nas curvas de rotação galácticas. As velocidades anômalas das estrelas nos halos galácticos apresentaram um enigma profundo: ou as leis da gravidade precisavam de revisão, ou uma vasta quantidade de matéria invisível estava em jogo. Isso me levou a explorar o conceito de Matéria Escura, uma substância misteriosa que interage gravitacionalmente, mas não eletromagneticamente. Um momento crucial em minha compreensão veio do estudo do Aglomerado Bala, uma colisão cósmica onde o lenteamento gravitacional revelou uma distribuição de massa muito superior à matéria visível. A separação da matéria comum e escura durante esta colisão forneceu evidências visuais convincentes para a existência da Matéria Escura. Tive o privilégio de apresentar essas descobertas no Primeiro Ciclo de Seminários de Astronomia da UNIFAL-MG, transformando anos de observação em rigor teórico e compartilhando as fronteiras da cosmologia com uma audiência cativada. Esta experiência reforçou minha crença na educação superior como um motor vital para pesquisa e extensão, preenchendo a lacuna entre o fascínio telescópico e a astrofísica teórica.',
                 image: {
-                    src: 'assets/images/bullet-cluster-black-matter_upscayl.png',
+                    src: 'images/bullet-cluster-black-matter_upscayl.png',
                     alt: 'Aglomerado Bala mostrando a distribuição de matéria escura, uma evidência chave para a matéria escura',
                     caption: 'Aglomerado Bala: Evidência visual de Matéria Escura (Crédito: NASA/CXC/M.Weiss)'
                 },
@@ -454,7 +454,7 @@ class ContentModel {
                 title: 'Série de Seminários de Astronomia: Órbitas Estelares e o Universo Escuro',
                 description: 'Esta imagem captura um momento significativo: uma palestra que proferi no Primeiro Ciclo de Seminários de Astronomia da UNIFAL-MG. Minha apresentação focou em Órbitas Estelares na Galáxia, onde compartilhei simulações de movimentos estelares baseadas em modelos de distribuição de massa e soluções numéricas para acelerações, velocidades e posições estelares na Via Láctea. Discuti as evidências que levaram aos postulados de Matéria Escura e Gravidade Modificada, destacando particularmente as Curvas de Rotação de galáxias. Esta anomalia, onde as estrelas no halo galáctico se movem muito rápido, sugere que a maior parte da massa da Via Láctea é invisível. Compartilhar essas ideias complexas e desafiar a audiência com os mistérios do cosmos foi uma experiência profunda, reforçando o papel do ensino superior em impulsionar tanto a pesquisa quanto o engajamento público.',
                 image: {
-                    src: 'assets/images/seminario.jpg',
+                    src: 'images/seminario.jpg',
                     alt: 'Apresentação de seminário de astronomia sobre órbitas estelares e matéria escura',
                     caption: 'Apresentação sobre Órbitas Estelares e Matéria Escura no Seminário da UNIFAL-MG (2019)'
                 },
@@ -489,7 +489,7 @@ class ContentModel {
                 title: 'Uma Janela para o Universo: Extensão Científica e Pesquisa na UNIFAL-MG',
                 description: 'Durante meu tempo como membro da equipe do Observatório Astronômico da UNIFAL-MG (2015 a 2018), tive o privilégio de conectar mais de 2.000 visitantes de Alfenas e região às maravilhas do cosmos. Como divulgador científico, utilizei nosso magnífico telescópio Cassegrain de 380mm para revelar as impressionantes crateras da Lua, os majestosos anéis de Saturno, as luas galileanas de Júpiter e a beleza dos aglomerados estelares. Essas experiências, compartilhadas com colegas como José Carlos da Silva e o Professor Artur Justiniano, reforçaram minha crença na ciência aberta e na educação não formal. Era mais do que apenas observar; era sobre inspirar curiosidade, reflexão e pensamento crítico em todas as idades, desde crianças fascinadas até membros da comunidade acadêmica e idosos. Este período foi fundamental para moldar meu compromisso em tornar a ciência acessível e envolvente.',
                 image: {
-                    src: 'assets/images/observatorio-unifal.jpg',
+                    src: 'images/observatorio-unifal.jpg',
                     alt: 'Observatório Astronômico da UNIFAL-MG com um telescópio Cassegrain',
                     caption: 'Observatório Astronômico da UNIFAL-MG: Inspirando a próxima geração de cientistas'
                 },
@@ -503,12 +503,12 @@ class ContentModel {
                 title: 'Astrofotografia e Pesquisa de Exoplanetas no Observatório da UNIFAL-MG',
                 description: 'Além da extensão pública, o Observatório da UNIFAL-MG foi um centro de pesquisa e astrofotografia. Testemunhei e contribuí para conquistas significativas, incluindo o trabalho pioneiro do meu colega José Carlos na detecção do trânsito do exoplaneta WASP-76b. Meus próprios esforços em astrofotografia me levaram a capturar imagens impressionantes, como a Galáxia do Sombreiro (M104/NGC 4594) em uma exposição de 34 minutos e os braços espirais da Galáxia do Catavento do Sul (M83/NGC 5236). Também tive a oportunidade única de guiar minha primeira turma, o 3º EJA de Divisa Nova - MG, através de uma sessão prática de observação no observatório. Mesmo após o término do meu envolvimento institucional, minha paixão pela observação continuou, culminando na experiência emocionante de contemplar o cometa de longo período C/2020 F3 (NEOWISE) em 2020. Essas experiências solidificaram minhas habilidades em aquisição de dados, processamento de imagens e análise científica.',
                 image: {
-                    src: 'assets/images/obsLua.jpg',
+                    src: 'images/obsLua.jpg',
                     alt: 'Observação da Lua', 
                     caption: 'Vista detalhada da Lua capturada no Observatório da UNIFAL-MG'
                 },
                 image: {
-                    src: 'assets/images/obsGalaxiaSombrero.jpg',
+                    src: 'images/obsGalaxiaSombrero.jpg',
                     alt: 'Galáxia do Sombreiro', 
                     caption: 'Galáxia do Sombreiro (M104/NGC 4594) capturada por astrofotografia'
                 },
@@ -534,10 +534,10 @@ class ContentModel {
                 title: 'Explorando a Radioastronomia Solar no CRAAM: Um Mergulho Profundo na Instrumentação',
                 description: 'Em 2019, pouco depois de concluir meu curso de Física na UNIFAL-MG, tive a distinta honra de visitar o CRAAM (Centro de Rádio Astronomia e Astrofísica Mackenzie), uma instituição de pesquisa pioneira no Brasil desde 1960. O ponto alto desta visita foi a oportunidade de aprender e operar o Polarímetro Solar de Rádio de 7 GHz, um instrumento crítico para monitorar nossa estrela hospedeira. Guiado pelo colega Raphael Cesar Pimenta e pelo engenheiro Amauri Shossei Kudaka, obtive insights inestimáveis sobre os intrincados sistemas eletrônicos e computacionais que processam dados solares. A engenharia de precisão necessária para a aquisição e análise de dados foi realmente impressionante. Subindo ao local de instalação do polarímetro, protegido por sua cúpula, testemunhei em primeira mão a escala da infraestrutura de pesquisa. A antena de 1,5 metro, posicionada em direção ao céu, capta emissões de rádio polarizadas circularmente do Sol. Este equipamento, operando a 7 GHz, é crucial para a pesquisa do CRAAM, que se concentra no monitoramento da atividade solar, detecção de fenômenos energéticos como explosões solares e revelação das propriedades magnéticas da atmosfera solar. Esta experiência foi uma lição profunda em Instrumentação e Radioastronomia, reforçando minha paixão pela Física Solar e destacando as significativas contribuições da pesquisa brasileira no cenário internacional. As colaborações do CRAAM com instituições como o INPE e seu envolvimento em projetos como o voo do balão estratosférico Solar-T na Antártica são verdadeiramente inspiradoras.',
                 images: [
-                    { src: 'assets/images/craamAntena.jpg', alt: 'Antena do Polarímetro Solar de Rádio no CRAAM', caption: 'Polarímetro Solar de Rádio de 7 GHz (CRAAM)' },
-                    { src: 'assets/images/craamControle.jpg', alt: 'Sala de controle do CRAAM', caption: 'Sala de Controle do CRAAM: Inspecionando sistemas eletrônicos e computacionais' },
-                    { src: 'assets/images/craamDomo.jpg', alt: 'Interior da cúpula do CRAAM', caption: 'Dentro da Cúpula do CRAAM: Antena de 1,5 metro' },
-                    { src: 'assets/images/craamEscada.jpg', alt: 'Escada externa do CRAAM', caption: 'Escada externa para o deck de observação' }
+                    { src: 'images/craamAntena.jpg', alt: 'Antena do Polarímetro Solar de Rádio no CRAAM', caption: 'Polarímetro Solar de Rádio de 7 GHz (CRAAM)' },
+                    { src: 'images/craamControle.jpg', alt: 'Sala de controle do CRAAM', caption: 'Sala de Controle do CRAAM: Inspecionando sistemas eletrônicos e computacionais' },
+                    { src: 'images/craamDomo.jpg', alt: 'Interior da cúpula do CRAAM', caption: 'Dentro da Cúpula do CRAAM: Antena de 1,5 metro' },
+                    { src: 'images/craamEscada.jpg', alt: 'Escada externa do CRAAM', caption: 'Escada externa para o deck de observação' }
                 ],
                 highlights: [
                     'Operou o Polarímetro Solar de Rádio de 7 GHz',
@@ -561,8 +561,8 @@ class ContentModel {
                 title: 'Operando o Histórico Telescópio Zeiss no LNA: Uma Jornada Através do Tempo e da Ciência',
                 description: 'Durante meu curso de Física na UNIFAL-MG (2014-2018), tive a extraordinária oportunidade de operar, por duas noites em 2016, um instrumento verdadeiramente especial no Laboratório Nacional de Astrofísica (LNA/OPD). Este não era um telescópio comum; era um Zeiss histórico, adquirido da antiga Alemanha Oriental nas décadas de 1960/70 através de uma fascinante negociação envolvendo café. Após anos em armazenamento, foi finalmente montado em 1983 no Observatório do Pico dos Dias. Este clássico telescópio Cassegrain, com sua primária parabólica e secundária hiperbólica, apresenta uma razão focal de f/12.5 no foco Cassegrain e requer apontamento manual. É exclusivamente dedicado à fotometria e polarimetria, permitindo estudos precisos da luz de estrelas e galáxias, revelando detalhes intrincados que apenas instrumentos meticulosamente calibrados podem capturar. Operar o Zeiss foi uma experiência profunda: desde a preparação das observações e coleta de dados até a calibração do instrumento, cada detalhe e ajuste ressaltou a busca essencial pelo conhecimento. Mais do que apenas habilidade técnica, foi uma imersão no rico legado científico que ele incorpora, um poderoso lembrete de que a ciência prospera com paciência, precisão e curiosidade insaciável. Esta experiência não apenas aprofundou minha paixão por dados e por observar o universo, mas também permanece como uma das memórias mais queridas da minha jornada acadêmica, destacando o fascínio duradouro da exploração astronômica.',
                 images: [
-                    { src: 'assets/images/obs4.jpg', alt: 'Observatório do LNA ao pôr do sol', caption: 'Observatório do Pico dos Dias (LNA) ao pôr do sol, um cenário sereno para a descoberta científica' },
-                    { src: 'assets/images/obs5.jpg', alt: 'Vista aérea do Observatório do LNA', caption: 'Vista aérea do Laboratório Nacional de Astrofísica (LNA), mostrando sua impressionante infraestrutura' }
+                    { src: 'images/obs4.jpg', alt: 'Observatório do LNA ao pôr do sol', caption: 'Observatório do Pico dos Dias (LNA) ao pôr do sol, um cenário sereno para a descoberta científica' },
+                    { src: 'images/obs5.jpg', alt: 'Vista aérea do Observatório do LNA', caption: 'Vista aérea do Laboratório Nacional de Astrofísica (LNA), mostrando sua impressionante infraestrutura' }
                 ],
                 highlights: [
                     'Operou um telescópio Cassegrain Zeiss histórico para fotometria e polarimetria',
@@ -626,7 +626,7 @@ getInnovationContent() {
                 title: 'Incubadora de Empresas NidusTec: Conectando Academia e Empreendedorismo',
                 description: 'Em 2023, iniciei uma nova jornada acadêmica, cursando Bacharelado em Ciência da Computação na UNIFAL-MG (2023–2029). Concomitantemente, tive a inestimável oportunidade de integrar a equipe da Incubadora de Empresas de Base Tecnológica NidusTec/UNIFAL-MG (2024–2025). Este período foi transformador, permitindo-me transitar de tarefas operacionais para contribuições estratégicas. Como generalista Maker, liderei projetos de Robótica, Modelagem 3D e oficinas de CNC, aplicando técnicas de Computação Gráfica e Processamento de Imagens para desenvolver protótipos multidisciplinares. Esses projetos não apenas enriqueceram as atividades de ensino, pesquisa e extensão, mas também atenderam às necessidades de infraestrutura institucional nos três campi da UNIFAL-MG. Esta experiência ampliou meus horizontes em Propriedade Intelectual, Empreendedorismo, dinâmica Universidade-Mercado, Inovação Aberta e Transferência de Tecnologia. Monitorei ativamente startups incubadas, apoiei estratégias de mobilização de recursos e contribuí para o alinhamento da incubadora com o modelo CERNE (Centro de Referência para Apoio a Novos Empreendimentos), gerenciando 29 procedimentos. Esta trajetória me moldou como um aplicador de conhecimento, unindo ciência e tecnologia para atender às demandas contemporâneas, fomentando novos negócios e iniciativas de inovação.',
                 image: {
-                    src: 'assets/images/nidus.jpg',
+                    src: 'images/nidus.jpg',
                     alt: 'Rafael no Laboratório NidusTec', 
                     caption: 'Trabalhando como generalista Maker na NidusTec, fomentando inovação e empreendedorismo'
                 },
@@ -727,28 +727,28 @@ getDeepLearningProjectsContent() {
                     title: 'Jardinagem',
                     description: 'Encontro imensa alegria em cultivar uma horta, uma prática que me conecta com a natureza e me ensina paciência e resiliência. É uma forma tangível de ver os resultados do cuidado e da dedicação.',
                     icon: 'leaf',
-                    image: './assets/images/hobbies/gardening.jpg'
+                    image: './images/hobbies/gardening.jpg'
                 },
                 {
                     id: 'reading',
                     title: 'Leitura',
                     description: 'Sou um ávido leitor de ficção científica, fantasia e ciência popular. Livros são minha porta de entrada para novos mundos e ideias, alimentando minha imaginação e minha paixão por aprender.',
                     icon: 'book-open',
-                    image: './assets/images/hobbies/reading.jpg'
+                    image: './images/hobbies/reading.jpg'
                 },
                 {
                     id: 'tinkering',
                     title: 'Projetos DIY e Eletrônica',
                     description: 'Como uma pessoa prática, adoro mexer com eletrônica, construir circuitos e trabalhar em projetos DIY. Esse espírito maker é uma fonte constante de criatividade e resolução de problemas.',
                     icon: 'tools',
-                    image: './assets/images/hobbies/tinkering.jpg'
+                    image: './images/hobbies/tinkering.jpg'
                 },
                 {
                     id: 'astrophotography',
                     title: 'Astrofotografia',
                     description: 'Combinando meu amor pela astronomia e tecnologia, gosto de capturar imagens do céu noturno. É um hobby desafiador, mas recompensador, que me permite compartilhar a beleza do cosmos com outras pessoas.',
                     icon: 'camera',
-                    image: './assets/images/hobbies/astrophotography.jpg'
+                    image: './images/hobbies/astrophotography.jpg'
                 }
             ]
         };
