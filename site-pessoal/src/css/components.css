@@ -1,263 +1,16 @@
-/* Navigation Component */
-.main-navigation-container {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    background: var(--nav-bg, rgba(255, 255, 255, 0.95));
-    backdrop-filter: blur(10px);
-    z-index: 1000;
-    padding: 1rem 0;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    transition: var(--transition);
-}
+/* ===== APPLICATION CONTROLS - FIXED VERSION ===== */
 
-.nav-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 2rem;
-}
-
-.nav-list {
-    list-style: none;
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-}
-
-.nav-link {
-    text-decoration: none;
-    color: var(--text-color);
-    font-weight: 500;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    transition: var(--transition);
-}
-
-.nav-link:hover,
-.nav-link.active {
-    background: var(--secondary-color);
-    color: white;
-}
-
-/* Timeline Component */
-.timeline {
-    position: relative;
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-.timeline::before {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 0;
-    bottom: 0;
-    width: 2px;
-    background: var(--secondary-color);
-    transform: translateX(-50%);
-}
-
-.timeline-item {
-    display: flex;
-    margin-bottom: 3rem;
-    position: relative;
-}
-
-.timeline-item:nth-child(odd) {
-    flex-direction: row-reverse;
-}
-
-.timeline-period {
-    flex: 0 0 150px;
-    text-align: center;
-    font-weight: bold;
-    color: var(--secondary-color);
-    padding: 0.5rem;
-}
-
-.timeline-content {
-    flex: 1;
-    padding: 1.5rem;
-    background: var(--component-bg, white);
-    border-radius: 8px;
-    box-shadow: var(--card-shadow);
-    margin: 0 2rem;
-}
-
-.timeline-title {
-    color: var(--primary-color);
-    margin-bottom: 0.5rem;
-}
-
-.highlights-list {
-    margin-top: 1rem;
-}
-
-/* Cards Component */
-.cards-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    margin-top: 2rem;
-}
-
-.card {
-    background: var(--component-bg, white);
-    border-radius: 10px;
-    padding: 1.5rem;
-    box-shadow: var(--card-shadow);
-    transition: var(--transition);
-}
-
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
-}
-
-.card-title {
-    color: var(--primary-color);
-    margin-bottom: 1rem;
-}
-
-.card-description {
-    margin-bottom: 1rem;
-}
-
-.card-links {
-    margin-bottom: 1rem;
-}
-
-.card-links a {
-    display: inline-block;
-    margin-right: 1rem;
-    color: var(--secondary-color);
-    text-decoration: none;
-}
-
-.card-links a:hover {
-    text-decoration: underline;
-}
-
-.card-meta {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 1rem;
-    font-size: 0.9rem;
-    color: #666;
-}
-
-/* Tags Component */
-.tags-container {
-    margin-top: 1rem;
-}
-
-.tag {
-    display: inline-block;
-    background: var(--secondary-color);
-    color: white;
-    padding: 0.3rem 0.8rem;
-    margin: 0.2rem;
-    border-radius: 4px;
-    font-size: 0.8rem;
-}
-
-.highlight-tag {
-    display: inline-block;
-    background: var(--tag-highlight-bg, var(--light-bg));
-    padding: 0.3rem 0.8rem;
-    margin: 0.2rem;
-    border-radius: 20px;
-    font-size: 0.9rem;
-}
-
-/* Skills Component */
-.skills-categories {
-    display: grid;
-    gap: 2rem;
-}
-
-.skill-category {
-    background: var(--component-bg, white);
-    padding: 1.5rem;
-    border-radius: 8px;
-    box-shadow: var(--card-shadow);
-}
-
-.category-title {
-    color: var(--primary-color);
-    margin-bottom: 1rem;
-    border-bottom: 2px solid var(--secondary-color);
-    padding-bottom: 0.5rem;
-}
-
-.skill-item {
-    margin-bottom: 1.5rem;
-}
-
-.skill-header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 0.5rem;
-}
-
-.skill-bar {
-    height: 8px;
-    background: var(--skill-bar-bg, #e0e0e0);
-    border-radius: 4px;
-    overflow: hidden;
-    margin-bottom: 0.5rem;
-}
-
-.skill-progress {
-    height: 100%;
-    background: var(--secondary-color);
-    transition: width 1s ease-in-out;
-}
-
-/* Gallery Component */
-.gallery-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1rem;
-    margin-top: 2rem;
-}
-
-.gallery-item {
-    position: relative;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: var(--card-shadow);
-}
-
-.gallery-image {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    transition: var(--transition);
-}
-
-.gallery-item:hover .gallery-image {
-    transform: scale(1.05);
-}
-
-.gallery-caption {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(0, 0, 0, 0.7);
-    color: white;
-    padding: 0.5rem;
-    font-size: 0.9rem;
-}
-
-/* Application Controls Styles */
+/**
+ * @brief Main application controls container
+ * @description Fixed positioned container for theme and accessibility controls
+ */
 .app-controls {
     position: fixed;
     top: 20px;
     right: 20px;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    align-items: center;
     gap: 10px;
     z-index: 1001;
     background: var(--nav-bg, rgba(255, 255, 255, 0.95));
@@ -266,21 +19,14 @@
     padding: 12px;
     box-shadow: var(--card-shadow);
     border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
 }
 
-.accessibility-controls {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.font-controls {
-    display: flex;
-    gap: 5px;
-    justify-content: center;
-}
-
-.app-control-button {
+/**
+ * @brief Theme toggle button styles
+ * @description Always visible button for theme switching
+ */
+.theme-toggle-btn {
     width: 44px;
     height: 44px;
     border: none;
@@ -291,342 +37,297 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.1rem;
+    font-size: 1.3rem;
     font-weight: bold;
-    transition: var(--transition);
+    transition: all 0.3s ease;
     box-shadow: var(--card-shadow);
 }
 
-.app-control-button:hover {
+.theme-toggle-btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     background: var(--secondary-color);
     color: white;
 }
 
-.app-control-button:active {
+.theme-toggle-btn:active {
     transform: translateY(0);
 }
 
-.app-control-button:focus-visible {
+.theme-toggle-btn:focus-visible {
     outline: 3px solid var(--accent-color);
     outline-offset: 2px;
 }
 
-.app-control-button[aria-pressed="true"] {
+.theme-toggle-btn[aria-pressed="true"] {
     background: var(--accent-color);
     color: white;
 }
 
-.theme-toggle-btn {
-    font-size: 1.3rem;
-}
-
-.high-contrast-btn {
+/**
+ * @brief Menu toggle button styles
+ * @description Hamburger button for accessibility menu
+ */
+.menu-toggle-btn {
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 8px;
+    background: var(--component-bg, white);
+    color: var(--text-color);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-size: 1.2rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: var(--card-shadow);
 }
 
-.font-reset-btn {
-    font-size: 0.9rem;
+.menu-toggle-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    background: var(--secondary-color);
+    color: white;
 }
 
-/* High contrast mode adjustments */
-[data-high-contrast="true"] .app-control-button {
-    border: 2px solid currentColor;
+.menu-toggle-btn:active {
+    transform: translateY(0);
 }
 
-[data-high-contrast="true"] .app-control-button:focus-visible {
-    outline: 3px solid #ff0000;
+.menu-toggle-btn:focus-visible {
+    outline: 3px solid var(--accent-color);
+    outline-offset: 2px;
 }
 
-/* Responsive Components */
+.menu-toggle-btn[aria-expanded="true"] {
+    background: var(--accent-color);
+    color: white;
+    transform: rotate(90deg);
+}
+
+/**
+ * @brief Accessibility menu container
+ * @description Hidden by default, shows when menu is expanded
+ */
+.accessibility-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: var(--nav-bg, rgba(255, 255, 255, 0.95));
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: var(--card-shadow);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    margin-top: 10px;
+    min-width: 150px;
+    z-index: 1002;
+}
+
+/**
+ * @brief Show accessibility menu when parent has menu-open class
+ */
+.app-controls.menu-open .accessibility-menu {
+    display: block;
+}
+
+/**
+ * @brief Font controls container
+ * @description Flex container for font size buttons
+ */
+.font-controls {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    margin-bottom: 8px;
+}
+
+/**
+ * @brief Base button styles for accessibility controls
+ */
+.accessibility-menu .app-control-button {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 8px;
+    background: var(--component-bg, white);
+    color: var(--text-color);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: var(--card-shadow);
+}
+
+.accessibility-menu .app-control-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    background: var(--secondary-color);
+    color: white;
+}
+
+.accessibility-menu .app-control-button:active {
+    transform: translateY(0);
+}
+
+.accessibility-menu .app-control-button:focus-visible {
+    outline: 3px solid var(--accent-color);
+    outline-offset: 2px;
+}
+
+/**
+ * @brief High contrast button styles
+ */
+.high-contrast-btn {
+    width: 100%;
+    height: 40px;
+    border: none;
+    border-radius: 8px;
+    background: var(--component-bg, white);
+    color: var(--text-color);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: var(--card-shadow);
+    margin-top: 8px;
+}
+
+.high-contrast-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    background: var(--secondary-color);
+    color: white;
+}
+
+.high-contrast-btn:active {
+    transform: translateY(0);
+}
+
+.high-contrast-btn:focus-visible {
+    outline: 3px solid var(--accent-color);
+    outline-offset: 2px;
+}
+
+.high-contrast-btn[aria-pressed="true"] {
+    background: var(--accent-color);
+    color: white;
+}
+
+/* ===== DARK THEME ADJUSTMENTS ===== */
+
+[data-theme="dark"] .app-controls,
+[data-theme="dark"] .accessibility-menu {
+    background: rgba(44, 62, 80, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .theme-toggle-btn,
+[data-theme="dark"] .menu-toggle-btn,
+[data-theme="dark"] .app-control-button,
+[data-theme="dark"] .high-contrast-btn {
+    background: var(--component-bg, #34495e);
+    color: var(--text-color);
+}
+
+/* ===== HIGH CONTRAST MODE ADJUSTMENTS ===== */
+
+[data-high-contrast="true"] .theme-toggle-btn,
+[data-high-contrast="true"] .menu-toggle-btn,
+[data-high-contrast="true"] .app-control-button,
+[data-high-contrast="true"] .high-contrast-btn {
+    border: 2px solid #000000;
+}
+
+[data-high-contrast="true"] .app-controls,
+[data-high-contrast="true"] .accessibility-menu {
+    border: 2px solid #000000;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+
+/**
+ * @brief Tablet responsive styles
+ */
 @media (max-width: 768px) {
-    .nav-list {
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-
-    .timeline::before {
-        left: 30px;
-    }
-
-    .timeline-item {
-        flex-direction: row !important;
-    }
-
-    .timeline-period {
-        flex: 0 0 80px;
-        text-align: left;
-    }
-
-    .timeline-content {
-        margin-left: 1rem;
-        margin-right: 0;
-    }
-
-    .cards-grid {
-        grid-template-columns: 1fr;
-    }
-
-    /* App Controls Mobile */
     .app-controls {
         top: 10px;
         right: 10px;
         padding: 8px;
     }
     
-    .app-control-button {
+    .theme-toggle-btn,
+    .menu-toggle-btn {
         width: 40px;
         height: 40px;
-        font-size: 1rem;
+        font-size: 1.1rem;
     }
     
-    .font-controls {
-        gap: 3px;
+    .accessibility-menu .app-control-button,
+    .high-contrast-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 0.9rem;
+    }
+    
+    .high-contrast-btn {
+        width: calc(100% - 8px);
+    }
+    
+    .accessibility-menu {
+        min-width: 130px;
     }
 }
 
+/**
+ * @brief Mobile responsive styles
+ */
 @media (max-width: 480px) {
     .app-controls {
         position: static;
-        flex-direction: row;
-        justify-content: center;
-        margin: 10px;
-        border-radius: 20px;
+        flex-direction: column;
         width: calc(100% - 20px);
+        margin: 10px auto;
+        border-radius: 20px;
     }
     
-    .accessibility-controls {
-        flex-direction: row;
-        align-items: center;
+    .accessibility-menu {
+        position: static;
+        margin-top: 8px;
         width: 100%;
+    }
+    
+    .font-controls {
         justify-content: space-around;
     }
+}
 
-    /* Application Controls Styles - Hamburger Menu Version */
-    .app-controls {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        gap: 10px;
-        z-index: 1001;
-        background: var(--nav-bg, rgba(255, 255, 255, 0.95));
-        backdrop-filter: blur(10px);
-        border-radius: 12px;
-        padding: 12px;
-        box-shadow: var(--card-shadow);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        transition: all 0.3s ease;
-        min-width: auto;
-    }
-
-    /* Main control buttons (always visible) */
-    .app-controls > .theme-toggle-btn,
-    .app-controls > .menu-toggle-btn {
-        width: 44px;
-        height: 44px;
-        margin: 0;
-    }
-
-    /* Accessibility menu (hidden by default) */
+/**
+ * @brief Reduced motion support for accessibility
+ */
+@media (prefers-reduced-motion: reduce) {
+    .app-controls,
+    .theme-toggle-btn,
+    .menu-toggle-btn,
+    .app-control-button,
+    .high-contrast-btn,
     .accessibility-menu {
-        display: none;
-        flex-direction: column;
-        gap: 8px;
-        width: 100%;
-        opacity: 0;
-        transform: translateY(-10px);
-        transition: all 0.3s ease;
+        transition: none;
     }
-
-    /* When menu is open */
-    .app-controls.menu-open {
-        min-width: 200px;
-    }
-
-    .app-controls.menu-open .accessibility-menu {
-        display: flex;
-        opacity: 1;
-        transform: translateY(0);
-    }
-
-    .accessibility-menu[aria-hidden="false"] {
-        display: flex;
-    }
-
-    /* Font controls layout */
-    .font-controls {
-        display: flex;
-        gap: 5px;
-        justify-content: center;
-        width: 100%;
-    }
-
-    /* Base button styles */
-    .app-control-button {
-        width: 44px;
-        height: 44px;
-        border: none;
-        border-radius: 8px;
-        background: var(--component-bg, white);
-        color: var(--text-color);
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.1rem;
-        font-weight: bold;
-        transition: all 0.3s ease;
-        box-shadow: var(--card-shadow);
-        flex-shrink: 0;
-    }
-
-    .app-control-button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        background: var(--secondary-color);
-        color: white;
-    }
-
-    .app-control-button:active {
-        transform: translateY(0);
-    }
-
-    .app-control-button:focus-visible {
-        outline: 3px solid var(--accent-color);
-        outline-offset: 2px;
-    }
-
-    .app-control-button[aria-pressed="true"] {
-        background: var(--accent-color);
-        color: white;
-    }
-
-    /* Specific button styles */
-    .theme-toggle-btn {
-        font-size: 1.3rem;
-        order: 1;
-    }
-
-    .menu-toggle-btn {
-        font-size: 1.2rem;
-        order: 2;
-    }
-
-    .high-contrast-btn {
-        font-size: 1.2rem;
-    }
-
-    .font-reset-btn {
-        font-size: 0.9rem;
-    }
-
-    /* Menu toggle animation */
-    .menu-toggle-btn {
-        position: relative;
-        transition: transform 0.3s ease;
-    }
-
-    .app-controls.menu-open .menu-toggle-btn {
-        transform: rotate(90deg);
-        background: var(--secondary-color);
-        color: white;
-    }
-
-    /* High contrast mode adjustments */
-    [data-high-contrast="true"] .app-control-button {
-        border: 2px solid currentColor;
-    }
-
-    [data-high-contrast="true"] .app-control-button:focus-visible {
-        outline: 3px solid #ff0000;
-    }
-
-    [data-high-contrast="true"] .app-controls {
-        border: 2px solid currentColor;
-    }
-
-    /* Dark theme adjustments */
-    [data-theme="dark"] .app-controls {
-        background: rgba(44, 62, 80, 0.95);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    [data-theme="dark"] .app-control-button {
-        background: var(--component-bg, #34495e);
-        color: var(--text-color);
-    }
-
-    /* Mobile responsive styles */
-    @media (max-width: 768px) {
-        .app-controls {
-            top: 10px;
-            right: 10px;
-            padding: 8px;
-            flex-direction: row;
-            align-items: center;
-            min-width: auto;
-        }
-        
-        .app-control-button {
-            width: 40px;
-            height: 40px;
-            font-size: 1rem;
-        }
-        
-        .font-controls {
-            gap: 3px;
-        }
-        
-        .app-controls.menu-open {
-            flex-direction: column;
-            min-width: 180px;
-        }
-        
-        .theme-toggle-btn {
-            order: 1;
-        }
-        
-        .menu-toggle-btn {
-            order: 2;
-        }
-        
-        .accessibility-menu {
-            order: 3;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .app-controls {
-            position: static;
-            flex-direction: column;
-            width: calc(100% - 20px);
-            margin: 10px auto;
-            border-radius: 20px;
-        }
-        
-        .app-controls.menu-open {
-            width: calc(100% - 20px);
-        }
-        
-        .font-controls {
-            justify-content: space-around;
-        }
-    }
-
-    /* Reduced motion support */
-    @media (prefers-reduced-motion: reduce) {
-        .app-controls,
-        .app-control-button,
-        .accessibility-menu {
-            transition: none;
-        }
-        
-        .app-control-button:hover {
-            transform: none;
-        }
+    
+    .theme-toggle-btn:hover,
+    .menu-toggle-btn:hover,
+    .app-control-button:hover,
+    .high-contrast-btn:hover {
+        transform: none;
     }
 }

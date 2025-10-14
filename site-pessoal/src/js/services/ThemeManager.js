@@ -4,12 +4,18 @@
  * @description Compatible with AccessibilityManager for coordinated UI updates
  */
 export class ThemeManager {
+    /**
+     * @brief ThemeManager constructor
+     * @param {Object} dependencies - Service dependencies
+     * @param {Object} dependencies.eventBus - Event bus for inter-component communication
+     */
     constructor(dependencies = {}) {
         this.eventBus = dependencies.eventBus;
         this.currentTheme = 'light';
         this.isInitialized = false;
         this.storageKey = 'portfolio-theme-preference';
 
+        // Bind methods for event listeners
         this.handleSystemThemeChange = this.handleSystemThemeChange.bind(this);
         this.onAccessibilityChange = this.onAccessibilityChange.bind(this);
     }
@@ -61,7 +67,7 @@ export class ThemeManager {
         // Only auto-update if user hasn't set a manual preference
         if (!localStorage.getItem(this.storageKey)) {
             const newTheme = event.matches ? 'dark' : 'light';
-            this.setTheme(newTheme, false); // Don't save to localStorage for system changes
+            this.setTheme(newTheme, false);
         }
     }
 
@@ -71,7 +77,6 @@ export class ThemeManager {
      */
     onAccessibilityChange(data) {
         if (data.highContrast) {
-            // Apply high contrast theme variations
             document.documentElement.setAttribute('data-high-contrast', 'true');
         } else {
             document.documentElement.removeAttribute('data-high-contrast');
@@ -110,6 +115,7 @@ export class ThemeManager {
             return;
         }
 
+        console.log('ThemeManager: Setting theme to:', theme);
         this.currentTheme = theme;
         this.applyCurrentTheme();
 
@@ -140,8 +146,8 @@ export class ThemeManager {
         // Update meta theme-color for mobile browsers
         this.updateThemeMetaTag();
         
-        // Update CSS custom properties if needed
-        this.updateCSSCustomProperties();
+        // Update CSS custom properties
+        this.updateCssCustomProperties();
     }
 
     /**
@@ -163,7 +169,7 @@ export class ThemeManager {
     /**
      * @brief Update CSS custom properties for theme
      */
-    updateCSSCustomProperties() {
+    updateCssCustomProperties() {
         const root = document.documentElement;
         const isDark = this.isDarkMode();
         
@@ -173,11 +179,15 @@ export class ThemeManager {
             root.style.setProperty('--secondary-color', '#3498db');
             root.style.setProperty('--text-color', '#ecf0f1');
             root.style.setProperty('--background-color', '#1a1a2e');
+            root.style.setProperty('--component-bg', '#2c3e50');
+            root.style.setProperty('--nav-bg', 'rgba(26, 26, 46, 0.95)');
         } else {
             root.style.setProperty('--primary-color', '#2c3e50');
             root.style.setProperty('--secondary-color', '#3498db');
             root.style.setProperty('--text-color', '#2c3e50');
             root.style.setProperty('--background-color', '#ffffff');
+            root.style.setProperty('--component-bg', '#ffffff');
+            root.style.setProperty('--nav-bg', 'rgba(255, 255, 255, 0.95)');
         }
     }
 
@@ -238,49 +248,5 @@ export class ThemeManager {
         
         this.isInitialized = false;
         console.info('ThemeManager: Cleaned up successfully');
-    }
-
-    /**
-     * @brief Toggle between light and dark themes
-     */
-    toggleTheme() {
-        console.log('ThemeManager: toggleTheme called, current theme:', this.currentTheme);
-        const newTheme = this.currentTheme === 'light' ? 'dark' : 'light';
-        console.log('ThemeManager: switching to theme:', newTheme);
-        this.setTheme(newTheme);
-    }
-
-    /**
-     * @brief Set and apply application theme
-     * @param {string} theme - Theme name ('light' or 'dark')
-     * @param {boolean} savePreference - Whether to save to localStorage
-     */
-    setTheme(theme, savePreference = true) {
-        console.log('ThemeManager: setTheme called with:', theme);
-        
-        if (theme !== 'light' && theme !== 'dark') {
-            console.warn('ThemeManager: Invalid theme:', theme);
-            return;
-        }
-
-        this.currentTheme = theme;
-        console.log('ThemeManager: applying theme to document');
-        this.applyTheme(theme);
-
-        if (savePreference) {
-            console.log('ThemeManager: saving theme preference');
-            localStorage.setItem('app-theme', theme);
-        }
-
-        // Notify other components about theme change
-        if (this.eventBus) {
-            console.log('ThemeManager: publishing theme change event');
-            this.eventBus.publish('theme:changed', { 
-                theme: this.currentTheme,
-                isDarkMode: this.isDarkMode()
-            });
-        }
-
-        console.info('ThemeManager: Theme changed to:', this.currentTheme);
     }
 }
