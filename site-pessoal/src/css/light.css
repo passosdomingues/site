@@ -45,6 +45,7 @@
 [data-theme="light"] body {
     background-color: var(--bg-primary);
     color: var(--text-primary);
+    background-image: var(--gradient-paper);
 }
 
 [data-theme="light"] .card {
@@ -74,6 +75,12 @@
 [data-theme="light"] .nav-link:hover,
 [data-theme="light"] .nav-link:focus {
     background: var(--bg-tertiary);
+    color: var(--primary-color);
+}
+
+[data-theme="light"] .nav-link.active {
+    color: var(--primary-color);
+    background: var(--bg-tertiary);
 }
 
 [data-theme="light"] .btn--outline {
@@ -85,9 +92,41 @@
 [data-theme="light"] .btn--outline:focus {
     background: var(--text-primary);
     color: var(--bg-primary);
+    border-color: var(--text-primary);
 }
 
 [data-theme="light"] .main-footer {
     background: var(--bg-secondary);
     border-top: 1px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+[data-theme="light"] .app-control-button {
+    background: var(--bg-card);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+[data-theme="light"] .app-control-button:hover,
+[data-theme="light"] .app-control-button:focus {
+    background: var(--primary-color);
+    color: var(--text-light);
+}
+
+[data-theme="light"] .nav-overlay {
+    background: var(--bg-overlay);
+}
+
+[data-theme="light"] .skill-bar {
+    background: var(--bg-tertiary);
+}
+
+[data-theme="light"] .timeline-content {
+    background: var(--bg-card);
+    border-color: var(--border-color);
+}
+
+[data-theme="light"] .skill-category {
+    background: var(--bg-card);
+    border-color: var(--border-color);
 }

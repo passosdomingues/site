@@ -42,6 +42,7 @@
 [data-theme="dark"] body {
     background-color: var(--bg-primary);
     color: var(--text-primary);
+    background-image: var(--gradient-paper);
 }
 
 [data-theme="dark"] .card {
@@ -79,10 +80,12 @@
 [data-theme="dark"] .nav-link:hover,
 [data-theme="dark"] .nav-link:focus {
     background: var(--bg-secondary);
+    color: var(--primary-color);
 }
 
 [data-theme="dark"] .nav-link.active {
     background: var(--primary-color);
+    color: var(--text-light);
 }
 
 [data-theme="dark"] .btn--outline {
@@ -94,6 +97,7 @@
 [data-theme="dark"] .btn--outline:focus {
     background: var(--text-primary);
     color: var(--bg-primary);
+    border-color: var(--text-primary);
 }
 
 [data-theme="dark"] .tag {
@@ -104,10 +108,23 @@
 [data-theme="dark"] .main-footer {
     background: var(--bg-secondary);
     border-top: 1px solid var(--border-color);
+    color: var(--text-primary);
 }
 
 [data-theme="dark"] .footer-bottom {
     border-top-color: var(--border-color);
+}
+
+[data-theme="dark"] .app-control-button {
+    background: var(--bg-card);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] .app-control-button:hover,
+[data-theme="dark"] .app-control-button:focus {
+    background: var(--primary-color);
+    color: var(--text-light);
 }
 
 /* Ajustes para imagens no modo escuro */

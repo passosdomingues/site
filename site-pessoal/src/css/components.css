@@ -147,11 +147,9 @@
 .main-header {
     transition: all var(--transition-base);
     backdrop-filter: blur(10px);
-    background: rgba(45, 50, 67, 0.9);
 }
 
 .main-header.scrolled {
-    background: rgba(45, 50, 67, 0.95);
     box-shadow: var(--shadow-md);
 }
 
@@ -230,6 +228,99 @@
     transform: translateY(-2px);
 }
 
+/* Timeline Components */
+.timeline {
+    position: relative;
+    padding: var(--space-8) 0;
+}
+
+.timeline-item {
+    display: flex;
+    margin-bottom: var(--space-8);
+    position: relative;
+}
+
+.timeline-period {
+    min-width: 120px;
+    font-weight: var(--font-weight-semibold);
+    color: var(--primary-color);
+}
+
+.timeline-content {
+    flex: 1;
+    background: var(--bg-card);
+    padding: var(--space-4);
+    border-radius: var(--radius-base);
+    border: 1px solid var(--border-color);
+}
+
+/* Skills Components */
+.skills-categories {
+    display: grid;
+    gap: var(--space-6);
+}
+
+.skill-category {
+    background: var(--bg-card);
+    padding: var(--space-6);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+}
+
+.skill-item {
+    margin-bottom: var(--space-4);
+}
+
+.skill-bar {
+    height: 8px;
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    margin: var(--space-2) 0;
+}
+
+.skill-progress {
+    height: 100%;
+    background: var(--gradient-primary);
+    border-radius: var(--radius-full);
+    transition: width 1s ease-in-out;
+}
+
+/* Gallery Components */
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: var(--space-4);
+}
+
+.gallery-item {
+    position: relative;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+}
+
+.gallery-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    transition: transform var(--transition-base);
+}
+
+.gallery-item:hover .gallery-image {
+    transform: scale(1.05);
+}
+
+.gallery-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--bg-overlay);
+    color: var(--text-light);
+    padding: var(--space-3);
+    backdrop-filter: blur(10px);
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
     .menu-toggle {
@@ -269,6 +360,18 @@
     .app-control-button {
         width: 44px;
         height: 44px;
+    }
+
+    .timeline-item {
+        flex-direction: column;
+    }
+
+    .timeline-period {
+        margin-bottom: var(--space-2);
+    }
+
+    .gallery-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     }
 }
 
