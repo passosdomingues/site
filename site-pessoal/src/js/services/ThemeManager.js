@@ -208,4 +208,4 @@ class ThemeManager {
     }
 }
 
-export default ThemeManager;
+export { ThemeManager };
