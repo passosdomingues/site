@@ -283,6 +283,23 @@ class NavigationView {
     }
 
     /**
+     * @brief Generates flashback button HTML
+     * @private
+     * @returns {string} Flashback button HTML string
+     */
+    generateFlashbackButton() {
+        return `
+            <button 
+                class="flashback-button btn btn--secondary btn--sm"
+                aria-label="Get a random flashback from my journey"
+            >
+                <i class="fas fa-random" aria-hidden="true"></i>
+                <span class="flashback-button-text">Flashback</span>
+            </button>
+        `;
+    }
+
+    /**
      * @brief Initializes navigation interactivity and event handlers
      * @public
      * @param {Object} initializationData - Data for initialization
@@ -316,7 +333,6 @@ class NavigationView {
             this.setupScrollBehavior(navigationElement),
             this.setupNavigationClickHandlers(navigationElement),
             this.setupFlashbackInteractions(navigationElement)
-
         ];
 
         await Promise.all(setupPromises);
@@ -689,6 +705,35 @@ class NavigationView {
     };
 
     /**
+     * @brief Sets up flashback button interactions
+     * @private
+     * @param {HTMLElement} navigationElement - The navigation container element
+     * @returns {Promise<void>} Resolves when flashback interactions are set up
+     */
+    async setupFlashbackInteractions(navigationElement) {
+        const flashbackButton = navigationElement.querySelector('.flashback-button');
+        if (!flashbackButton) return;
+
+        flashbackButton.addEventListener('click', () => {
+            this.triggerFlashback();
+        }, { signal: this.eventAbortController.signal });
+    }
+
+    /**
+     * @brief Triggers a random flashback, navigating to a random section
+     * @private
+     */
+    triggerFlashback() {
+        const sections = Array.from(document.querySelectorAll('.section'));
+        if (sections.length === 0) return;
+
+        const randomSection = sections[Math.floor(Math.random() * sections.length)];
+        randomSection.scrollIntoView({ behavior: 'smooth' });
+
+        this.notifyObservers('flashbackTriggered', { sectionId: randomSection.id });
+    }
+
+    /**
      * @brief Updates navigation state based on current route
      * @public
      * @param {string} currentPath - The current active path for highlighting
@@ -850,50 +895,3 @@ class NavigationView {
 }
 
 export default NavigationView;
-
-    /**
-     * @brief Generates flashback button HTML
-     * @private
-     * @returns {string} Flashback button HTML string
-     */
-    generateFlashbackButton() {
-        return `
-            <button 
-                class="flashback-button btn btn--secondary btn--sm"
-                aria-label="Get a random flashback from my journey"
-            >
-                <i class="fas fa-random" aria-hidden="true"></i>
-                <span class="flashback-button-text">Flashback</span>
-            </button>
-        `;
-    }
-
-    /**
-     * @brief Sets up flashback button interactions
-     * @private
-     * @param {HTMLElement} navigationElement - The navigation container element
-     * @returns {Promise<void>} Resolves when flashback interactions are set up
-     */
-    async setupFlashbackInteractions(navigationElement) {
-        const flashbackButton = navigationElement.querySelector(".flashback-button");
-        if (!flashbackButton) return;
-
-        flashbackButton.addEventListener("click", () => {
-            this.triggerFlashback();
-        }, { signal: this.eventAbortController.signal });
-    }
-
-    /**
-     * @brief Triggers a random flashback, navigating to a random section
-     * @private
-     */
-    triggerFlashback() {
-        const sections = Array.from(document.querySelectorAll(".section"));
-        if (sections.length === 0) return;
-
-        const randomSection = sections[Math.floor(Math.random() * sections.length)];
-        randomSection.scrollIntoView({ behavior: "smooth" });
-
-        this.notifyObservers("flashbackTriggered", { sectionId: randomSection.id });
-    }
-
