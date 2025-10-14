@@ -5,25 +5,25 @@
  *              error handling, performance monitoring, and accessibility features
  */
 
-import MainController from './MainController.js';
-import NavigationController from './NavigationController.js';
-import SectionController from './SectionController.js';
-import './main.css';
+import MainController from './controllers/MainController.js';
+import NavigationController from './controllers/NavigationController.js';
+import SectionController from './controllers/SectionController.js';
+import '../css/main.css';
 
-import ViewManager from './ViewManager.js';
-import Router from './Router.js';
-import ThemeManager from './ThemeManager.js';
-import AccessibilityManager from './AccessibilityManager.js';
-import PerformanceMonitor from './PerformanceMonitor.js';
-import ErrorReporter from './ErrorReporter.js';
+import ViewManager from './views/ViewManager.js';
+import Router from './core/Router.js';
+import ThemeManager from './services/ThemeManager.js';
+import AccessibilityManager from './services/AccessibilityManager.js';
+import PerformanceMonitor from './services/PerformanceMonitor.js';
+import ErrorReporter from './services/ErrorReporter.js';
 
-import ContentModel from './ContentModel.js';
-import UserModel from './UserModel.js';
+import ContentModel from './models/ContentModel.js';
+import UserModel from './models/UserModel.js';
 
-import NavigationView from './NavigationView.js';
-import HeroView from './HeroView.js';
-import FooterView from './FooterView.js';
-import SectionView from './SectionView.js'; // Import SectionView
+import NavigationView from './views/NavigationView.js';
+import HeroView from './views/HeroView.js';
+import FooterView from './views/FooterView.js';
+import SectionView from './views/SectionView.js'; // Import SectionView
 
 /**
  * @class App
