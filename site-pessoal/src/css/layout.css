@@ -40,7 +40,7 @@
 }
 
 .section:nth-child(even) {
-    background: var(--component-bg, white);
+    background: white;
     border-radius: 10px;
     box-shadow: var(--card-shadow);
 }
@@ -79,9 +79,5 @@
 @media (max-width: 768px) {
     .hero-title {
         font-size: 2rem;
-    }
-    
-    .section {
-        padding: 2rem 1rem;
     }
 }

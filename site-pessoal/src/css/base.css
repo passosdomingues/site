@@ -10,7 +10,6 @@ body {
     line-height: 1.6;
     color: var(--text-color);
     background-color: var(--light-bg);
-    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .skip-link {
@@ -26,13 +25,4 @@ body {
 
 .skip-link:focus {
     top: 0;
-}
-
-/* Screen Reader Only Utility */
-.screen-reader-only {
-    position: absolute;
-    left: -10000px;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
 }

@@ -1,333 +1,281 @@
-/* ===== APPLICATION CONTROLS - FIXED VERSION ===== */
-
-/**
- * @brief Main application controls container
- * @description Fixed positioned container for theme and accessibility controls
- */
-.app-controls {
+/* Navigation Component */
+.main-navigation-container {
     position: fixed;
-    top: 20px;
-    right: 20px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 10px;
-    z-index: 1001;
-    background: var(--nav-bg, rgba(255, 255, 255, 0.95));
-    backdrop-filter: blur(10px);
-    border-radius: 12px;
-    padding: 12px;
-    box-shadow: var(--card-shadow);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    transition: all 0.3s ease;
-}
-
-/**
- * @brief Theme toggle button styles
- * @description Always visible button for theme switching
- */
-.theme-toggle-btn {
-    width: 44px;
-    height: 44px;
-    border: none;
-    border-radius: 8px;
-    background: var(--component-bg, white);
-    color: var(--text-color);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.3rem;
-    font-weight: bold;
-    transition: all 0.3s ease;
-    box-shadow: var(--card-shadow);
-}
-
-.theme-toggle-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    background: var(--secondary-color);
-    color: white;
-}
-
-.theme-toggle-btn:active {
-    transform: translateY(0);
-}
-
-.theme-toggle-btn:focus-visible {
-    outline: 3px solid var(--accent-color);
-    outline-offset: 2px;
-}
-
-.theme-toggle-btn[aria-pressed="true"] {
-    background: var(--accent-color);
-    color: white;
-}
-
-/**
- * @brief Menu toggle button styles
- * @description Hamburger button for accessibility menu
- */
-.menu-toggle-btn {
-    width: 44px;
-    height: 44px;
-    border: none;
-    border-radius: 8px;
-    background: var(--component-bg, white);
-    color: var(--text-color);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2rem;
-    font-weight: bold;
-    transition: all 0.3s ease;
-    box-shadow: var(--card-shadow);
-}
-
-.menu-toggle-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    background: var(--secondary-color);
-    color: white;
-}
-
-.menu-toggle-btn:active {
-    transform: translateY(0);
-}
-
-.menu-toggle-btn:focus-visible {
-    outline: 3px solid var(--accent-color);
-    outline-offset: 2px;
-}
-
-.menu-toggle-btn[aria-expanded="true"] {
-    background: var(--accent-color);
-    color: white;
-    transform: rotate(90deg);
-}
-
-/**
- * @brief Accessibility menu container
- * @description Hidden by default, shows when menu is expanded
- */
-.accessibility-menu {
-    display: none;
-    position: absolute;
-    top: 100%;
-    right: 0;
-    background: var(--nav-bg, rgba(255, 255, 255, 0.95));
-    backdrop-filter: blur(10px);
-    border-radius: 12px;
-    padding: 12px;
-    box-shadow: var(--card-shadow);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    margin-top: 10px;
-    min-width: 150px;
-    z-index: 1002;
-}
-
-/**
- * @brief Show accessibility menu when parent has menu-open class
- */
-.app-controls.menu-open .accessibility-menu {
-    display: block;
-}
-
-/**
- * @brief Font controls container
- * @description Flex container for font size buttons
- */
-.font-controls {
-    display: flex;
-    gap: 5px;
-    justify-content: center;
-    margin-bottom: 8px;
-}
-
-/**
- * @brief Base button styles for accessibility controls
- */
-.accessibility-menu .app-control-button {
-    width: 40px;
-    height: 40px;
-    border: none;
-    border-radius: 8px;
-    background: var(--component-bg, white);
-    color: var(--text-color);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1rem;
-    font-weight: bold;
-    transition: all 0.3s ease;
-    box-shadow: var(--card-shadow);
-}
-
-.accessibility-menu .app-control-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    background: var(--secondary-color);
-    color: white;
-}
-
-.accessibility-menu .app-control-button:active {
-    transform: translateY(0);
-}
-
-.accessibility-menu .app-control-button:focus-visible {
-    outline: 3px solid var(--accent-color);
-    outline-offset: 2px;
-}
-
-/**
- * @brief High contrast button styles
- */
-.high-contrast-btn {
+    top: 0;
     width: 100%;
-    height: 40px;
-    border: none;
-    border-radius: 8px;
-    background: var(--component-bg, white);
-    color: var(--text-color);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.1rem;
-    font-weight: bold;
-    transition: all 0.3s ease;
-    box-shadow: var(--card-shadow);
-    margin-top: 8px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    padding: 1rem 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-.high-contrast-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.nav-list {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: var(--text-color);
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: var(--transition);
+}
+
+.nav-link:hover,
+.nav-link.active {
     background: var(--secondary-color);
     color: white;
 }
 
-.high-contrast-btn:active {
-    transform: translateY(0);
+/* Timeline Component */
+.timeline {
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
-.high-contrast-btn:focus-visible {
-    outline: 3px solid var(--accent-color);
-    outline-offset: 2px;
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--secondary-color);
+    transform: translateX(-50%);
 }
 
-.high-contrast-btn[aria-pressed="true"] {
-    background: var(--accent-color);
+.timeline-item {
+    display: flex;
+    margin-bottom: 3rem;
+    position: relative;
+}
+
+.timeline-item:nth-child(odd) {
+    flex-direction: row-reverse;
+}
+
+.timeline-period {
+    flex: 0 0 150px;
+    text-align: center;
+    font-weight: bold;
+    color: var(--secondary-color);
+    padding: 0.5rem;
+}
+
+.timeline-content {
+    flex: 1;
+    padding: 1.5rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: var(--card-shadow);
+    margin: 0 2rem;
+}
+
+.timeline-title {
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.highlights-list {
+    margin-top: 1rem;
+}
+
+/* Cards Component */
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.card {
+    background: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: var(--card-shadow);
+    transition: var(--transition);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.card-title {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.card-description {
+    margin-bottom: 1rem;
+}
+
+.card-links {
+    margin-bottom: 1rem;
+}
+
+.card-links a {
+    display: inline-block;
+    margin-right: 1rem;
+    color: var(--secondary-color);
+    text-decoration: none;
+}
+
+.card-links a:hover {
+    text-decoration: underline;
+}
+
+.card-meta {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* Tags Component */
+.tags-container {
+    margin-top: 1rem;
+}
+
+.tag {
+    display: inline-block;
+    background: var(--secondary-color);
     color: white;
+    padding: 0.3rem 0.8rem;
+    margin: 0.2rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
 }
 
-/* ===== DARK THEME ADJUSTMENTS ===== */
-
-[data-theme="dark"] .app-controls,
-[data-theme="dark"] .accessibility-menu {
-    background: rgba(44, 62, 80, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+.highlight-tag {
+    display: inline-block;
+    background: var(--light-bg);
+    padding: 0.3rem 0.8rem;
+    margin: 0.2rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
 }
 
-[data-theme="dark"] .theme-toggle-btn,
-[data-theme="dark"] .menu-toggle-btn,
-[data-theme="dark"] .app-control-button,
-[data-theme="dark"] .high-contrast-btn {
-    background: var(--component-bg, #34495e);
-    color: var(--text-color);
+/* Skills Component */
+.skills-categories {
+    display: grid;
+    gap: 2rem;
 }
 
-/* ===== HIGH CONTRAST MODE ADJUSTMENTS ===== */
-
-[data-high-contrast="true"] .theme-toggle-btn,
-[data-high-contrast="true"] .menu-toggle-btn,
-[data-high-contrast="true"] .app-control-button,
-[data-high-contrast="true"] .high-contrast-btn {
-    border: 2px solid #000000;
+.skill-category {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: var(--card-shadow);
 }
 
-[data-high-contrast="true"] .app-controls,
-[data-high-contrast="true"] .accessibility-menu {
-    border: 2px solid #000000;
+.category-title {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    border-bottom: 2px solid var(--secondary-color);
+    padding-bottom: 0.5rem;
 }
 
-/* ===== RESPONSIVE DESIGN ===== */
+.skill-item {
+    margin-bottom: 1.5rem;
+}
 
-/**
- * @brief Tablet responsive styles
- */
+.skill-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.skill-bar {
+    height: 8px;
+    background: #e0e0e0;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+}
+
+.skill-progress {
+    height: 100%;
+    background: var(--secondary-color);
+    transition: width 1s ease-in-out;
+}
+
+/* Gallery Component */
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.gallery-item {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: var(--card-shadow);
+}
+
+.gallery-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    transition: var(--transition);
+}
+
+.gallery-item:hover .gallery-image {
+    transform: scale(1.05);
+}
+
+.gallery-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 0.5rem;
+    font-size: 0.9rem;
+}
+
+/* Responsive Components */
 @media (max-width: 768px) {
-    .app-controls {
-        top: 10px;
-        right: 10px;
-        padding: 8px;
-    }
-    
-    .theme-toggle-btn,
-    .menu-toggle-btn {
-        width: 40px;
-        height: 40px;
-        font-size: 1.1rem;
-    }
-    
-    .accessibility-menu .app-control-button,
-    .high-contrast-btn {
-        width: 36px;
-        height: 36px;
-        font-size: 0.9rem;
-    }
-    
-    .high-contrast-btn {
-        width: calc(100% - 8px);
-    }
-    
-    .accessibility-menu {
-        min-width: 130px;
-    }
-}
-
-/**
- * @brief Mobile responsive styles
- */
-@media (max-width: 480px) {
-    .app-controls {
-        position: static;
+    .nav-list {
         flex-direction: column;
-        width: calc(100% - 20px);
-        margin: 10px auto;
-        border-radius: 20px;
+        gap: 0.5rem;
     }
-    
-    .accessibility-menu {
-        position: static;
-        margin-top: 8px;
-        width: 100%;
-    }
-    
-    .font-controls {
-        justify-content: space-around;
-    }
-}
 
-/**
- * @brief Reduced motion support for accessibility
- */
-@media (prefers-reduced-motion: reduce) {
-    .app-controls,
-    .theme-toggle-btn,
-    .menu-toggle-btn,
-    .app-control-button,
-    .high-contrast-btn,
-    .accessibility-menu {
-        transition: none;
+    .timeline::before {
+        left: 30px;
     }
-    
-    .theme-toggle-btn:hover,
-    .menu-toggle-btn:hover,
-    .app-control-button:hover,
-    .high-contrast-btn:hover {
-        transform: none;
+
+    .timeline-item {
+        flex-direction: row !important;
+    }
+
+    .timeline-period {
+        flex: 0 0 80px;
+        text-align: left;
+    }
+
+    .timeline-content {
+        margin-left: 1rem;
+        margin-right: 0;
+    }
+
+    .cards-grid {
+        grid-template-columns: 1fr;
     }
 }
