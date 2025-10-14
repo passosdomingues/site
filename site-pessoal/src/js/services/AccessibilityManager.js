@@ -1,9 +1,20 @@
+/**
+ * @file Accessibility manager service
+ * @brief Handles accessibility features like font sizing and screen reader announcements
+ */
+
 import eventBus from '../core/EventBus.js';
 
 /**
- * @brief Accessibility manager service
+ * @class AccessibilityManager
+ * @brief Manages accessibility features and user preferences
  */
 export class AccessibilityManager {
+    /**
+     * @brief Constructs AccessibilityManager instance
+     * @param {Object} dependencies - Service dependencies
+     * @param {Object} dependencies.eventBus - Event bus instance
+     */
     constructor(dependencies = {}) {
         this.eventBus = dependencies.eventBus || eventBus;
         this.isInitialized = false;
@@ -17,11 +28,12 @@ export class AccessibilityManager {
 
     /**
      * @brief Initialize accessibility manager
+     * @async
+     * @returns {Promise<void>}
      */
     async init() {
         if (this.isInitialized) return;
 
-        // Load saved preferences
         const savedFontSize = localStorage.getItem('app-font-size');
         if (savedFontSize) {
             this.currentFontSize = parseInt(savedFontSize);
@@ -36,7 +48,7 @@ export class AccessibilityManager {
     }
 
     /**
-     * @brief Set up event listeners
+     * @brief Set up event listeners for keyboard shortcuts
      */
     setupEventListeners() {
         document.addEventListener('keydown', this.handleKeydown);
@@ -47,15 +59,14 @@ export class AccessibilityManager {
     }
 
     /**
-     * @brief Handle keyboard events
+     * @brief Handle keyboard events for accessibility shortcuts
+     * @param {KeyboardEvent} event - Keyboard event object
      */
     handleKeydown(event) {
-        // Skip if user is typing
         if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA' || event.target.isContentEditable) {
             return;
         }
 
-        // Font size controls
         if ((event.ctrlKey || event.metaKey) && (event.key === '+' || event.key === '=')) {
             event.preventDefault();
             this.increaseFontSize();
@@ -74,7 +85,6 @@ export class AccessibilityManager {
             return;
         }
 
-        // Theme toggle with Ctrl+T
         if ((event.ctrlKey || event.metaKey) && event.key === 't') {
             event.preventDefault();
             this.eventBus.publish('theme:toggle');
@@ -83,10 +93,9 @@ export class AccessibilityManager {
     }
 
     /**
-     * @brief Set up focus management
+     * @brief Set up focus management for route changes
      */
     setupFocusManagement() {
-        // Manage focus for route changes
         this.eventBus.subscribe('router:navigated', () => {
             setTimeout(() => {
                 const mainContent = document.getElementById('main-content');
@@ -109,6 +118,7 @@ export class AccessibilityManager {
 
     /**
      * @brief Announce content to screen readers
+     * @param {string} message - Message to announce
      */
     announceContent(message) {
         let announcer = document.getElementById('a11y-announcer');
@@ -127,7 +137,7 @@ export class AccessibilityManager {
     }
 
     /**
-     * @brief Increase font size
+     * @brief Increase font size within allowed limits
      */
     increaseFontSize() {
         const newSize = Math.min(this.currentFontSize + this.fontSizeStep, this.maxFontSize);
@@ -139,7 +149,7 @@ export class AccessibilityManager {
     }
 
     /**
-     * @brief Decrease font size
+     * @brief Decrease font size within allowed limits
      */
     decreaseFontSize() {
         const newSize = Math.max(this.currentFontSize - this.fontSizeStep, this.minFontSize);
@@ -151,7 +161,7 @@ export class AccessibilityManager {
     }
 
     /**
-     * @brief Reset font size to default
+     * @brief Reset font size to default (100%)
      */
     resetFontSize() {
         if (this.currentFontSize !== 100) {
@@ -162,7 +172,7 @@ export class AccessibilityManager {
     }
 
     /**
-     * @brief Apply current font size to document
+     * @brief Apply current font size to document and save preference
      */
     applyFontSize() {
         document.documentElement.style.fontSize = `${this.currentFontSize}%`;
@@ -174,21 +184,23 @@ export class AccessibilityManager {
     }
 
     /**
-     * @brief Get current font size
+     * @brief Get current font size percentage
+     * @returns {number} Current font size percentage
      */
     getCurrentFontSize() {
         return this.currentFontSize;
     }
 
     /**
-     * @brief Check if reduced motion is preferred
+     * @brief Check if user prefers reduced motion
+     * @returns {boolean} Reduced motion preference status
      */
     prefersReducedMotion() {
         return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     }
 
     /**
-     * @brief Destroy accessibility manager
+     * @brief Destroy accessibility manager and clean up resources
      */
     destroy() {
         document.removeEventListener('keydown', this.handleKeydown);

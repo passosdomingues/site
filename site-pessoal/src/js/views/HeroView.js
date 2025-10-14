@@ -1,22 +1,33 @@
+/**
+ * @file Hero section view
+ * @brief Renders main hero section with personal information
+ */
+
 import { BaseView } from './BaseView.js';
 
 /**
- * @brief Hero section view
- * @description Renders the main hero section with personal information
+ * @class HeroView
+ * @brief Handles hero section rendering and interactions
  */
 export class HeroView extends BaseView {
+    /**
+     * @brief Constructs HeroView instance
+     * @param {Object} config - Configuration object
+     * @param {Object} config.heroData - Data used to render hero section
+     */
     constructor(config = {}) {
         super(config);
         this.heroData = config.heroData || {};
     }
 
     /**
-     * @brief Initialize hero view
+     * @brief Initialize hero view with default data
+     * @async
+     * @returns {Promise<void>}
      */
     async init() {
         await super.init();
         
-        // Load default hero data if not provided
         if (Object.keys(this.heroData).length === 0) {
             this.heroData = this.getDefaultHeroData();
         }
@@ -26,6 +37,8 @@ export class HeroView extends BaseView {
 
     /**
      * @brief Render hero section
+     * @async
+     * @returns {Promise<void>}
      */
     async render() {
         await super.render();
@@ -37,7 +50,6 @@ export class HeroView extends BaseView {
         const heroHTML = this.createHeroHTML();
         this.container.innerHTML = heroHTML;
         
-        // Register main elements
         this.registerElement('heroTitle', this.container.querySelector('.hero-title'));
         this.registerElement('heroSubtitle', this.container.querySelector('.hero-subtitle'));
         this.registerElement('heroDescription', this.container.querySelector('.hero-description'));
@@ -49,7 +61,7 @@ export class HeroView extends BaseView {
 
     /**
      * @brief Create hero section HTML
-     * @returns {string} HTML string
+     * @returns {string} HTML string for hero section
      */
     createHeroHTML() {
         return `
@@ -101,10 +113,9 @@ export class HeroView extends BaseView {
     }
 
     /**
-     * @brief Set up event listeners
+     * @brief Set up event listeners for CTA buttons
      */
     setupEventListeners() {
-        // Add click listeners to CTA buttons
         const ctaButtons = this.container.querySelectorAll('.hero-cta-button');
         ctaButtons.forEach((button, index) => {
             this.addEventListener(button, 'click', (event) => {
@@ -116,7 +127,7 @@ export class HeroView extends BaseView {
     /**
      * @brief Handle CTA button clicks
      * @param {Event} event - Click event
-     * @param {Object} cta - CTA data
+     * @param {Object} cta - CTA data object
      */
     onCTAClick(event, cta) {
         this.eventBus.publish('hero:cta:clicked', {
@@ -128,15 +139,16 @@ export class HeroView extends BaseView {
     }
 
     /**
-     * @brief Update hero data
+     * @brief Update hero data and re-render if necessary
+     * @async
      * @param {Object} newData - New hero data
+     * @returns {Promise<void>}
      */
     async update(newData) {
         await super.update(newData);
         
         this.heroData = { ...this.heroData, ...newData };
         
-        // Re-render if already rendered
         if (this.isRendered) {
             await this.render();
         }
@@ -144,7 +156,7 @@ export class HeroView extends BaseView {
 
     /**
      * @brief Get default hero data
-     * @returns {Object} Default hero data
+     * @returns {Object} Default hero data object
      */
     getDefaultHeroData() {
         return {

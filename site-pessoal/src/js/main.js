@@ -1,6 +1,8 @@
 /**
- * @brief Main application entry point
+ * @file Main application entry point
+ * @brief Initializes core application components and UI controls
  */
+
 import { App } from './core/App.js';
 import { MainController } from './controllers/MainController.js';
 import { NavigationController } from './controllers/NavigationController.js';
@@ -10,6 +12,10 @@ import { ThemeManager } from './services/ThemeManager.js';
 import { AccessibilityManager } from './services/AccessibilityManager.js';
 import { PerformanceMonitor } from './services/PerformanceMonitor.js';
 
+/**
+ * @class Application
+ * @brief Main application class coordinating initialization and UI setup
+ */
 class Application {
     constructor() {
         this.app = null;
@@ -18,7 +24,9 @@ class Application {
     }
 
     /**
-     * @brief Initialize the core application and UI controls
+     * @brief Initialize core application and UI controls
+     * @async
+     * @returns {Promise<void>}
      */
     async initializeApplication() {
         try {
@@ -42,7 +50,6 @@ class Application {
             await this.app.initialize();
             console.info('Application: All components initialized successfully.');
 
-            // Set up UI components
             this.setupMobileNavigation();
             this.setupUIControls();
             this.setupScrollEffects();
@@ -94,7 +101,7 @@ class Application {
     }
 
     /**
-     * @brief Show error state
+     * @brief Show error state when initialization fails
      */
     showErrorState() {
         const loadingOverlay = document.getElementById('loading-overlay');
@@ -112,7 +119,7 @@ class Application {
     }
 
     /**
-     * @brief Set up mobile navigation
+     * @brief Set up mobile navigation functionality
      */
     setupMobileNavigation() {
         const menuToggle = document.getElementById('menu-toggle');
@@ -127,15 +134,12 @@ class Application {
                 navMenu.classList.toggle('active');
                 if (navOverlay) navOverlay.classList.toggle('active');
                 
-                // Toggle body scroll
                 document.body.style.overflow = isOpening ? 'hidden' : '';
                 
-                // Announce for screen readers
                 const announcement = isOpening ? 'Navigation menu opened' : 'Navigation menu closed';
                 this.app.services.accessibilityManager.announceContent(announcement);
             });
             
-            // Close menu when clicking on overlay
             if (navOverlay) {
                 navOverlay.addEventListener('click', () => {
                     menuToggle.classList.remove('active');
@@ -145,7 +149,6 @@ class Application {
                 });
             }
             
-            // Close menu when clicking on a link
             navMenu.addEventListener('click', (e) => {
                 if (e.target.tagName === 'A') {
                     menuToggle.classList.remove('active');
@@ -155,7 +158,6 @@ class Application {
                 }
             });
             
-            // Close menu on escape key
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape' && navMenu.classList.contains('active')) {
                     menuToggle.classList.remove('active');
@@ -168,7 +170,7 @@ class Application {
     }
 
     /**
-     * @brief Set up UI controls
+     * @brief Set up UI control buttons (theme, font size, etc.)
      */
     setupUIControls() {
         const controlsContainer = document.getElementById('app-controls');
@@ -177,7 +179,6 @@ class Application {
         const themeManager = this.app.services.themeManager;
         const accessibilityManager = this.app.services.accessibilityManager;
 
-        // Theme Toggle Button
         const themeToggleBtn = document.createElement('button');
         themeToggleBtn.className = 'app-control-button theme-toggle-btn';
         themeToggleBtn.setAttribute('aria-label', 'Toggle light and dark theme');
@@ -195,7 +196,6 @@ class Application {
         controlsContainer.appendChild(themeToggleBtn);
         updateThemeIcon();
 
-        // Font Size Controls
         const fontIncreaseBtn = this.createControlButton('A+', 'Increase font size', () => {
             accessibilityManager.increaseFontSize();
         });
@@ -216,7 +216,11 @@ class Application {
     }
 
     /**
-     * @brief Create control button
+     * @brief Create a control button with specified parameters
+     * @param {string} text - Button text content
+     * @param {string} label - Accessibility label
+     * @param {Function} onClick - Click handler function
+     * @returns {HTMLButtonElement} Created button element
      */
     createControlButton(text, label, onClick) {
         const button = document.createElement('button');
@@ -229,7 +233,7 @@ class Application {
     }
 
     /**
-     * @brief Set up scroll effects
+     * @brief Set up scroll effects (header hide/show, smooth scrolling)
      */
     setupScrollEffects() {
         let lastScrollY = window.scrollY;
@@ -239,14 +243,12 @@ class Application {
             window.addEventListener('scroll', () => {
                 const currentScrollY = window.scrollY;
                 
-                // Add scrolled class based on scroll position
                 if (currentScrollY > 50) {
                     header.classList.add('scrolled');
                 } else {
                     header.classList.remove('scrolled');
                 }
                 
-                // Hide header on scroll down
                 if (currentScrollY > lastScrollY && currentScrollY > 200) {
                     header.style.transform = 'translateY(-100%)';
                 } else {
@@ -257,7 +259,6 @@ class Application {
             }, { passive: true });
         }
         
-        // Smooth scroll for anchor links
         document.addEventListener('click', (e) => {
             const link = e.target.closest('a[href^="#"]');
             if (link && link.getAttribute('href') !== '#') {
@@ -274,7 +275,6 @@ class Application {
                         behavior: 'smooth'
                     });
                     
-                    // Update URL
                     history.pushState(null, null, `#${targetId}`);
                 }
             }
@@ -283,6 +283,7 @@ class Application {
 
     /**
      * @brief Get application instance
+     * @returns {App} Application instance
      */
     getApp() {
         return this.app;
@@ -290,13 +291,14 @@ class Application {
 
     /**
      * @brief Check if application is initialized
+     * @returns {boolean} Initialization status
      */
     isAppInitialized() {
         return this.isInitialized;
     }
 
     /**
-     * @brief Destroy application
+     * @brief Destroy application and clean up resources
      */
     destroy() {
         if (this.app) {
@@ -306,7 +308,6 @@ class Application {
     }
 }
 
-// Initialize application
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
         window.app = new Application();

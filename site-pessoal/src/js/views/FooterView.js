@@ -1,14 +1,19 @@
+/**
+ * @file Footer view
+ * @brief Renders application footer with links and copyright information
+ */
+
 import { BaseView } from './BaseView.js';
 
 /**
- * @brief Footer view
- * @description Renders the application footer with links and copyright information.
+ * @class FooterView
+ * @brief Handles footer rendering and interactions
  */
 export class FooterView extends BaseView {
     /**
-     * @brief Constructs a FooterView instance.
-     * @param {Object} [config={}] - The configuration object.
-     * @param {Object} [config.footerData] - The data used to render the footer.
+     * @brief Constructs FooterView instance
+     * @param {Object} config - Configuration object
+     * @param {Object} config.footerData - Data used to render footer
      */
     constructor(config = {}) {
         super(config);
@@ -17,8 +22,8 @@ export class FooterView extends BaseView {
     }
 
     /**
-     * @brief Initialize the footer view.
-     * @description Sets up default data if none is provided.
+     * @brief Initialize footer view with default data
+     * @async
      * @returns {Promise<void>}
      */
     async init() {
@@ -32,8 +37,8 @@ export class FooterView extends BaseView {
     }
 
     /**
-     * @brief Render the footer into its container.
-     * @description Generates the footer HTML and attaches event listeners.
+     * @brief Render footer into container
+     * @async
      * @returns {Promise<void>}
      */
     async render() {
@@ -52,8 +57,8 @@ export class FooterView extends BaseView {
     }
 
     /**
-     * @brief Create the main footer HTML structure.
-     * @returns {string} The complete HTML string for the footer.
+     * @brief Create main footer HTML structure
+     * @returns {string} Complete HTML string for footer
      */
     createFooterHTML() {
         return `
@@ -73,8 +78,8 @@ export class FooterView extends BaseView {
     }
 
     /**
-     * @brief Create the info section HTML.
-     * @returns {string} The HTML for the info section.
+     * @brief Create info section HTML
+     * @returns {string} HTML for info section
      */
     createInfoSection() {
         return `
@@ -86,8 +91,8 @@ export class FooterView extends BaseView {
     }
 
     /**
-     * @brief Create the links section HTML.
-     * @returns {string} The HTML for the navigation links section.
+     * @brief Create links section HTML
+     * @returns {string} HTML for navigation links section
      */
     createLinksSection() {
         if (!this.footerData.links) return '';
@@ -113,8 +118,8 @@ export class FooterView extends BaseView {
     }
 
     /**
-     * @brief Create the social media links section HTML.
-     * @returns {string} The HTML for the social links section.
+     * @brief Create social media links section HTML
+     * @returns {string} HTML for social links section
      */
     createSocialSection() {
         if (!this.footerData.social) return '';
@@ -139,8 +144,8 @@ export class FooterView extends BaseView {
     }
 
     /**
-     * @brief Create the copyright section HTML.
-     * @returns {string} The HTML for the copyright section.
+     * @brief Create copyright section HTML
+     * @returns {string} HTML for copyright section
      */
     createCopyrightSection() {
         return `
@@ -157,7 +162,7 @@ export class FooterView extends BaseView {
     }
 
     /**
-     * @brief Set up event listeners for footer elements.
+     * @brief Set up event listeners for footer elements
      */
     setupEventListeners() {
         const footerLinks = this.container.querySelectorAll('.footer-link, .footer-social-link');
@@ -169,9 +174,9 @@ export class FooterView extends BaseView {
     }
 
     /**
-     * @brief Handle clicks on footer links.
-     * @param {Event} event - The click event object.
-     * @param {HTMLElement} link - The clicked link element.
+     * @brief Handle clicks on footer links
+     * @param {Event} event - Click event object
+     * @param {HTMLElement} link - Clicked link element
      */
     onFooterLinkClick(event, link) {
         const url = link.getAttribute('href');
@@ -188,8 +193,8 @@ export class FooterView extends BaseView {
     }
 
     /**
-     * @brief Get the default data for the footer.
-     * @returns {Object} An object containing default footer content.
+     * @brief Get default data for footer
+     * @returns {Object} Object containing default footer content
      */
     getDefaultFooterData() {
         return {
@@ -209,22 +214,22 @@ export class FooterView extends BaseView {
                 {
                     title: 'Resources',
                     links: [
-                        { label: 'GitHub', url: 'https://github.com/rafaelpassosdomingues', external: true },
-                        { label: 'LinkedIn', url: 'https://www.linkedin.com/in/rafael-passos-domingues/', external: true },
+                        { label: 'GitHub', url: 'https://github.com/passosdomingues', external: true },
+                        { label: 'LinkedIn', url: 'https://www.linkedin.com/in/rafaelpassosdomingues/', external: true },
                         { label: 'CV/Resume', url: '/path-to-cv.pdf', external: true }
                     ]
                 }
             ],
             social: [
-                { name: 'GitHub', url: 'https://github.com/rafaelpassosdomingues', icon: '🐙' },
-                { name: 'LinkedIn', url: 'https://www.linkedin.com/in/rafael-passos-domingues/', icon: '💼' },
-                { name: 'Email', url: 'mailto:rafael.passos.domingues@gmail.com', icon: '✉️' }
+                { name: 'GitHub', url: 'https://github.com/passosdomingues', icon: '🐙' },
+                { name: 'LinkedIn', url: 'https://www.linkedin.com/in/rafaelpassosdomingues/', icon: '💼' },
+                { name: 'Email', url: 'mailto:rafaelpassosdomingues@gmail.com', icon: '✉️' }
             ]
         };
     }
 
     /**
-     * @brief Update the copyright year in the rendered footer.
+     * @brief Update copyright year in rendered footer
      */
     updateCopyrightYear() {
         const newYear = new Date().getFullYear();
@@ -239,8 +244,9 @@ export class FooterView extends BaseView {
     }
 
     /**
-     * @brief Update the footer with new data and re-render if necessary.
-     * @param {Object} newData - The new data to merge with existing footer data.
+     * @brief Update footer with new data and re-render if necessary
+     * @async
+     * @param {Object} newData - New data to merge with existing footer data
      * @returns {Promise<void>}
      */
     async update(newData) {

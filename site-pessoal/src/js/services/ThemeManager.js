@@ -1,13 +1,23 @@
+/**
+ * @file Theme manager service
+ * @brief Manages application theme and dark/light mode with persistence
+ */
+
 import eventBus from '../core/EventBus.js';
 
 /**
- * @brief Theme manager service
- * @description Manages application theme and dark/light mode with persistence
+ * @class ThemeManager
+ * @brief Handles theme management and system preference detection
  */
 export class ThemeManager {
+    /**
+     * @brief Constructs ThemeManager instance
+     * @param {Object} dependencies - Service dependencies
+     * @param {Object} dependencies.eventBus - Event bus instance
+     */
     constructor(dependencies = {}) {
         this.eventBus = dependencies.eventBus || eventBus;
-        this.currentTheme = 'dark'; // Default to dark
+        this.currentTheme = 'dark';
         this.isInitialized = false;
         this.systemPreference = null;
 
@@ -17,18 +27,17 @@ export class ThemeManager {
 
     /**
      * @brief Initialize theme manager
+     * @async
+     * @returns {Promise<void>}
      */
     async init() {
         if (this.isInitialized) return;
 
-        // Detect system preference
         this.systemPreference = this.detectSystemPreference();
         
-        // Load saved theme or use dark as default
         const savedTheme = localStorage.getItem('app-theme');
-        this.currentTheme = savedTheme || 'dark'; // Force dark as default
+        this.currentTheme = savedTheme || 'dark';
         
-        // Apply theme
         await this.applyTheme(this.currentTheme);
         this.setupEventListeners();
         
@@ -38,6 +47,7 @@ export class ThemeManager {
 
     /**
      * @brief Detect system color scheme preference
+     * @returns {string} System preference ('dark' or 'light')
      */
     detectSystemPreference() {
         if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -47,31 +57,31 @@ export class ThemeManager {
     }
 
     /**
-     * @brief Set up event listeners
+     * @brief Set up event listeners for theme changes
      */
     setupEventListeners() {
         this.eventBus.subscribe('theme:change', this.onThemeChange);
         this.eventBus.subscribe('theme:toggle', this.toggleTheme.bind(this));
         
-        // Listen for system theme changes
         const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
         mediaQuery.addEventListener('change', this.handleSystemThemeChange);
     }
 
     /**
      * @brief Handle system theme changes
+     * @param {MediaQueryListEvent} event - Media query change event
      */
     handleSystemThemeChange(event) {
         this.systemPreference = event.matches ? 'dark' : 'light';
         
-        // Only update if no manual theme is set
         if (!localStorage.getItem('app-theme')) {
             this.setTheme(this.systemPreference, true);
         }
     }
 
     /**
-     * @brief Handle theme change events
+     * @brief Handle theme change events from event bus
+     * @param {Object} data - Event data containing theme information
      */
     onThemeChange(data) {
         if (data.theme && this.isValidTheme(data.theme)) {
@@ -81,6 +91,10 @@ export class ThemeManager {
 
     /**
      * @brief Set application theme
+     * @async
+     * @param {string} theme - Theme to apply ('light' or 'dark')
+     * @param {boolean} isSystemChange - Whether change is from system preference
+     * @returns {Promise<void>}
      */
     async setTheme(theme, isSystemChange = false) {
         if (!this.isValidTheme(theme)) {
@@ -91,15 +105,12 @@ export class ThemeManager {
         const previousTheme = this.currentTheme;
         this.currentTheme = theme;
         
-        // Apply theme to DOM
         await this.applyTheme(theme);
         
-        // Save preference unless this is a system change
         if (!isSystemChange) {
             localStorage.setItem('app-theme', theme);
         }
         
-        // Publish theme change event
         this.eventBus.publish('theme:changed', { 
             theme: this.currentTheme,
             previousTheme,
@@ -108,14 +119,15 @@ export class ThemeManager {
     }
 
     /**
-     * @brief Apply theme to document
+     * @brief Apply theme to document with transition
+     * @param {string} theme - Theme to apply
+     * @returns {Promise} Promise that resolves after transition
      */
     async applyTheme(theme) {
         return new Promise((resolve) => {
             document.documentElement.setAttribute('data-theme', theme);
             this.updateThemeMeta(theme);
             
-            // Add transition class
             document.documentElement.classList.add('theme-transition');
             
             setTimeout(() => {
@@ -126,7 +138,8 @@ export class ThemeManager {
     }
 
     /**
-     * @brief Update theme-color meta tag
+     * @brief Update theme-color meta tag for browser UI
+     * @param {string} theme - Current theme
      */
     updateThemeMeta(theme) {
         let metaThemeColor = document.querySelector('meta[name="theme-color"]');
@@ -143,6 +156,7 @@ export class ThemeManager {
 
     /**
      * @brief Toggle between light and dark themes
+     * @returns {string} New theme after toggle
      */
     toggleTheme() {
         const newTheme = this.currentTheme === 'light' ? 'dark' : 'light';
@@ -152,6 +166,8 @@ export class ThemeManager {
 
     /**
      * @brief Check if theme is valid
+     * @param {string} theme - Theme to validate
+     * @returns {boolean} Validation result
      */
     isValidTheme(theme) {
         return ['light', 'dark'].includes(theme);
@@ -159,6 +175,7 @@ export class ThemeManager {
 
     /**
      * @brief Get current theme
+     * @returns {string} Current theme
      */
     getCurrentTheme() {
         return this.currentTheme;
@@ -166,13 +183,14 @@ export class ThemeManager {
 
     /**
      * @brief Check if dark mode is active
+     * @returns {boolean} Dark mode status
      */
     isDarkMode() {
         return this.currentTheme === 'dark';
     }
 
     /**
-     * @brief Destroy theme manager
+     * @brief Destroy theme manager and clean up resources
      */
     destroy() {
         this.eventBus.unsubscribe('theme:change', this.onThemeChange);

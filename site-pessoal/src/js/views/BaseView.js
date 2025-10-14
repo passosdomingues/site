@@ -1,15 +1,20 @@
+/**
+ * @file Base view class for all views
+ * @brief Provides common functionality and lifecycle methods for views
+ */
+
 import eventBus from '../core/EventBus.js';
 
 /**
- * @brief Base view class for all views
- * @description Provides common functionality and lifecycle methods for views
+ * @class BaseView
+ * @brief Abstract base class providing common view functionality
  */
 export class BaseView {
     /**
-     * @brief Constructs a BaseView instance.
-     * @param {Object} config - The configuration object.
-     * @param {HTMLElement} [config.container] - The main DOM container for the view.
-     * @param {Object} [config.eventBus] - The event bus instance for communication.
+     * @brief Constructs BaseView instance
+     * @param {Object} config - Configuration object
+     * @param {HTMLElement} config.container - Main DOM container for the view
+     * @param {Object} config.eventBus - Event bus instance for communication
      */
     constructor(config = {}) {
         this.container = config.container;
@@ -22,8 +27,8 @@ export class BaseView {
     }
 
     /**
-     * @brief Initialize the view.
-     * @description Called before the first render, sets up initial state.
+     * @brief Initialize the view
+     * @async
      * @returns {Promise<void>}
      */
     async init() {
@@ -35,8 +40,8 @@ export class BaseView {
     }
 
     /**
-     * @brief Render the view.
-     * @description Main render method to be implemented by subclasses.
+     * @brief Render the view (to be implemented by subclasses)
+     * @async
      * @returns {Promise<void>}
      */
     async render() {
@@ -49,9 +54,9 @@ export class BaseView {
     }
 
     /**
-     * @brief Update the view.
-     * @description Updates the view with new data.
-     * @param {Object} data - The data for the update.
+     * @brief Update the view with new data
+     * @async
+     * @param {Object} data - Data for the update
      * @returns {Promise<void>}
      */
     async update(data) {
@@ -64,29 +69,29 @@ export class BaseView {
     }
 
     /**
-     * @brief Register a DOM element for easy access.
-     * @param {string} key - The identifier for the element.
-     * @param {HTMLElement} element - The DOM element to register.
+     * @brief Register DOM element for easy access
+     * @param {string} key - Identifier for the element
+     * @param {HTMLElement} element - DOM element to register
      */
     registerElement(key, element) {
         this.elements.set(key, element);
     }
 
     /**
-     * @brief Get a registered DOM element.
-     * @param {string} key - The identifier for the element.
-     * @returns {HTMLElement|undefined} The registered element or undefined if not found.
+     * @brief Get registered DOM element
+     * @param {string} key - Identifier for the element
+     * @returns {HTMLElement|undefined} Registered element or undefined if not found
      */
     getElement(key) {
         return this.elements.get(key);
     }
 
     /**
-     * @brief Add an event listener to an element and track it for cleanup.
-     * @param {HTMLElement|string} element - The element or its registered key.
-     * @param {string} event - The event type (e.g., 'click').
-     * @param {Function} handler - The event handler function.
-     * @param {Object} [options={}] - The event listener options.
+     * @brief Add event listener to element and track for cleanup
+     * @param {HTMLElement|string} element - Element or its registered key
+     * @param {string} event - Event type (e.g., 'click')
+     * @param {Function} handler - Event handler function
+     * @param {Object} options - Event listener options
      */
     addEventListener(element, event, handler, options = {}) {
         const actualElement = typeof element === 'string' ? this.getElement(element) : element;
@@ -98,7 +103,6 @@ export class BaseView {
         
         actualElement.addEventListener(event, handler, options);
         
-        // Store for cleanup
         const handlerKey = `${typeof element === 'string' ? element : 'direct'}_${event}`;
         if (!this.eventHandlers.has(handlerKey)) {
             this.eventHandlers.set(handlerKey, []);
@@ -107,10 +111,10 @@ export class BaseView {
     }
 
     /**
-     * @brief Remove a specific event listener from an element.
-     * @param {HTMLElement|string} element - The element or its registered key.
-     * @param {string} event - The event type.
-     * @param {Function} handler - The handler function to remove.
+     * @brief Remove specific event listener from element
+     * @param {HTMLElement|string} element - Element or its registered key
+     * @param {string} event - Event type
+     * @param {Function} handler - Handler function to remove
      */
     removeEventListener(element, event, handler) {
         const actualElement = typeof element === 'string' ? this.getElement(element) : element;
@@ -121,8 +125,7 @@ export class BaseView {
     }
 
     /**
-     * @brief Show the view.
-     * @description Makes the view's container visible.
+     * @brief Show the view by making container visible
      */
     show() {
         if (this.container) {
@@ -134,8 +137,7 @@ export class BaseView {
     }
 
     /**
-     * @brief Hide the view.
-     * @description Hides the view's container.
+     * @brief Hide the view by hiding container
      */
     hide() {
         if (this.container) {
@@ -146,11 +148,11 @@ export class BaseView {
     }
 
     /**
-     * @brief Create a DOM element with specified attributes and content.
-     * @param {string} tag - The HTML tag name (e.g., 'div').
-     * @param {Object} [attributes={}] - An object of element attributes.
-     * @param {string} [textContent=''] - The text content for the element.
-     * @returns {HTMLElement} The created DOM element.
+     * @brief Create DOM element with specified attributes and content
+     * @param {string} tag - HTML tag name
+     * @param {Object} attributes - Element attributes
+     * @param {string} textContent - Text content for the element
+     * @returns {HTMLElement} Created DOM element
      */
     createElement(tag, attributes = {}, textContent = '') {
         const element = document.createElement(tag);
@@ -178,9 +180,9 @@ export class BaseView {
     }
 
     /**
-     * @brief Escape HTML to prevent XSS vulnerabilities.
-     * @param {string} text - The text to escape.
-     * @returns {string} The escaped HTML string.
+     * @brief Escape HTML to prevent XSS vulnerabilities
+     * @param {string} text - Text to escape
+     * @returns {string} Escaped HTML string
      */
     escapeHtml(text) {
         if (!text) return '';
@@ -191,9 +193,9 @@ export class BaseView {
     }
 
     /**
-     * @brief Add a CSS class to an element.
-     * @param {HTMLElement|string} element - The element or its registered key.
-     * @param {string} className - The CSS class to add.
+     * @brief Add CSS class to element
+     * @param {HTMLElement|string} element - Element or its registered key
+     * @param {string} className - CSS class to add
      */
     addClass(element, className) {
         const actualElement = typeof element === 'string' ? this.getElement(element) : element;
@@ -203,9 +205,9 @@ export class BaseView {
     }
 
     /**
-     * @brief Remove a CSS class from an element.
-     * @param {HTMLElement|string} element - The element or its registered key.
-     * @param {string} className - The CSS class to remove.
+     * @brief Remove CSS class from element
+     * @param {HTMLElement|string} element - Element or its registered key
+     * @param {string} className - CSS class to remove
      */
     removeClass(element, className) {
         const actualElement = typeof element === 'string' ? this.getElement(element) : element;
@@ -215,9 +217,9 @@ export class BaseView {
     }
 
     /**
-     * @brief Toggle a CSS class on an element.
-     * @param {HTMLElement|string} element - The element or its registered key.
-     * @param {string} className - The CSS class to toggle.
+     * @brief Toggle CSS class on element
+     * @param {HTMLElement|string} element - Element or its registered key
+     * @param {string} className - CSS class to toggle
      */
     toggleClass(element, className) {
         const actualElement = typeof element === 'string' ? this.getElement(element) : element;
@@ -227,21 +229,21 @@ export class BaseView {
     }
 
     /**
-     * @brief Set the text content of an element safely.
-     * @param {HTMLElement|string} element - The element or its registered key.
-     * @param {string} text - The text content to set.
+     * @brief Set text content of element safely
+     * @param {HTMLElement|string} element - Element or its registered key
+     * @param {string} text - Text content to set
      */
     setText(element, text) {
         const actualElement = typeof element === 'string' ? this.getElement(element) : element;
         if (actualElement) {
-            actualElement.textContent = text; // textContent automatically escapes HTML
+            actualElement.textContent = text;
         }
     }
 
     /**
-     * @brief Set the inner HTML of an element.
-     * @param {HTMLElement|string} element - The element or its registered key.
-     * @param {string} html - The HTML string to set. Use with caution.
+     * @brief Set inner HTML of element (use with caution)
+     * @param {HTMLElement|string} element - Element or its registered key
+     * @param {string} html - HTML string to set
      */
     setHTML(element, html) {
         const actualElement = typeof element === 'string' ? this.getElement(element) : element;
@@ -251,13 +253,11 @@ export class BaseView {
     }
 
     /**
-     * @brief Destroy the view and clean up resources.
-     * @description Removes all registered event listeners and clears element references.
+     * @brief Destroy view and clean up resources
      */
     destroy() {
         if (this.isDestroyed) return;
 
-        // Remove all tracked event listeners
         this.eventHandlers.forEach((handlers) => {
             handlers.forEach(({ element, handler, options }) => {
                 const eventName = [...element.getAttributeNames()].find(attr => attr.startsWith('on'))?.substring(2);
