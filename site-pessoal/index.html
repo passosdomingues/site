@@ -4,14 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rafael Passos Domingues | Physicist & Computer Scientist | Astrophysics Research</title>
-    <meta name="description" content="Rafael Passos Domingues - Physicist and Computer Scientist specialized in Astrophysics Research, Data Science and Technology Innovation.">
+    <meta name="description" content="Rafael Passos Domingues - Physicist and Computer Scientist specializing in Astrophysics Research, Data Science, and Technology Innovation.">
     <meta name="author" content="Rafael Passos Domingues">
     
-    <!-- Preload critical resources -->
     <link rel="preload" href="./src/css/styles.css" as="style">
     <link rel="preload" href="./src/js/main.js" as="script">
     
-    <!-- Critical CSS inline -->
     <style>
         :root {
             --paper-texture: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='1' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.1'/%3E%3C/svg%3E");
@@ -30,6 +28,7 @@
             z-index: 9999;
             color: #e8e6e3;
             font-family: 'Segoe UI Variable', system-ui, sans-serif;
+            transition: opacity 0.5s ease;
         }
         
         .critical-hidden {
@@ -53,17 +52,13 @@
         }
     </style>
     
-    <!-- Main CSS -->
     <link rel="stylesheet" href="./src/css/styles.css">
     
-    <!-- Theme color -->
     <meta name="theme-color" content="#1a1f2d">
     
-    <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="./public/images/favicon.ico">
 </head>
 <body>
-    <!-- Loading overlay -->
     <div class="main-loading-overlay critical-loading" id="loading-overlay">
         <div class="loading-content">
             <div class="loading-spinner"></div>
@@ -72,40 +67,32 @@
         </div>
     </div>
 
-    <!-- Main container -->
     <div class="main-container critical-hidden" id="main-container">
-        <!-- Header with navigation -->
-        <header class="main-header" id="main-header">
+        <header class="main-header" id="main-header" role="banner">
             <div class="container">
-                <nav class="nav-container">
+                <nav class="nav-container" role="navigation" aria-label="Main Navigation">
                     <a href="#hero-section" class="nav-brand">
                         Rafael Passos Domingues
                     </a>
                     
-                    <!-- Mobile menu toggle -->
-                    <button class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation menu">
+                    <button class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="nav-menu">
                         <span></span>
                         <span></span>
                         <span></span>
                     </button>
                     
-                    <!-- Navigation menu -->
                     <ul class="nav-menu" id="nav-menu">
-                        <!-- Navigation will be populated by JavaScript -->
-                    </ul>
+                        </ul>
                 </nav>
             </div>
         </header>
         
-        <!-- Mobile menu overlay -->
         <div class="nav-overlay" id="nav-overlay"></div>
         
-        <!-- Main content -->
-        <main id="main-content" class="main-content">
-            <!-- Hero section -->
-            <section class="hero-section" id="hero-section">
+        <main id="main-content" class="main-content" role="main">
+            <section class="hero-section" id="hero-section" aria-labelledby="hero-title">
                 <div class="hero-content">
-                    <h1 class="hero-title">Rafael Passos Domingues</h1>
+                    <h1 id="hero-title" class="hero-title">Rafael Passos Domingues</h1>
                     <p class="hero-subtitle">Physicist & Computer Scientist</p>
                     <p class="hero-description">
                         Researcher in Astrophysics, Data Science and Technology Innovation. 
@@ -123,14 +110,11 @@
                 </div>
             </section>
             
-            <!-- Sections container -->
             <div id="sections-container">
-                <!-- Sections will be populated by JavaScript -->
-            </div>
+                </div>
         </main>
         
-        <!-- Footer -->
-        <footer class="main-footer">
+        <footer class="main-footer" role="contentinfo">
             <div class="container">
                 <div class="footer-content">
                     <div class="footer-section footer-section--info">
@@ -164,15 +148,15 @@
                     <div class="footer-section footer-section--social">
                         <h4 class="footer-social-title">Connect</h4>
                         <div class="footer-social-links">
-                            <a href="https://github.com/passosdomingues" class="footer-social-link" target="_blank" rel="noopener noreferrer">
+                            <a href="https://github.com/passosdomingues" class="footer-social-link" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
                                 <span class="footer-social-icon">🐙</span>
                                 <span class="sr-only">GitHub</span>
                             </a>
-                            <a href="https://www.linkedin.com/in/rafaelpassosdomingues/" class="footer-social-link" target="_blank" rel="noopener noreferrer">
+                            <a href="https://www.linkedin.com/in/rafaelpassosdomingues/" class="footer-social-link" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
                                 <span class="footer-social-icon">💼</span>
                                 <span class="sr-only">LinkedIn</span>
                             </a>
-                            <a href="mailto:rafaelpassosdomingues@gmail.com" class="footer-social-link">
+                            <a href="mailto:rafaelpassosdomingues@gmail.com" class="footer-social-link" aria-label="Email">
                                 <span class="footer-social-icon">✉️</span>
                                 <span class="sr-only">Email</span>
                             </a>
@@ -189,10 +173,8 @@
         </footer>
     </div>
 
-    <!-- App controls for theme and accessibility -->
     <div class="app-controls" id="app-controls">
-        <!-- Controls will be populated by JavaScript -->
-    </div>
+        </div>
 
     <script type="module" src="./src/js/main.js"></script>
 </body>

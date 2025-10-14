@@ -1,8 +1,3 @@
-/**
- * @file Main application entry point
- * @brief Initializes core application components and UI controls
- */
-
 import { App } from './core/App.js';
 import { MainController } from './controllers/MainController.js';
 import { NavigationController } from './controllers/NavigationController.js';
@@ -13,10 +8,14 @@ import { AccessibilityManager } from './services/AccessibilityManager.js';
 import { PerformanceMonitor } from './services/PerformanceMonitor.js';
 
 /**
- * @class Application
- * @brief Main application class coordinating initialization and UI setup
+ * @brief Main application entry point.
+ * @description Initializes the application, sets up UI components,
+ * and manages the application lifecycle.
  */
 class Application {
+    /**
+     * @brief Constructs the main Application class.
+     */
     constructor() {
         this.app = null;
         this.isInitialized = false;
@@ -24,9 +23,7 @@ class Application {
     }
 
     /**
-     * @brief Initialize core application and UI controls
-     * @async
-     * @returns {Promise<void>}
+     * @brief Initializes the core application, services, and controllers.
      */
     async initializeApplication() {
         try {
@@ -51,7 +48,7 @@ class Application {
             console.info('Application: All components initialized successfully.');
 
             this.setupMobileNavigation();
-            this.setupUIControls();
+            this.setupUiControls();
             this.setupScrollEffects();
             
             this.isInitialized = true;
@@ -64,32 +61,26 @@ class Application {
     }
 
     /**
-     * @brief Hide loading overlay and show main content
+     * @brief Hides the loading overlay.
      */
     hideLoadingOverlay() {
         const loadingOverlay = document.getElementById('loading-overlay');
-        const mainContainer = document.getElementById('main-container');
-        
         if (loadingOverlay) {
             loadingOverlay.style.opacity = '0';
             setTimeout(() => {
                 loadingOverlay.style.display = 'none';
-            }, 500);
-        }
-        
-        if (mainContainer) {
-            mainContainer.classList.remove('critical-hidden');
+            }, 500); // Match this with transition duration
         }
     }
 
     /**
-     * @brief Show main content with fade-in animation
+     * @brief Shows the main application content with a fade-in effect.
      */
     showMainContent() {
         const mainContainer = document.getElementById('main-container');
         if (mainContainer) {
+            mainContainer.classList.remove('critical-hidden');
             mainContainer.style.opacity = '0';
-            mainContainer.style.display = 'block';
             
             setTimeout(() => {
                 mainContainer.style.transition = 'opacity 0.5s ease';
@@ -101,15 +92,16 @@ class Application {
     }
 
     /**
-     * @brief Show error state when initialization fails
+     * @brief Displays an error message if the application fails to load.
      */
     showErrorState() {
         const loadingOverlay = document.getElementById('loading-overlay');
         if (loadingOverlay) {
+            loadingOverlay.style.opacity = '1';
             loadingOverlay.innerHTML = `
                 <div class="loading-content">
                     <h1>Something went wrong</h1>
-                    <p>Failed to load portfolio. Please refresh the page.</p>
+                    <p>Failed to load the portfolio. Please refresh the page.</p>
                     <button onclick="window.location.reload()" class="btn btn--primary">
                         Reload Page
                     </button>
@@ -119,121 +111,95 @@ class Application {
     }
 
     /**
-     * @brief Set up mobile navigation functionality
+     * @brief Sets up event listeners and functionality for mobile navigation.
      */
     setupMobileNavigation() {
         const menuToggle = document.getElementById('menu-toggle');
         const navMenu = document.getElementById('nav-menu');
         const navOverlay = document.getElementById('nav-overlay');
         
-        if (menuToggle && navMenu) {
-            menuToggle.addEventListener('click', () => {
-                const isOpening = !menuToggle.classList.contains('active');
-                
-                menuToggle.classList.toggle('active');
-                navMenu.classList.toggle('active');
-                if (navOverlay) navOverlay.classList.toggle('active');
-                
-                document.body.style.overflow = isOpening ? 'hidden' : '';
-                
-                const announcement = isOpening ? 'Navigation menu opened' : 'Navigation menu closed';
-                this.app.services.accessibilityManager.announceContent(announcement);
-            });
-            
-            if (navOverlay) {
-                navOverlay.addEventListener('click', () => {
-                    menuToggle.classList.remove('active');
-                    navMenu.classList.remove('active');
-                    navOverlay.classList.remove('active');
-                    document.body.style.overflow = '';
-                });
+        if (!menuToggle || !navMenu || !navOverlay) return;
+
+        const toggleMenu = (isOpen) => {
+            menuToggle.classList.toggle('active', isOpen);
+            menuToggle.setAttribute('aria-expanded', isOpen);
+            navMenu.classList.toggle('active', isOpen);
+            navOverlay.classList.toggle('active', isOpen);
+            document.body.style.overflow = isOpen ? 'hidden' : '';
+
+            const announcement = isOpen ? 'Navigation menu opened' : 'Navigation menu closed';
+            this.app.services.accessibilityManager.announceContent(announcement);
+        };
+
+        menuToggle.addEventListener('click', () => {
+            const isOpening = !menuToggle.classList.contains('active');
+            toggleMenu(isOpening);
+        });
+        
+        navOverlay.addEventListener('click', () => toggleMenu(false));
+        
+        navMenu.addEventListener('click', (event) => {
+            if (event.target.tagName === 'A') {
+                toggleMenu(false);
             }
-            
-            navMenu.addEventListener('click', (e) => {
-                if (e.target.tagName === 'A') {
-                    menuToggle.classList.remove('active');
-                    navMenu.classList.remove('active');
-                    if (navOverlay) navOverlay.classList.remove('active');
-                    document.body.style.overflow = '';
-                }
-            });
-            
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && navMenu.classList.contains('active')) {
-                    menuToggle.classList.remove('active');
-                    navMenu.classList.remove('active');
-                    if (navOverlay) navOverlay.classList.remove('active');
-                    document.body.style.overflow = '';
-                }
-            });
-        }
+        });
+        
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && navMenu.classList.contains('active')) {
+                toggleMenu(false);
+            }
+        });
     }
 
     /**
-     * @brief Set up UI control buttons (theme, font size, etc.)
+     * @brief Sets up the UI controls for theme and accessibility.
      */
-    setupUIControls() {
+    setupUiControls() {
         const controlsContainer = document.getElementById('app-controls');
         if (!controlsContainer) return;
 
-        const themeManager = this.app.services.themeManager;
-        const accessibilityManager = this.app.services.accessibilityManager;
+        const { themeManager, accessibilityManager } = this.app.services;
 
-        const themeToggleBtn = document.createElement('button');
-        themeToggleBtn.className = 'app-control-button theme-toggle-btn';
-        themeToggleBtn.setAttribute('aria-label', 'Toggle light and dark theme');
-        themeToggleBtn.setAttribute('title', 'Toggle theme (Ctrl+T)');
-        
-        const updateThemeIcon = () => {
-            themeToggleBtn.textContent = themeManager.isDarkMode() ? '🌙' : '☀️';
-        };
-        
-        themeToggleBtn.addEventListener('click', () => {
-            themeManager.toggleTheme();
-            updateThemeIcon();
-        });
-        
+        // Theme Toggle Button
+        const themeToggleBtn = this.createControlButton(
+            themeManager.isDarkMode() ? '🌙' : '☀️',
+            'Toggle light and dark theme',
+            'Toggle theme (Ctrl+T)',
+            () => {
+                themeManager.toggleTheme();
+                themeToggleBtn.textContent = themeManager.isDarkMode() ? '🌙' : '☀️';
+            }
+        );
         controlsContainer.appendChild(themeToggleBtn);
-        updateThemeIcon();
 
-        const fontIncreaseBtn = this.createControlButton('A+', 'Increase font size', () => {
-            accessibilityManager.increaseFontSize();
-        });
-        
-        const fontDecreaseBtn = this.createControlButton('A-', 'Decrease font size', () => {
-            accessibilityManager.decreaseFontSize();
-        });
-        
-        const fontResetBtn = this.createControlButton('A↺', 'Reset font size', () => {
-            accessibilityManager.resetFontSize();
-        });
-
-        controlsContainer.appendChild(fontIncreaseBtn);
-        controlsContainer.appendChild(fontDecreaseBtn);
-        controlsContainer.appendChild(fontResetBtn);
+        // Font Size Controls
+        controlsContainer.appendChild(this.createControlButton('A+', 'Increase font size', 'Increase font size (Ctrl++)', () => accessibilityManager.increaseFontSize()));
+        controlsContainer.appendChild(this.createControlButton('A-', 'Decrease font size', 'Decrease font size (Ctrl+-)', () => accessibilityManager.decreaseFontSize()));
+        controlsContainer.appendChild(this.createControlButton('A⟳', 'Reset font size', 'Reset font size (Ctrl+0)', () => accessibilityManager.resetFontSize()));
 
         console.info('Application: UI Controls initialized.');
     }
 
     /**
-     * @brief Create a control button with specified parameters
-     * @param {string} text - Button text content
-     * @param {string} label - Accessibility label
-     * @param {Function} onClick - Click handler function
-     * @returns {HTMLButtonElement} Created button element
+     * @brief Factory function to create a control button element.
+     * @param {string} text - The button's visible text or icon.
+     * @param {string} ariaLabel - The ARIA label for screen readers.
+     * @param {string} title - The tooltip title.
+     * @param {Function} onClick - The callback function for the click event.
+     * @returns {HTMLButtonElement} The created button element.
      */
-    createControlButton(text, label, onClick) {
+    createControlButton(text, ariaLabel, title, onClick) {
         const button = document.createElement('button');
         button.className = 'app-control-button';
-        button.setAttribute('aria-label', label);
-        button.setAttribute('title', label);
+        button.setAttribute('aria-label', ariaLabel);
+        button.setAttribute('title', title);
         button.textContent = text;
         button.addEventListener('click', onClick);
         return button;
     }
 
     /**
-     * @brief Set up scroll effects (header hide/show, smooth scrolling)
+     * @brief Sets up scroll-related effects like a hiding header and smooth scrolling.
      */
     setupScrollEffects() {
         let lastScrollY = window.scrollY;
@@ -243,11 +209,7 @@ class Application {
             window.addEventListener('scroll', () => {
                 const currentScrollY = window.scrollY;
                 
-                if (currentScrollY > 50) {
-                    header.classList.add('scrolled');
-                } else {
-                    header.classList.remove('scrolled');
-                }
+                header.classList.toggle('scrolled', currentScrollY > 50);
                 
                 if (currentScrollY > lastScrollY && currentScrollY > 200) {
                     header.style.transform = 'translateY(-100%)';
@@ -255,50 +217,50 @@ class Application {
                     header.style.transform = 'translateY(0)';
                 }
                 
-                lastScrollY = currentScrollY;
+                lastScrollY = currentScrollY <= 0 ? 0 : currentScrollY;
             }, { passive: true });
         }
         
-        document.addEventListener('click', (e) => {
-            const link = e.target.closest('a[href^="#"]');
-            if (link && link.getAttribute('href') !== '#') {
-                e.preventDefault();
-                const targetId = link.getAttribute('href').substring(1);
-                const targetElement = document.getElementById(targetId);
+        document.addEventListener('click', (event) => {
+            const link = event.target.closest('a[href^="#"]');
+            if (!link || link.getAttribute('href') === '#') return;
+
+            event.preventDefault();
+            const targetId = link.getAttribute('href').substring(1);
+            const targetElement = document.getElementById(targetId);
+            
+            if (targetElement) {
+                const headerHeight = header ? header.offsetHeight : 0;
+                const targetPosition = targetElement.offsetTop - headerHeight - 20;
                 
-                if (targetElement) {
-                    const headerHeight = header ? header.offsetHeight : 0;
-                    const targetPosition = targetElement.offsetTop - headerHeight - 20;
-                    
-                    window.scrollTo({
-                        top: targetPosition,
-                        behavior: 'smooth'
-                    });
-                    
-                    history.pushState(null, null, `#${targetId}`);
-                }
+                window.scrollTo({
+                    top: targetPosition,
+                    behavior: 'smooth'
+                });
+                
+                history.pushState(null, null, `#${targetId}`);
             }
         });
     }
 
     /**
-     * @brief Get application instance
-     * @returns {App} Application instance
+     * @brief Gets the initialized application instance.
+     * @returns {App} The core application instance.
      */
     getApp() {
         return this.app;
     }
 
     /**
-     * @brief Check if application is initialized
-     * @returns {boolean} Initialization status
+     * @brief Checks if the application has been successfully initialized.
+     * @returns {boolean} True if initialized.
      */
     isAppInitialized() {
         return this.isInitialized;
     }
 
     /**
-     * @brief Destroy application and clean up resources
+     * @brief Destroys the application instance and cleans up resources.
      */
     destroy() {
         if (this.app) {
@@ -308,6 +270,7 @@ class Application {
     }
 }
 
+// Initialize the application when the DOM is ready.
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
         window.app = new Application();

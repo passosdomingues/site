@@ -1,20 +1,15 @@
-/**
- * @file View manager for rendering sections
- * @brief Handles rendering of different section types with template methods
- */
-
 import eventBus from '../core/EventBus.js';
 
 /**
- * @class ViewManager
- * @brief Manages rendering of different content types with template methods
+ * @brief Manages the rendering of different content sections into the DOM.
+ * @description Handles rendering of various section types like timelines, cards, skills, and galleries.
  */
 class ViewManager {
     /**
-     * @brief Create new ViewManager instance
-     * @param {Object} config - Configuration object
-     * @param {HTMLElement} config.container - Container element for sections
-     * @param {Object} config.eventBus - Event bus instance
+     * @brief Creates a new ViewManager instance.
+     * @param {object} [config={}] - Configuration object.
+     * @param {HTMLElement} [config.container] - The main container element where sections will be rendered.
+     * @param {object} [config.eventBus] - The event bus instance for communication.
      */
     constructor(config = {}) {
         this.container = config.container;
@@ -31,27 +26,34 @@ class ViewManager {
     }
 
     /**
-     * @brief Set up event listeners for section updates
+     * @brief Sets up event listeners for the ViewManager.
      */
     setupEventListeners() {
         this.eventBus.subscribe('section:updated', this.onSectionUpdated.bind(this));
     }
 
     /**
-     * @brief Handle section updates
-     * @param {Object} data - Update data with sectionId and newContent
+     * @brief Handles section update events from the event bus.
+     * @param {object} data - The event data.
+     * @param {string} data.sectionId - The ID of the section to update.
+     * @param {object} data.newContent - The new content for the section.
      */
     onSectionUpdated(data) {
         this.renderSection(data.sectionId, data.newContent);
     }
 
     /**
-     * @brief Render section with appropriate template method
-     * @param {Object} section - Section data object
+     * @brief Renders a single section into the container.
+     * @param {object} section - The section data object to render.
+     * @param {string} section.id - The unique ID for the section element.
+     * @param {string} section.type - The type of section (e.g., 'timeline', 'cards').
+     * @param {string} section.title - The main title of the section.
+     * @param {string} section.subtitle - The subtitle of the section.
+     * @param {object} section.content - The content data for the section body.
      */
     renderSection(section) {
         if (!this.container) {
-            console.error('ViewManager: Container not available');
+            console.error('ViewManager: Container element is not available.');
             return;
         }
 
@@ -62,7 +64,7 @@ class ViewManager {
 
             const renderMethod = this.renderMethods[section.type];
             if (typeof renderMethod !== 'function') {
-                console.warn(`ViewManager: No render method for type "${section.type}"`);
+                console.warn(`ViewManager: No render method found for type "${section.type}".`);
                 return;
             }
 
@@ -92,9 +94,10 @@ class ViewManager {
     }
 
     /**
-     * @brief Render timeline content
-     * @param {Object} content - Timeline content data
-     * @returns {string} HTML string for timeline
+     * @brief Renders the HTML for an enhanced timeline section.
+     * @param {object} content - The timeline content data.
+     * @param {Array<object>} content.timeline - An array of timeline items.
+     * @returns {string} The generated HTML string for the timeline.
      */
     renderTimeline(content) {
         if (!content.timeline) return '';
@@ -134,9 +137,9 @@ class ViewManager {
     }
 
     /**
-     * @brief Render cards content
-     * @param {Array} content - Cards content array
-     * @returns {string} HTML string for cards grid
+     * @brief Renders the HTML for an enhanced cards section.
+     * @param {Array<object>} content - An array of card items.
+     * @returns {string} The generated HTML string for the cards grid.
      */
     renderCards(content) {
         if (!Array.isArray(content)) return '';
@@ -151,40 +154,14 @@ class ViewManager {
                 <div class="card-content">
                     <p class="card-description">${this.escapeHtml(item.description)}</p>
                     
-                    ${item.detailedDescription ? `
-                        <p class="card-detailed-description">${this.escapeHtml(item.detailedDescription)}</p>
-                    ` : ''}
+                    ${item.detailedDescription ? `<p class="card-detailed-description">${this.escapeHtml(item.detailedDescription)}</p>` : ''}
                     
                     ${item.technologies && item.technologies.length > 0 ? `
                         <div class="technologies-container">
                             <h4 class="technologies-title">Technologies Used:</h4>
                             <div class="technologies-list">
-                                ${item.technologies.map(tech => `
-                                    <span class="tag tag--secondary">${this.escapeHtml(tech)}</span>
-                                `).join('')}
+                                ${item.technologies.map(tech => `<span class="tag tag--secondary">${this.escapeHtml(tech)}</span>`).join('')}
                             </div>
-                        </div>
-                    ` : ''}
-                    
-                    ${item.metrics && item.metrics.length > 0 ? `
-                        <div class="metrics-container">
-                            <h4 class="metrics-title">Key Metrics:</h4>
-                            <ul class="metrics-list">
-                                ${item.metrics.map(metric => `
-                                    <li class="metric">${this.escapeHtml(metric)}</li>
-                                `).join('')}
-                            </ul>
-                        </div>
-                    ` : ''}
-                    
-                    ${item.applications && item.applications.length > 0 ? `
-                        <div class="applications-container">
-                            <h4 class="applications-title">Applications:</h4>
-                            <ul class="applications-list">
-                                ${item.applications.map(app => `
-                                    <li class="application">${this.escapeHtml(app)}</li>
-                                `).join('')}
-                            </ul>
                         </div>
                     ` : ''}
                 </div>
@@ -193,10 +170,7 @@ class ViewManager {
                     ${item.links && item.links.length > 0 ? `
                         <div class="card-links">
                             ${item.links.map(link => `
-                                <a href="${this.escapeHtml(link.url)}" 
-                                class="btn btn--outline btn--sm"
-                                target="_blank" 
-                                rel="noopener noreferrer">
+                                <a href="${this.escapeHtml(link.url)}" class="btn btn--outline btn--sm" target="_blank" rel="noopener noreferrer">
                                     ${this.escapeHtml(link.label)}
                                 </a>
                             `).join('')}
@@ -205,16 +179,12 @@ class ViewManager {
                     
                     <div class="card-meta">
                         <div class="tags-container">
-                            ${item.tags.map(tag => `
-                                <span class="tag">${this.escapeHtml(tag)}</span>
-                            `).join('')}
+                            ${(item.tags || []).map(tag => `<span class="tag">${this.escapeHtml(tag)}</span>`).join('')}
                         </div>
                         
                         <div class="meta-info">
                             <span class="card-date">${this.escapeHtml(item.date)}</span>
-                            <span class="status status--${item.status?.toLowerCase()}">
-                                ${this.escapeHtml(item.status)}
-                            </span>
+                            <span class="status status--${item.status?.toLowerCase()}">${this.escapeHtml(item.status)}</span>
                         </div>
                     </div>
                 </div>
@@ -225,9 +195,10 @@ class ViewManager {
     }
 
     /**
-     * @brief Render skills content
-     * @param {Object} content - Skills content object
-     * @returns {string} HTML string for skills categories
+     * @brief Renders the HTML for a skills section.
+     * @param {object} content - The skills content object.
+     * @param {Array<object>} content.categories - An array of skill categories.
+     * @returns {string} The generated HTML string for the skills section.
      */
     renderSkills(content) {
         if (!content.categories || !Array.isArray(content.categories)) return '';
@@ -243,10 +214,7 @@ class ViewManager {
                                 <span class="skill-proficiency">${skill.proficiency}%</span>
                             </div>
                             <div class="skill-bar">
-                                <div class="skill-progress" 
-                                     style="width: ${skill.proficiency}%;"
-                                     data-proficiency="${skill.proficiency}">
-                                </div>
+                                <div class="skill-progress" style="width: ${skill.proficiency}%;" data-proficiency="${skill.proficiency}"></div>
                             </div>
                             <p class="skill-description">${this.escapeHtml(skill.description)}</p>
                         </div>
@@ -259,9 +227,9 @@ class ViewManager {
     }
     
     /**
-     * @brief Render gallery content
-     * @param {Array} content - Gallery content array
-     * @returns {string} HTML string for gallery grid
+     * @brief Renders the HTML for a gallery section.
+     * @param {Array<object>} content - An array of gallery items.
+     * @returns {string} The generated HTML string for the gallery.
      */
     renderGallery(content) {
         if (!Array.isArray(content)) return '';
@@ -271,24 +239,17 @@ class ViewManager {
             const alt = item.alt || item.caption || item.title || 'Gallery image';
             const caption = item.caption || (item.image && item.image.caption) || '';
 
-            const multipleImages = item.images?.length > 1 ? item.images.map(img => `
+            // Handle cases where an item has multiple images.
+            const multipleImages = (item.images?.length > 1) ? item.images.map(img => `
                 <div class="gallery-subitem">
-                    <img src="${this.escapeHtml(img.src)}"
-                        alt="${this.escapeHtml(img.alt || alt)}"
-                        class="gallery-image"
-                        loading="lazy">
+                    <img src="${this.escapeHtml(img.src)}" alt="${this.escapeHtml(img.alt || alt)}" class="gallery-image" loading="lazy">
                     ${img.caption ? `<div class="gallery-caption">${this.escapeHtml(img.caption)}</div>` : ''}
                 </div>
             `).join('') : '';
 
             return `
                 <div class="gallery-item">
-                    ${src ? `
-                        <img src="${this.escapeHtml(src)}"
-                            alt="${this.escapeHtml(alt)}"
-                            class="gallery-image"
-                            loading="lazy">
-                    ` : ''}
+                    ${src ? `<img src="${this.escapeHtml(src)}" alt="${this.escapeHtml(alt)}" class="gallery-image" loading="lazy">` : ''}
                     ${multipleImages}
                     ${caption ? `<div class="gallery-caption">${this.escapeHtml(caption)}</div>` : ''}
                 </div>
@@ -299,12 +260,12 @@ class ViewManager {
     }
 
     /**
-     * @brief Escape HTML to prevent XSS
-     * @param {string} text - Text to escape
-     * @returns {string} Escaped text
+     * @brief Escapes a string for safe insertion into HTML.
+     * @param {string} text - The text to escape.
+     * @returns {string} The escaped, HTML-safe text.
      */
     escapeHtml(text) {
-        if (!text) return '';
+        if (typeof text !== 'string') return '';
         
         const div = document.createElement('div');
         div.textContent = text;
@@ -312,7 +273,7 @@ class ViewManager {
     }
 
     /**
-     * @brief Clear all rendered content
+     * @brief Clears all rendered content from the container.
      */
     clear() {
         if (this.container) {
@@ -321,12 +282,12 @@ class ViewManager {
     }
 
     /**
-     * @brief Destroy view manager and clean up resources
+     * @brief Cleans up resources used by the ViewManager.
      */
     destroy() {
         this.eventBus.unsubscribe('section:updated', this.onSectionUpdated);
         this.clear();
-        console.info('ViewManager: Destroyed');
+        console.info('ViewManager: Destroyed.');
     }
 }
 

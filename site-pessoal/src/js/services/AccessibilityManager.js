@@ -1,24 +1,20 @@
-/**
- * @file Accessibility manager service
- * @brief Handles accessibility features like font sizing and screen reader announcements
- */
-
 import eventBus from '../core/EventBus.js';
 
 /**
- * @class AccessibilityManager
- * @brief Manages accessibility features and user preferences
+ * @brief Manages accessibility features for the application.
+ * @description This includes font size adjustments, focus management for navigation,
+ * and screen reader announcements.
  */
 export class AccessibilityManager {
     /**
-     * @brief Constructs AccessibilityManager instance
-     * @param {Object} dependencies - Service dependencies
-     * @param {Object} dependencies.eventBus - Event bus instance
+     * @brief Constructs a new AccessibilityManager instance.
+     * @param {object} [dependencies={}] - The dependencies for the manager.
+     * @param {object} [dependencies.eventBus] - The event bus instance for communication.
      */
     constructor(dependencies = {}) {
         this.eventBus = dependencies.eventBus || eventBus;
         this.isInitialized = false;
-        this.currentFontSize = 100;
+        this.currentFontSize = 100; // Represented as a percentage
         this.minFontSize = 80;
         this.maxFontSize = 150;
         this.fontSizeStep = 10;
@@ -27,16 +23,16 @@ export class AccessibilityManager {
     }
 
     /**
-     * @brief Initialize accessibility manager
-     * @async
-     * @returns {Promise<void>}
+     * @brief Initializes the accessibility manager.
+     * @description Loads user preferences, sets up event listeners and focus management,
+     * and makes an initial announcement for screen readers.
      */
     async init() {
         if (this.isInitialized) return;
 
         const savedFontSize = localStorage.getItem('app-font-size');
         if (savedFontSize) {
-            this.currentFontSize = parseInt(savedFontSize);
+            this.currentFontSize = parseInt(savedFontSize, 10);
             this.applyFontSize();
         }
 
@@ -48,7 +44,8 @@ export class AccessibilityManager {
     }
 
     /**
-     * @brief Set up event listeners for keyboard shortcuts
+     * @brief Sets up global event listeners for accessibility features.
+     * @description Listens for keyboard shortcuts and custom events for font size changes.
      */
     setupEventListeners() {
         document.addEventListener('keydown', this.handleKeydown);
@@ -59,41 +56,36 @@ export class AccessibilityManager {
     }
 
     /**
-     * @brief Handle keyboard events for accessibility shortcuts
-     * @param {KeyboardEvent} event - Keyboard event object
+     * @brief Handles keydown events for accessibility shortcuts.
+     * @description Implements shortcuts for font size (Ctrl/Meta +/-, 0) and theme toggling (Ctrl/Meta + T).
+     * @param {KeyboardEvent} event - The keyboard event object.
      */
     handleKeydown(event) {
-        if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA' || event.target.isContentEditable) {
+        const isTyping = event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA' || event.target.isContentEditable;
+        if (isTyping) {
             return;
         }
 
-        if ((event.ctrlKey || event.metaKey) && (event.key === '+' || event.key === '=')) {
+        const isCtrlOrMeta = event.ctrlKey || event.metaKey;
+
+        if (isCtrlOrMeta && (event.key === '+' || event.key === '=')) {
             event.preventDefault();
             this.increaseFontSize();
-            return;
-        }
-
-        if ((event.ctrlKey || event.metaKey) && event.key === '-') {
+        } else if (isCtrlOrMeta && event.key === '-') {
             event.preventDefault();
             this.decreaseFontSize();
-            return;
-        }
-
-        if ((event.ctrlKey || event.metaKey) && event.key === '0') {
+        } else if (isCtrlOrMeta && event.key === '0') {
             event.preventDefault();
             this.resetFontSize();
-            return;
-        }
-
-        if ((event.ctrlKey || event.metaKey) && event.key === 't') {
+        } else if (isCtrlOrMeta && event.key === 't') {
             event.preventDefault();
             this.eventBus.publish('theme:toggle');
-            return;
         }
     }
 
     /**
-     * @brief Set up focus management for route changes
+     * @brief Sets up focus management for single-page application navigation.
+     * @description On route change, it moves focus to the main content area.
      */
     setupFocusManagement() {
         this.eventBus.subscribe('router:navigated', () => {
@@ -108,7 +100,7 @@ export class AccessibilityManager {
     }
 
     /**
-     * @brief Announce page load to screen readers
+     * @brief Announces that the page has loaded to screen readers.
      */
     announcePageLoad() {
         setTimeout(() => {
@@ -117,27 +109,30 @@ export class AccessibilityManager {
     }
 
     /**
-     * @brief Announce content to screen readers
-     * @param {string} message - Message to announce
+     * @brief Announces a message to screen readers using an ARIA live region.
+     * @param {string} message - The message to be announced.
      */
     announceContent(message) {
-        let announcer = document.getElementById('a11y-announcer');
+        const announcerId = 'a11y-announcer';
+        let announcer = document.getElementById(announcerId);
+
         if (!announcer) {
             announcer = document.createElement('div');
-            announcer.id = 'a11y-announcer';
+            announcer.id = announcerId;
             announcer.setAttribute('aria-live', 'polite');
             announcer.setAttribute('aria-atomic', 'true');
-            announcer.classList.add('sr-only');
+            announcer.classList.add('sr-only'); // This class should hide the element visually
             document.body.appendChild(announcer);
         }
         
+        // Set text content after a short delay to ensure it's announced
         setTimeout(() => {
             announcer.textContent = message;
         }, 100);
     }
 
     /**
-     * @brief Increase font size within allowed limits
+     * @brief Increases the global font size by one step.
      */
     increaseFontSize() {
         const newSize = Math.min(this.currentFontSize + this.fontSizeStep, this.maxFontSize);
@@ -149,7 +144,7 @@ export class AccessibilityManager {
     }
 
     /**
-     * @brief Decrease font size within allowed limits
+     * @brief Decreases the global font size by one step.
      */
     decreaseFontSize() {
         const newSize = Math.max(this.currentFontSize - this.fontSizeStep, this.minFontSize);
@@ -161,7 +156,7 @@ export class AccessibilityManager {
     }
 
     /**
-     * @brief Reset font size to default (100%)
+     * @brief Resets the font size to the default value (100%).
      */
     resetFontSize() {
         if (this.currentFontSize !== 100) {
@@ -172,7 +167,9 @@ export class AccessibilityManager {
     }
 
     /**
-     * @brief Apply current font size to document and save preference
+     * @brief Applies the current font size to the document.
+     * @description Sets the font size on the <html> element, saves the preference
+     * to localStorage, and publishes an event.
      */
     applyFontSize() {
         document.documentElement.style.fontSize = `${this.currentFontSize}%`;
@@ -184,23 +181,24 @@ export class AccessibilityManager {
     }
 
     /**
-     * @brief Get current font size percentage
-     * @returns {number} Current font size percentage
+     * @brief Gets the current font size.
+     * @returns {number} The current font size percentage.
      */
     getCurrentFontSize() {
         return this.currentFontSize;
     }
 
     /**
-     * @brief Check if user prefers reduced motion
-     * @returns {boolean} Reduced motion preference status
+     * @brief Checks if the user prefers reduced motion.
+     * @returns {boolean} True if reduced motion is preferred.
      */
     prefersReducedMotion() {
         return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     }
 
     /**
-     * @brief Destroy accessibility manager and clean up resources
+     * @brief Cleans up resources used by the AccessibilityManager.
+     * @description Removes event listeners to prevent memory leaks.
      */
     destroy() {
         document.removeEventListener('keydown', this.handleKeydown);
