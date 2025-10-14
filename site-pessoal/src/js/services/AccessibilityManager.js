@@ -1,210 +1,154 @@
+import eventBus from '../core/EventBus.js';
+
 /**
- * @file AccessibilityManager.js
- * @brief Comprehensive accessibility enhancements and screen reader support
- * @description Manages accessibility features, screen reader announcements, and keyboard navigation
+ * @brief Accessibility manager service
+ * @description Handles accessibility features and keyboard navigation
  */
-
-class AccessibilityManager {
-    /**
-     * @brief Creates a new AccessibilityManager instance
-     * @constructor
-     * @param {Object} configuration - Accessibility configuration options
-     */
-    constructor(configuration = {}) {
-        /**
-         * @private
-         * @type {Object}
-         * @description Current accessibility settings state
-         */
-        this.settings = {
-            reducedMotion: false,
-            highContrast: false,
-            fontSizeMultiplier: 1.0,
-            screenReaderEnabled: false,
-            ...configuration.defaultSettings
-        };
-
-        /**
-         * @private
-         * @type {HTMLElement|null}
-         * @description Live region element for screen reader announcements
-         */
-        this.liveRegion = null;
-
-        /**
-         * @private
-         * @type {boolean}
-         * @description Tracks initialization status
-         */
+export class AccessibilityManager {
+    constructor(dependencies = {}) {
+        this.eventBus = dependencies.eventBus || eventBus;
         this.isInitialized = false;
+        this.focusTrapped = false;
 
-        this.initialize = this.initialize.bind(this);
-        this.detectAccessibilityPreferences = this.detectAccessibilityPreferences.bind(this);
+        this.handleKeydown = this.handleKeydown.bind(this);
     }
 
     /**
-     * @brief Initializes accessibility manager and sets up observers
-     * @method initialize
-     * @returns {Promise<void>}
+     * @brief Initialize accessibility manager
      */
-    async initialize() {
-        try {
-            // Create live region for screen reader announcements
-            this.createLiveRegion();
-            
-            // Detect user accessibility preferences
-            await this.detectAccessibilityPreferences();
-            
-            // Apply initial accessibility settings
-            this.applyAccessibilitySettings();
-            
-            // Set up event listeners for keyboard navigation
-            this.setupKeyboardNavigation();
-            
-            // Set up mutation observer for dynamic content
-            this.setupMutationObserver();
-            
-            this.isInitialized = true;
-            console.info('AccessibilityManager initialized successfully');
-        } catch (error) {
-            console.error('AccessibilityManager initialization failed:', error);
+    async init() {
+        if (this.isInitialized) return;
+
+        this.setupEventListeners();
+        this.setupFocusManagement();
+        this.announcePageLoad();
+        
+        this.isInitialized = true;
+        console.info('AccessibilityManager: Initialized');
+    }
+
+    /**
+     * @brief Set up event listeners
+     */
+    setupEventListeners() {
+        document.addEventListener('keydown', this.handleKeydown);
+        
+        // Observe DOM changes for new interactive elements
+        this.setupMutationObserver();
+    }
+
+    /**
+     * @brief Handle keyboard events
+     * @param {KeyboardEvent} event - Keyboard event
+     */
+    handleKeydown(event) {
+        // Skip keyboard handling if user is typing in an input
+        if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') {
+            return;
+        }
+
+        switch (event.key) {
+            case 'Escape':
+                this.handleEscapeKey(event);
+                break;
+            case 'Tab':
+                this.handleTabKey(event);
+                break;
+            case 'Enter':
+            case ' ':
+                this.handleActionKey(event);
+                break;
         }
     }
 
     /**
-     * @brief Creates ARIA live region for screen reader announcements
-     * @method createLiveRegion
-     * @private
+     * @brief Handle escape key
+     * @param {KeyboardEvent} event - Keyboard event
      */
-    createLiveRegion() {
-        this.liveRegion = document.createElement('div');
-        this.liveRegion.setAttribute('aria-live', 'polite');
-        this.liveRegion.setAttribute('aria-atomic', 'true');
-        this.liveRegion.setAttribute('class', 'sr-only');
-        this.liveRegion.style.cssText = `
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border: 0;
-        `;
-        
-        document.body.appendChild(this.liveRegion);
+    handleEscapeKey(event) {
+        // Close any open modals or menus
+        this.eventBus.publish('accessibility:escape', { event });
     }
 
     /**
-     * @brief Detects user system accessibility preferences
-     * @method detectAccessibilityPreferences
-     * @returns {Promise<void>}
-     * @private
+     * @brief Handle tab key for focus trapping
+     * @param {KeyboardEvent} event - Keyboard event
      */
-    async detectAccessibilityPreferences() {
-        if (typeof window === 'undefined' || !window.matchMedia) return;
+    handleTabKey(event) {
+        if (!this.focusTrapped) return;
 
-        // Detect reduced motion preference
-        this.settings.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        
-        // Detect contrast preference
-        this.settings.highContrast = window.matchMedia('(prefers-contrast: high)').matches;
-        
-        // Load saved accessibility settings
-        const savedSettings = localStorage.getItem('accessibility-settings');
-        if (savedSettings) {
-            try {
-                const parsedSettings = JSON.parse(savedSettings);
-                this.settings = { ...this.settings, ...parsedSettings };
-            } catch (error) {
-                console.warn('Failed to parse saved accessibility settings');
-            }
+        // Implement focus trapping logic for modals
+        this.eventBus.publish('accessibility:tab', { event });
+    }
+
+    /**
+     * @brief Handle action keys (Enter/Space)
+     * @param {KeyboardEvent} event - Keyboard event
+     */
+    handleActionKey(event) {
+        // Ensure buttons and links can be activated with space/enter
+        const element = event.target;
+        if (element.tagName === 'BUTTON' || (element.tagName === 'A' && element.getAttribute('href'))) {
+            event.preventDefault();
+            element.click();
         }
     }
 
     /**
-     * @brief Applies current accessibility settings to document
-     * @method applyAccessibilitySettings
-     * @private
+     * @brief Set up focus management
      */
-    applyAccessibilitySettings() {
-        const rootElement = document.documentElement;
+    setupFocusManagement() {
+        // Add skip link functionality
+        this.setupSkipLinks();
         
-        // Apply reduced motion
-        if (this.settings.reducedMotion) {
-            rootElement.style.setProperty('--animation-duration', '0.01ms');
-            rootElement.classList.add('reduced-motion');
-        } else {
-            rootElement.style.removeProperty('--animation-duration');
-            rootElement.classList.remove('reduced-motion');
-        }
-        
-        // Apply high contrast
-        if (this.settings.highContrast) {
-            rootElement.classList.add('high-contrast');
-        } else {
-            rootElement.classList.remove('high-contrast');
-        }
-        
-        // Apply font size scaling
-        rootElement.style.setProperty('--font-size-multiplier', this.settings.fontSizeMultiplier.toString());
-        
-        // Persist settings
-        this.persistSettings();
-        
-        // Dispatch settings changed event
-        this.dispatchAccessibilityEvent('accessibility:changed', this.settings);
-    }
-
-    /**
-     * @brief Sets up comprehensive keyboard navigation
-     * @method setupKeyboardNavigation
-     * @private
-     */
-    setupKeyboardNavigation() {
-        document.addEventListener('keydown', (event) => {
-            // Skip if inside form element
-            if (['INPUT', 'TEXTAREA', 'SELECT'].includes(event.target.tagName)) {
-                return;
-            }
-
-            switch (event.key) {
-                case 'Tab':
-                    this.handleTabNavigation(event);
-                    break;
-                case 'Escape':
-                    this.handleEscapeKey(event);
-                    break;
-                case 'Enter':
-                    this.handleEnterKey(event);
-                    break;
-            }
+        // Manage focus for dynamic content
+        this.eventBus.subscribe('view:section:rendered', (data) => {
+            this.manageFocusForNewContent(data.element);
         });
     }
 
     /**
-     * @brief Handles tab navigation for keyboard users
-     * @method handleTabNavigation
-     * @param {KeyboardEvent} event - Keyboard event
-     * @private
+     * @brief Set up skip links
      */
-    handleTabNavigation(event) {
-        // Add visual indicator for keyboard navigation
-        document.documentElement.classList.add('keyboard-navigation');
+    setupSkipLinks() {
+        const skipLink = document.querySelector('.skip-link');
+        if (skipLink) {
+            skipLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = skipLink.getAttribute('href')?.replace('#', '');
+                const target = document.getElementById(targetId);
+                if (target) {
+                    target.setAttribute('tabindex', '-1');
+                    target.focus();
+                }
+            });
+        }
     }
 
     /**
-     * @brief Sets up mutation observer for dynamic content accessibility
-     * @method setupMutationObserver
-     * @private
+     * @brief Manage focus for new content
+     * @param {HTMLElement} element - Newly added element
+     */
+    manageFocusForNewContent(element) {
+        // If the element is a heading or important content, focus it for screen readers
+        if (element.querySelector('h1, h2, [role="main"]')) {
+            element.setAttribute('tabindex', '-1');
+            element.focus();
+            
+            // Announce to screen readers
+            this.announceContent('New section loaded');
+        }
+    }
+
+    /**
+     * @brief Set up mutation observer for dynamic content
      */
     setupMutationObserver() {
         const observer = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
                 mutation.addedNodes.forEach((node) => {
-                    if (node.nodeType === Node.ELEMENT_NODE) {
-                        this.enhanceElementAccessibility(node);
+                    if (node.nodeType === 1) { // Element node
+                        this.enhanceAccessibility(node);
                     }
                 });
             });
@@ -217,134 +161,86 @@ class AccessibilityManager {
     }
 
     /**
-     * @brief Enhances accessibility of dynamically added elements
-     * @method enhanceElementAccessibility
+     * @brief Enhance accessibility of elements
      * @param {Element} element - Element to enhance
-     * @private
      */
-    enhanceElementAccessibility(element) {
-        // Add ARIA labels to interactive elements missing them
-        if (element.hasAttribute('role') || ['BUTTON', 'A', 'INPUT'].includes(element.tagName)) {
-            if (!element.hasAttribute('aria-label') && !element.textContent.trim()) {
-                const label = this.generateAccessibleLabel(element);
-                if (label) {
-                    element.setAttribute('aria-label', label);
-                }
+    enhanceAccessibility(element) {
+        // Add ARIA labels to interactive elements
+        if (element.tagName === 'BUTTON' && !element.getAttribute('aria-label')) {
+            const text = element.textContent.trim();
+            if (text) {
+                element.setAttribute('aria-label', text);
             }
         }
 
-        // Ensure focus management for modal elements
-        if (element.hasAttribute('role') && ['dialog', 'modal'].includes(element.getAttribute('role'))) {
-            element.setAttribute('tabindex', '-1');
+        // Ensure images have alt attributes
+        if (element.tagName === 'IMG' && !element.getAttribute('alt')) {
+            element.setAttribute('alt', 'Decorative image');
         }
     }
 
     /**
-     * @brief Announces message to screen readers
-     * @method announceToScreenReader
+     * @brief Announce page load to screen readers
+     */
+    announcePageLoad() {
+        this.announceContent('Page loaded successfully');
+    }
+
+    /**
+     * @brief Announce content to screen readers
      * @param {string} message - Message to announce
-     * @param {string} priority - Announcement priority ('polite' or 'assertive')
-     * @returns {void}
      */
-    announceToScreenReader(message, priority = 'polite') {
-        if (!this.liveRegion) {
-            console.warn('Live region not initialized for screen reader announcement');
-            return;
-        }
-
-        this.liveRegion.setAttribute('aria-live', priority);
-        this.liveRegion.textContent = message;
-        
-        // Clear message after announcement
-        setTimeout(() => {
-            if (this.liveRegion.textContent === message) {
-                this.liveRegion.textContent = '';
-            }
-        }, 1000);
+    announceContent(message) {
+        const announcer = document.getElementById('a11y-announcer') || this.createAnnouncer();
+        announcer.textContent = message;
     }
 
     /**
-     * @brief Announces view changes for screen reader users
-     * @method announceViewChange
-     * @param {string} viewName - Name of the view being loaded
-     * @returns {void}
+     * @brief Create ARIA live region announcer
+     * @returns {HTMLElement} Announcer element
      */
-    announceViewChange(viewName) {
-        const message = `Loaded ${viewName} view`;
-        this.announceToScreenReader(message, 'polite');
+    createAnnouncer() {
+        const announcer = document.createElement('div');
+        announcer.id = 'a11y-announcer';
+        announcer.setAttribute('aria-live', 'polite');
+        announcer.setAttribute('aria-atomic', 'true');
+        announcer.style.cssText = `
+            position: absolute;
+            left: -10000px;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+        `;
+        document.body.appendChild(announcer);
+        return announcer;
     }
 
     /**
-     * @brief Updates accessibility setting
-     * @method updateSetting
-     * @param {string} setting - Setting name to update
-     * @param {any} value - New setting value
-     * @returns {void}
+     * @brief Enable focus trapping
+     * @param {HTMLElement} container - Container to trap focus within
      */
-    updateSetting(setting, value) {
-        if (this.settings.hasOwnProperty(setting)) {
-            this.settings[setting] = value;
-            this.applyAccessibilitySettings();
-            console.info(`Accessibility setting "${setting}" updated to:`, value);
-        } else {
-            console.warn(`Accessibility setting "${setting}" not found`);
-        }
+    enableFocusTrap(container) {
+        this.focusTrapped = true;
+        this.eventBus.publish('accessibility:focus:trap:enabled', { container });
     }
 
     /**
-     * @brief Persists accessibility settings to storage
-     * @method persistSettings
-     * @private
+     * @brief Disable focus trapping
      */
-    persistSettings() {
-        try {
-            localStorage.setItem('accessibility-settings', JSON.stringify(this.settings));
-        } catch (error) {
-            console.warn('Failed to persist accessibility settings:', error);
-        }
+    disableFocusTrap() {
+        this.focusTrapped = false;
+        this.eventBus.publish('accessibility:focus:trap:disabled');
     }
 
     /**
-     * @brief Dispatches accessibility events
-     * @method dispatchAccessibilityEvent
-     * @param {string} eventName - Name of event to dispatch
-     * @param {Object} eventDetail - Event detail data
-     * @private
-     */
-    dispatchAccessibilityEvent(eventName, eventDetail) {
-        const accessibilityEvent = new CustomEvent(eventName, {
-            detail: {
-                ...eventDetail,
-                timestamp: Date.now()
-            },
-            bubbles: true
-        });
-        
-        window.dispatchEvent(accessibilityEvent);
-    }
-
-    /**
-     * @brief Gets current accessibility settings
-     * @method getSettings
-     * @returns {Object} Current accessibility settings
-     */
-    getSettings() {
-        return { ...this.settings };
-    }
-
-    /**
-     * @brief Cleans up accessibility manager resources
-     * @method destroy
-     * @returns {void}
+     * @brief Destroy accessibility manager
      */
     destroy() {
-        if (this.liveRegion && this.liveRegion.parentNode) {
-            this.liveRegion.parentNode.removeChild(this.liveRegion);
-        }
+        document.removeEventListener('keydown', this.handleKeydown);
+        this.eventBus.clear('accessibility:escape');
+        this.eventBus.clear('accessibility:tab');
         
         this.isInitialized = false;
-        console.info('AccessibilityManager destroyed successfully');
+        console.info('AccessibilityManager: Destroyed');
     }
 }
-
-export { AccessibilityManager };

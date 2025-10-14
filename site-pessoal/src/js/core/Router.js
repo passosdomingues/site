@@ -1,317 +1,174 @@
-/**
- * @brief Navigation view component
- * @description Handles main navigation rendering and interactive behavior
- */
+import { eventBus } from './EventBus.js';
 
 /**
- * @brief Navigation configuration data
- * @constant
- * @type {Array}
+ * @brief Client-side router for SPA navigation
+ * @description Handles route changes and history management
  */
-const navigationConfig = [
-    {
-        path: '/',
-        label: 'Home',
-        icon: 'home',
-        ariaLabel: 'Go to home page'
-    },
-    {
-        path: '/about',
-        label: 'About',
-        icon: 'user',
-        ariaLabel: 'Learn more about me'
-    },
-    {
-        path: '/projects',
-        label: 'Projects',
-        icon: 'code',
-        ariaLabel: 'View my projects'
-    },
-    {
-        path: '/research',
-        label: 'Research',
-        icon: 'microscope',
-        ariaLabel: 'Explore my research work'
-    },
-    {
-        path: '/contact',
-        label: 'Contact',
-        icon: 'envelope',
-        ariaLabel: 'Get in touch with me'
+export class Router {
+    constructor(config = {}) {
+        this.config = config;
+        this.routes = new Map();
+        this.currentRoute = null;
+        this.eventBus = eventBus;
+        
+        this.handlePopState = this.handlePopState.bind(this);
+        this.handleLinkClick = this.handleLinkClick.bind(this);
     }
-];
 
-/**
- * @brief Renders the navigation component
- * @function render
- * @param {Object} data - Navigation data
- * @returns {string} HTML string of the navigation
- */
-export const render = (data = {}) => {
-    const { currentPath = '/', isMobileMenuOpen = false } = data;
-    
-    return `
-        <nav class="main-navigation" role="navigation" aria-label="Main navigation">
-            <div class="nav-container">
-                <!-- Logo/Brand -->
-                <div class="nav-brand">
-                    <a href="/" class="brand-link" aria-label="Rafael Passos Domingues - Home">
-                        <span class="brand-text">Rafael Passos Domingues</span>
-                    </a>
-                </div>
-
-                <!-- Desktop Navigation -->
-                <ul class="nav-menu desktop-menu" role="menubar">
-                    ${navigationConfig.map(item => `
-                        <li class="nav-item" role="none">
-                            <a 
-                                href="${item.path}" 
-                                class="nav-link ${currentPath === item.path ? 'nav-link--active' : ''}"
-                                role="menuitem"
-                                aria-label="${item.ariaLabel}"
-                                ${currentPath === item.path ? 'aria-current="page"' : ''}
-                            >
-                                <i class="fas fa-${item.icon}" aria-hidden="true"></i>
-                                <span class="nav-link-text">${item.label}</span>
-                            </a>
-                        </li>
-                    `).join('')}
-                </ul>
-
-                <!-- Mobile Menu Toggle -->
-                <button 
-                    class="mobile-menu-toggle"
-                    aria-label="Toggle mobile menu"
-                    aria-expanded="${isMobileMenuOpen}"
-                    aria-controls="mobile-navigation-menu"
-                >
-                    <span class="hamburger-line"></span>
-                    <span class="hamburger-line"></span>
-                    <span class="hamburger-line"></span>
-                </button>
-
-                <!-- Mobile Navigation -->
-                <div 
-                    id="mobile-navigation-menu" 
-                    class="mobile-menu ${isMobileMenuOpen ? 'mobile-menu--open' : ''}"
-                    aria-hidden="${!isMobileMenuOpen}"
-                >
-                    <ul class="nav-menu mobile-nav-menu" role="menubar">
-                        ${navigationConfig.map(item => `
-                            <li class="nav-item" role="none">
-                                <a 
-                                    href="${item.path}" 
-                                    class="nav-link ${currentPath === item.path ? 'nav-link--active' : ''}"
-                                    role="menuitem"
-                                    aria-label="${item.ariaLabel}"
-                                    ${currentPath === item.path ? 'aria-current="page"' : ''}
-                                >
-                                    <i class="fas fa-${item.icon}" aria-hidden="true"></i>
-                                    <span class="nav-link-text">${item.label}</span>
-                                </a>
-                            </li>
-                        `).join('')}
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    `;
-};
-
-/**
- * @brief Initializes navigation interactivity
- * @function init
- * @param {Object} data - Initialization data
- * @returns {Promise<void>}
- */
-export const init = async (data = {}) => {
-    const navigationElement = document.querySelector('.main-navigation');
-    if (!navigationElement) return;
-
-    setupMobileMenuInteractions(navigationElement);
-    setupKeyboardNavigation(navigationElement);
-    setupScrollBehavior(navigationElement);
-};
-
-/**
- * @brief Sets up mobile menu interactions
- * @function setupMobileMenuInteractions
- * @param {HTMLElement} navigationElement - The navigation container element
- */
-const setupMobileMenuInteractions = (navigationElement) => {
-    const toggleButton = navigationElement.querySelector('.mobile-menu-toggle');
-    const mobileMenu = navigationElement.querySelector('.mobile-menu');
-    
-    if (!toggleButton || !mobileMenu) return;
-
-    const toggleMobileMenu = () => {
-        const isOpen = mobileMenu.classList.contains('mobile-menu--open');
+    /**
+     * @brief Initialize the router
+     * @description Sets up event listeners and initial route
+     */
+    init() {
+        this.setupEventListeners();
+        this.navigate(window.location.pathname, { replace: true, silent: true });
         
-        // Toggle menu state
-        mobileMenu.classList.toggle('mobile-menu--open');
-        toggleButton.setAttribute('aria-expanded', (!isOpen).toString());
-        mobileMenu.setAttribute('aria-hidden', isOpen.toString());
+        console.info('Router: Router initialized');
+    }
+
+    /**
+     * @brief Set up router event listeners
+     */
+    setupEventListeners() {
+        window.addEventListener('popstate', this.handlePopState);
+        document.addEventListener('click', this.handleLinkClick);
+    }
+
+    /**
+     * @brief Handle browser back/forward navigation
+     * @param {PopStateEvent} event - Pop state event
+     */
+    handlePopState(event) {
+        this.navigate(window.location.pathname, { silent: true });
+    }
+
+    /**
+     * @brief Handle link clicks for SPA navigation
+     * @param {MouseEvent} event - Click event
+     */
+    handleLinkClick(event) {
+        const link = event.target.closest('a[href]');
+        if (!link) return;
+
+        const href = link.getAttribute('href');
         
-        // Prevent body scroll when menu is open
-        document.body.style.overflow = isOpen ? '' : 'hidden';
-    };
-
-    // Toggle button click event
-    toggleButton.addEventListener('click', toggleMobileMenu);
-
-    // Close menu when clicking on a link
-    const mobileLinks = mobileMenu.querySelectorAll('.nav-link');
-    mobileLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            mobileMenu.classList.remove('mobile-menu--open');
-            toggleButton.setAttribute('aria-expanded', 'false');
-            mobileMenu.setAttribute('aria-hidden', 'true');
-            document.body.style.overflow = '';
-        });
-    });
-
-    // Close menu when pressing Escape key
-    document.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape' && mobileMenu.classList.contains('mobile-menu--open')) {
-            toggleMobileMenu();
+        // Only handle internal links
+        if (href && href.startsWith('/') && !href.startsWith('//')) {
+            event.preventDefault();
+            this.navigate(href);
         }
-    });
+    }
 
-    // Close menu when clicking outside
-    document.addEventListener('click', (event) => {
-        if (!navigationElement.contains(event.target) && mobileMenu.classList.contains('mobile-menu--open')) {
-            toggleMobileMenu();
-        }
-    });
-};
+    /**
+     * @brief Add a route
+     * @param {string} path - Route path
+     * @param {Object} config - Route configuration
+     */
+    addRoute(path, config) {
+        this.routes.set(path, config);
+    }
 
-/**
- * @brief Sets up keyboard navigation for accessibility
- * @function setupKeyboardNavigation
- * @param {HTMLElement} navigationElement - The navigation container element
- */
-const setupKeyboardNavigation = (navigationElement) => {
-    const menuItems = navigationElement.querySelectorAll('.nav-link');
-    
-    menuItems.forEach((item, index) => {
-        item.addEventListener('keydown', (event) => {
-            switch (event.key) {
-                case 'ArrowRight':
-                case 'ArrowDown':
-                    event.preventDefault();
-                    focusNextMenuItem(menuItems, index);
-                    break;
-                    
-                case 'ArrowLeft':
-                case 'ArrowUp':
-                    event.preventDefault();
-                    focusPreviousMenuItem(menuItems, index);
-                    break;
-                    
-                case 'Home':
-                    event.preventDefault();
-                    menuItems[0]?.focus();
-                    break;
-                    
-                case 'End':
-                    event.preventDefault();
-                    menuItems[menuItems.length - 1]?.focus();
-                    break;
+    /**
+     * @brief Navigate to a route
+     * @param {string} path - Path to navigate to
+     * @param {Object} options - Navigation options
+     */
+    navigate(path, options = {}) {
+        const { replace = false, silent = false } = options;
+        
+        // Find matching route
+        const route = this.findMatchingRoute(path);
+        
+        if (route) {
+            this.executeRoute(route, path, silent);
+            
+            // Update browser history
+            if (!silent) {
+                if (replace) {
+                    window.history.replaceState({}, '', path);
+                } else {
+                    window.history.pushState({}, '', path);
+                }
             }
-        });
-    });
-};
-
-/**
- * @brief Focuses the next menu item in sequence
- * @function focusNextMenuItem
- * @param {NodeList} menuItems - Collection of menu item elements
- * @param {number} currentIndex - Index of the current menu item
- */
-const focusNextMenuItem = (menuItems, currentIndex) => {
-    const nextIndex = (currentIndex + 1) % menuItems.length;
-    menuItems[nextIndex]?.focus();
-};
-
-/**
- * @brief Focuses the previous menu item in sequence
- * @function focusPreviousMenuItem
- * @param {NodeList} menuItems - Collection of menu item elements
- * @param {number} currentIndex - Index of the current menu item
- */
-const focusPreviousMenuItem = (menuItems, currentIndex) => {
-    const previousIndex = currentIndex > 0 ? currentIndex - 1 : menuItems.length - 1;
-    menuItems[previousIndex]?.focus();
-};
-
-/**
- * @brief Sets up scroll behavior for navigation
- * @function setupScrollBehavior
- * @param {HTMLElement} navigationElement - The navigation container element
- */
-const setupScrollBehavior = (navigationElement) => {
-    let lastScrollY = window.scrollY;
-    
-    const handleScroll = () => {
-        const currentScrollY = window.scrollY;
-        const scrollDelta = currentScrollY - lastScrollY;
-        
-        if (scrollDelta > 5 && currentScrollY > 100) {
-            // Scrolling down - hide navigation
-            navigationElement.classList.add('nav--hidden');
-        } else if (scrollDelta < -5) {
-            // Scrolling up - show navigation
-            navigationElement.classList.remove('nav--hidden');
-        }
-        
-        // Add background when scrolled
-        if (currentScrollY > 50) {
-            navigationElement.classList.add('nav--scrolled');
         } else {
-            navigationElement.classList.remove('nav--scrolled');
+            console.warn(`Router: No route found for path: ${path}`);
+            this.eventBus.publish('router:404', { path });
         }
-        
-        lastScrollY = currentScrollY;
-    };
-    
-    // Throttle scroll events for performance
-    let ticking = false;
-    const throttledScrollHandler = () => {
-        if (!ticking) {
-            requestAnimationFrame(() => {
-                handleScroll();
-                ticking = false;
+    }
+
+    /**
+     * @brief Find matching route for path
+     * @param {string} path - Path to match
+     * @returns {Object|null} Matching route configuration
+     */
+    findMatchingRoute(path) {
+        for (const [routePath, config] of this.routes) {
+            if (this.pathMatches(routePath, path)) {
+                return config;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @brief Check if path matches route pattern
+     * @param {string} routePath - Route pattern
+     * @param {string} path - Actual path
+     * @returns {boolean} Whether path matches
+     */
+    pathMatches(routePath, path) {
+        // Simple exact match for now - can be extended for dynamic routes
+        return routePath === path;
+    }
+
+    /**
+     * @brief Execute route handlers
+     * @param {Object} route - Route configuration
+     * @param {string} path - Actual path
+     * @param {boolean} silent - Whether to suppress events
+     */
+    executeRoute(route, path, silent = false) {
+        const previousRoute = this.currentRoute;
+        this.currentRoute = { path, config: route };
+
+        if (!silent) {
+            this.eventBus.publish('router:beforeNavigate', { 
+                from: previousRoute, 
+                to: this.currentRoute 
             });
-            ticking = true;
         }
-    };
-    
-    window.addEventListener('scroll', throttledScrollHandler, { passive: true });
-};
 
-/**
- * @brief Updates navigation state based on current route
- * @function updateNavigationState
- * @param {string} currentPath - The current active path
- */
-export const updateNavigationState = (currentPath) => {
-    const navLinks = document.querySelectorAll('.nav-link');
-    
-    navLinks.forEach(link => {
-        const isActive = link.getAttribute('href') === currentPath;
+        // Execute route handler
+        if (typeof route.handler === 'function') {
+            route.handler(this.currentRoute);
+        }
+
+        if (!silent) {
+            this.eventBus.publish('router:navigated', { 
+                from: previousRoute, 
+                to: this.currentRoute 
+            });
+        }
+
+        console.info(`Router: Navigated to ${path}`);
+    }
+
+    /**
+     * @brief Get current route information
+     * @returns {Object|null} Current route
+     */
+    getCurrentRoute() {
+        return this.currentRoute;
+    }
+
+    /**
+     * @brief Destroy router and clean up
+     */
+    destroy() {
+        window.removeEventListener('popstate', this.handlePopState);
+        document.removeEventListener('click', this.handleLinkClick);
+        this.routes.clear();
         
-        if (isActive) {
-            link.classList.add('nav-link--active');
-            link.setAttribute('aria-current', 'page');
-        } else {
-            link.classList.remove('nav-link--active');
-            link.removeAttribute('aria-current');
-        }
-    });
-};
-
-export default {
-    render,
-    init,
-    updateNavigationState
-};
+        console.info('Router: Router destroyed');
+    }
+}

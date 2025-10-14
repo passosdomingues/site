@@ -1,66 +1,57 @@
 <!DOCTYPE html>
-<html lang="en-US" class="no-js" data-theme="light">
+<html lang="en" class="js" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rafael Passos Domingues | Physicist & Computer Science Researcher</title>
-    <meta name="description" content="Rafael Passos Domingues - Physicist and Computer Scientist specializing in Astrophysics research, Data Science innovation, and Maker Education.">
+    <title>Rafael Passos Domingues | Physicist & Computer Scientist | Astrophysics Research & Innovation</title>
+    <meta name="description" content="Rafael Passos Domingues - Physicist and Computer Scientist specialized in Astrophysics Research, Data Science and Technology Innovation. Bridging scientific research with computational methodologies.">
     <meta name="author" content="Rafael Passos Domingues">
-    <meta property="og:title" content="Rafael Passos Domingues | Physicist & Computer Science Researcher">
-    <meta property="og:description" content="Physicist and Computer Scientist specializing in Astrophysics research and Data Science innovation.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://rafaeldomingues.dev">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="./src/css/styles.css">
-    <style>
-        .app-container { opacity: 0; transition: opacity 0.5s ease; }
-        .js-enabled .app-container { opacity: 1; }
-        .skip-link { position: absolute; top: -999px; left: 10px; background: #000; color: white; padding: 10px; z-index: 9999; }
-        .skip-link:focus { top: 10px; }
-    </style>
 </head>
-<body class="no-js">
-    <noscript>
-        <div role="alert" style="padding: 20px; text-align: center; background-color: #ffc; color: #333;">
-            <h1>JavaScript is Required</h1>
-            <p>This portfolio requires JavaScript for an optimal experience. Please enable it in your browser.</p>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <div class="main-container">
+        <div class="main-loading-overlay" id="loading-overlay">
+            <div class="loading-content">
+                <h1>Rafael Passos Domingues</h1>
+                <p>Loading portfolio...</p>
+            </div>
         </div>
-    </noscript>
-
-    <div id="app" class="app-container" data-app-initialized="false">
-        <a href="#main-content" class="skip-link">Skip to Main Content</a>
-
-        <header id="global-header" class="global-header" role="banner">
-            <div class="container">
-                <nav id="primary-navigation" class="primary-navigation" aria-label="Primary navigation"></nav>
-                <div class="user-preference-controls">
-                    <button type="button" class="theme-toggle btn btn--secondary" id="theme-toggle" aria-pressed="false" aria-label="Toggle dark mode">
-                        <span class="theme-toggle-icon"><i class="fas fa-moon"></i></span>
-                    </button>
-                    <button type="button" class="accessibility-menu-toggle btn btn--secondary" id="accessibility-menu-toggle" aria-expanded="false" aria-label="Open accessibility options">
-                        <span class="accessibility-icon"><i class="fas fa-universal-access"></i></span>
-                    </button>
-                </div>
-            </div>
-        </header>
-
-        <section id="hero" class="hero-section" aria-labelledby="hero-heading"></section>
-
-        <main id="main-content" class="main-content" role="main" tabindex="-1"></main>
-
-        <aside id="accessibility-menu" class="accessibility-menu" role="dialog" aria-modal="true" aria-labelledby="accessibility-menu-heading" hidden>
-            <div class="accessibility-menu-content">
-                <h2 id="accessibility-menu-heading">Accessibility Options</h2>
-                <button type="button" class="accessibility-menu-close btn btn--primary" id="accessibility-menu-close" aria-label="Close accessibility menu">Close</button>
-            </div>
-        </aside>
-
-        <footer id="global-footer" class="global-footer" role="contentinfo"></footer>
         
-        <div id="notification-area" role="status" aria-live="polite" aria-atomic="true"></div>
+        <nav class="main-navigation-container" id="main-nav">
+            <div class="nav-container">
+                <ul class="nav-list" id="nav-list">
+                    <!-- Navigation will be populated by JavaScript -->
+                </ul>
+            </div>
+        </nav>
+        
+        <main id="main-content" class="main-content">
+            <section class="hero-section" id="hero-section">
+                <div class="hero-content">
+                    <h1 class="hero-title">Rafael Passos Domingues</h1>
+                    <p class="hero-subtitle">Physicist & Computer Scientist</p>
+                    <p class="hero-description">
+                        Researcher in Astrophysics, Data Science and Technology Innovation. 
+                        Combining scientific rigor with computational expertise to solve 
+                        complex problems and drive innovation.
+                    </p>
+                </div>
+            </section>
+            
+            <div id="sections-container">
+                <!-- Sections will be populated by JavaScript -->
+            </div>
+        </main>
+        
+        <footer class="main-footer">
+            <div class="footer-content">
+                <p class="footer-text">
+                    &copy; 2025
+                </p>
+            </div>
+        </footer>
     </div>
 
     <script type="module" src="./src/js/main.js"></script>

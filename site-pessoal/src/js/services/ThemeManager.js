@@ -1,211 +1,126 @@
+import eventBus from '../core/EventBus.js';
+
 /**
- * @file ThemeManager.js
- * @brief Comprehensive theme management with CSS variables and persistence
- * @description Handles theme switching, CSS custom properties, and user preference persistence
+ * @brief Theme manager service
+ * @description Manages application theme and dark/light mode
  */
-
-class ThemeManager {
-    /**
-     * @brief Creates a new ThemeManager instance
-     * @constructor
-     * @param {Object} configuration - Theme configuration options
-     */
-    constructor(configuration = {}) {
-        /**
-         * @private
-         * @type {string}
-         * @description Current active theme name
-         */
-        this.currentTheme = configuration.defaultTheme || 'light';
-
-        /**
-         * @private
-         * @type {Object}
-         * @description Available theme definitions
-         */
-        this.themes = configuration.themes || {
-            light: {
-                '--primary-color': '#264B93',
-                '--secondary-color': '#A16DAE', 
-                '--background-color': '#FFFFFF',
-                '--text-color': '#1F3D68',
-                '--surface-color': '#E4F5FC',
-                '--border-color': '#264B9322'
-            },
-            dark: {
-                '--primary-color': '#6495ED',
-                '--secondary-color': '#A16DAE',
-                '--background-color': '#1A1A1A',
-                '--text-color': '#E4E4E4',
-                '--surface-color': '#2D2D2D',
-                '--border-color': '#FFFFFF22'
-            }
-        };
-
-        /**
-         * @private
-         * @type {boolean}
-         * @description Tracks initialization status
-         */
+export class ThemeManager {
+    constructor(dependencies = {}) {
+        this.eventBus = dependencies.eventBus || eventBus;
+        this.currentTheme = 'light';
         this.isInitialized = false;
 
-        this.initialize = this.initialize.bind(this);
-        this.applyTheme = this.applyTheme.bind(this);
+        this.onThemeChange = this.onThemeChange.bind(this);
     }
 
     /**
-     * @brief Initializes the theme manager and applies stored preferences
-     * @method initialize
-     * @returns {Promise<void>}
+     * @brief Initialize theme manager
+     * @description Loads saved theme or detects system preference
      */
-    async initialize() {
-        try {
-            // Load saved theme preference or detect system preference
-            const savedTheme = localStorage.getItem('user-theme');
-            const systemPreference = this.detectSystemThemePreference();
-            
-            const initialTheme = savedTheme || systemPreference || this.currentTheme;
-            await this.applyTheme(initialTheme);
-            
-            this.isInitialized = true;
-            console.info('ThemeManager initialized successfully');
-        } catch (error) {
-            console.error('ThemeManager initialization failed:', error);
-            // Apply default theme as fallback
-            await this.applyTheme('light');
-        }
-    }
+    async init() {
+        if (this.isInitialized) return;
 
-    /**
-     * @brief Detects system-level theme preference
-     * @method detectSystemThemePreference
-     * @returns {string|null} System theme preference or null if not detectable
-     * @private
-     */
-    detectSystemThemePreference() {
-        if (typeof window === 'undefined' || !window.matchMedia) return null;
+        // Load saved theme or detect system preference
+        const savedTheme = localStorage.getItem('app-theme');
+        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         
-        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        this.currentTheme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
+        
+        this.applyTheme(this.currentTheme);
+        this.setupEventListeners();
+        
+        this.isInitialized = true;
+        console.info('ThemeManager: Initialized with theme:', this.currentTheme);
     }
 
     /**
-     * @brief Applies specified theme to document
-     * @method applyTheme
-     * @param {string} themeName - Name of theme to apply
-     * @returns {Promise<void>}
+     * @brief Set up event listeners
      */
-    async applyTheme(themeName) {
-        if (!this.themes[themeName]) {
-            console.warn(`Theme "${themeName}" not found. Falling back to default.`);
-            themeName = Object.keys(this.themes)[0];
-        }
-
-        try {
-            const theme = this.themes[themeName];
-            const rootElement = document.documentElement;
-            
-            // Apply all CSS custom properties
-            Object.entries(theme).forEach(([property, value]) => {
-                rootElement.style.setProperty(property, value);
-            });
-            
-            // Update internal state
-            this.currentTheme = themeName;
-            
-            // Persist user preference
-            localStorage.setItem('user-theme', themeName);
-            
-            // Dispatch theme change event
-            this.dispatchThemeChangeEvent(themeName, theme);
-            
-            console.info(`Theme "${themeName}" applied successfully`);
-        } catch (error) {
-            console.error(`Error applying theme "${themeName}":`, error);
-            throw error;
-        }
-    }
-
-    /**
-     * @brief Dispatches theme change event for application components
-     * @method dispatchThemeChangeEvent
-     * @param {string} themeName - Activated theme name
-     * @param {Object} themeData - Theme configuration data
-     * @private
-     */
-    dispatchThemeChangeEvent(themeName, themeData) {
-        const themeChangeEvent = new CustomEvent('theme:changed', {
-            detail: {
-                themeName,
-                themeData,
-                timestamp: Date.now()
-            },
-            bubbles: true
+    setupEventListeners() {
+        this.eventBus.subscribe('theme:change', this.onThemeChange);
+        
+        // Listen for system theme changes
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+            if (!localStorage.getItem('app-theme')) {
+                this.setTheme(e.matches ? 'dark' : 'light');
+            }
         });
-        
-        window.dispatchEvent(themeChangeEvent);
     }
 
     /**
-     * @brief Gets current active theme
-     * @method getCurrentTheme
-     * @returns {string} Current theme name
+     * @brief Handle theme change events
+     * @param {Object} data - Event data
+     */
+    onThemeChange(data) {
+        if (data.theme && ['light', 'dark'].includes(data.theme)) {
+            this.setTheme(data.theme);
+        }
+    }
+
+    /**
+     * @brief Set application theme
+     * @param {string} theme - Theme name ('light' or 'dark')
+     */
+    setTheme(theme) {
+        if (theme !== 'light' && theme !== 'dark') {
+            console.warn('ThemeManager: Invalid theme:', theme);
+            return;
+        }
+
+        this.currentTheme = theme;
+        this.applyTheme(theme);
+        
+        // Save preference
+        localStorage.setItem('app-theme', theme);
+        
+        this.eventBus.publish('theme:changed', { theme });
+        console.info('ThemeManager: Theme changed to:', theme);
+    }
+
+    /**
+     * @brief Apply theme to document
+     * @param {string} theme - Theme name
+     */
+    applyTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        
+        // Update meta theme-color for mobile browsers
+        const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+        if (metaThemeColor) {
+            metaThemeColor.setAttribute('content', theme === 'dark' ? '#1a1a1a' : '#ffffff');
+        }
+    }
+
+    /**
+     * @brief Toggle between light and dark themes
+     */
+    toggleTheme() {
+        const newTheme = this.currentTheme === 'light' ? 'dark' : 'light';
+        this.setTheme(newTheme);
+    }
+
+    /**
+     * @brief Get current theme
+     * @returns {string} Current theme
      */
     getCurrentTheme() {
         return this.currentTheme;
     }
 
     /**
-     * @brief Gets all available themes
-     * @method getAvailableThemes
-     * @returns {Array<string>} Array of available theme names
+     * @brief Check if dark mode is active
+     * @returns {boolean} Dark mode status
      */
-    getAvailableThemes() {
-        return Object.keys(this.themes);
+    isDarkMode() {
+        return this.currentTheme === 'dark';
     }
 
     /**
-     * @brief Adds new theme to available themes
-     * @method addTheme
-     * @param {string} themeName - Unique theme identifier
-     * @param {Object} themeProperties - CSS custom properties for theme
-     * @returns {void}
-     */
-    addTheme(themeName, themeProperties) {
-        if (this.themes[themeName]) {
-            console.warn(`Theme "${themeName}" already exists. Overwriting.`);
-        }
-        
-        this.themes[themeName] = { ...themeProperties };
-        console.info(`Theme "${themeName}" added successfully`);
-    }
-
-    /**
-     * @brief Toggles between light and dark themes
-     * @method toggleTheme
-     * @returns {Promise<void>}
-     */
-    async toggleTheme() {
-        const newTheme = this.currentTheme === 'light' ? 'dark' : 'light';
-        await this.applyTheme(newTheme);
-    }
-
-    /**
-     * @brief Cleans up theme manager resources
-     * @method destroy
-     * @returns {void}
+     * @brief Destroy theme manager
      */
     destroy() {
-        // Remove all custom theme properties
-        const rootElement = document.documentElement;
-        Object.keys(this.themes).forEach(themeName => {
-            Object.keys(this.themes[themeName]).forEach(property => {
-                rootElement.style.removeProperty(property);
-            });
-        });
-        
+        this.eventBus.unsubscribe('theme:change', this.onThemeChange);
         this.isInitialized = false;
-        console.info('ThemeManager destroyed successfully');
+        console.info('ThemeManager: Destroyed');
     }
 }
-
-export { ThemeManager };
