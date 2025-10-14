@@ -486,4 +486,4 @@ class ErrorReporter {
     }
 }
 
-export default ErrorReporter;
+export { ErrorReporter };

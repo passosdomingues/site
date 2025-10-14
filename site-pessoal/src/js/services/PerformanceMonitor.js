@@ -359,4 +359,4 @@ class PerformanceMonitor {
     }
 }
 
-export default PerformanceMonitor;
+export { PerformanceMonitor };
