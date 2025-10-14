@@ -7,11 +7,11 @@ export class NavigationController {
     constructor(dependencies) {
         this.eventBus = dependencies.eventBus;
         this.contentModel = dependencies.services.contentModel;
-        
+
         this.navigationView = new NavigationView({
             container: document.getElementById('navigation-container')
         });
-        
+
         this.handleNavigationClick = this.handleNavigationClick.bind(this);
     }
 

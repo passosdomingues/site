@@ -69,7 +69,7 @@ export class MainController {
 
         container.append(themeBtn, increaseFontBtn, decreaseFontBtn);
     }
-    
+
     createControlButton(text, ariaLabel, onClick) {
         const button = document.createElement('button');
         button.className = 'app-control-button';

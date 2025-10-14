@@ -1,7 +1,7 @@
 import { BaseView } from './BaseView.js';
 
 /**
- * @brief Manages the rendering of the dynamic content sections.
+ * @brief Manages rendering of dynamic content sections.
  */
 export class ViewManager extends BaseView {
     constructor(config = {}) {
@@ -21,12 +21,15 @@ export class ViewManager extends BaseView {
 
     renderSection(section) {
         const renderMethod = this.renderMethods[section.type];
-        if (!renderMethod) return;
-        
+        if (!renderMethod) {
+            console.warn(`[ViewManager] No render method for type: "${section.type}"`);
+            return;
+        }
+
         const sectionElement = document.createElement('section');
         sectionElement.id = section.id;
         sectionElement.className = `section section--${section.type}`;
-        
+
         sectionElement.innerHTML = `
             <div class="container">
                 <header class="section-header">

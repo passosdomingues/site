@@ -32,10 +32,10 @@ class Application {
                     navigationController: NavigationController
                 }
             };
-            
+
             this.app = new App(appConfig);
             await this.app.initialize();
-            
+
         } catch (error) {
             console.error('Application: A critical error occurred during initialization.', error);
             this.showErrorState();
