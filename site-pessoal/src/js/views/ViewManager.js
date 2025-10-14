@@ -255,6 +255,135 @@ class ViewManager {
         this.clear();
         console.info('ViewManager: Destroyed');
     }
+
+    /**
+     * @brief Render enhanced timeline content
+     */
+    renderTimeline(content) {
+        if (!content.timeline) return '';
+
+        const timelineItems = content.timeline.map(item => `
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-period">
+                    <span class="timeline-icon">${item.icon || '📅'}</span>
+                    <span>${this.escapeHtml(item.period)}</span>
+                </div>
+                <div class="timeline-content">
+                    <h3 class="timeline-title">${this.escapeHtml(item.title)}</h3>
+                    <p class="timeline-description">${this.escapeHtml(item.description)}</p>
+                    
+                    ${item.achievements && item.achievements.length > 0 ? `
+                        <div class="achievements-list">
+                            <h4 class="achievements-title">Key Achievements:</h4>
+                            <ul class="achievements">
+                                ${item.achievements.map(achievement => `
+                                    <li class="achievement">${this.escapeHtml(achievement)}</li>
+                                `).join('')}
+                            </ul>
+                        </div>
+                    ` : ''}
+                    
+                    <div class="highlights-list">
+                        ${item.highlights.map(h => `
+                            <span class="tag tag--primary">${this.escapeHtml(h)}</span>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>
+        `).join('');
+
+        return `<div class="timeline">${timelineItems}</div>`;
+    }
+
+    /**
+     * @brief Render enhanced cards content
+     */
+    renderCards(content) {
+        if (!Array.isArray(content)) return '';
+
+        const cards = content.map(item => `
+            <div class="card ${item.featured ? 'card--featured' : ''}">
+                <div class="card-header">
+                    <h3 class="card-title">${this.escapeHtml(item.title)}</h3>
+                    <p class="card-subtitle">${this.escapeHtml(item.subtitle || '')}</p>
+                </div>
+                
+                <div class="card-content">
+                    <p class="card-description">${this.escapeHtml(item.description)}</p>
+                    
+                    ${item.detailedDescription ? `
+                        <p class="card-detailed-description">${this.escapeHtml(item.detailedDescription)}</p>
+                    ` : ''}
+                    
+                    ${item.technologies && item.technologies.length > 0 ? `
+                        <div class="technologies-container">
+                            <h4 class="technologies-title">Technologies Used:</h4>
+                            <div class="technologies-list">
+                                ${item.technologies.map(tech => `
+                                    <span class="tag tag--secondary">${this.escapeHtml(tech)}</span>
+                                `).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+                    
+                    ${item.metrics && item.metrics.length > 0 ? `
+                        <div class="metrics-container">
+                            <h4 class="metrics-title">Key Metrics:</h4>
+                            <ul class="metrics-list">
+                                ${item.metrics.map(metric => `
+                                    <li class="metric">${this.escapeHtml(metric)}</li>
+                                `).join('')}
+                            </ul>
+                        </div>
+                    ` : ''}
+                    
+                    ${item.applications && item.applications.length > 0 ? `
+                        <div class="applications-container">
+                            <h4 class="applications-title">Applications:</h4>
+                            <ul class="applications-list">
+                                ${item.applications.map(app => `
+                                    <li class="application">${this.escapeHtml(app)}</li>
+                                `).join('')}
+                            </ul>
+                        </div>
+                    ` : ''}
+                </div>
+                
+                <div class="card-footer">
+                    ${item.links && item.links.length > 0 ? `
+                        <div class="card-links">
+                            ${item.links.map(link => `
+                                <a href="${this.escapeHtml(link.url)}" 
+                                class="btn btn--outline btn--sm"
+                                target="_blank" 
+                                rel="noopener noreferrer">
+                                    ${this.escapeHtml(link.label)}
+                                </a>
+                            `).join('')}
+                        </div>
+                    ` : ''}
+                    
+                    <div class="card-meta">
+                        <div class="tags-container">
+                            ${item.tags.map(tag => `
+                                <span class="tag">${this.escapeHtml(tag)}</span>
+                            `).join('')}
+                        </div>
+                        
+                        <div class="meta-info">
+                            <span class="card-date">${this.escapeHtml(item.date)}</span>
+                            <span class="status status--${item.status?.toLowerCase()}">
+                                ${this.escapeHtml(item.status)}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+
+        return `<div class="cards-grid grid grid--2">${cards}</div>`;
+    }
 }
 
 export { ViewManager };

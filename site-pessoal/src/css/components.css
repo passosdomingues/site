@@ -1,239 +1,114 @@
-/* ===== Navigation (Migrado do styles.css) ===== */
-.main-navigation-container {
+/* Theme transition for smooth theme switching */
+.theme-transition * {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease !important;
+}
+
+/* App controls specific styles */
+.app-controls {
     position: fixed;
-    top: 0;
-    width: 100%;
-    /* Efeito de vidro fosco usando suas variáveis */
-    background: color-mix(in srgb, var(--color-background-primary) 85%, transparent);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    z-index: 1000;
-    padding: var(--space-4) 0;
-    border-bottom: 1px solid var(--color-border-primary);
-}
-
-.nav-container {
-    max-width: var(--container-max-width);
-    margin: 0 auto;
-    padding: 0 var(--space-8);
-}
-
-.nav-list {
-    list-style: none;
+    bottom: var(--space-6);
+    right: var(--space-6);
     display: flex;
-    justify-content: center;
-    gap: var(--space-8);
+    flex-direction: column;
+    gap: var(--space-3);
+    z-index: var(--z-fixed);
 }
 
-.nav-link {
-    text-decoration: none;
-    color: var(--color-text-secondary);
-    font-weight: var(--font-weight-medium);
-    padding: var(--space-2) var(--space-4);
-    border-radius: var(--border-radius-md);
-    transition: all var(--transition-duration-base) var(--transition-timing-function);
-}
-
-.nav-link:hover,
-.nav-link.active {
-    background: var(--color-primary-500);
-    color: var(--color-text-inverse);
-}
-
-/* ===== Timeline (Migrado do styles.css) ===== */
-.timeline {
-    position: relative;
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-.timeline::before {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 0;
-    bottom: 0;
-    width: 2px;
-    background: var(--color-primary-500);
-    transform: translateX(-50%);
-}
-
-.timeline-item {
-    display: flex;
-    margin-bottom: var(--space-12);
-    position: relative;
-}
-
-.timeline-item:nth-child(odd) {
-    flex-direction: row-reverse;
-}
-
-.timeline-period {
-    flex: 0 0 150px;
-    text-align: center;
+.app-control-button {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-full);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--border-light);
+    font-size: var(--font-size-lg);
     font-weight: var(--font-weight-bold);
-    color: var(--color-primary-500);
-    padding: var(--space-2);
-}
-
-.timeline-content {
-    flex: 1;
-    padding: var(--space-6);
-    background: var(--color-background-primary);
-    border-radius: var(--border-radius-lg);
-    box-shadow: var(--shadow-md);
-    margin: 0 var(--space-8);
-}
-
-.timeline-title {
-    color: var(--color-text-primary);
-    margin-bottom: var(--space-2);
-}
-
-.highlights-list {
-    margin-top: var(--space-4);
-}
-
-.highlight-tag {
-    display: inline-block;
-    background: var(--color-background-secondary);
-    color: var(--color-text-secondary);
-    padding: var(--space-1) var(--space-3);
-    margin: var(--space-1);
-    border-radius: var(--border-radius-full);
-    font-size: var(--font-size-sm);
-}
-
-/* ===== Cards (Migrado do styles.css) ===== */
-.cards-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: var(--space-8);
-    margin-top: var(--space-8);
-}
-
-/* A classe .card base já deve existir, estas são as regras internas */
-.card-title {
-    color: var(--color-text-primary);
-    margin-bottom: var(--space-4);
-}
-.card-description { margin-bottom: var(--space-4); }
-.card-links { margin-bottom: var(--space-4); }
-.card-links a {
-    display: inline-block;
-    margin-right: var(--space-4);
-    color: var(--color-primary-500);
-    text-decoration: none;
-}
-.card-links a:hover { text-decoration: underline; }
-.card-meta {
     display: flex;
-    justify-content: space-between;
-    margin-top: var(--space-4);
-    font-size: var(--font-size-sm);
-    color: var(--color-text-secondary);
-}
-.tags-container { margin-top: var(--space-4); }
-.tag {
-    display: inline-block;
-    background: var(--color-primary-500);
-    color: var(--color-text-inverse);
-    padding: var(--space-1) var(--space-3);
-    margin: var(--space-1);
-    border-radius: var(--border-radius-md);
-    font-size: var(--font-size-xs);
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-base);
 }
 
-/* ===== Skills (Migrado do styles.css) ===== */
-.skills-categories { display: grid; gap: var(--space-8); }
-.skill-category {
-    background: var(--color-background-primary);
-    padding: var(--space-6);
-    border-radius: var(--border-radius-lg);
-    box-shadow: var(--shadow-md);
-}
-.category-title {
-    color: var(--color-text-primary);
-    margin-bottom: var(--space-4);
-    border-bottom: 2px solid var(--color-primary-500);
-    padding-bottom: var(--space-2);
-}
-.skill-item { margin-bottom: var(--space-6); }
-.skill-header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: var(--space-2);
-}
-.skill-bar {
-    height: 8px;
-    background: var(--color-background-secondary);
-    border-radius: var(--border-radius-full);
-    overflow: hidden;
-    margin-bottom: var(--space-2);
-}
-.skill-progress {
-    height: 100%;
-    background: var(--color-primary-500);
-    transition: width 1s ease-in-out;
+.app-control-button:hover,
+.app-control-button:focus {
+    transform: scale(1.1);
+    box-shadow: var(--shadow-xl);
+    background: var(--secondary-color);
+    color: var(--text-light);
 }
 
-/* ===== Gallery (Migrado do styles.css) ===== */
-.gallery-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: var(--space-4);
-    margin-top: var(--space-8);
+/* Mobile menu styles */
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 21px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
 }
-.gallery-item {
-    position: relative;
-    border-radius: var(--border-radius-lg);
-    overflow: hidden;
-    box-shadow: var(--shadow-md);
-}
-.gallery-image {
+
+.menu-toggle span {
+    display: block;
+    height: 3px;
     width: 100%;
-    height: 200px;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-}
-.gallery-item:hover .gallery-image { transform: scale(1.05); }
-.gallery-caption {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(0, 0, 0, 0.7);
-    color: var(--color-text-inverse);
-    padding: var(--space-2);
-    font-size: var(--font-size-sm);
+    background: var(--primary-color);
+    border-radius: var(--radius-full);
+    transition: all var(--transition-base);
 }
 
-/* ===== Responsive (Migrado do styles.css) ===== */
+.menu-toggle.active span:nth-child(1) {
+    transform: rotate(45deg) translate(6px, 6px);
+}
+
+.menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.menu-toggle.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -6px);
+}
+
+/* Header scroll effects */
+.main-header {
+    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.main-header.scrolled {
+    background: var(--bg-primary);
+    box-shadow: var(--shadow-md);
+}
+
+/* Responsive adjustments */
 @media (max-width: 768px) {
-    .hero-title {
-        font-size: var(--font-size-2xl);
+    .menu-toggle {
+        display: flex;
     }
-
-    .nav-list {
+    
+    .nav-menu {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 80%;
+        max-width: 300px;
+        height: 100vh;
+        background: var(--bg-primary);
         flex-direction: column;
-        gap: var(--space-2);
+        padding: var(--space-16) var(--space-6);
+        box-shadow: var(--shadow-xl);
+        transition: right var(--transition-base);
+        gap: var(--space-4);
     }
-
-    .timeline::before {
-        left: 30px;
+    
+    .nav-menu.active {
+        right: 0;
     }
-
-    .timeline-item {
-        flex-direction: row !important;
-    }
-
-    .timeline-period {
-        flex: 0 0 80px;
-        text-align: left;
-    }
-
-    .timeline-content {
-        margin-left: var(--space-4);
-        margin-right: 0;
+    
+    .app-controls {
+        bottom: var(--space-4);
+        right: var(--space-4);
     }
 }
