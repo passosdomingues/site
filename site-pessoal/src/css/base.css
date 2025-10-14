@@ -1,4 +1,4 @@
-/* base.css - Base styles and reset */
+/* base.css - Modern base styles with paper texture */
 *,
 *::before,
 *::after {
@@ -16,15 +16,19 @@ html {
 body {
     font-family: var(--font-family-primary);
     font-size: var(--font-size-base);
-    line-height: var(--line-height-normal);
+    line-height: var(--line-height-relaxed);
     color: var(--text-primary);
     background-color: var(--bg-primary);
+    background-image: var(--gradient-paper);
+    background-attachment: fixed;
     transition: background-color var(--transition-base), color var(--transition-base);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
-/* Improved focus styles for accessibility */
+/* Focus styles */
 :focus {
-    outline: 2px solid var(--secondary-color);
+    outline: 2px solid var(--primary-color);
     outline-offset: 2px;
 }
 
@@ -33,27 +37,29 @@ body {
 }
 
 :focus-visible {
-    outline: 2px solid var(--secondary-color);
+    outline: 2px solid var(--primary-color);
     outline-offset: 2px;
 }
 
-/* Selection styles */
+/* Selection */
 ::selection {
-    background-color: var(--secondary-color);
+    background-color: var(--primary-color);
     color: var(--text-light);
 }
 
 /* Typography */
 h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-family-heading);
-    font-weight: var(--font-weight-bold);
+    font-weight: var(--font-weight-semibold);
     line-height: var(--line-height-tight);
     margin-bottom: var(--space-4);
     color: var(--text-primary);
+    letter-spacing: -0.02em;
 }
 
 h1 {
     font-size: var(--font-size-5xl);
+    font-weight: var(--font-weight-bold);
 }
 
 h2 {
@@ -78,17 +84,19 @@ h6 {
 
 p {
     margin-bottom: var(--space-4);
+    line-height: var(--line-height-relaxed);
 }
 
 a {
-    color: var(--secondary-color);
+    color: var(--primary-color);
     text-decoration: none;
-    transition: color var(--transition-fast);
+    transition: all var(--transition-fast);
+    border-radius: var(--radius-sm);
 }
 
 a:hover,
 a:focus {
-    color: var(--secondary-dark);
+    color: var(--primary-light);
     text-decoration: underline;
 }
 
@@ -107,6 +115,7 @@ img {
     max-width: 100%;
     height: auto;
     display: block;
+    border-radius: var(--radius-base);
 }
 
 /* Forms */
@@ -123,24 +132,7 @@ button {
     cursor: pointer;
     border: none;
     background: none;
-}
-
-/* Skip link for keyboard navigation */
-.skip-link {
-    position: absolute;
-    top: -40px;
-    left: var(--space-4);
-    background: var(--primary-color);
-    color: var(--text-light);
-    padding: var(--space-3) var(--space-4);
-    text-decoration: none;
-    z-index: var(--z-tooltip);
     border-radius: var(--radius-base);
-    transition: top var(--transition-base);
-}
-
-.skip-link:focus {
-    top: var(--space-4);
 }
 
 /* Screen reader only */

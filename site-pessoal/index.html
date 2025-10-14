@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" class="js" data-theme="light">
+<html lang="en" class="js" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rafael Passos Domingues | Physicist & Computer Scientist | Astrophysics Research & Innovation</title>
-    <meta name="description" content="Rafael Passos Domingues - Physicist and Computer Scientist specialized in Astrophysics Research, Data Science and Technology Innovation. Bridging scientific research with computational methodologies.">
+    <title>Rafael Passos Domingues | Physicist & Computer Scientist | Astrophysics Research</title>
+    <meta name="description" content="Rafael Passos Domingues - Physicist and Computer Scientist specialized in Astrophysics Research, Data Science and Technology Innovation.">
     <meta name="author" content="Rafael Passos Domingues">
     
     <!-- Preload critical resources -->
@@ -13,26 +13,43 @@
     
     <!-- Critical CSS inline -->
     <style>
-        /* critical.css content would be inlined here for production */
+        :root {
+            --paper-texture: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='1' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.1'/%3E%3C/svg%3E");
+        }
+        
         .critical-loading {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: #1a252f;
+            background: #1a1f2d;
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 9999;
-            color: white;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #e8e6e3;
+            font-family: 'Segoe UI Variable', system-ui, sans-serif;
         }
         
         .critical-hidden {
             opacity: 0;
             visibility: hidden;
-            transition: opacity 0.5s ease, visibility 0.5s;
+        }
+        
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(232, 230, 227, 0.3);
+            border-top: 3px solid #6a8d73;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
     
@@ -40,15 +57,12 @@
     <link rel="stylesheet" href="./src/css/styles.css">
     
     <!-- Theme color -->
-    <meta name="theme-color" content="#2c3e50">
+    <meta name="theme-color" content="#1a1f2d">
     
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="./public/images/favicon.ico">
 </head>
 <body>
-    <!-- Skip link for accessibility -->
-    <a href="#main-content" class="skip-link">Skip to main content</a>
-
     <!-- Loading overlay -->
     <div class="main-loading-overlay critical-loading" id="loading-overlay">
         <div class="loading-content">
@@ -82,6 +96,9 @@
                 </nav>
             </div>
         </header>
+        
+        <!-- Mobile menu overlay -->
+        <div class="nav-overlay" id="nav-overlay"></div>
         
         <!-- Main content -->
         <main id="main-content" class="main-content">
@@ -147,15 +164,15 @@
                     <div class="footer-section footer-section--social">
                         <h4 class="footer-social-title">Connect</h4>
                         <div class="footer-social-links">
-                            <a href="https://github.com/rafaelpassosdomingues" class="footer-social-link" target="_blank" rel="noopener noreferrer">
+                            <a href="https://github.com/passosdomingues" class="footer-social-link" target="_blank" rel="noopener noreferrer">
                                 <span class="footer-social-icon">🐙</span>
                                 <span class="sr-only">GitHub</span>
                             </a>
-                            <a href="https://www.linkedin.com/in/rafael-passos-domingues/" class="footer-social-link" target="_blank" rel="noopener noreferrer">
+                            <a href="https://www.linkedin.com/in/rafaelpassosdomingues/" class="footer-social-link" target="_blank" rel="noopener noreferrer">
                                 <span class="footer-social-icon">💼</span>
                                 <span class="sr-only">LinkedIn</span>
                             </a>
-                            <a href="mailto:rafael.passos.domingues@gmail.com" class="footer-social-link">
+                            <a href="mailto:rafaelpassosdomingues@gmail.com" class="footer-social-link">
                                 <span class="footer-social-icon">✉️</span>
                                 <span class="sr-only">Email</span>
                             </a>
@@ -165,7 +182,7 @@
                 
                 <div class="footer-bottom">
                     <p class="footer-text">
-                        &copy; 2025 Rafael Passos Domingues. All rights reserved.
+                        &copy; 2025 Rafael Passos Domingues.
                     </p>
                 </div>
             </div>
