@@ -1,193 +1,95 @@
-/**
- * @file MainController.js
- * @brief Main application controller
- * @description Orchestrates views and models for the main content
- */
-
-import eventBus from '../core/EventBus.js';
+import { HeroView } from '../views/HeroView.js';
+import { FooterView } from '../views/FooterView.js';
 import { ViewManager } from '../views/ViewManager.js';
 
 /**
- * @class MainController
- * @brief Coordinates main content rendering and section management
+ * @brief Main application controller.
+ * @description Orchestrates the main views (Hero, Footer, Sections) and UI controls.
  */
-class MainController {
-    /**
-     * @brief Constructs MainController instance
-     * @param {Object} dependencies - Controller dependencies
-     * @param {Object} dependencies.eventBus - Event bus instance
-     * @param {Object} dependencies.contentModel - Content model instance
-     * @param {Object} dependencies.services - Service dependencies
-     */
-    constructor(dependencies = {}) {
-        this.eventBus = dependencies.eventBus || eventBus;
-        this.contentModel = dependencies.contentModel;
-        this.services = dependencies.services || {};
-        
-        this.viewManager = null;
-        this.isInitialized = false;
+export class MainController {
+    constructor(dependencies) {
+        this.eventBus = dependencies.eventBus;
+        this.contentModel = dependencies.services.contentModel;
+        this.themeManager = dependencies.services.themeManager;
+        this.accessibilityManager = dependencies.services.accessibilityManager;
 
-        this.onContentLoaded = this.onContentLoaded.bind(this);
-        this.onSectionActivated = this.onSectionActivated.bind(this);
+        // Instantiate all the views this controller manages
+        this.heroView = new HeroView({ container: document.getElementById('hero-section') });
+        this.footerView = new FooterView({ container: document.getElementById('main-footer') });
+        this.viewManager = new ViewManager({ container: document.getElementById('sections-container') });
     }
 
-    /**
-     * @brief Initialize main controller
-     * @async
-     * @returns {Promise<void>}
-     */
     async init() {
-        if (this.isInitialized) {
-            console.warn('MainController: Already initialized');
-            return;
-        }
-
-        try {
-            const sectionsContainer = document.getElementById('sections-container');
-            if (!sectionsContainer) {
-                throw new Error('MainController: sections-container element not found');
-            }
-
-            this.viewManager = new ViewManager({
-                container: sectionsContainer,
-                eventBus: this.eventBus
-            });
-
-            this.setupEventListeners();
-
-            if (this.contentModel && !this.contentModel.isInitialized) {
-                await this.contentModel.initializeContentModel();
-            }
-
-            await this.renderAllSections();
-
-            this.isInitialized = true;
-            console.info('MainController: Initialized successfully');
-
-        } catch (error) {
-            console.error('MainController: Initialization failed', error);
-            this.eventBus.publish('app:error', error);
-        }
+        this.renderAllViews();
+        this.setupUIControls();
+        this.hideLoadingOverlay();
     }
 
     /**
-     * @brief Set up event listeners
+     * @brief Renders all views managed by this controller.
      */
-    setupEventListeners() {
-        this.eventBus.subscribe('content:loaded', this.onContentLoaded);
-        this.eventBus.subscribe('section:activated', this.onSectionActivated);
-        this.eventBus.subscribe('ui:loading:hide', this.hideLoadingOverlay.bind(this));
-    }
-
-    /**
-     * @brief Handle content loaded event
-     * @param {Object} data - Event data
-     */
-    onContentLoaded(data) {
-        this.renderAllSections();
-    }
-
-    /**
-     * @brief Handle section activation
-     * @param {Object} data - Section data
-     */
-    onSectionActivated(data) {
-        this.highlightActiveSection(data.sectionId);
-    }
-
-    /**
-     * @brief Render all sections
-     * @async
-     * @returns {Promise<void>}
-     */
-    async renderAllSections() {
-        if (!this.viewManager || !this.contentModel) {
-            console.warn('MainController: ViewManager or ContentModel not available');
-            return;
-        }
-
-        try {
-            const sections = this.contentModel.getAllSections();
-            
-            this.viewManager.container.innerHTML = '';
-            
-            sections.forEach(section => {
-                if (section.metadata.visible) {
-                    this.viewManager.renderSection(section);
-                }
-            });
-
-            this.eventBus.publish('maincontroller:sections:rendered', { sections });
-            console.info(`MainController: Rendered ${sections.length} sections`);
-
-        } catch (error) {
-            console.error('MainController: Error rendering sections', error);
-            this.eventBus.publish('render:error', error);
-        }
-    }
-
-    /**
-     * @brief Highlight active section in view
-     * @param {string} sectionId - ID of active section
-     */
-    highlightActiveSection(sectionId) {
-        document.querySelectorAll('.section').forEach(section => {
-            section.classList.remove('section--active');
+    renderAllViews() {
+        // Render hero and footer with data from the model
+        const userData = this.contentModel.getUserData();
+        this.heroView.render({
+            title: userData.name,
+            subtitle: userData.title,
+            description: 'Researcher in Astrophysics, Data Science and Technology Innovation. Combining scientific rigor with computational expertise to solve complex problems and drive innovation.',
+            cta: [
+                { label: 'View Research', url: '#about', type: 'primary' },
+                { label: 'Contact Me', url: '#contact', type: 'secondary' }
+            ]
         });
+        this.footerView.render({ name: userData.name });
 
-        const activeSection = document.getElementById(sectionId);
-        if (activeSection) {
-            activeSection.classList.add('section--active');
-        }
+        // Render all dynamic sections using ViewManager
+        const sections = this.contentModel.getAllSections();
+        this.viewManager.renderAll(sections);
     }
 
     /**
-     * @brief Hide loading overlay
+     * @brief Sets up the floating UI controls for theme and accessibility.
+     */
+    setupUIControls() {
+        const container = document.getElementById('app-controls');
+        if (!container) return;
+        container.innerHTML = ''; // Clear existing
+
+        const themeBtn = this.createControlButton(
+            this.themeManager.isDarkMode() ? '🌙' : '☀️',
+            'Toggle Theme',
+            () => {
+                this.themeManager.toggleTheme();
+                themeBtn.textContent = this.themeManager.isDarkMode() ? '🌙' : '☀️';
+            }
+        );
+
+        const increaseFontBtn = this.createControlButton('A+', 'Increase Font Size', () => this.accessibilityManager.increaseFontSize());
+        const decreaseFontBtn = this.createControlButton('A-', 'Decrease Font Size', () => this.accessibilityManager.decreaseFontSize());
+
+        container.append(themeBtn, increaseFontBtn, decreaseFontBtn);
+    }
+    
+    createControlButton(text, ariaLabel, onClick) {
+        const button = document.createElement('button');
+        button.className = 'app-control-button';
+        button.setAttribute('aria-label', ariaLabel);
+        button.textContent = text;
+        button.addEventListener('click', onClick);
+        return button;
+    }
+
+    /**
+     * @brief Hides the initial loading screen to show the main content.
      */
     hideLoadingOverlay() {
         const overlay = document.getElementById('loading-overlay');
+        const mainContainer = document.getElementById('main-container');
         if (overlay) {
-            overlay.style.opacity = '0';
-            setTimeout(() => {
-                overlay.style.display = 'none';
-            }, 500);
+            overlay.classList.add('critical-hidden');
         }
-    }
-
-    /**
-     * @brief Get section by ID
-     * @param {string} sectionId - Section identifier
-     * @returns {Object|null} Section data
-     */
-    getSection(sectionId) {
-        return this.contentModel ? this.contentModel.getSection(sectionId) : null;
-    }
-
-    /**
-     * @brief Update section content
-     * @param {string} sectionId - Section identifier
-     * @param {Object} newContent - New content data
-     */
-    updateSection(sectionId, newContent) {
-        if (this.contentModel) {
-            this.contentModel.updateSection(sectionId, newContent);
-            this.eventBus.publish('section:updated', { sectionId, newContent });
+        if (mainContainer) {
+            mainContainer.classList.remove('critical-hidden');
         }
-    }
-
-    /**
-     * @brief Destroy controller and clean up
-     */
-    destroy() {
-        this.eventBus.unsubscribe('content:loaded', this.onContentLoaded);
-        this.eventBus.unsubscribe('section:activated', this.onSectionActivated);
-        this.eventBus.unsubscribe('ui:loading:hide', this.hideLoadingOverlay);
-        
-        this.viewManager = null;
-        this.isInitialized = false;
-        
-        console.info('MainController: Destroyed');
     }
 }
-
-export { MainController };

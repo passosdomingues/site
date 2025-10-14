@@ -1,35 +1,42 @@
-/**
- * @file ContentModel.js
- * @brief Model responsible for managing the website's portfolio content.
- */
-
 import { PORTFOLIO_DATA } from '../data/PortfolioData.js';
 
-class ContentModel {
+/**
+ * @brief Manages the portfolio's content.
+ */
+export class ContentModel {
     constructor() {
         this.sections = [];
+        this.user = {};
         this.isInitialized = false;
     }
 
-    async initializeContentModel() {
+    /**
+     * @brief Initializes the content model by loading data.
+     */
+    async init() {
+        if (this.isInitialized) return;
         try {
-            // Use os dados do PORTFOLIO_DATA diretamente
             this.sections = PORTFOLIO_DATA.sections || [];
+            this.user = PORTFOLIO_DATA.user || {};
             this.isInitialized = true;
-            console.info('ContentModel: Content model initialized successfully');
+            console.info('ContentModel: Content loaded successfully.');
         } catch (error) {
-            console.error('ContentModel: Initialization failed:', error);
+            console.error('ContentModel: Failed to load content data.', error);
             throw error;
         }
+    }
+
+    getUserData() {
+        return this.user;
     }
 
     getAllSections() {
         return [...this.sections].sort((a, b) => a.metadata.order - b.metadata.order);
     }
-
-    getSection(sectionId) {
-        return this.sections.find(section => section.id === sectionId);
+    
+    getNavigationLinks() {
+        return this.getAllSections()
+            .filter(s => s.metadata.visibleInNav !== false)
+            .map(s => ({ id: s.id, title: s.title }));
     }
 }
-
-export { ContentModel };
