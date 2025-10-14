@@ -347,4 +347,4 @@ class AccessibilityManager {
     }
 }
 
-export default AccessibilityManager;
+export { AccessibilityManager };
