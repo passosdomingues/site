@@ -1,9 +1,9 @@
 /* styles.css - Main CSS file that imports all modules */
-@import './css/variables.css';
-@import './css/base.css';
-@import './css/layout.css';
-@import './css/components.css';
-@import './css/utilities.css';
-@import './css/dark.css';
-@import './css/light.css';
-@import './css/critical.css';
+@import './variables.css';
+@import './base.css';
+@import './layout.css';
+@import './components.css';
+@import './utilities.css';
+@import './dark.css';
+@import './light.css';
+@import './critical.css';
