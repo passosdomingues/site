@@ -52,7 +52,6 @@ class Application {
      * @brief Creates and manages the UI controls for theme and accessibility.
      * @description This method dynamically injects control buttons into the page,
      * providing theme switching, font size adjustment, and high contrast mode.
-     * All controls are properly accessible and coordinate between services.
      */
     setupUIControls() {
         const controlsContainer = document.createElement('div');
@@ -66,7 +65,6 @@ class Application {
         themeToggleBtn.className = 'btn btn--icon app-control-button theme-toggle-btn';
         themeToggleBtn.setAttribute('aria-label', 'Toggle light and dark theme');
         themeToggleBtn.setAttribute('aria-pressed', themeManager.isDarkMode());
-        themeToggleBtn.setAttribute('title', 'Switch between light and dark mode');
         
         const updateThemeIcon = () => {
             // Use emojis for better compatibility without external dependencies
@@ -79,39 +77,25 @@ class Application {
         themeToggleBtn.addEventListener('click', () => {
             themeManager.toggleTheme();
             updateThemeIcon();
-            // Announce theme change for screen readers
-            this.app.services.accessibilityManager.announceContent(
-                `Switched to ${themeManager.isDarkMode() ? 'dark' : 'light'} mode`
-            );
         });
         
         controlsContainer.appendChild(themeToggleBtn);
-        updateThemeIcon(); // Set initial icon
+        updateThemeIcon();
 
-        // --- Accessibility Controls Container ---
+        // --- Accessibility Controls ---
         const accessibilityManager = this.app.services.accessibilityManager;
-        const accessibilityControls = document.createElement('div');
-        accessibilityControls.className = 'accessibility-controls';
-        accessibilityControls.setAttribute('aria-label', 'Accessibility controls');
-
-        // Font Size Controls
+        
+        // Font Size Controls Container
         const fontControls = document.createElement('div');
         fontControls.className = 'font-controls';
-        fontControls.setAttribute('aria-label', 'Font size controls');
 
         // Decrease Font Button
         const decreaseFontBtn = document.createElement('button');
         decreaseFontBtn.className = 'btn btn--icon app-control-button font-decrease-btn';
         decreaseFontBtn.setAttribute('aria-label', 'Decrease font size');
-        decreaseFontBtn.setAttribute('title', 'Decrease text size (Ctrl + -)');
         decreaseFontBtn.innerHTML = 'A-';
         decreaseFontBtn.addEventListener('click', () => {
             accessibilityManager.decreaseFontSize();
-            // Provide feedback on current font scale
-            const status = accessibilityManager.getAccessibilityStatus();
-            this.app.services.accessibilityManager.announceContent(
-                `Font size decreased to ${Math.round(status.fontSizeScale * 100)}%`
-            );
         });
         fontControls.appendChild(decreaseFontBtn);
 
@@ -119,15 +103,9 @@ class Application {
         const increaseFontBtn = document.createElement('button');
         increaseFontBtn.className = 'btn btn--icon app-control-button font-increase-btn';
         increaseFontBtn.setAttribute('aria-label', 'Increase font size');
-        increaseFontBtn.setAttribute('title', 'Increase text size (Ctrl + +)');
         increaseFontBtn.innerHTML = 'A+';
         increaseFontBtn.addEventListener('click', () => {
             accessibilityManager.increaseFontSize();
-            // Provide feedback on current font scale
-            const status = accessibilityManager.getAccessibilityStatus();
-            this.app.services.accessibilityManager.announceContent(
-                `Font size increased to ${Math.round(status.fontSizeScale * 100)}%`
-            );
         });
         fontControls.appendChild(increaseFontBtn);
 
@@ -135,54 +113,44 @@ class Application {
         const resetFontBtn = document.createElement('button');
         resetFontBtn.className = 'btn btn--icon app-control-button font-reset-btn';
         resetFontBtn.setAttribute('aria-label', 'Reset font size to default');
-        resetFontBtn.setAttribute('title', 'Reset text size to default (Ctrl + 0)');
         resetFontBtn.innerHTML = 'A↺';
         resetFontBtn.addEventListener('click', () => {
             accessibilityManager.resetFontSize();
-            this.app.services.accessibilityManager.announceContent('Font size reset to default');
         });
         fontControls.appendChild(resetFontBtn);
-
-        accessibilityControls.appendChild(fontControls);
 
         // High Contrast Toggle Button
         const highContrastBtn = document.createElement('button');
         highContrastBtn.className = 'btn btn--icon app-control-button high-contrast-btn';
         highContrastBtn.setAttribute('aria-label', 'Toggle high contrast mode');
         highContrastBtn.setAttribute('aria-pressed', 'false');
-        highContrastBtn.setAttribute('title', 'Toggle high contrast mode for better visibility');
         highContrastBtn.innerHTML = '⚫';
         
-        // Update high contrast button state based on current preferences
+        // Update high contrast button state
         const updateHighContrastState = () => {
             const status = accessibilityManager.getAccessibilityStatus();
             const isActive = status.isHighContrast;
             highContrastBtn.setAttribute('aria-pressed', isActive.toString());
             highContrastBtn.setAttribute('aria-label', 
                 isActive ? 'Disable high contrast mode' : 'Enable high contrast mode');
-            // Optional: Change icon based on state
             highContrastBtn.innerHTML = isActive ? '⚪' : '⚫';
-            highContrastBtn.style.border = isActive ? '2px solid #ff0000' : '';
         };
         
         highContrastBtn.addEventListener('click', () => {
             accessibilityManager.toggleHighContrast();
             updateHighContrastState();
-            // Announce state change
-            const status = accessibilityManager.getAccessibilityStatus();
-            this.app.services.accessibilityManager.announceContent(
-                `High contrast mode ${status.isHighContrast ? 'enabled' : 'disabled'}`
-            );
         });
         
+        // Create accessibility controls container
+        const accessibilityControls = document.createElement('div');
+        accessibilityControls.className = 'accessibility-controls';
+        accessibilityControls.appendChild(fontControls);
         accessibilityControls.appendChild(highContrastBtn);
+
         controlsContainer.appendChild(accessibilityControls);
 
-        // --- Keyboard Shortcuts ---
-        this.setupKeyboardShortcuts();
-
-        // --- Initialize States ---
-        updateHighContrastState(); // Set initial high contrast state
+        // Initialize high contrast state
+        updateHighContrastState();
 
         console.info('Application: UI Controls initialized successfully.');
     }
