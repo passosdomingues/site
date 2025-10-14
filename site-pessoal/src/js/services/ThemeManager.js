@@ -239,4 +239,48 @@ export class ThemeManager {
         this.isInitialized = false;
         console.info('ThemeManager: Cleaned up successfully');
     }
+
+    /**
+     * @brief Toggle between light and dark themes
+     */
+    toggleTheme() {
+        console.log('ThemeManager: toggleTheme called, current theme:', this.currentTheme);
+        const newTheme = this.currentTheme === 'light' ? 'dark' : 'light';
+        console.log('ThemeManager: switching to theme:', newTheme);
+        this.setTheme(newTheme);
+    }
+
+    /**
+     * @brief Set and apply application theme
+     * @param {string} theme - Theme name ('light' or 'dark')
+     * @param {boolean} savePreference - Whether to save to localStorage
+     */
+    setTheme(theme, savePreference = true) {
+        console.log('ThemeManager: setTheme called with:', theme);
+        
+        if (theme !== 'light' && theme !== 'dark') {
+            console.warn('ThemeManager: Invalid theme:', theme);
+            return;
+        }
+
+        this.currentTheme = theme;
+        console.log('ThemeManager: applying theme to document');
+        this.applyTheme(theme);
+
+        if (savePreference) {
+            console.log('ThemeManager: saving theme preference');
+            localStorage.setItem('app-theme', theme);
+        }
+
+        // Notify other components about theme change
+        if (this.eventBus) {
+            console.log('ThemeManager: publishing theme change event');
+            this.eventBus.publish('theme:changed', { 
+                theme: this.currentTheme,
+                isDarkMode: this.isDarkMode()
+            });
+        }
+
+        console.info('ThemeManager: Theme changed to:', this.currentTheme);
+    }
 }

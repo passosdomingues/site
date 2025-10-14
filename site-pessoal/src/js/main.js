@@ -40,8 +40,12 @@ class Application {
             await this.app.initialize();
             console.info('Application: All components initialized successfully.');
 
+            // Wait a bit for services to be fully ready
+            await new Promise(resolve => setTimeout(resolve, 100));
+            
             // After the app is ready, set up the UI controls
             this.setupUIControls();
+            this.setupKeyboardShortcuts();
 
         } catch (error) {
             console.error('Application: Critical initialization failed.', error);
@@ -54,6 +58,12 @@ class Application {
      * providing theme switching, font size adjustment, and high contrast mode.
      */
     setupUIControls() {
+        // Check if services are available
+        if (!this.app?.services?.themeManager || !this.app?.services?.accessibilityManager) {
+            console.error('Application: Services not available for UI controls');
+            return;
+        }
+
         const controlsContainer = document.createElement('div');
         controlsContainer.className = 'app-controls';
         controlsContainer.setAttribute('aria-label', 'Application controls');
@@ -75,6 +85,7 @@ class Application {
         };
         
         themeToggleBtn.addEventListener('click', () => {
+            console.log('Theme toggle clicked');
             themeManager.toggleTheme();
             updateThemeIcon();
         });
@@ -82,10 +93,22 @@ class Application {
         controlsContainer.appendChild(themeToggleBtn);
         updateThemeIcon();
 
-        // --- Accessibility Controls ---
+        // --- Accessibility Menu (Hamburger Style) ---
         const accessibilityManager = this.app.services.accessibilityManager;
         
-        // Font Size Controls Container
+        // Create hamburger menu button
+        const menuToggleBtn = document.createElement('button');
+        menuToggleBtn.className = 'btn btn--icon app-control-button menu-toggle-btn';
+        menuToggleBtn.setAttribute('aria-label', 'Open accessibility menu');
+        menuToggleBtn.setAttribute('aria-expanded', 'false');
+        menuToggleBtn.innerHTML = '♿';
+        
+        // Create accessibility menu container (initially hidden)
+        const accessibilityMenu = document.createElement('div');
+        accessibilityMenu.className = 'accessibility-menu';
+        accessibilityMenu.setAttribute('aria-hidden', 'true');
+        
+        // Font Size Controls
         const fontControls = document.createElement('div');
         fontControls.className = 'font-controls';
 
@@ -95,6 +118,7 @@ class Application {
         decreaseFontBtn.setAttribute('aria-label', 'Decrease font size');
         decreaseFontBtn.innerHTML = 'A-';
         decreaseFontBtn.addEventListener('click', () => {
+            console.log('Decrease font clicked');
             accessibilityManager.decreaseFontSize();
         });
         fontControls.appendChild(decreaseFontBtn);
@@ -105,6 +129,7 @@ class Application {
         increaseFontBtn.setAttribute('aria-label', 'Increase font size');
         increaseFontBtn.innerHTML = 'A+';
         increaseFontBtn.addEventListener('click', () => {
+            console.log('Increase font clicked');
             accessibilityManager.increaseFontSize();
         });
         fontControls.appendChild(increaseFontBtn);
@@ -115,6 +140,7 @@ class Application {
         resetFontBtn.setAttribute('aria-label', 'Reset font size to default');
         resetFontBtn.innerHTML = 'A↺';
         resetFontBtn.addEventListener('click', () => {
+            console.log('Reset font clicked');
             accessibilityManager.resetFontSize();
         });
         fontControls.appendChild(resetFontBtn);
@@ -137,17 +163,39 @@ class Application {
         };
         
         highContrastBtn.addEventListener('click', () => {
+            console.log('High contrast toggle clicked');
             accessibilityManager.toggleHighContrast();
             updateHighContrastState();
         });
-        
-        // Create accessibility controls container
-        const accessibilityControls = document.createElement('div');
-        accessibilityControls.className = 'accessibility-controls';
-        accessibilityControls.appendChild(fontControls);
-        accessibilityControls.appendChild(highContrastBtn);
 
-        controlsContainer.appendChild(accessibilityControls);
+        // Add all controls to menu
+        accessibilityMenu.appendChild(fontControls);
+        accessibilityMenu.appendChild(highContrastBtn);
+
+        // Toggle menu visibility
+        menuToggleBtn.addEventListener('click', () => {
+            const isExpanded = menuToggleBtn.getAttribute('aria-expanded') === 'true';
+            const newState = !isExpanded;
+            
+            menuToggleBtn.setAttribute('aria-expanded', newState.toString());
+            accessibilityMenu.setAttribute('aria-hidden', (!newState).toString());
+            controlsContainer.classList.toggle('menu-open', newState);
+            
+            console.log('Menu toggled:', newState);
+        });
+
+        // Add menu toggle and menu to controls container
+        controlsContainer.appendChild(menuToggleBtn);
+        controlsContainer.appendChild(accessibilityMenu);
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (event) => {
+            if (!controlsContainer.contains(event.target)) {
+                menuToggleBtn.setAttribute('aria-expanded', 'false');
+                accessibilityMenu.setAttribute('aria-hidden', 'true');
+                controlsContainer.classList.remove('menu-open');
+            }
+        });
 
         // Initialize high contrast state
         updateHighContrastState();
@@ -164,7 +212,7 @@ class Application {
 
         document.addEventListener('keydown', (event) => {
             // Skip if user is typing in input fields
-            if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') {
+            if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA' || event.target.isContentEditable) {
                 return;
             }
 
@@ -172,9 +220,11 @@ class Application {
             if ((event.ctrlKey || event.metaKey) && event.key === 't') {
                 event.preventDefault();
                 themeManager.toggleTheme();
-                accessibilityManager.announceContent(
-                    `Theme switched to ${themeManager.isDarkMode() ? 'dark' : 'light'} mode`
-                );
+                if (accessibilityManager.announceContent) {
+                    accessibilityManager.announceContent(
+                        `Theme switched to ${themeManager.isDarkMode() ? 'dark' : 'light'} mode`
+                    );
+                }
             }
 
             // Ctrl/Cmd + Plus - Increase font size
@@ -193,20 +243,42 @@ class Application {
             if ((event.ctrlKey || event.metaKey) && event.key === '0') {
                 event.preventDefault();
                 accessibilityManager.resetFontSize();
-                accessibilityManager.announceContent('Font size reset to default');
+                if (accessibilityManager.announceContent) {
+                    accessibilityManager.announceContent('Font size reset to default');
+                }
             }
 
             // Ctrl/Cmd + H - Toggle high contrast
             if ((event.ctrlKey || event.metaKey) && event.key === 'h') {
                 event.preventDefault();
                 accessibilityManager.toggleHighContrast();
-                const status = accessibilityManager.getAccessibilityStatus();
-                accessibilityManager.announceContent(
-                    `High contrast mode ${status.isHighContrast ? 'enabled' : 'disabled'}`
-                );
+                if (accessibilityManager.announceContent) {
+                    const status = accessibilityManager.getAccessibilityStatus();
+                    accessibilityManager.announceContent(
+                        `High contrast mode ${status.isHighContrast ? 'enabled' : 'disabled'}`
+                    );
+                }
+            }
+
+            // Escape - Close accessibility menu
+            if (event.key === 'Escape') {
+                const menuToggle = document.querySelector('.menu-toggle-btn');
+                const menu = document.querySelector('.accessibility-menu');
+                const controls = document.querySelector('.app-controls');
+                
+                if (menu && menu.getAttribute('aria-hidden') === 'false') {
+                    menuToggle.setAttribute('aria-expanded', 'false');
+                    menu.setAttribute('aria-hidden', 'true');
+                    controls.classList.remove('menu-open');
+                }
             }
         });
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => new Application());
+// Wait for DOM to be fully ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => new Application());
+} else {
+    new Application();
+}
