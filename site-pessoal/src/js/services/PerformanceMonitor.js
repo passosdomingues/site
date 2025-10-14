@@ -1,307 +1,362 @@
-import eventBus from '../core/EventBus.js';
-
 /**
- * @brief Performance monitoring service
- * @description Tracks application performance metrics and user interactions
+ * @file PerformanceMonitor.js
+ * @brief Comprehensive application performance monitoring and metrics tracking
+ * @description Monitors performance metrics, memory usage, and provides optimization insights
  */
-export class PerformanceMonitor {
-    constructor(dependencies = {}) {
-        this.eventBus = dependencies.eventBus || eventBus;
-        this.metrics = new Map();
-        this.isInitialized = false;
-        
-        this.onFirstContentfulPaint = this.onFirstContentfulPaint.bind(this);
-        this.onLargestContentfulPaint = this.onLargestContentfulPaint.bind(this);
+
+class PerformanceMonitor {
+    /**
+     * @brief Creates a new PerformanceMonitor instance
+     * @constructor
+     * @param {Object} configuration - Performance monitoring configuration
+     */
+    constructor(configuration = {}) {
+        /**
+         * @private
+         * @type {Object}
+         * @description Performance metrics storage
+         */
+        this.metrics = {
+            cpuUsage: [],
+            memoryUsage: [],
+            domNodes: [],
+            eventListeners: [],
+            layoutCount: 0,
+            styleRecalculations: 0,
+            ...configuration.initialMetrics
+        };
+
+        /**
+         * @private
+         * @type {number|null}
+         * @description Monitoring interval reference
+         */
+        this.monitoringInterval = null;
+
+        /**
+         * @private
+         * @type {boolean}
+         * @description Tracks monitoring status
+         */
+        this.isMonitoring = false;
+
+        /**
+         * @private
+         * @type {number}
+         * @description Monitoring interval in milliseconds
+         */
+        this.monitoringFrequency = configuration.frequency || 5000;
+
+        /**
+         * @private
+         * @type {PerformanceObserver|null}
+         * @description Performance observer for long tasks
+         */
+        this.longTaskObserver = null;
+
+        this.startMonitoring = this.startMonitoring.bind(this);
+        this.collectPerformanceMetrics = this.collectPerformanceMetrics.bind(this);
     }
 
     /**
-     * @brief Initialize performance monitor
-     * @description Sets up performance observers and metrics tracking
+     * @brief Starts performance monitoring
+     * @method startMonitoring
+     * @returns {Promise<void>}
      */
-    async init() {
-        if (this.isInitialized) return;
+    async startMonitoring() {
+        if (this.isMonitoring) {
+            console.warn('Performance monitoring is already active');
+            return;
+        }
 
         try {
+            // Set up performance observers
             this.setupPerformanceObservers();
-            this.setupEventListeners();
-            this.trackInitialLoad();
             
-            this.isInitialized = true;
-            console.info('PerformanceMonitor: Initialized successfully');
+            // Start periodic metrics collection
+            this.monitoringInterval = setInterval(() => {
+                this.collectPerformanceMetrics();
+            }, this.monitoringFrequency);
             
+            // Collect initial metrics
+            await this.collectPerformanceMetrics();
+            
+            this.isMonitoring = true;
+            console.info('Performance monitoring started successfully');
         } catch (error) {
-            console.error('PerformanceMonitor: Initialization failed', error);
+            console.error('Failed to start performance monitoring:', error);
         }
     }
 
     /**
-     * @brief Set up performance observers
+     * @brief Sets up PerformanceObserver instances for specific metrics
+     * @method setupPerformanceObservers
+     * @private
      */
     setupPerformanceObservers() {
-        // Observe Largest Contentful Paint
+        // Observe long tasks (tasks longer than 50ms)
         if ('PerformanceObserver' in window) {
             try {
-                // LCP Observer
-                const lcpObserver = new PerformanceObserver((entryList) => {
-                    const entries = entryList.getEntries();
-                    const lastEntry = entries[entries.length - 1];
-                    this.metrics.set('lcp', lastEntry.startTime);
-                    this.onLargestContentfulPaint(lastEntry);
-                });
-                lcpObserver.observe({ type: 'largest-contentful-paint', buffered: true });
-
-                // FID Observer
-                const fidObserver = new PerformanceObserver((entryList) => {
-                    const entries = entryList.getEntries();
-                    entries.forEach(entry => {
-                        this.metrics.set('fid', entry.processingStart - entry.startTime);
-                        this.eventBus.publish('performance:metric', {
-                            name: 'fid',
-                            value: entry.processingStart - entry.startTime,
-                            entry
-                        });
+                this.longTaskObserver = new PerformanceObserver((list) => {
+                    list.getEntries().forEach((entry) => {
+                        console.warn('Long task detected:', entry);
+                        this.reportPerformanceIssue('long_task', entry);
                     });
                 });
-                fidObserver.observe({ type: 'first-input', buffered: true });
-
-                // CLS Observer
-                const clsObserver = new PerformanceObserver((entryList) => {
-                    let clsValue = 0;
-                    const entries = entryList.getEntries();
-                    entries.forEach(entry => {
-                        if (!entry.hadRecentInput) {
-                            clsValue += entry.value;
-                        }
-                    });
-                    this.metrics.set('cls', clsValue);
-                    this.eventBus.publish('performance:metric', {
-                        name: 'cls',
-                        value: clsValue
-                    });
-                });
-                clsObserver.observe({ type: 'layout-shift', buffered: true });
-
-            } catch (error) {
-                console.warn('PerformanceMonitor: Performance Observer not supported', error);
-            }
-        }
-    }
-
-    /**
-     * @brief Set up event listeners
-     */
-    setupEventListeners() {
-        // Track navigation performance
-        this.eventBus.subscribe('router:navigated', this.onNavigation.bind(this));
-        
-        // Track resource loading
-        this.eventBus.subscribe('view:section:rendered', this.onSectionRendered.bind(this));
-        
-        // Track user interactions
-        document.addEventListener('click', this.onUserInteraction.bind(this));
-    }
-
-    /**
-     * @brief Track initial page load performance
-     */
-    trackInitialLoad() {
-        if (window.performance) {
-            const navigationTiming = performance.getEntriesByType('navigation')[0];
-            if (navigationTiming) {
-                this.metrics.set('loadTime', navigationTiming.loadEventEnd - navigationTiming.navigationStart);
-                this.metrics.set('domContentLoaded', navigationTiming.domContentLoadedEventEnd - navigationTiming.navigationStart);
                 
-                this.eventBus.publish('performance:load', {
-                    loadTime: this.metrics.get('loadTime'),
-                    domContentLoaded: this.metrics.get('domContentLoaded'),
-                    timing: navigationTiming
-                });
+                this.longTaskObserver.observe({ entryTypes: ['longtask'] });
+            } catch (error) {
+                console.warn('Long task observation not supported:', error);
             }
+        }
+    }
 
-            // First Contentful Paint
-            const paintEntries = performance.getEntriesByType('paint');
-            paintEntries.forEach(entry => {
-                if (entry.name === 'first-contentful-paint') {
-                    this.metrics.set('fcp', entry.startTime);
-                    this.onFirstContentfulPaint(entry);
+    /**
+     * @brief Collects comprehensive performance metrics
+     * @method collectPerformanceMetrics
+     * @returns {Promise<void>}
+     * @private
+     */
+    async collectPerformanceMetrics() {
+        const currentMetrics = await this.gatherCurrentMetrics();
+        
+        // Store metrics with timestamp
+        const timestampedMetrics = {
+            ...currentMetrics,
+            timestamp: Date.now()
+        };
+        
+        // Update metrics storage
+        Object.keys(this.metrics).forEach(metric => {
+            if (Array.isArray(this.metrics[metric])) {
+                this.metrics[metric].push(timestampedMetrics[metric]);
+                
+                // Keep only last 100 data points
+                if (this.metrics[metric].length > 100) {
+                    this.metrics[metric].shift();
                 }
-            });
-        }
-    }
-
-    /**
-     * @brief Handle First Contentful Paint
-     * @param {PerformanceEntry} entry - Performance entry
-     */
-    onFirstContentfulPaint(entry) {
-        this.eventBus.publish('performance:metric', {
-            name: 'fcp',
-            value: entry.startTime,
-            entry
+            } else {
+                this.metrics[metric] = timestampedMetrics[metric];
+            }
         });
         
-        console.info(`PerformanceMonitor: First Contentful Paint at ${entry.startTime}ms`);
+        // Check for performance issues
+        this.analyzePerformanceMetrics(timestampedMetrics);
     }
 
     /**
-     * @brief Handle Largest Contentful Paint
-     * @param {PerformanceEntry} entry - Performance entry
+     * @brief Gathers current performance metrics from browser APIs
+     * @method gatherCurrentMetrics
+     * @returns {Promise<Object>} Current performance metrics
+     * @private
      */
-    onLargestContentfulPaint(entry) {
-        this.eventBus.publish('performance:metric', {
-            name: 'lcp',
-            value: entry.startTime,
-            entry
-        });
-        
-        console.info(`PerformanceMonitor: Largest Contentful Paint at ${entry.startTime}ms`);
-    }
+    async gatherCurrentMetrics() {
+        const metrics = {};
 
-    /**
-     * @brief Handle navigation events
-     * @param {Object} data - Navigation data
-     */
-    onNavigation(data) {
-        const navigationStart = performance.now();
-        this.metrics.set('lastNavigationStart', navigationStart);
-        
-        this.eventBus.publish('performance:navigation:start', {
-            from: data.from,
-            to: data.to,
-            timestamp: navigationStart
-        });
-    }
-
-    /**
-     * @brief Handle section rendering
-     * @param {Object} data - Section data
-     */
-    onSectionRendered(data) {
-        const renderTime = performance.now();
-        const navigationStart = this.metrics.get('lastNavigationStart');
-        
-        if (navigationStart) {
-            const navigationDuration = renderTime - navigationStart;
-            this.eventBus.publish('performance:navigation:complete', {
-                sectionId: data.sectionId,
-                duration: navigationDuration,
-                timestamp: renderTime
-            });
-        }
-    }
-
-    /**
-     * @brief Handle user interactions
-     * @param {Event} event - User interaction event
-     */
-    onUserInteraction(event) {
-        const interactionTime = performance.now();
-        
-        this.eventBus.publish('performance:interaction', {
-            type: event.type,
-            target: event.target.tagName,
-            timestamp: interactionTime
-        });
-    }
-
-    /**
-     * @brief Get performance metrics
-     * @returns {Object} Performance metrics object
-     */
-    getMetrics() {
-        return Object.fromEntries(this.metrics);
-    }
-
-    /**
-     * @brief Get specific metric value
-     * @param {string} metricName - Name of the metric
-     * @returns {number|undefined} Metric value
-     */
-    getMetric(metricName) {
-        return this.metrics.get(metricName);
-    }
-
-    /**
-     * @brief Measure function execution time
-     * @param {Function} fn - Function to measure
-     * @param {string} name - Measurement name
-     * @returns {Promise<{result: *, duration: number}>} Execution result and duration
-     */
-    async measureExecution(fn, name = 'anonymous') {
-        const startTime = performance.now();
-        const result = await fn();
-        const duration = performance.now() - startTime;
-        
-        this.eventBus.publish('performance:execution', {
-            name,
-            duration,
-            timestamp: startTime
-        });
-        
-        return { result, duration };
-    }
-
-    /**
-     * @brief Report performance data to analytics
-     * @param {Object} additionalData - Additional data to include
-     */
-    reportPerformance(additionalData = {}) {
-        const performanceData = {
-            ...this.getMetrics(),
-            ...additionalData,
-            userAgent: navigator.userAgent,
-            connection: navigator.connection ? {
-                effectiveType: navigator.connection.effectiveType,
-                downlink: navigator.connection.downlink,
-                rtt: navigator.connection.rtt
-            } : null
-        };
-        
-        this.eventBus.publish('performance:report', performanceData);
-        
-        // Could send to analytics service here
-        console.info('PerformanceMonitor: Performance report', performanceData);
-    }
-
-    /**
-     * @brief Check if performance meets thresholds
-     * @param {Object} thresholds - Performance thresholds
-     * @returns {Object} Threshold compliance results
-     */
-    checkThresholds(thresholds = {}) {
-        const defaultThresholds = {
-            fcp: 2000,    // 2 seconds
-            lcp: 2500,    // 2.5 seconds
-            fid: 100,     // 100ms
-            cls: 0.1      // 0.1
-        };
-        
-        const actualThresholds = { ...defaultThresholds, ...thresholds };
-        const results = {};
-        
-        for (const [metric, threshold] of Object.entries(actualThresholds)) {
-            const value = this.metrics.get(metric);
-            results[metric] = {
-                value,
-                threshold,
-                meets: value !== undefined ? value <= threshold : undefined
+        // Memory usage (if available)
+        if (performance.memory) {
+            metrics.memoryUsage = {
+                used: performance.memory.usedJSHeapSize,
+                total: performance.memory.totalJSHeapSize,
+                limit: performance.memory.jsHeapSizeLimit
             };
         }
+
+        // DOM metrics
+        metrics.domNodes = document.getElementsByTagName('*').length;
+        metrics.eventListeners = this.countEventListeners();
         
-        return results;
+        // Navigation timing
+        if (performance.timing) {
+            const timing = performance.timing;
+            metrics.loadTime = timing.loadEventEnd - timing.navigationStart;
+            metrics.domReadyTime = timing.domContentLoadedEventEnd - timing.navigationStart;
+        }
+
+        // Resource timing
+        metrics.resourceCount = performance.getEntriesByType('resource').length;
+
+        return metrics;
     }
 
     /**
-     * @brief Destroy performance monitor
+     * @brief Estimates current event listener count
+     * @method countEventListeners
+     * @returns {number} Estimated event listener count
+     * @private
+     */
+    countEventListeners() {
+        let count = 0;
+        const elements = document.getElementsByTagName('*');
+        
+        for (let element of elements) {
+            // This is an approximation since we can't directly access listener count
+            if (element._listeners) {
+                count += element._listeners;
+            }
+        }
+        
+        return count;
+    }
+
+    /**
+     * @brief Analyzes collected metrics for performance issues
+     * @method analyzePerformanceMetrics
+     * @param {Object} currentMetrics - Current performance metrics
+     * @private
+     */
+    analyzePerformanceMetrics(currentMetrics) {
+        // Check for memory leaks
+        if (this.detectMemoryLeak()) {
+            this.reportPerformanceIssue('memory_leak', currentMetrics);
+        }
+
+        // Check for excessive DOM size
+        if (currentMetrics.domNodes > 10000) {
+            this.reportPerformanceIssue('excessive_dom_nodes', currentMetrics);
+        }
+
+        // Check for long load times
+        if (currentMetrics.loadTime > 3000) {
+            this.reportPerformanceIssue('slow_load_time', currentMetrics);
+        }
+    }
+
+    /**
+     * @brief Detects potential memory leaks
+     * @method detectMemoryLeak
+     * @returns {boolean} True if memory leak detected
+     * @private
+     */
+    detectMemoryLeak() {
+        if (this.metrics.memoryUsage.length < 10) return false;
+
+        const recentMetrics = this.metrics.memoryUsage.slice(-5);
+        const increasingTrend = recentMetrics.every((metric, index) => {
+            if (index === 0) return true;
+            return metric.used > recentMetrics[index - 1].used;
+        });
+
+        return increasingTrend;
+    }
+
+    /**
+     * @brief Reports performance issues
+     * @method reportPerformanceIssue
+     * @param {string} issueType - Type of performance issue
+     * @param {Object} metrics - Related performance metrics
+     * @private
+     */
+    reportPerformanceIssue(issueType, metrics) {
+        const performanceEvent = new CustomEvent('performance:issue', {
+            detail: {
+                issueType,
+                metrics,
+                timestamp: Date.now(),
+                suggestions: this.getPerformanceSuggestions(issueType)
+            },
+            bubbles: true
+        });
+        
+        window.dispatchEvent(performanceEvent);
+        console.warn(`Performance issue detected: ${issueType}`, metrics);
+    }
+
+    /**
+     * @brief Gets performance improvement suggestions
+     * @method getPerformanceSuggestions
+     * @param {string} issueType - Type of performance issue
+     * @returns {Array<string>} Performance improvement suggestions
+     * @private
+     */
+    getPerformanceSuggestions(issueType) {
+        const suggestions = {
+            memory_leak: [
+                'Check for circular references',
+                'Remove unused event listeners',
+                'Clear intervals and timeouts',
+                'Use weak references where appropriate'
+            ],
+            excessive_dom_nodes: [
+                'Implement virtual scrolling for long lists',
+                'Use pagination or infinite scrolling',
+                'Remove hidden DOM elements',
+                'Implement code splitting'
+            ],
+            slow_load_time: [
+                'Optimize bundle size with tree shaking',
+                'Implement lazy loading',
+                'Use CDN for static assets',
+                'Enable compression'
+            ],
+            long_task: [
+                'Break up long-running JavaScript',
+                'Use web workers for heavy computation',
+                'Optimize expensive loops',
+                'Implement requestAnimationFrame for animations'
+            ]
+        };
+
+        return suggestions[issueType] || ['Investigate performance bottlenecks'];
+    }
+
+    /**
+     * @brief Gets current performance metrics
+     * @method getMetrics
+     * @returns {Object} Current performance metrics
+     */
+    getMetrics() {
+        return { ...this.metrics };
+    }
+
+    /**
+     * @brief Gets performance summary for reporting
+     * @method getPerformanceSummary
+     * @returns {Object} Performance summary
+     */
+    getPerformanceSummary() {
+        const latestMetrics = this.metrics.memoryUsage[this.metrics.memoryUsage.length - 1] || {};
+        
+        return {
+            domNodeCount: this.metrics.domNodes[this.metrics.domNodes.length - 1] || 0,
+            eventListenerCount: this.metrics.eventListeners[this.metrics.eventListeners.length - 1] || 0,
+            memoryUsage: latestMetrics.used || 0,
+            loadTime: this.metrics.loadTime || 0,
+            isHealthy: !this.detectMemoryLeak() && 
+                      (this.metrics.domNodes[this.metrics.domNodes.length - 1] || 0) < 5000
+        };
+    }
+
+    /**
+     * @brief Stops performance monitoring
+     * @method stopMonitoring
+     * @returns {void}
+     */
+    stopMonitoring() {
+        if (this.monitoringInterval) {
+            clearInterval(this.monitoringInterval);
+            this.monitoringInterval = null;
+        }
+
+        if (this.longTaskObserver) {
+            this.longTaskObserver.disconnect();
+            this.longTaskObserver = null;
+        }
+
+        this.isMonitoring = false;
+        console.info('Performance monitoring stopped');
+    }
+
+    /**
+     * @brief Cleans up performance monitor resources
+     * @method destroy
+     * @returns {void}
      */
     destroy() {
-        this.eventBus.clear('router:navigated');
-        this.eventBus.clear('view:section:rendered');
-        document.removeEventListener('click', this.onUserInteraction);
-        
-        this.metrics.clear();
-        this.isInitialized = false;
-        
-        console.info('PerformanceMonitor: Destroyed');
+        this.stopMonitoring();
+        this.metrics = {};
+        console.info('PerformanceMonitor destroyed successfully');
     }
 }
+
+export default PerformanceMonitor;

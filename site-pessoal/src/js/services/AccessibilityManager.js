@@ -1,211 +1,350 @@
-import eventBus from '../core/EventBus.js';
-
 /**
- * @brief Manages accessibility features for the application.
- * @description This includes font size adjustments, focus management for navigation,
- * and screen reader announcements.
+ * @file AccessibilityManager.js
+ * @brief Comprehensive accessibility enhancements and screen reader support
+ * @description Manages accessibility features, screen reader announcements, and keyboard navigation
  */
-export class AccessibilityManager {
-    /**
-     * @brief Constructs a new AccessibilityManager instance.
-     * @param {object} [dependencies={}] - The dependencies for the manager.
-     * @param {object} [dependencies.eventBus] - The event bus instance for communication.
-     */
-    constructor(dependencies = {}) {
-        this.eventBus = dependencies.eventBus || eventBus;
-        this.isInitialized = false;
-        this.currentFontSize = 100; // Represented as a percentage
-        this.minFontSize = 80;
-        this.maxFontSize = 150;
-        this.fontSizeStep = 10;
 
-        this.handleKeydown = this.handleKeydown.bind(this);
+class AccessibilityManager {
+    /**
+     * @brief Creates a new AccessibilityManager instance
+     * @constructor
+     * @param {Object} configuration - Accessibility configuration options
+     */
+    constructor(configuration = {}) {
+        /**
+         * @private
+         * @type {Object}
+         * @description Current accessibility settings state
+         */
+        this.settings = {
+            reducedMotion: false,
+            highContrast: false,
+            fontSizeMultiplier: 1.0,
+            screenReaderEnabled: false,
+            ...configuration.defaultSettings
+        };
+
+        /**
+         * @private
+         * @type {HTMLElement|null}
+         * @description Live region element for screen reader announcements
+         */
+        this.liveRegion = null;
+
+        /**
+         * @private
+         * @type {boolean}
+         * @description Tracks initialization status
+         */
+        this.isInitialized = false;
+
+        this.initialize = this.initialize.bind(this);
+        this.detectAccessibilityPreferences = this.detectAccessibilityPreferences.bind(this);
     }
 
     /**
-     * @brief Initializes the accessibility manager.
-     * @description Loads user preferences, sets up event listeners and focus management,
-     * and makes an initial announcement for screen readers.
+     * @brief Initializes accessibility manager and sets up observers
+     * @method initialize
+     * @returns {Promise<void>}
      */
-    async init() {
-        if (this.isInitialized) return;
+    async initialize() {
+        try {
+            // Create live region for screen reader announcements
+            this.createLiveRegion();
+            
+            // Detect user accessibility preferences
+            await this.detectAccessibilityPreferences();
+            
+            // Apply initial accessibility settings
+            this.applyAccessibilitySettings();
+            
+            // Set up event listeners for keyboard navigation
+            this.setupKeyboardNavigation();
+            
+            // Set up mutation observer for dynamic content
+            this.setupMutationObserver();
+            
+            this.isInitialized = true;
+            console.info('AccessibilityManager initialized successfully');
+        } catch (error) {
+            console.error('AccessibilityManager initialization failed:', error);
+        }
+    }
 
-        const savedFontSize = localStorage.getItem('app-font-size');
-        if (savedFontSize) {
-            this.currentFontSize = parseInt(savedFontSize, 10);
-            this.applyFontSize();
+    /**
+     * @brief Creates ARIA live region for screen reader announcements
+     * @method createLiveRegion
+     * @private
+     */
+    createLiveRegion() {
+        this.liveRegion = document.createElement('div');
+        this.liveRegion.setAttribute('aria-live', 'polite');
+        this.liveRegion.setAttribute('aria-atomic', 'true');
+        this.liveRegion.setAttribute('class', 'sr-only');
+        this.liveRegion.style.cssText = `
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        `;
+        
+        document.body.appendChild(this.liveRegion);
+    }
+
+    /**
+     * @brief Detects user system accessibility preferences
+     * @method detectAccessibilityPreferences
+     * @returns {Promise<void>}
+     * @private
+     */
+    async detectAccessibilityPreferences() {
+        if (typeof window === 'undefined' || !window.matchMedia) return;
+
+        // Detect reduced motion preference
+        this.settings.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        
+        // Detect contrast preference
+        this.settings.highContrast = window.matchMedia('(prefers-contrast: high)').matches;
+        
+        // Load saved accessibility settings
+        const savedSettings = localStorage.getItem('accessibility-settings');
+        if (savedSettings) {
+            try {
+                const parsedSettings = JSON.parse(savedSettings);
+                this.settings = { ...this.settings, ...parsedSettings };
+            } catch (error) {
+                console.warn('Failed to parse saved accessibility settings');
+            }
+        }
+    }
+
+    /**
+     * @brief Applies current accessibility settings to document
+     * @method applyAccessibilitySettings
+     * @private
+     */
+    applyAccessibilitySettings() {
+        const rootElement = document.documentElement;
+        
+        // Apply reduced motion
+        if (this.settings.reducedMotion) {
+            rootElement.style.setProperty('--animation-duration', '0.01ms');
+            rootElement.classList.add('reduced-motion');
+        } else {
+            rootElement.style.removeProperty('--animation-duration');
+            rootElement.classList.remove('reduced-motion');
+        }
+        
+        // Apply high contrast
+        if (this.settings.highContrast) {
+            rootElement.classList.add('high-contrast');
+        } else {
+            rootElement.classList.remove('high-contrast');
+        }
+        
+        // Apply font size scaling
+        rootElement.style.setProperty('--font-size-multiplier', this.settings.fontSizeMultiplier.toString());
+        
+        // Persist settings
+        this.persistSettings();
+        
+        // Dispatch settings changed event
+        this.dispatchAccessibilityEvent('accessibility:changed', this.settings);
+    }
+
+    /**
+     * @brief Sets up comprehensive keyboard navigation
+     * @method setupKeyboardNavigation
+     * @private
+     */
+    setupKeyboardNavigation() {
+        document.addEventListener('keydown', (event) => {
+            // Skip if inside form element
+            if (['INPUT', 'TEXTAREA', 'SELECT'].includes(event.target.tagName)) {
+                return;
+            }
+
+            switch (event.key) {
+                case 'Tab':
+                    this.handleTabNavigation(event);
+                    break;
+                case 'Escape':
+                    this.handleEscapeKey(event);
+                    break;
+                case 'Enter':
+                    this.handleEnterKey(event);
+                    break;
+            }
+        });
+    }
+
+    /**
+     * @brief Handles tab navigation for keyboard users
+     * @method handleTabNavigation
+     * @param {KeyboardEvent} event - Keyboard event
+     * @private
+     */
+    handleTabNavigation(event) {
+        // Add visual indicator for keyboard navigation
+        document.documentElement.classList.add('keyboard-navigation');
+    }
+
+    /**
+     * @brief Sets up mutation observer for dynamic content accessibility
+     * @method setupMutationObserver
+     * @private
+     */
+    setupMutationObserver() {
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                mutation.addedNodes.forEach((node) => {
+                    if (node.nodeType === Node.ELEMENT_NODE) {
+                        this.enhanceElementAccessibility(node);
+                    }
+                });
+            });
+        });
+
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+    }
+
+    /**
+     * @brief Enhances accessibility of dynamically added elements
+     * @method enhanceElementAccessibility
+     * @param {Element} element - Element to enhance
+     * @private
+     */
+    enhanceElementAccessibility(element) {
+        // Add ARIA labels to interactive elements missing them
+        if (element.hasAttribute('role') || ['BUTTON', 'A', 'INPUT'].includes(element.tagName)) {
+            if (!element.hasAttribute('aria-label') && !element.textContent.trim()) {
+                const label = this.generateAccessibleLabel(element);
+                if (label) {
+                    element.setAttribute('aria-label', label);
+                }
+            }
         }
 
-        this.setupEventListeners();
-        this.setupFocusManagement();
-        this.announcePageLoad();
-        
-        this.isInitialized = true;
+        // Ensure focus management for modal elements
+        if (element.hasAttribute('role') && ['dialog', 'modal'].includes(element.getAttribute('role'))) {
+            element.setAttribute('tabindex', '-1');
+        }
     }
 
     /**
-     * @brief Sets up global event listeners for accessibility features.
-     * @description Listens for keyboard shortcuts and custom events for font size changes.
+     * @brief Announces message to screen readers
+     * @method announceToScreenReader
+     * @param {string} message - Message to announce
+     * @param {string} priority - Announcement priority ('polite' or 'assertive')
+     * @returns {void}
      */
-    setupEventListeners() {
-        document.addEventListener('keydown', this.handleKeydown);
-        
-        this.eventBus.subscribe('accessibility:increaseFont', this.increaseFontSize.bind(this));
-        this.eventBus.subscribe('accessibility:decreaseFont', this.decreaseFontSize.bind(this));
-        this.eventBus.subscribe('accessibility:resetFont', this.resetFontSize.bind(this));
-    }
-
-    /**
-     * @brief Handles keydown events for accessibility shortcuts.
-     * @description Implements shortcuts for font size (Ctrl/Meta +/-, 0) and theme toggling (Ctrl/Meta + T).
-     * @param {KeyboardEvent} event - The keyboard event object.
-     */
-    handleKeydown(event) {
-        const isTyping = event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA' || event.target.isContentEditable;
-        if (isTyping) {
+    announceToScreenReader(message, priority = 'polite') {
+        if (!this.liveRegion) {
+            console.warn('Live region not initialized for screen reader announcement');
             return;
         }
 
-        const isCtrlOrMeta = event.ctrlKey || event.metaKey;
-
-        if (isCtrlOrMeta && (event.key === '+' || event.key === '=')) {
-            event.preventDefault();
-            this.increaseFontSize();
-        } else if (isCtrlOrMeta && event.key === '-') {
-            event.preventDefault();
-            this.decreaseFontSize();
-        } else if (isCtrlOrMeta && event.key === '0') {
-            event.preventDefault();
-            this.resetFontSize();
-        } else if (isCtrlOrMeta && event.key === 't') {
-            event.preventDefault();
-            this.eventBus.publish('theme:toggle');
-        }
-    }
-
-    /**
-     * @brief Sets up focus management for single-page application navigation.
-     * @description On route change, it moves focus to the main content area.
-     */
-    setupFocusManagement() {
-        this.eventBus.subscribe('router:navigated', () => {
-            setTimeout(() => {
-                const mainContent = document.getElementById('main-content');
-                if (mainContent) {
-                    mainContent.setAttribute('tabindex', '-1');
-                    mainContent.focus();
-                }
-            }, 100);
-        });
-    }
-
-    /**
-     * @brief Announces that the page has loaded to screen readers.
-     */
-    announcePageLoad() {
-        setTimeout(() => {
-            this.announceContent('Portfolio website loaded successfully');
-        }, 500);
-    }
-
-    /**
-     * @brief Announces a message to screen readers using an ARIA live region.
-     * @param {string} message - The message to be announced.
-     */
-    announceContent(message) {
-        const announcerId = 'a11y-announcer';
-        let announcer = document.getElementById(announcerId);
-
-        if (!announcer) {
-            announcer = document.createElement('div');
-            announcer.id = announcerId;
-            announcer.setAttribute('aria-live', 'polite');
-            announcer.setAttribute('aria-atomic', 'true');
-            announcer.classList.add('sr-only'); // This class should hide the element visually
-            document.body.appendChild(announcer);
-        }
+        this.liveRegion.setAttribute('aria-live', priority);
+        this.liveRegion.textContent = message;
         
-        // Set text content after a short delay to ensure it's announced
+        // Clear message after announcement
         setTimeout(() => {
-            announcer.textContent = message;
-        }, 100);
+            if (this.liveRegion.textContent === message) {
+                this.liveRegion.textContent = '';
+            }
+        }, 1000);
     }
 
     /**
-     * @brief Increases the global font size by one step.
+     * @brief Announces view changes for screen reader users
+     * @method announceViewChange
+     * @param {string} viewName - Name of the view being loaded
+     * @returns {void}
      */
-    increaseFontSize() {
-        const newSize = Math.min(this.currentFontSize + this.fontSizeStep, this.maxFontSize);
-        if (newSize !== this.currentFontSize) {
-            this.currentFontSize = newSize;
-            this.applyFontSize();
-            this.announceContent(`Font size increased to ${newSize}%`);
+    announceViewChange(viewName) {
+        const message = `Loaded ${viewName} view`;
+        this.announceToScreenReader(message, 'polite');
+    }
+
+    /**
+     * @brief Updates accessibility setting
+     * @method updateSetting
+     * @param {string} setting - Setting name to update
+     * @param {any} value - New setting value
+     * @returns {void}
+     */
+    updateSetting(setting, value) {
+        if (this.settings.hasOwnProperty(setting)) {
+            this.settings[setting] = value;
+            this.applyAccessibilitySettings();
+            console.info(`Accessibility setting "${setting}" updated to:`, value);
+        } else {
+            console.warn(`Accessibility setting "${setting}" not found`);
         }
     }
 
     /**
-     * @brief Decreases the global font size by one step.
+     * @brief Persists accessibility settings to storage
+     * @method persistSettings
+     * @private
      */
-    decreaseFontSize() {
-        const newSize = Math.max(this.currentFontSize - this.fontSizeStep, this.minFontSize);
-        if (newSize !== this.currentFontSize) {
-            this.currentFontSize = newSize;
-            this.applyFontSize();
-            this.announceContent(`Font size decreased to ${newSize}%`);
+    persistSettings() {
+        try {
+            localStorage.setItem('accessibility-settings', JSON.stringify(this.settings));
+        } catch (error) {
+            console.warn('Failed to persist accessibility settings:', error);
         }
     }
 
     /**
-     * @brief Resets the font size to the default value (100%).
+     * @brief Dispatches accessibility events
+     * @method dispatchAccessibilityEvent
+     * @param {string} eventName - Name of event to dispatch
+     * @param {Object} eventDetail - Event detail data
+     * @private
      */
-    resetFontSize() {
-        if (this.currentFontSize !== 100) {
-            this.currentFontSize = 100;
-            this.applyFontSize();
-            this.announceContent('Font size reset to default');
-        }
-    }
-
-    /**
-     * @brief Applies the current font size to the document.
-     * @description Sets the font size on the <html> element, saves the preference
-     * to localStorage, and publishes an event.
-     */
-    applyFontSize() {
-        document.documentElement.style.fontSize = `${this.currentFontSize}%`;
-        localStorage.setItem('app-font-size', this.currentFontSize.toString());
-        
-        this.eventBus.publish('accessibility:fontSize:changed', { 
-            size: this.currentFontSize 
+    dispatchAccessibilityEvent(eventName, eventDetail) {
+        const accessibilityEvent = new CustomEvent(eventName, {
+            detail: {
+                ...eventDetail,
+                timestamp: Date.now()
+            },
+            bubbles: true
         });
+        
+        window.dispatchEvent(accessibilityEvent);
     }
 
     /**
-     * @brief Gets the current font size.
-     * @returns {number} The current font size percentage.
+     * @brief Gets current accessibility settings
+     * @method getSettings
+     * @returns {Object} Current accessibility settings
      */
-    getCurrentFontSize() {
-        return this.currentFontSize;
+    getSettings() {
+        return { ...this.settings };
     }
 
     /**
-     * @brief Checks if the user prefers reduced motion.
-     * @returns {boolean} True if reduced motion is preferred.
-     */
-    prefersReducedMotion() {
-        return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    }
-
-    /**
-     * @brief Cleans up resources used by the AccessibilityManager.
-     * @description Removes event listeners to prevent memory leaks.
+     * @brief Cleans up accessibility manager resources
+     * @method destroy
+     * @returns {void}
      */
     destroy() {
-        document.removeEventListener('keydown', this.handleKeydown);
-        this.eventBus.unsubscribe('accessibility:increaseFont');
-        this.eventBus.unsubscribe('accessibility:decreaseFont');
-        this.eventBus.unsubscribe('accessibility:resetFont');
-        this.eventBus.unsubscribe('router:navigated');
+        if (this.liveRegion && this.liveRegion.parentNode) {
+            this.liveRegion.parentNode.removeChild(this.liveRegion);
+        }
+        
         this.isInitialized = false;
+        console.info('AccessibilityManager destroyed successfully');
     }
 }
+
+export default AccessibilityManager;

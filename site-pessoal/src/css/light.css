@@ -1,132 +1,15 @@
-/* light.css - Light theme with paper texture */
-[data-theme="light"] {
-    color-scheme: light;
+/**
+ * @file light.css
+ * @brief Light theme variables
+ * @description CSS custom properties for the light color scheme
+ */
 
-    /* Colors - Light Theme */
-    --primary-color: var(--green-soft);
-    --primary-dark: var(--green-soft-dark);
-    --primary-light: var(--green-soft-light);
-    --secondary-color: var(--yellow-soft);
-    --secondary-dark: var(--yellow-soft-dark);
-    --secondary-light: var(--yellow-soft-light);
-    --accent-color: var(--orange-soft);
-    --accent-dark: var(--orange-soft-dark);
-    --accent-light: var(--orange-soft-light);
-
-    /* Neutral Colors */
-    --text-primary: #2d3748;
-    --text-secondary: #4a5568;
-    --text-muted: #718096;
-    --text-light: #ffffff;
-
-    /* Background Colors */
-    --bg-primary: #f7fafc;
-    --bg-secondary: #ffffff;
-    --bg-tertiary: #edf2f7;
-    --bg-card: #ffffff;
-    --bg-overlay: rgba(247, 250, 252, 0.9);
-
-    /* Paper Texture for Light Theme */
-    --gradient-paper: linear-gradient(rgba(247, 250, 252, 0.9), rgba(247, 250, 252, 0.9)), var(--paper-texture-light);
-
-    /* Border Colors */
-    --border-color: #e2e8f0;
-    --border-light: #f1f5f9;
-    --border-dark: #cbd5e0;
-
-    /* Shadows - Lighter for light theme */
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
-    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.08);
-    --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
-    --shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.03);
-}
-
-[data-theme="light"] body {
-    background-color: var(--bg-primary);
-    color: var(--text-primary);
-    background-image: var(--gradient-paper);
-}
-
-[data-theme="light"] .card {
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    box-shadow: var(--shadow-md);
-}
-
-[data-theme="light"] .main-header {
-    background: rgba(247, 250, 252, 0.95);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--border-color);
-}
-
-[data-theme="light"] .hero-section {
-    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-}
-
-[data-theme="light"] .menu-toggle span {
-    background: var(--text-primary);
-}
-
-[data-theme="light"] .nav-link {
-    color: var(--text-primary);
-}
-
-[data-theme="light"] .nav-link:hover,
-[data-theme="light"] .nav-link:focus {
-    background: var(--bg-tertiary);
-    color: var(--primary-color);
-}
-
-[data-theme="light"] .nav-link.active {
-    color: var(--primary-color);
-    background: var(--bg-tertiary);
-}
-
-[data-theme="light"] .btn--outline {
-    color: var(--text-primary);
-    border-color: var(--text-primary);
-}
-
-[data-theme="light"] .btn--outline:hover,
-[data-theme="light"] .btn--outline:focus {
-    background: var(--text-primary);
-    color: var(--bg-primary);
-    border-color: var(--text-primary);
-}
-
-[data-theme="light"] .main-footer {
-    background: var(--bg-secondary);
-    border-top: 1px solid var(--border-color);
-    color: var(--text-primary);
-}
-
-[data-theme="light"] .app-control-button {
-    background: var(--bg-card);
-    color: var(--text-primary);
-    border: 1px solid var(--border-color);
-}
-
-[data-theme="light"] .app-control-button:hover,
-[data-theme="light"] .app-control-button:focus {
-    background: var(--primary-color);
-    color: var(--text-light);
-}
-
-[data-theme="light"] .nav-overlay {
-    background: var(--bg-overlay);
-}
-
-[data-theme="light"] .skill-bar {
-    background: var(--bg-tertiary);
-}
-
-[data-theme="light"] .timeline-content {
-    background: var(--bg-card);
-    border-color: var(--border-color);
-}
-
-[data-theme="light"] .skill-category {
-    background: var(--bg-card);
-    border-color: var(--border-color);
+:root {
+  --color-background-primary: #ffffff;
+  --color-background-secondary: #f8fafc;
+  --color-text-primary: #1e293b;
+  --color-text-secondary: #475569;
+  --color-primary-500: #3b82f6;
+  --color-border-primary: #e2e8f0;
+  /* ... other light theme variables ... */
 }

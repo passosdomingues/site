@@ -1,138 +1,15 @@
-/* dark.css - Dark theme specific styles */
+/**
+ * @file dark.css
+ * @brief Dark theme variables
+ * @description CSS custom properties for the dark color scheme
+ */
+
 [data-theme="dark"] {
-    color-scheme: dark;
-
-    /* Colors - Dark Theme */
-    --primary-color: #3498db;
-    --primary-dark: #2980b9;
-    --primary-light: #5dade2;
-    --secondary-color: #2ecc71;
-    --secondary-dark: #27ae60;
-    --secondary-light: #58d68d;
-    --accent-color: #e74c3c;
-    --accent-dark: #c0392b;
-    --accent-light: #ec7063;
-
-    /* Neutral Colors */
-    --text-primary: #ecf0f1;
-    --text-secondary: #bdc3c7;
-    --text-muted: #95a5a6;
-    --text-light: #ffffff;
-
-    /* Background Colors */
-    --bg-primary: #1a1a1a;
-    --bg-secondary: #2d2d2d;
-    --bg-tertiary: #3d3d3d;
-    --bg-card: #2d2d2d;
-    --bg-overlay: rgba(0, 0, 0, 0.7);
-
-    /* Border Colors */
-    --border-color: #404040;
-    --border-light: #4d4d4d;
-    --border-dark: #333333;
-
-    /* Shadows */
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
-    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.3);
-    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.3);
-    --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.3);
-    --shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-[data-theme="dark"] body {
-    background-color: var(--bg-primary);
-    color: var(--text-primary);
-    background-image: var(--gradient-paper);
-}
-
-[data-theme="dark"] .card {
-    background: var(--bg-card);
-    border-color: var(--border-color);
-}
-
-[data-theme="dark"] .skill-bar {
-    background: var(--bg-tertiary);
-}
-
-[data-theme="dark"] .timeline-content {
-    background: var(--bg-card);
-    border-color: var(--border-color);
-}
-
-[data-theme="dark"] .skill-category {
-    background: var(--bg-card);
-    border-color: var(--border-color);
-}
-
-[data-theme="dark"] .main-header {
-    background: var(--bg-primary);
-    border-bottom: 1px solid var(--border-color);
-}
-
-[data-theme="dark"] .menu-toggle span {
-    background: var(--text-primary);
-}
-
-[data-theme="dark"] .nav-link {
-    color: var(--text-primary);
-}
-
-[data-theme="dark"] .nav-link:hover,
-[data-theme="dark"] .nav-link:focus {
-    background: var(--bg-secondary);
-    color: var(--primary-color);
-}
-
-[data-theme="dark"] .nav-link.active {
-    background: var(--primary-color);
-    color: var(--text-light);
-}
-
-[data-theme="dark"] .btn--outline {
-    color: var(--text-primary);
-    border-color: var(--text-primary);
-}
-
-[data-theme="dark"] .btn--outline:hover,
-[data-theme="dark"] .btn--outline:focus {
-    background: var(--text-primary);
-    color: var(--bg-primary);
-    border-color: var(--text-primary);
-}
-
-[data-theme="dark"] .tag {
-    background: var(--bg-tertiary);
-    color: var(--text-primary);
-}
-
-[data-theme="dark"] .main-footer {
-    background: var(--bg-secondary);
-    border-top: 1px solid var(--border-color);
-    color: var(--text-primary);
-}
-
-[data-theme="dark"] .footer-bottom {
-    border-top-color: var(--border-color);
-}
-
-[data-theme="dark"] .app-control-button {
-    background: var(--bg-card);
-    color: var(--text-primary);
-    border: 1px solid var(--border-color);
-}
-
-[data-theme="dark"] .app-control-button:hover,
-[data-theme="dark"] .app-control-button:focus {
-    background: var(--primary-color);
-    color: var(--text-light);
-}
-
-/* Ajustes para imagens no modo escuro */
-[data-theme="dark"] img {
-    opacity: 0.9;
-    transition: opacity var(--transition-base);
-}
-
-[data-theme="dark"] img:hover {
-    opacity: 1;
+  --color-background-primary: #0f172a;
+  --color-background-secondary: #1e293b;
+  --color-text-primary: #f1f5f9;
+  --color-text-secondary: #cbd5e1;
+  --color-primary-500: #60a5fa;
+  --color-border-primary: #334155;
+  /* ... other dark theme variables ... */
 }

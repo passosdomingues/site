@@ -1,63 +1,361 @@
 <!DOCTYPE html>
-<html lang="en" class="js" data-theme="dark">
+<html lang="en-US" class="no-js" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rafael Passos Domingues | Physicist & Computer Scientist</title>
-    <meta name="description" content="Portfolio of Rafael Passos Domingues, a Physicist and Computer Scientist.">
+    
+    <title>Rafael Passos Domingues | Physicist & Computer Science Researcher | Astrophysics & Data Science</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Rafael Passos Domingues - Physicist and Computer Scientist specializing in Astrophysics research, Data Science innovation, and Maker Education. Bridging scientific research with computational methodologies.">
+    <meta name="keywords" content="Rafael Passos Domingues, Physics, Computer Science, Astrophysics, Data Science, Research, Maker Education, Data Analysis, Computational Physics, Scientific Innovation">
     <meta name="author" content="Rafael Passos Domingues">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <meta name="theme-color" content="#264B93">
+    
+    <!-- Canonical URL for SEO -->
+    <link rel="canonical" href="https://rafaeldomingues.dev">
 
-    <link rel="preload" href="./src/css/styles.css" as="style">
-    <link rel="preload" href="./src/js/main.js" as="script">
+    <!-- Open Graph Meta Tags for social sharing -->
+    <meta property="og:title" content="Rafael Passos Domingues | Physicist & Computer Science Researcher">
+    <meta property="og:description" content="Physicist and Computer Scientist specializing in Astrophysics research, Data Science innovation, and Maker Education.">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:url" content="https://rafaeldomingues.dev">
+    <meta property="og:image" content="https://rafaeldomingues.dev/src/images/social-preview-1200x630.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Rafael Passos Domingues - Professional Portfolio">
+    <meta property="og:site_name" content="Rafael Passos Domingues Portfolio">
 
+    <!-- Resource Preloading and Preconnecting for Performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+
+    <!-- Critical CSS Inline for Above-the-Fold Content -->
     <style>
-        .critical-loading {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: #1a1f2d; color: #e8e6e3;
-            display: flex; justify-content: center; align-items: center;
-            z-index: 9999; transition: opacity 0.5s ease; text-align: center;
+        /* CSS Reset and Base Styles */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        /* Core Layout and Typography */
+        html { 
+            -webkit-text-size-adjust: 100%; 
+            -webkit-font-smoothing: antialiased; 
+            text-rendering: optimizeSpeed;
+            scroll-behavior: smooth;
         }
-        .critical-hidden { opacity: 0; pointer-events: none; }
-        .loading-spinner {
-            width: 40px; height: 40px; border-radius: 50%;
-            border: 3px solid rgba(232, 230, 227, 0.3);
-            border-top-color: #6a8d73;
-            animation: spin 1s linear infinite; margin: 0 auto 20px;
+        
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.5;
+            min-height: 100vh;
+            background-color: #ffffff;
+            color: #1e293b;
         }
-        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        /* Progressive Enhancement Classes */
+        .app-container { opacity: 0; }
+        .js-enabled .app-container { opacity: 1; transition: opacity 0.3s ease-in; }
+        
+        /* Accessibility: Skip Link */
+        .skip-link { 
+            position: absolute; 
+            top: -40px; 
+            left: 6px; 
+            background: #264B93; 
+            color: white; 
+            padding: 8px 12px; 
+            text-decoration: none; 
+            border-radius: 4px; 
+            z-index: 10000;
+            font-weight: 600;
+        }
+        .skip-link:focus { top: 6px; }
+        
+        /* NoScript Warning */
+        .noscript-warning { 
+            background: #ffeb3b; 
+            color: #333; 
+            padding: 1rem; 
+            text-align: center; 
+            border-bottom: 2px solid #ffc107;
+        }
+        
+        /* Hide dynamic content until JS initializes */
+        [data-app-initialized="false"] .dynamic-content-container,
+        [data-hero-initialized="false"] .hero-content-container,
+        [data-main-initialized="false"] .main-content > *:not(.content-loading-indicator) {
+            display: none;
+        }
     </style>
 
-    <link rel="stylesheet" href="./src/css/styles.css">
-    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
-</head>
-<body>
-    <div id="loading-overlay" class="critical-loading">
-        <div>
-            <div class="loading-spinner"></div>
-            <h1>Rafael Passos Domingues</h1>
-            <p>Loading Portfolio...</p>
-        </div>
-    </div>
+    <!-- Favicon and App Icons with Multiple Formats -->
+    <link rel="icon" type="image/svg+xml" href="/src/images/favicon.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="/src/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/src/images/favicon-16x16.png">
+    <link rel="shortcut icon" href="/src/images/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/src/images/apple-touch-icon.png">
+    <link rel="manifest" href="/src/manifest.webmanifest">
 
-    <div id="main-container" class="main-container critical-hidden">
-        <header id="main-header" class="main-header" role="banner">
+    <!-- Web App Capabilities -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Rafael Domingues">
+
+    <!-- Fonts with Performance Optimization -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Inconsolata:wght@400;700&family=Press+Start+2P&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=VT323&display=swap" rel="stylesheet">
+    
+    <!-- Icons with Fallback -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" 
+          integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6TaYlQdGBlFjL+KjWTwngRABtfJaHlAAB8j+Ym8O7zPqFzw==" 
+          crossorigin="anonymous" referrerpolicy="no-referrer"
+          onerror="this.remove();">
+</head>
+
+<body class="no-js">
+    <noscript>
+        <div class="noscript-warning" role="alert" aria-live="polite">
+            <div class="noscript-container">
+                <h1>JavaScript Enhancement Required</h1>
+                <p>This portfolio utilizes modern web technologies for an optimal experience.</p>
+                <p>Please enable JavaScript in your browser settings or explore the <a href="/static" class="noscript-link">static portfolio version</a>.</p>
+            </div>
+        </div>
+    </noscript>
+
+    <div id="app" class="app-container" 
+         aria-live="polite" 
+         aria-atomic="true" 
+         aria-label="Rafael Passos Domingues Portfolio Application"
+         data-app-version="3.0.0"
+         data-app-initialized="false">
+        
+        <a href="#main-content" class="skip-link" id="skip-link">
+            Skip to Main Content
+        </a>
+
+        <header id="global-header" class="global-header" role="banner" aria-label="Site header">
             <div class="container">
-                <nav id="navigation-container" class="nav-container" role="navigation" aria-label="Main Navigation"></nav>
+                <nav id="primary-navigation" 
+                     class="primary-navigation" 
+                     data-view="navigation" 
+                     data-navigation-state="collapsed"
+                     aria-label="Primary navigation">
+                </nav>
+
+                <div class="user-preference-controls" aria-label="User preference controls">
+                    <button type="button" 
+                            class="theme-toggle btn btn--secondary btn--sm" 
+                            id="theme-toggle"
+                            aria-pressed="false"
+                            aria-label="Toggle dark mode">
+                        <span class="theme-toggle-icon" aria-hidden="true">
+                            <i class="fas fa-moon" data-theme-icon="dark"></i>
+                            <i class="fas fa-sun" data-theme-icon="light" style="display: none;"></i>
+                        </span>
+                        <span class="theme-toggle-text">Dark Mode</span>
+                    </button>
+                    
+                    <button type="button" 
+                            class="accessibility-menu-toggle btn btn--secondary btn--sm" 
+                            id="accessibility-menu-toggle"
+                            aria-expanded="false"
+                            aria-label="Open accessibility options">
+                        <span class="accessibility-icon" aria-hidden="true">
+                            <i class="fas fa-universal-access"></i>
+                        </span>
+                        <span class="accessibility-toggle-text">Accessibility</span>
+                    </button>
+                </div>
             </div>
         </header>
-        <div id="nav-overlay" class="nav-overlay"></div>
 
-        <main id="main-content" role="main">
-            <section id="hero-section" class="hero-section"></section>
+        <section id="hero" 
+                 class="hero-section" 
+                 data-view="hero" 
+                 aria-labelledby="hero-heading"
+                 data-hero-initialized="false">
+            <div class="hero-background" aria-hidden="true"></div>
+            <div class="container">
+                <div class="hero-content-container">
+                </div>
+            </div>
+        </section>
 
-            <div id="sections-container"></div>
+        <main id="main-content" 
+              class="main-content" 
+              role="main" 
+              tabindex="-1"
+              aria-label="Main content"
+              data-main-initialized="false">
+              
+            <div class="content-loading-indicator" 
+                 role="status" 
+                 aria-live="polite" 
+                 aria-label="Loading content"
+                 hidden>
+                <div class="loading-spinner" aria-hidden="true"></div>
+                <span class="loading-text">Loading content...</span>
+            </div>
+
+            <!-- The SectionView will render all sections directly into main-content -->
+            <!-- The #dynamic-content div is no longer needed as a separate container for sections -->
+            <!-- The sections themselves will contain a .dynamic-content-area for their specific content -->
         </main>
 
-        <footer id="main-footer" class="main-footer" role="contentinfo"></footer>
+        <aside id="accessibility-menu" 
+               class="accessibility-menu" 
+               role="dialog" 
+               aria-modal="true"
+               aria-labelledby="accessibility-menu-heading"
+               aria-hidden="true"
+               hidden>
+            <div class="accessibility-menu-content">
+                <h2 id="accessibility-menu-heading" class="accessibility-menu-title">Accessibility Options</h2>
+                
+                <div class="accessibility-control-group">
+                    <label for="font-size-control" class="accessibility-control-label">Font Size</label>
+                    <div class="accessibility-control-input">
+                        <input type="range" 
+                               id="font-size-control" 
+                               class="font-size-slider"
+                               min="0.8" 
+                               max="1.5" 
+                               step="0.1" 
+                               value="1.0"
+                               aria-valuetext="Normal font size">
+                        <span class="font-size-value" aria-hidden="true">100%</span>
+                    </div>
+                </div>
+
+                <div class="accessibility-control-group">
+                    <label for="contrast-toggle" class="accessibility-control-label">High Contrast Mode</label>
+                    <div class="accessibility-control-input">
+                        <input type="checkbox" 
+                               id="contrast-toggle" 
+                               class="contrast-toggle-switch"
+                               aria-checked="false">
+                        <span class="toggle-slider" aria-hidden="true"></span>
+                    </div>
+                </div>
+
+                <div class="accessibility-control-group">
+                    <label for="reduced-motion-toggle" class="accessibility-control-label">Reduced Motion</label>
+                    <div class="accessibility-control-input">
+                        <input type="checkbox" 
+                               id="reduced-motion-toggle" 
+                               class="reduced-motion-toggle-switch"
+                               aria-checked="false">
+                        <span class="toggle-slider" aria-hidden="true"></span>
+                    </div>
+                </div>
+
+                <div class="accessibility-control-group">
+                    <label for="font-family-toggle" class="accessibility-control-label">Dyslexia-Friendly Font</label>
+                    <div class="accessibility-control-input">
+                        <input type="checkbox" 
+                               id="font-family-toggle" 
+                               class="font-family-toggle-switch"
+                               aria-checked="false">
+                        <span class="toggle-slider" aria-hidden="true"></span>
+                    </div>
+                </div>
+
+                <div class="accessibility-menu-actions">
+                    <button type="button" 
+                            class="accessibility-reset-btn btn btn--secondary btn--sm"
+                            id="accessibility-reset"
+                            aria-label="Reset all accessibility settings to default">
+                        Reset to Defaults
+                    </button>
+                    <button type="button" 
+                            class="accessibility-menu-close btn btn--primary btn--sm" 
+                            id="accessibility-menu-close"
+                            aria-label="Close accessibility menu">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <footer id="global-footer" 
+                class="global-footer" 
+                data-view="footer" 
+                role="contentinfo"
+                aria-label="Site footer">
+            <div class="container">
+            </div>
+        </footer>
+
+        <div id="notification-area" 
+             class="notification-area" 
+             role="status" 
+             aria-live="polite"
+             aria-atomic="true"
+             aria-relevant="additions"
+             hidden></div>
     </div>
 
-    <div id="app-controls" class="app-controls"></div>
 
-    <script type="module" src="./src/js/main.js"></script>
+
+
+
+
+
+
+    <script nomodule>
+        /**
+         * @file legacy.js
+         * @brief Legacy browser support and graceful degradation
+         * @description Provides fallback experience for browsers without ES module support
+         */
+
+        // Enhanced legacy browser detection and messaging
+        const legacyBrowserMessage = `
+            <div class="browser-support-message" role="alert" aria-live="polite">
+                <div class="browser-support-container">
+                    <h2 class="browser-support-title">Browser Update Recommended</h2>
+                    <p class="browser-support-description">
+                        Your browser doesn't support modern JavaScript features required for this application.
+                        Please consider updating to a modern browser for the best experience.
+                    </p>
+                    <div class="browser-links">
+                        <a href="https://www.google.com/chrome/" target="_blank" rel="noopener" class="browser-link">
+                            Google Chrome
+                        </a>
+                        <a href="https://www.mozilla.org/firefox/" target="_blank" rel="noopener" class="browser-link">
+                            Mozilla Firefox
+                        </a>
+                        <a href="https://www.apple.com/safari/" target="_blank" rel="noopener" class="browser-link">
+                            Apple Safari
+                        </a>
+                        <a href="https://www.microsoft.com/edge" target="_blank" rel="noopener" class="browser-link">
+                            Microsoft Edge
+                        </a>
+                    </div>
+                    <p class="browser-support-note">
+                        You can still view the basic content, but some interactive features may be limited.
+                    </p>
+                </div>
+            </div>
+        `;
+
+        const appContainer = document.getElementById("app");
+        if (appContainer) {
+            appContainer.innerHTML = legacyBrowserMessage + appContainer.innerHTML;
+        }
+
+        console.warn("Legacy browser detected: Some features may be unavailable");
+    </script>
 </body>
 </html>
+
+
+
+
+    <script type="module" src="./app.js"></script>
+
