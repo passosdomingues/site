@@ -1,10 +1,23 @@
-import eventBus from '../core/EventBus.js';
-
 /**
+ * @file SectionController.js
  * @brief Section controller for individual section management
  * @description Handles section-specific logic and interactions
  */
+
+import eventBus from '../core/EventBus.js';
+
+/**
+ * @class SectionController
+ * @brief Manages individual section behavior and data loading
+ */
 export class SectionController {
+    /**
+     * @brief Constructs SectionController instance
+     * @param {Object} dependencies - Controller dependencies
+     * @param {Object} dependencies.eventBus - Event bus instance
+     * @param {Object} dependencies.contentModel - Content model instance
+     * @param {Object} dependencies.services - Service dependencies
+     */
     constructor(dependencies = {}) {
         this.eventBus = dependencies.eventBus || eventBus;
         this.contentModel = dependencies.contentModel;
@@ -16,6 +29,7 @@ export class SectionController {
 
     /**
      * @brief Initialize section controller
+     * @async
      * @returns {Promise<void>}
      */
     async init() {
@@ -110,8 +124,8 @@ export class SectionController {
      * @brief Destroy controller
      */
     destroy() {
-        this.eventBus.clear('section:activated');
-        this.eventBus.clear('section:request:data');
+        this.eventBus.unsubscribe('section:activated', this.onSectionActivated);
+        this.eventBus.unsubscribe('section:request:data', this.onSectionDataRequest);
         
         this.activeSection = null;
         this.isInitialized = false;

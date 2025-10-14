@@ -1,11 +1,24 @@
+/**
+ * @file MainController.js
+ * @brief Main application controller
+ * @description Orchestrates views and models for the main content
+ */
+
 import eventBus from '../core/EventBus.js';
 import { ViewManager } from '../views/ViewManager.js';
 
 /**
- * @brief Main application controller
- * @description Orchestrates views and models for the main content
+ * @class MainController
+ * @brief Coordinates main content rendering and section management
  */
 class MainController {
+    /**
+     * @brief Constructs MainController instance
+     * @param {Object} dependencies - Controller dependencies
+     * @param {Object} dependencies.eventBus - Event bus instance
+     * @param {Object} dependencies.contentModel - Content model instance
+     * @param {Object} dependencies.services - Service dependencies
+     */
     constructor(dependencies = {}) {
         this.eventBus = dependencies.eventBus || eventBus;
         this.contentModel = dependencies.contentModel;
@@ -19,8 +32,8 @@ class MainController {
     }
 
     /**
-     * @brief Initialize the main controller
-     * @description Sets up view manager and event listeners
+     * @brief Initialize main controller
+     * @async
      * @returns {Promise<void>}
      */
     async init() {
@@ -30,7 +43,6 @@ class MainController {
         }
 
         try {
-            // Initialize ViewManager
             const sectionsContainer = document.getElementById('sections-container');
             if (!sectionsContainer) {
                 throw new Error('MainController: sections-container element not found');
@@ -41,15 +53,12 @@ class MainController {
                 eventBus: this.eventBus
             });
 
-            // Set up event listeners
             this.setupEventListeners();
 
-            // Wait for content model to be ready
             if (this.contentModel && !this.contentModel.isInitialized) {
                 await this.contentModel.initializeContentModel();
             }
 
-            // Initial render
             await this.renderAllSections();
 
             this.isInitialized = true;
@@ -88,6 +97,7 @@ class MainController {
 
     /**
      * @brief Render all sections
+     * @async
      * @returns {Promise<void>}
      */
     async renderAllSections() {
@@ -99,10 +109,8 @@ class MainController {
         try {
             const sections = this.contentModel.getAllSections();
             
-            // Clear existing content
             this.viewManager.container.innerHTML = '';
             
-            // Render each section
             sections.forEach(section => {
                 if (section.metadata.visible) {
                     this.viewManager.renderSection(section);
@@ -120,15 +128,13 @@ class MainController {
 
     /**
      * @brief Highlight active section in view
-     * @param {string} sectionId - ID of the active section
+     * @param {string} sectionId - ID of active section
      */
     highlightActiveSection(sectionId) {
-        // Remove active class from all sections
         document.querySelectorAll('.section').forEach(section => {
             section.classList.remove('section--active');
         });
 
-        // Add active class to current section
         const activeSection = document.getElementById(sectionId);
         if (activeSection) {
             activeSection.classList.add('section--active');

@@ -1,11 +1,24 @@
+/**
+ * @file NavigationController.js
+ * @brief Navigation controller
+ * @description Manages navigation state and interactions
+ */
+
 import eventBus from '../core/EventBus.js';
 import { NavigationView } from '../views/NavigationView.js';
 
 /**
- * @brief Navigation controller
- * @description Manages navigation state and interactions
+ * @class NavigationController
+ * @brief Handles navigation logic and scroll management
  */
 export class NavigationController {
+    /**
+     * @brief Constructs NavigationController instance
+     * @param {Object} dependencies - Controller dependencies
+     * @param {Object} dependencies.eventBus - Event bus instance
+     * @param {Object} dependencies.contentModel - Content model instance
+     * @param {Object} dependencies.services - Service dependencies
+     */
     constructor(dependencies = {}) {
         this.eventBus = dependencies.eventBus || eventBus;
         this.contentModel = dependencies.contentModel;
@@ -20,7 +33,7 @@ export class NavigationController {
 
     /**
      * @brief Initialize navigation controller
-     * @description Sets up navigation view and scroll handling
+     * @async
      * @returns {Promise<void>}
      */
     async init() {
@@ -30,7 +43,6 @@ export class NavigationController {
         }
 
         try {
-            // Initialize NavigationView
             const navContainer = document.getElementById('nav-list');
             if (!navContainer) {
                 throw new Error('NavigationController: nav-list element not found');
@@ -41,15 +53,12 @@ export class NavigationController {
                 eventBus: this.eventBus
             });
 
-            // Set up event listeners
             this.setupEventListeners();
 
-            // Wait for content model
             if (this.contentModel && !this.contentModel.isInitialized) {
                 await this.contentModel.initializeContentModel();
             }
 
-            // Initial render
             await this.renderNavigation();
 
             this.isInitialized = true;
@@ -68,7 +77,6 @@ export class NavigationController {
         this.eventBus.subscribe('content:loaded', this.onContentLoaded);
         window.addEventListener('scroll', this.onScroll);
         
-        // Handle navigation clicks
         this.eventBus.subscribe('navigation:clicked', this.handleNavigationClick.bind(this));
     }
 
@@ -88,6 +96,8 @@ export class NavigationController {
 
     /**
      * @brief Render navigation menu
+     * @async
+     * @returns {Promise<void>}
      */
     async renderNavigation() {
         if (!this.navigationView || !this.contentModel) {
@@ -112,7 +122,7 @@ export class NavigationController {
     updateActiveNavigationLink() {
         if (!this.contentModel) return;
 
-        const scrollPosition = window.scrollY + 100; // Offset
+        const scrollPosition = window.scrollY + 100;
         const sections = this.contentModel.getAllSections();
         
         let activeSectionId = null;
@@ -137,7 +147,6 @@ export class NavigationController {
     handleNavigationClick(data) {
         const { sectionId } = data;
         
-        // Scroll to section
         const sectionElement = document.getElementById(sectionId);
         if (sectionElement) {
             sectionElement.scrollIntoView({ 

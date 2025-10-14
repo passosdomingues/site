@@ -1,9 +1,7 @@
 /**
  * @file UserModel.js
- * @author Rafael Passos Domingues
- * @brief Model responsible for managing user-specific data.
- * @description Consumes data from UserData.js to provide personal information,
- * contact details, and social links to the application.
+ * @brief Model responsible for managing user-specific data
+ * @description Consumes data from UserData.js to provide personal information
  */
 
 import eventBus from '../core/EventBus.js';
@@ -11,13 +9,13 @@ import { USER_DATA } from '../data/UserData.js';
 
 /**
  * @class UserModel
- * @description Manages the user's personal and contact data.
+ * @brief Manages user's personal and contact data
  */
 class UserModel {
     /**
-     * @brief Constructs the UserModel instance.
-     * @param {Object} [config={}] - The configuration object.
-     * @param {Object} [config.eventBus] - The application's event bus.
+     * @brief Constructs UserModel instance
+     * @param {Object} config - Configuration object
+     * @param {Object} config.eventBus - Event bus instance
      */
     constructor(config = {}) {
         this.eventBus = config.eventBus || eventBus;
@@ -26,7 +24,8 @@ class UserModel {
     }
 
     /**
-     * @brief Initializes the model by loading the user data.
+     * @brief Initialize model by loading user data
+     * @async
      * @returns {Promise<void>}
      */
     async init() {
@@ -34,6 +33,7 @@ class UserModel {
             console.warn('UserModel: Already initialized.');
             return;
         }
+        
         console.info('UserModel: Initializing with user data...');
         this.userData = USER_DATA;
         this.isInitialized = true;
@@ -42,11 +42,35 @@ class UserModel {
     }
 
     /**
-     * @brief Retrieves the full user data object.
-     * @returns {Object} The complete user data.
+     * @brief Get full user data object
+     * @returns {Object} Complete user data
      */
     getUserData() {
         return this.userData;
+    }
+
+    /**
+     * @brief Get user's personal information
+     * @returns {Object} Personal info including name and title
+     */
+    getPersonalInfo() {
+        return this.userData.personalInfo || {};
+    }
+
+    /**
+     * @brief Get user's contact information
+     * @returns {Object} Contact details including email and phone
+     */
+    getContactInfo() {
+        return this.userData.contact || {};
+    }
+
+    /**
+     * @brief Get user's social links
+     * @returns {Object} Social media links
+     */
+    getSocialLinks() {
+        return this.userData.socialLinks || {};
     }
 }
 

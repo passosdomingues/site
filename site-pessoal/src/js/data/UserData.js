@@ -1,11 +1,14 @@
 /**
  * @file UserData.js
- * @author Rafael Passos Domingues
- * @brief Centralized data for user-specific information.
- * @description Contains personal details, contact info, and social media links,
- * providing a single source of truth for user-related content.
+ * @brief Centralized data for user-specific information
+ * @description Contains personal details, contact info, and social media links
  */
 
+/**
+ * @constant USER_DATA
+ * @brief User-specific information including contact and social links
+ * @type {Object}
+ */
 export const USER_DATA = {
     personalInfo: {
         name: 'Rafael Passos Domingues',
@@ -18,8 +21,8 @@ export const USER_DATA = {
     },
     socialLinks: {
         github: 'https://github.com/passosdomingues',
-        linkedin: 'https://www.linkedin.com/in/rafael-passos-domingues/',
-        instagram: '@rafalpassosdomingues'
+        linkedin: 'https://www.linkedin.com/in/rafaelpassosdomingues/',
+        instagram: '@rafaelpassosdomingues'
     },
     resumeUrl: 'http://lattes.cnpq.br/2726901051757064'
 };
