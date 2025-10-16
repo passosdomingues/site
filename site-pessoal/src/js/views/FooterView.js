@@ -84,7 +84,7 @@ export class FooterView extends BaseView {
             <div class="footer-container">
                 <div class="footer-info">
                     <p class="footer-copyright">
-                        &copy; ${this.currentYear} ${this.escapeHtml(personalInfo.name)}. All rights reserved.
+                        &copy; ${this.currentYear} ${this.escapeHtml(personalInfo.name)}.
                     </p>
                     ${resumeUrl ? `
                         <a href="${this.escapeHtml(resumeUrl)}" 
