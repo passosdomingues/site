@@ -187,7 +187,7 @@ class Application {
         const menuToggle = document.createElement('button');
         menuToggle.className = 'app-control-button accessibility-menu-toggle';
         menuToggle.setAttribute('aria-label', 'Accessibility options');
-        menuToggle.innerHTML = '♿';
+        menuToggle.innerHTML = '👁️';
         menuToggle.setAttribute('aria-expanded', 'false');
         
         // Menu de acessibilidade (inicialmente escondido)
