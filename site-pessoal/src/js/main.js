@@ -29,9 +29,6 @@ class Application {
         try {
             console.info('Application: Starting initialization...');
             
-            // Primeiro esconde o loading overlay
-            this.hideLoadingOverlay();
-            
             const appConfig = {
                 services: {
                     contentModel: ContentModel,
@@ -47,7 +44,7 @@ class Application {
             };
             
             this.app = new App(appConfig);
-            await this.app.initialize(); // CORREÇÃO: era init(), agora initialize()
+            await this.app.initialize();
             
             await this.setupGlobalUIControls();
             await this.initializeFooter();
@@ -57,8 +54,9 @@ class Application {
 
         } catch (error) {
             console.error('Application: Failed to initialize.', error);
-            this.hideLoadingOverlay();
             this.showErrorMessage('Failed to load application. Please refresh the page.');
+        } finally {
+            this.hideLoadingOverlay();
         }
     }
 
@@ -134,130 +132,125 @@ class Application {
 
         const controlsContainer = document.createElement('div');
         controlsContainer.className = 'app-controls';
-        controlsContainer.style.cssText = `
-            position: fixed;
-            top: 100px;
-            right: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            z-index: 1000;
-        `;
         document.body.appendChild(controlsContainer);
 
         // --- Theme Toggle Button ---
         const themeManager = this.app.getService('themeManager');
         if (themeManager) {
-            const themeToggleBtn = document.createElement('button');
-            themeToggleBtn.className = 'app-control-button theme-toggle-btn';
-            themeToggleBtn.style.cssText = `
-                width: 40px;
-                height: 40px;
-                border: none;
-                border-radius: 50%;
-                background: var(--primary-color);
-                color: white;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 1.2rem;
-            `;
-            
-            const updateThemeIcon = () => {
-                const isDark = themeManager.isDarkMode();
-                themeToggleBtn.setAttribute('aria-label', `Switch to ${isDark ? 'light' : 'dark'} theme`);
-                themeToggleBtn.textContent = isDark ? '☀️' : '🌙';
-            };
-            
-            themeToggleBtn.addEventListener('click', () => {
-                themeManager.toggleTheme();
-                updateThemeIcon();
-            });
-            
-            controlsContainer.appendChild(themeToggleBtn);
-            updateThemeIcon();
+            this.createThemeToggle(themeManager, controlsContainer);
         }
 
         // --- Accessibility Controls ---
         const accessibilityManager = this.app.getService('accessibilityManager');
         if (accessibilityManager) {
-            // High Contrast Toggle
-            const contrastBtn = document.createElement('button');
-            contrastBtn.className = 'app-control-button';
-            contrastBtn.setAttribute('aria-label', 'Toggle high contrast mode');
-            contrastBtn.textContent = '⚫';
-            contrastBtn.style.cssText = `
-                width: 40px;
-                height: 40px;
-                border: none;
-                border-radius: 50%;
-                background: var(--secondary-color);
-                color: white;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 1.2rem;
-            `;
-            contrastBtn.addEventListener('click', () => {
-                const current = document.body.classList.contains('high-contrast');
-                accessibilityManager.toggleHighContrast(!current);
-                contrastBtn.style.background = current ? 'var(--secondary-color)' : '#000000';
-            });
-            controlsContainer.appendChild(contrastBtn);
-
-            // Font Size Controls
-            const fontSizeContainer = document.createElement('div');
-            fontSizeContainer.style.cssText = `
-                display: flex;
-                gap: 5px;
-            `;
-
-            const decreaseFontBtn = document.createElement('button');
-            decreaseFontBtn.className = 'app-control-button';
-            decreaseFontBtn.setAttribute('aria-label', 'Decrease font size');
-            decreaseFontBtn.textContent = 'A-';
-            decreaseFontBtn.style.cssText = `
-                width: 40px;
-                height: 40px;
-                border: none;
-                border-radius: 50%;
-                background: var(--accent-color);
-                color: white;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 0.9rem;
-            `;
-            decreaseFontBtn.addEventListener('click', () => accessibilityManager.decreaseFontSize());
-
-            const increaseFontBtn = document.createElement('button');
-            increaseFontBtn.className = 'app-control-button';
-            increaseFontBtn.setAttribute('aria-label', 'Increase font size');
-            increaseFontBtn.textContent = 'A+';
-            increaseFontBtn.style.cssText = `
-                width: 40px;
-                height: 40px;
-                border: none;
-                border-radius: 50%;
-                background: var(--accent-color);
-                color: white;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 1rem;
-            `;
-            increaseFontBtn.addEventListener('click', () => accessibilityManager.increaseFontSize());
-
-            fontSizeContainer.appendChild(decreaseFontBtn);
-            fontSizeContainer.appendChild(increaseFontBtn);
-            controlsContainer.appendChild(fontSizeContainer);
+            this.createAccessibilityControls(accessibilityManager, controlsContainer);
         }
 
         console.info('Application: UI Controls initialized.');
+    }
+
+    /**
+     * @brief Creates theme toggle button
+     */
+    createThemeToggle(themeManager, container) {
+        const themeToggleBtn = document.createElement('button');
+        themeToggleBtn.className = 'app-control-button theme-toggle-btn';
+        themeToggleBtn.setAttribute('aria-label', 'Toggle theme');
+        
+        const updateThemeIcon = () => {
+            const isDark = themeManager.isDarkMode();
+            themeToggleBtn.innerHTML = isDark ? '☀️' : '🌙';
+            themeToggleBtn.setAttribute('aria-label', `Switch to ${isDark ? 'light' : 'dark'} theme`);
+        };
+        
+        themeToggleBtn.addEventListener('click', () => {
+            themeManager.toggleTheme();
+            // A atualização do ícone será feita pelo evento do ThemeManager
+        });
+
+        // Atualiza o ícone quando o tema mudar
+        this.app.eventBus.subscribe('theme:changed', updateThemeIcon);
+        
+        container.appendChild(themeToggleBtn);
+        updateThemeIcon(); // Define o ícone inicial
+    }
+
+    /**
+     * @brief Creates accessibility controls
+     */
+    createAccessibilityControls(accessibilityManager, container) {
+        // Container principal de acessibilidade
+        const accessibilityContainer = document.createElement('div');
+        accessibilityContainer.className = 'accessibility-container';
+        
+        // Botão hamburguer para menu de acessibilidade
+        const menuToggle = document.createElement('button');
+        menuToggle.className = 'app-control-button accessibility-menu-toggle';
+        menuToggle.setAttribute('aria-label', 'Accessibility options');
+        menuToggle.innerHTML = '♿';
+        menuToggle.setAttribute('aria-expanded', 'false');
+        
+        // Menu de acessibilidade (inicialmente escondido)
+        const menu = document.createElement('div');
+        menu.className = 'accessibility-menu';
+        menu.style.display = 'none';
+        
+        // Itens do menu
+        const menuItems = [
+            {
+                label: 'Increase Font Size',
+                action: () => accessibilityManager.increaseFontSize(),
+                icon: 'A+'
+            },
+            {
+                label: 'Decrease Font Size', 
+                action: () => accessibilityManager.decreaseFontSize(),
+                icon: 'A-'
+            },
+            {
+                label: 'High Contrast',
+                action: () => {
+                    const current = document.body.classList.contains('high-contrast');
+                    accessibilityManager.toggleHighContrast(!current);
+                },
+                icon: '⚫'
+            },
+            {
+                label: 'Reduced Motion',
+                action: () => {
+                    const current = document.body.classList.contains('reduced-motion');
+                    accessibilityManager.toggleReducedMotion(!current);
+                },
+                icon: '🌀'
+            }
+        ];
+
+        menuItems.forEach(item => {
+            const button = document.createElement('button');
+            button.className = 'accessibility-menu-item';
+            button.setAttribute('aria-label', item.label);
+            button.innerHTML = `<span class="menu-item-icon">${item.icon}</span><span class="menu-item-label">${item.label}</span>`;
+            button.addEventListener('click', item.action);
+            menu.appendChild(button);
+        });
+
+        // Toggle do menu
+        menuToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
+            menu.style.display = isExpanded ? 'none' : 'block';
+            menuToggle.setAttribute('aria-expanded', (!isExpanded).toString());
+        });
+
+        // Fechar menu quando clicar fora
+        document.addEventListener('click', () => {
+            menu.style.display = 'none';
+            menuToggle.setAttribute('aria-expanded', 'false');
+        });
+
+        accessibilityContainer.appendChild(menuToggle);
+        accessibilityContainer.appendChild(menu);
+        container.appendChild(accessibilityContainer);
     }
 
     /**

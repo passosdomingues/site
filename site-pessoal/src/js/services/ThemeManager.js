@@ -9,8 +9,6 @@ export class ThemeManager {
         this.eventBus = dependencies.eventBus || eventBus;
         this.currentTheme = 'light';
         this.isInitialized = false;
-
-        this.onThemeChange = this.onThemeChange.bind(this);
     }
 
     /**
@@ -36,17 +34,11 @@ export class ThemeManager {
      * @brief Set up event listeners
      */
     setupEventListeners() {
-        this.eventBus.subscribe('theme:change', this.onThemeChange);
-        
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
             if (!localStorage.getItem('app-theme')) {
                 this.setTheme(e.matches ? 'dark' : 'light');
             }
         });
-    }
-    
-    onThemeChange({ theme }) {
-        this.setTheme(theme);
     }
 
     /**
@@ -64,8 +56,8 @@ export class ThemeManager {
         
         localStorage.setItem('app-theme', theme);
         
+        // Dispara evento para atualizar os componentes
         this.eventBus.publish('theme:changed', { theme });
-        // **NOVO**: Notifica o sistema de acessibilidade sobre a mudança de tema.
         this.eventBus.publish('accessibility:announce', `Theme changed to ${theme} mode.`);
         
         console.info('ThemeManager: Theme changed to:', theme);
@@ -112,7 +104,6 @@ export class ThemeManager {
      * @brief Destroy theme manager
      */
     destroy() {
-        this.eventBus.unsubscribe('theme:change', this.onThemeChange);
         console.info('ThemeManager: Destroyed');
     }
 }

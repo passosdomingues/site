@@ -13,6 +13,7 @@ class AccessibilityManager {
         this.currentFocusIndex = 0;
         this.trapContainer = null;
         this.observer = null;
+        this.fontSize = 100; // percent
         
         this.announce = this.announce.bind(this);
         this.handleKeydown = this.handleKeydown.bind(this);
@@ -47,6 +48,7 @@ class AccessibilityManager {
             this.createAnnouncer();
             this.announcePageLoad();
             this.setupSkipLinks();
+            this.loadPreferences();
             
             this.isInitialized = true;
             console.info('AccessibilityManager: Initialized successfully');
@@ -512,6 +514,56 @@ class AccessibilityManager {
     }
 
     /**
+     * @brief Increase font size
+     */
+    increaseFontSize() {
+        this.fontSize = Math.min(this.fontSize + 10, 150);
+        this.applyFontSize();
+        this.announce(`Font size increased to ${this.fontSize}%`);
+    }
+
+    /**
+     * @brief Decrease font size
+     */
+    decreaseFontSize() {
+        this.fontSize = Math.max(this.fontSize - 10, 80);
+        this.applyFontSize();
+        this.announce(`Font size decreased to ${this.fontSize}%`);
+    }
+
+    /**
+     * @brief Apply current font size to document
+     */
+    applyFontSize() {
+        document.documentElement.style.fontSize = `${this.fontSize}%`;
+        localStorage.setItem('fontSize', this.fontSize);
+    }
+
+    /**
+     * @brief Load saved preferences
+     */
+    loadPreferences() {
+        // Load font size
+        const savedFontSize = localStorage.getItem('fontSize');
+        if (savedFontSize) {
+            this.fontSize = parseInt(savedFontSize);
+            this.applyFontSize();
+        }
+
+        // Load high contrast
+        const highContrast = localStorage.getItem('highContrast') === 'true';
+        if (highContrast) {
+            this.toggleHighContrast(true);
+        }
+
+        // Load reduced motion
+        const reducedMotion = localStorage.getItem('reducedMotion') === 'true';
+        if (reducedMotion) {
+            this.toggleReducedMotion(true);
+        }
+    }
+
+    /**
      * @brief Announce a message to screen readers
      * @param {string} message - Message to announce
      * @param {string} priority - Priority: 'polite' or 'assertive'
@@ -645,9 +697,27 @@ class AccessibilityManager {
             isInitialized: this.isInitialized,
             focusTrapped: this.focusTrapped,
             focusableElementsCount: this.focusableElements.length,
+            fontSize: this.fontSize,
             highContrast: document.body.classList.contains('high-contrast'),
             reducedMotion: document.body.classList.contains('reduced-motion')
         };
+    }
+
+    /**
+     * @brief Reset all accessibility settings to default
+     */
+    resetSettings() {
+        this.fontSize = 100;
+        this.applyFontSize();
+        
+        document.body.classList.remove('high-contrast');
+        document.body.classList.remove('reduced-motion');
+        
+        localStorage.removeItem('fontSize');
+        localStorage.removeItem('highContrast');
+        localStorage.removeItem('reducedMotion');
+        
+        this.announce('All accessibility settings have been reset to default');
     }
 
     /**
