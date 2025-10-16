@@ -95,7 +95,7 @@ export class FooterView extends BaseView {
                            target="_blank" 
                            rel="noopener noreferrer" 
                            class="footer-resume-link">
-                           View CV Lattes
+                           Lattes
                         </a>
                     ` : ''}
                 </div>

@@ -20,7 +20,7 @@ export const USER_DATA = {
     socialLinks: {
         github: 'https://github.com/passosdomingues',
         linkedin: 'https://www.linkedin.com/in/rafaelpassosdomingues/',
-        instagram: 'https://instagram.com/rafalpassosdomingues'
+        instagram: 'https://instagram.com/rafaelpassosdomingues/'
     },
     resumeUrl: 'http://lattes.cnpq.br/2726901051757064'
 };
