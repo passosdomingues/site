@@ -14,3 +14,41 @@ html.light {
     --tag-highlight-bg: var(--light-bg);
     --skill-bar-bg: #e0e0e0;
 }
+
+html.light .main-footer {
+    background: var(--dark-bg);
+    color: white;
+}
+
+html.light .footer-resume-link {
+    color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+html.light .footer-resume-link:hover {
+    background: var(--accent-color);
+    color: white;
+}
+
+html.light .footer-social-link {
+    color: white;
+}
+
+html.light .footer-social-link:hover {
+    color: var(--accent-color);
+}
+
+html.light .accessibility-menu {
+    background: var(--component-bg);
+    color: var(--text-color);
+    border: 1px solid var(--secondary-color);
+}
+
+html.light .accessibility-menu-item {
+    color: var(--text-color);
+}
+
+html.light .accessibility-menu-item:hover {
+    background: var(--secondary-color);
+    color: white;
+}
