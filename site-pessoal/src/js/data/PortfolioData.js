@@ -52,6 +52,17 @@ export const PORTFOLIO_DATA = {
             }
         },
         {
+            id: 'lna-zeiss-telescope',
+            title: 'LNA Zeiss Telescope Experience',
+            subtitle: 'Operating a classic instrument at Pico dos Dias Observatory',
+            type: 'gallery',
+            metadata: { order: 5, visible: true },
+            content: [
+                { imageUrl: './images/obs4.jpg', caption: 'LNA Observatory at sunset' },
+                { imageUrl: './images/obs5.jpg', caption: 'Aerial view of National Astrophysics Laboratory (LNA)' }
+            ]
+        },
+        {
             id: 'astrophysics-research',
             title: 'Astrophysics Research',
             subtitle: 'Work in galactic and extragalactic astrophysics',
@@ -62,7 +73,7 @@ export const PORTFOLIO_DATA = {
                     title: 'Beyond the Telescope: Diving into the Frontier of Galactic Astrophysics at UNIFAL-MG',
                     description: 'Looking at the sky through the eyepiece is the first step, but what really moves me is the mystery of Galactic Astrophysics...',
                     links: [
-                        { url: 'https://lnkd.in/deYnab4a', label: 'Research Paper' }
+                        { url: 'https://sciforum.net/paper/view/5868', label: 'Research Paper' }
                     ],
                     tags: ['Dark Matter', 'Galactic Astrophysics', 'Research', 'Stellar Orbits'],
                     status: 'Completed',
@@ -114,17 +125,6 @@ export const PORTFOLIO_DATA = {
             ]
         },
         {
-            id: 'lna-zeiss-telescope',
-            title: 'LNA Zeiss Telescope Experience',
-            subtitle: 'Operating a classic instrument at Pico dos Dias Observatory',
-            type: 'gallery',
-            metadata: { order: 5, visible: true },
-            content: [
-                { imageUrl: './images/obs4.jpg', caption: 'LNA Observatory at sunset' },
-                { imageUrl: './images/obs5.jpg', caption: 'Aerial view of National Astrophysics Laboratory (LNA)' }
-            ]
-        },
-        {
             id: 'education-experience',
             title: 'Education Experience',
             subtitle: 'Teaching and educational material development',
@@ -157,11 +157,12 @@ export const PORTFOLIO_DATA = {
             id: 'innovation-entrepreneurship',
             title: 'Innovation and Entrepreneurship',
             subtitle: 'NidusTec and innovation ecosystem',
-            type: 'cards',
+            type: 'gallery',
             metadata: { order: 7, visible: true },
             content: [
                 {
-                    title: 'NidusTec - Technology-Based Business Incubator',
+                    imageUrl: './images/nidus.jpg',
+                    caption: 'NidusTec - Technology-Based Business Incubator',
                     description: 'As part of the NidusTec team, I acted as a bridge between academic research and the market...',
                     links: [
                         { url: 'https://www.unifal-mg.edu.br/i9unifal/maratona-de-ideias-senac-alfenas-i9-em-parceria-com-o-unis-cefet-varginha-e-cesullab/', label: 'Maratona de Ideias Senac Alfenas' },
@@ -176,7 +177,17 @@ export const PORTFOLIO_DATA = {
                     tags: ['Innovation', 'Entrepreneurship', 'Technology', 'Startups'],
                     status: 'Completed',
                     date: '2021-2023'
-                }
+                },
+                { imageUrl: './images/nidus2.jpg', caption: 'NidusTec Activities' },
+                { imageUrl: './images/nidus3.jpg', caption: 'Innovation Workshop' },
+                { imageUrl: './images/nidus4.jpg', caption: 'Maker Space Equipment' },
+                { imageUrl: './images/nidus5.jpg', caption: 'Team Collaboration' },
+                { imageUrl: './images/nidus6.jpg', caption: 'Project Development' },
+                { imageUrl: './images/nidus7.jpg', caption: 'Technology Prototyping' },
+                { imageUrl: './images/nidus8.jpg', caption: 'Entrepreneurship Training' },
+                { imageUrl: './images/nidus9.jpg', caption: 'Innovation Ecosystem' },
+                { imageUrl: './images/nidus10.jpg', caption: 'Startup Incubation' },
+                { imageUrl: './images/nidus11.jpg', caption: 'Maker Culture' }
             ]
         },
         {
