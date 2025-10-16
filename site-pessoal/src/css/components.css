@@ -490,9 +490,33 @@
         height: 44px;
         font-size: 1.3rem;
     }
-    
+
+    /* Accessibility Menu Colors */
     .accessibility-menu {
-        right: -10px;
-        min-width: 180px;
+        background: var(--component-bg) !important;
+        color: var(--text-color) !important;
+        border: 1px solid var(--secondary-color) !important;
+    }
+
+    .accessibility-menu-item {
+        color: var(--text-color) !important;
+        background: transparent !important;
+    }
+
+    .accessibility-menu-item:hover {
+        background: var(--secondary-color) !important;
+        color: white !important;
+    }
+
+    /* Ensure app controls have proper contrast */
+    .app-control-button {
+        background: var(--primary-color) !important;
+        color: white !important;
+        border: 2px solid transparent !important;
+    }
+
+    .app-control-button:hover {
+        background: var(--secondary-color) !important;
+        color: white !important;
     }
 }

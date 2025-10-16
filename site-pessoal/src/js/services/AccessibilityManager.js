@@ -550,15 +550,15 @@ class AccessibilityManager {
             this.applyFontSize();
         }
 
-        // Load high contrast
-        const highContrast = localStorage.getItem('highContrast') === 'true';
-        if (highContrast) {
+        // Load high contrast - NÃO aplicar por padrão, só se explicitamente salvo
+        const highContrast = localStorage.getItem('highContrast');
+        if (highContrast === 'true') {
             this.toggleHighContrast(true);
         }
 
         // Load reduced motion
-        const reducedMotion = localStorage.getItem('reducedMotion') === 'true';
-        if (reducedMotion) {
+        const reducedMotion = localStorage.getItem('reducedMotion');
+        if (reducedMotion === 'true') {
             this.toggleReducedMotion(true);
         }
     }

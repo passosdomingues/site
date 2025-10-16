@@ -21,7 +21,8 @@ export class ThemeManager {
         const savedTheme = localStorage.getItem('app-theme');
         const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         
-        this.currentTheme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
+        // Use saved theme, otherwise system preference, otherwise default to dark
+        this.currentTheme = savedTheme || (systemPrefersDark ? 'dark' : 'dark'); // Default to dark
         
         this.applyTheme(this.currentTheme);
         this.setupEventListeners();
@@ -69,6 +70,7 @@ export class ThemeManager {
      */
     applyTheme(theme) {
         document.documentElement.setAttribute('data-theme', theme);
+        document.documentElement.className = theme; // Adicione esta linha
         
         const metaThemeColor = document.querySelector('meta[name="theme-color"]');
         if (metaThemeColor) {
