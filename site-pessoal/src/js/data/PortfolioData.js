@@ -164,7 +164,13 @@ export const PORTFOLIO_DATA = {
                     title: 'NidusTec - Technology-Based Business Incubator',
                     description: 'As part of the NidusTec team, I acted as a bridge between academic research and the market...',
                     links: [
-                        { url: 'https://jornal.unifal-mg.edu.br/capacitacoes-promovidas-pela-agencia-de-inovacao-e-a-incubadora-de-empresas-no-mes-de-junho-estimulam-a-cultura-empreendedora-e-a-inovacao-tecnologica-junto-a-comunidade/', label: 'UNIFAL-MG News: June Training' },
+                        { url: 'https://www.unifal-mg.edu.br/i9unifal/maratona-de-ideias-senac-alfenas-i9-em-parceria-com-o-unis-cefet-varginha-e-cesullab/', label: 'Maratona de Ideias Senac Alfenas' },
+                        { url: 'https://jornal.unifal-mg.edu.br/comunidade-academica-do-campus-varginha-adquire-habilidades-praticas-e-teoricas-na-area-da-cultura-maker-em-capacitacao-promovida-no-niduslab/', label: 'Capacitação em Cultura Maker - Campus Varginha' },
+                        { url: 'https://jornal.unifal-mg.edu.br/agencia-de-inovacao-de-empreendedorismo-da-unifal-mg-realiza-segunda-oficina-de-capacitacao-para-corte-a-laser-nos-laboratorios-maker-dos-campi-alfenas-e-pocos-de-caldas/', label: 'Oficina de Corte a Laser - Alfenas e Poços de Caldas' },
+                        { url: 'https://jornal.unifal-mg.edu.br/calouros-vivenciam-inovacao-em-visitas-ao-laboratorio-maker-na-unifal-mg/', label: 'Calouros Visitam Laboratório Maker' },
+                        { url: 'https://jornal.unifal-mg.edu.br/agencia-de-inovacao-e-empreendedorismo-da-unifal-mg-promove-visita-tecnica-no-espaco-maker-a-calouros-do-bacharelado-em-quimica-da-instituicao/', label: 'Visita Técnica ao Espaço Maker - Calouros de Química' },
+                        { url: 'https://jornal.unifal-mg.edu.br/capacitacoes-promovidas-pela-agencia-de-inovacao-e-incubadora-de-empresas-de-base-tecnologica-impulsionam-a-criatividade-e-o-empreendedorismo/', label: 'Capacitações Impulsionam Criatividade e Empreendedorismo' },
+                        { url: 'https://jornal.unifal-mg.edu.br/capacitacoes-promovidas-pela-agencia-de-inovacao-e-a-incubadora-de-empresas-no-mes-de-junho-estimulam-a-cultura-empreendedora-e-a-inovacao-tecnologica-junto-a-comunidade/', label: 'Capacitações de Junho - Cultura Empreendedora' },
                         { url: 'https://anprotec.org.br/site/2024/12/premio-nacional-anprotec-de-empreendedorismo-inovador-2024-revela-vencedores-em-sao-jose-dos-campos/', label: 'ANPROTEC Award News' }
                     ],
                     tags: ['Innovation', 'Entrepreneurship', 'Technology', 'Startups'],
