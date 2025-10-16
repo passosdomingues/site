@@ -278,4 +278,77 @@
     .cards-grid {
         grid-template-columns: 1fr;
     }
+
+    /* ==================================================================
+    * Footer Component (Styles for dynamic content)
+    * ================================================================== */
+
+    /* Ajusta o .footer-content que agora é o nosso container com ID */
+    .footer-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        max-width: var(--max-width-layout, 1100px);
+        margin: 0 auto;
+        width: 100%;
+    }
+
+    .footer-social-links {
+        display: flex;
+        justify-content: center;
+        gap: 1.5rem; /* Espaço entre os ícones */
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .footer-social-item a {
+        color: var(--color-text-secondary); /* Cor do ícone */
+        display: inline-block;
+        transition: color 0.3s ease, transform 0.3s ease;
+    }
+
+    .footer-social-item a:hover,
+    .footer-social-item a:focus {
+        color: var(--color-primary); /* Cor ao passar o mouse */
+        transform: scale(1.1);
+    }
+
+    .footer-icon {
+        width: 24px;  /* Tamanho do ícone */
+        height: 24px;
+        vertical-align: middle;
+    }
+
+    .footer-copyright {
+        text-align: center;
+    }
+
+    /* Classe de acessibilidade para leitores de tela */
+    .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border-width: 0;
+    }
+
+    /* Layout em telas maiores */
+    @media (min-width: 768px) {
+        .footer-content {
+            flex-direction: row;
+            justify-content: space-between;
+        }
+        .footer-social { 
+            order: 1; /* Links sociais à direita */
+        }
+        .footer-copyright { 
+            order: -1; /* Copyright à esquerda */
+        }
+    }
 }

@@ -1,3 +1,4 @@
+// Importa BaseView do mesmo diretório
 import { BaseView } from './BaseView.js';
 
 /**
@@ -7,6 +8,7 @@ import { BaseView } from './BaseView.js';
 export class HeroView extends BaseView {
     constructor(config = {}) {
         super(config);
+        // Recebe os dados 'personalInfo' do main.js
         this.heroData = config.heroData || {};
     }
 
@@ -16,12 +18,12 @@ export class HeroView extends BaseView {
     async init() {
         await super.init();
         
-        // Load default hero data if not provided
+        // Remove o getDefaultHeroData()
         if (Object.keys(this.heroData).length === 0) {
-            this.heroData = this.getDefaultHeroData();
+            console.warn('HeroView: No heroData provided by main.js');
         }
         
-        console.info('HeroView: Initialized with hero data', this.heroData);
+        console.info('HeroView: Initialized with hero data');
     }
 
     /**
@@ -35,7 +37,7 @@ export class HeroView extends BaseView {
         }
 
         const heroHTML = this.createHeroHTML();
-        this.container.innerHTML = heroHTML;
+        this.setHTML(this.container, heroHTML); // Use setHTML do BaseView
         
         // Register main elements
         this.registerElement('heroTitle', this.container.querySelector('.hero-title'));
@@ -49,121 +51,34 @@ export class HeroView extends BaseView {
 
     /**
      * @brief Create hero section HTML
-     * @returns {string} HTML string
+     * @returns {string} The HTML
      */
     createHeroHTML() {
-        return `
-            <section class="hero-section" id="hero-section">
+        // Lê os dados do UserData.js -> personalInfo
+        const { name, title, summary } = this.heroData;
+
+        if (!name || !title || !summary) {
+            console.warn('HeroView: Data is incomplete. Using fallback HTML.');
+            // Retorna o conteúdo estático do seu index.html como fallback
+            return `
                 <div class="hero-content">
-                    <h1 class="hero-title">${this.escapeHtml(this.heroData.title)}</h1>
-                    <p class="hero-subtitle">${this.escapeHtml(this.heroData.subtitle)}</p>
-                    <p class="hero-description">${this.escapeHtml(this.heroData.description)}</p>
-                    ${this.heroData.cta ? this.createCTAButtons() : ''}
+                    <h1 class="hero-title">Rafael Passos Domingues</h1>
+                    <p class="hero-subtitle">Physicist & Computer Scientist</p>
+                    <p class="hero-description">
+                        Researcher in Astrophysics, Data Science and Technology Innovation...
+                    </p>
                 </div>
-                ${this.heroData.image ? this.createHeroImage() : ''}
-            </section>
-        `;
-    }
+            `;
+        }
 
-    /**
-     * @brief Create call-to-action buttons
-     * @returns {string} CTA buttons HTML
-     */
-    createCTAButtons() {
-        if (!this.heroData.cta) return '';
-        
-        const buttons = this.heroData.cta.map(cta => `
-            <a href="${this.escapeHtml(cta.url)}" 
-               class="hero-cta-button hero-cta-button--${cta.type || 'primary'}"
-               ${cta.external ? 'target="_blank" rel="noopener noreferrer"' : ''}>
-                ${this.escapeHtml(cta.label)}
-            </a>
-        `).join('');
-        
-        return `<div class="hero-cta-container">${buttons}</div>`;
-    }
-
-    /**
-     * @brief Create hero image
-     * @returns {string} Hero image HTML
-     */
-    createHeroImage() {
-        if (!this.heroData.image) return '';
-        
+        // Gera o HTML dinâmico
         return `
-            <div class="hero-image-container">
-                <img src="${this.escapeHtml(this.heroData.image.url)}" 
-                     alt="${this.escapeHtml(this.heroData.image.alt)}" 
-                     class="hero-image"
-                     loading="eager">
+            <div class="hero-content">
+                <h1 class="hero-title">${this.escapeHtml(name)}</h1>
+                <p class="hero-subtitle">${this.escapeHtml(title)}</p>
+                <p class="hero-description">${this.escapeHtml(summary)}</p>
             </div>
         `;
-    }
-
-    /**
-     * @brief Set up event listeners
-     */
-    setupEventListeners() {
-        // Add click listeners to CTA buttons
-        const ctaButtons = this.container.querySelectorAll('.hero-cta-button');
-        ctaButtons.forEach((button, index) => {
-            this.addEventListener(button, 'click', (event) => {
-                this.onCTAClick(event, this.heroData.cta[index]);
-            });
-        });
-    }
-
-    /**
-     * @brief Handle CTA button clicks
-     * @param {Event} event - Click event
-     * @param {Object} cta - CTA data
-     */
-    onCTAClick(event, cta) {
-        this.eventBus.publish('hero:cta:clicked', {
-            cta,
-            event
-        });
-        
-        console.info('HeroView: CTA clicked', cta);
-    }
-
-    /**
-     * @brief Update hero data
-     * @param {Object} newData - New hero data
-     */
-    async update(newData) {
-        await super.update(newData);
-        
-        this.heroData = { ...this.heroData, ...newData };
-        
-        // Re-render if already rendered
-        if (this.isRendered) {
-            await this.render();
-        }
-    }
-
-    /**
-     * @brief Get default hero data
-     * @returns {Object} Default hero data
-     */
-    getDefaultHeroData() {
-        return {
-            title: 'Rafael Passos Domingues',
-            subtitle: 'Physicist & Computer Scientist',
-            description: 'Researcher in Astrophysics, Data Science and Technology Innovation. Combining scientific rigor with computational expertise to solve complex problems and drive innovation.',
-            cta: [
-                {
-                    label: 'View Research',
-                    url: '#astrophysics-research',
-                    type: 'primary'
-                },
-                {
-                    label: 'Contact Me',
-                    url: '#contact',
-                    type: 'secondary'
-                }
-            ]
-        };
     }
 
     /**
