@@ -20,7 +20,6 @@ export class ThemeManager {
     async init() {
         if (this.isInitialized) return;
 
-        // Load saved theme or detect system preference
         const savedTheme = localStorage.getItem('app-theme');
         const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         
@@ -39,41 +38,36 @@ export class ThemeManager {
     setupEventListeners() {
         this.eventBus.subscribe('theme:change', this.onThemeChange);
         
-        // Listen for system theme changes
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
             if (!localStorage.getItem('app-theme')) {
                 this.setTheme(e.matches ? 'dark' : 'light');
             }
         });
     }
-
-    /**
-     * @brief Handle theme change events
-     * @param {Object} data - Event data
-     */
-    onThemeChange(data) {
-        if (data.theme && ['light', 'dark'].includes(data.theme)) {
-            this.setTheme(data.theme);
-        }
+    
+    onThemeChange({ theme }) {
+        this.setTheme(theme);
     }
 
     /**
-     * @brief Set application theme
+     * @brief Set a new theme
      * @param {string} theme - Theme name ('light' or 'dark')
      */
     setTheme(theme) {
         if (theme !== 'light' && theme !== 'dark') {
-            console.warn('ThemeManager: Invalid theme:', theme);
-            return;
+            console.warn(`ThemeManager: Invalid theme '${theme}'. Defaulting to 'light'.`);
+            theme = 'light';
         }
 
         this.currentTheme = theme;
         this.applyTheme(theme);
         
-        // Save preference
         localStorage.setItem('app-theme', theme);
         
         this.eventBus.publish('theme:changed', { theme });
+        // **NOVO**: Notifica o sistema de acessibilidade sobre a mudança de tema.
+        this.eventBus.publish('accessibility:announce', `Theme changed to ${theme} mode.`);
+        
         console.info('ThemeManager: Theme changed to:', theme);
     }
 
@@ -84,7 +78,6 @@ export class ThemeManager {
     applyTheme(theme) {
         document.documentElement.setAttribute('data-theme', theme);
         
-        // Update meta theme-color for mobile browsers
         const metaThemeColor = document.querySelector('meta[name="theme-color"]');
         if (metaThemeColor) {
             metaThemeColor.setAttribute('content', theme === 'dark' ? '#1a1a1a' : '#ffffff');
@@ -120,7 +113,6 @@ export class ThemeManager {
      */
     destroy() {
         this.eventBus.unsubscribe('theme:change', this.onThemeChange);
-        this.isInitialized = false;
         console.info('ThemeManager: Destroyed');
     }
 }
