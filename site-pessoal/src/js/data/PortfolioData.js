@@ -189,6 +189,11 @@ export const PORTFOLIO_DATA = {
                 {
                     title: 'Brain Tumor Segmentation in Magnetic Resonance Images',
                     description: 'This project used a U-Net architecture for automatic segmentation of brain tumors in magnetic resonance images...',
+                    links: [
+                        { url: 'https://youtu.be/Sdd98HDahPA', label: 'Machine Learning Fundamentals: Dimensionality Reduction - A Physical and Mathematical Perspective' },
+                        { url: 'https://youtu.be/11ahe2JBN5c', label: 'Building a Complete Machine Learning Pipeline for Breast Cancer Diagnosis | End-to-End Project' },
+                        { url: 'https://youtu.be/4R1Z92z-zNs', label: 'Materializing Pixels: From Photons to Matter with CO₂ Laser CNC and Computational Vision Horizons' }
+                    ],
                     tags: ['Deep Learning', 'Computer Vision', 'Python', 'TensorFlow', 'Medicine'],
                     status: 'Completed',
                     date: '2023'
@@ -196,6 +201,9 @@ export const PORTFOLIO_DATA = {
                 {
                     title: 'Morphological Classification of Galaxies with CNNs',
                     description: 'Using data from the Galaxy Zoo project, I developed a convolutional neural network to classify galaxies based on their morphology...',
+                    links: [
+                        { url: 'https://youtu.be/naBvOJhUAH4', label: 'Are We Living in a Simulation? How M/M/1 Queues Could Reveal the Universe (Stochastic Experiment)' }
+                    ],
                     tags: ['Deep Learning', 'Astrophysics', 'Python', 'PyTorch', 'Data Science'],
                     status: 'Completed',
                     date: '2022'
