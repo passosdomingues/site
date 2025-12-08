@@ -66,10 +66,9 @@ public class AuthController {
 				new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
-		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-		List<String> roles = userDetails.getAuthorities().stream()
-				.map(item -> item.getAuthority())
-				.collect(Collectors.toList());
+		// UserDetailsImpl userDetails = (UserDetailsImpl)
+		// authentication.getPrincipal();
+		// Roles are available in userDetails if needed for JWT generation in the future
 
 		return ResponseEntity.ok(new MessageResponse("User signed in successfully!"));
 	}

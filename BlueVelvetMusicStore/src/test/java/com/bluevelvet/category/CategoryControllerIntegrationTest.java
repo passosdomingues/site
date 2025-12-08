@@ -5,8 +5,6 @@
  */
 package com.bluevelvet.category;
 
-import com.bluevelvet.auth.RoleRepository;
-import com.bluevelvet.auth.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,6 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
+@SuppressWarnings("null")
 public class CategoryControllerIntegrationTest {
 
     @Autowired

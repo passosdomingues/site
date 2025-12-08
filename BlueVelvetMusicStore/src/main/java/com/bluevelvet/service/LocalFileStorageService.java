@@ -35,7 +35,11 @@ public class LocalFileStorageService implements FileStorageService {
      */
     @Override
     public String saveFile(MultipartFile file) throws IOException {
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        String originalFilename = file.getOriginalFilename();
+        if (originalFilename == null) {
+            throw new IOException("File name cannot be null");
+        }
+        String fileName = StringUtils.cleanPath(originalFilename);
         String uniqueFileName = UUID.randomUUID().toString() + "_" + fileName;
 
         Path uploadPath = Paths.get(uploadDir);

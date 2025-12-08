@@ -33,6 +33,9 @@ public class ProductService {
      */
     @Transactional(readOnly = true)
     public Page<Product> listProductsByCategory(Long categoryId, Pageable pageable) {
+        if (categoryId == null) {
+            throw new IllegalArgumentException("Category ID must not be null");
+        }
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new EntityNotFoundException("Category not found with id: " + categoryId));
 

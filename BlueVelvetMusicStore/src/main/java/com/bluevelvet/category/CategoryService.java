@@ -65,6 +65,8 @@ public class CategoryService {
      * @return Optional containing the category if found
      */
     public Optional<Category> getCategoryById(Long categoryId) {
+        if (categoryId == null)
+            return Optional.empty();
         return categoryRepository.findById(categoryId);
     }
 
@@ -83,6 +85,8 @@ public class CategoryService {
      * @return The saved category entity
      */
     public Category saveCategory(Category category) {
+        if (category == null)
+            throw new IllegalArgumentException("Category must not be null");
         return categoryRepository.save(category);
     }
 
@@ -125,7 +129,9 @@ public class CategoryService {
      * @param categoryId The ID of the category to delete
      */
     public void deleteCategory(Long categoryId) {
-        categoryRepository.deleteById(categoryId);
+        if (categoryId != null) {
+            categoryRepository.deleteById(categoryId);
+        }
     }
 
     /**
@@ -152,6 +158,8 @@ public class CategoryService {
      * @return List of child categories
      */
     public List<Category> getSubcategoriesByParentId(Long parentCategoryId) {
+        if (parentCategoryId == null)
+            return List.of();
         Optional<Category> parentCategory = categoryRepository.findById(parentCategoryId);
         return parentCategory.map(categoryRepository::findByParent)
                 .orElse(List.of());
@@ -164,6 +172,8 @@ public class CategoryService {
      *         found
      */
     public Boolean toggleCategoryStatus(Long categoryId) {
+        if (categoryId == null)
+            return null;
         Optional<Category> categoryOptional = categoryRepository.findById(categoryId);
         if (categoryOptional.isPresent()) {
             Category category = categoryOptional.get();
