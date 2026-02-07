@@ -1,0 +1,1964 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=edge"/>
+<title>Test results - CategoryControllerIntegrationTest</title>
+<link href="../css/base-style.css" rel="stylesheet" type="text/css"/>
+<link href="../css/style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/report.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="content">
+<h1>CategoryControllerIntegrationTest</h1>
+<div class="breadcrumbs">
+<a href="../index.html">all</a> &gt; 
+<a href="../packages/com.bluevelvet.controller.html">com.bluevelvet.controller</a> &gt; CategoryControllerIntegrationTest</div>
+<div id="summary">
+<table>
+<tr>
+<td>
+<div class="summaryGroup">
+<table>
+<tr>
+<td>
+<div class="infoBox" id="tests">
+<div class="counter">4</div>
+<p>tests</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="failures">
+<div class="counter">0</div>
+<p>failures</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="ignored">
+<div class="counter">0</div>
+<p>ignored</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="duration">
+<div class="counter">0.879s</div>
+<p>duration</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+<td>
+<div class="infoBox success" id="successRate">
+<div class="percent">100%</div>
+<p>successful</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div id="tabs">
+<ul class="tabLinks">
+<li>
+<a href="#tab0">Tests</a>
+</li>
+<li>
+<a href="#tab1">Standard output</a>
+</li>
+<li>
+<a href="#tab2">Standard error</a>
+</li>
+</ul>
+<div id="tab0" class="tab">
+<h2>Tests</h2>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Duration</th>
+<th>Result</th>
+</tr>
+</thead>
+<tr>
+<td class="success">createCategory_Forbidden_ForNonAdmin()</td>
+<td class="success">0.076s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">createCategory_Success()</td>
+<td class="success">0.041s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">getCategory_WithChildren_Hierarchical()</td>
+<td class="success">0.711s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">getRootCategories_Success()</td>
+<td class="success">0.051s</td>
+<td class="success">passed</td>
+</tr>
+</table>
+</div>
+<div id="tab1" class="tab">
+<h2>Standard output</h2>
+<span class="code">
+<pre>18:17:07.856 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.bluevelvet.controller.CategoryControllerIntegrationTest]: CategoryControllerIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+18:17:07.970 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.bluevelvet.BlueVelvetMusicStoreApplication for test class com.bluevelvet.controller.CategoryControllerIntegrationTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.3)
+
+2025-12-10T18:17:08.449-03:00  INFO 36585 --- [BlueVelvetMusicStore] [    Test worker] c.b.c.CategoryControllerIntegrationTest  : Starting CategoryControllerIntegrationTest using Java 21.0.6 with PID 36585 (started by rafael in /home/rafael/.gemini/antigravity/scratch/BlueVelvetMusicStore)
+2025-12-10T18:17:08.451-03:00  INFO 36585 --- [BlueVelvetMusicStore] [    Test worker] c.b.c.CategoryControllerIntegrationTest  : No active profile set, falling back to 1 default profile: &quot;default&quot;
+2025-12-10T18:17:09.238-03:00  INFO 36585 --- [BlueVelvetMusicStore] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-12-10T18:17:09.296-03:00  INFO 36585 --- [BlueVelvetMusicStore] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 51 ms. Found 5 JPA repository interfaces.
+2025-12-10T18:17:09.785-03:00  INFO 36585 --- [BlueVelvetMusicStore] [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-12-10T18:17:09.835-03:00  INFO 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+2025-12-10T18:17:09.868-03:00  INFO 36585 --- [BlueVelvetMusicStore] [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-12-10T18:17:10.052-03:00  INFO 36585 --- [BlueVelvetMusicStore] [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-12-10T18:17:10.075-03:00  INFO 36585 --- [BlueVelvetMusicStore] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-12-10T18:17:10.220-03:00  INFO 36585 --- [BlueVelvetMusicStore] [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=CAPITAONEMO
+2025-12-10T18:17:10.222-03:00  INFO 36585 --- [BlueVelvetMusicStore] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-12-10T18:17:10.242-03:00  WARN 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-12-10T18:17:11.110-03:00  INFO 36585 --- [BlueVelvetMusicStore] [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-12-10T18:17:11.129-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    drop table if exists categories cascade 
+Hibernate: 
+    drop table if exists categories cascade 
+2025-12-10T18:17:11.132-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    drop table if exists gift_cards cascade 
+Hibernate: 
+    drop table if exists gift_cards cascade 
+2025-12-10T18:17:11.133-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    drop table if exists product_images cascade 
+Hibernate: 
+    drop table if exists product_images cascade 
+2025-12-10T18:17:11.134-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    drop table if exists products cascade 
+Hibernate: 
+    drop table if exists products cascade 
+2025-12-10T18:17:11.134-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    drop table if exists roles cascade 
+Hibernate: 
+    drop table if exists roles cascade 
+2025-12-10T18:17:11.135-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    drop table if exists user_roles cascade 
+Hibernate: 
+    drop table if exists user_roles cascade 
+2025-12-10T18:17:11.135-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    drop table if exists users cascade 
+Hibernate: 
+    drop table if exists users cascade 
+2025-12-10T18:17:11.140-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    create table categories (
+        enabled boolean not null,
+        id bigint generated by default as identity,
+        parent_id bigint,
+        name varchar(100) not null unique,
+        image_file_name varchar(255),
+        primary key (id)
+    )
+Hibernate: 
+    create table categories (
+        enabled boolean not null,
+        id bigint generated by default as identity,
+        parent_id bigint,
+        name varchar(100) not null unique,
+        image_file_name varchar(255),
+        primary key (id)
+    )
+2025-12-10T18:17:11.148-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    create table gift_cards (
+        balance numeric(38,2) not null,
+        is_active boolean,
+        id bigint generated by default as identity,
+        code varchar(255) not null unique,
+        primary key (id)
+    )
+Hibernate: 
+    create table gift_cards (
+        balance numeric(38,2) not null,
+        is_active boolean,
+        id bigint generated by default as identity,
+        code varchar(255) not null unique,
+        primary key (id)
+    )
+2025-12-10T18:17:11.151-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    create table product_images (
+        product_id bigint not null,
+        image_file_name varchar(255)
+    )
+Hibernate: 
+    create table product_images (
+        product_id bigint not null,
+        image_file_name varchar(255)
+    )
+2025-12-10T18:17:11.152-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    create table products (
+        enabled boolean not null,
+        in_stock boolean not null,
+        price numeric(38,2) not null,
+        category_id bigint not null,
+        created_time timestamp(6),
+        id bigint generated by default as identity,
+        updated_time timestamp(6),
+        description TEXT,
+        name varchar(255) not null,
+        primary key (id)
+    )
+Hibernate: 
+    create table products (
+        enabled boolean not null,
+        in_stock boolean not null,
+        price numeric(38,2) not null,
+        category_id bigint not null,
+        created_time timestamp(6),
+        id bigint generated by default as identity,
+        updated_time timestamp(6),
+        description TEXT,
+        name varchar(255) not null,
+        primary key (id)
+    )
+2025-12-10T18:17:11.154-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    create table roles (
+        id bigint generated by default as identity,
+        name varchar(30) check (name in ('ROLE_ADMINISTRATOR','ROLE_SALES_MANAGER','ROLE_EDITOR','ROLE_ASSISTANT','ROLE_SHIPPING_MANAGER')),
+        primary key (id)
+    )
+Hibernate: 
+    create table roles (
+        id bigint generated by default as identity,
+        name varchar(30) check (name in ('ROLE_ADMINISTRATOR','ROLE_SALES_MANAGER','ROLE_EDITOR','ROLE_ASSISTANT','ROLE_SHIPPING_MANAGER')),
+        primary key (id)
+    )
+2025-12-10T18:17:11.159-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    create table user_roles (
+        role_id bigint not null,
+        user_id bigint not null,
+        primary key (role_id, user_id)
+    )
+Hibernate: 
+    create table user_roles (
+        role_id bigint not null,
+        user_id bigint not null,
+        primary key (role_id, user_id)
+    )
+2025-12-10T18:17:11.160-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    create table users (
+        id bigint generated by default as identity,
+        email varchar(50),
+        password varchar(120),
+        primary key (id),
+        unique (email)
+    )
+Hibernate: 
+    create table users (
+        id bigint generated by default as identity,
+        email varchar(50),
+        password varchar(120),
+        primary key (id),
+        unique (email)
+    )
+2025-12-10T18:17:11.163-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    alter table if exists categories 
+       add constraint FKsaok720gsu4u2wrgbk10b5n8d 
+       foreign key (parent_id) 
+       references categories
+Hibernate: 
+    alter table if exists categories 
+       add constraint FKsaok720gsu4u2wrgbk10b5n8d 
+       foreign key (parent_id) 
+       references categories
+2025-12-10T18:17:11.170-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    alter table if exists product_images 
+       add constraint FKqnq71xsohugpqwf3c9gxmsuy 
+       foreign key (product_id) 
+       references products
+Hibernate: 
+    alter table if exists product_images 
+       add constraint FKqnq71xsohugpqwf3c9gxmsuy 
+       foreign key (product_id) 
+       references products
+2025-12-10T18:17:11.173-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    alter table if exists products 
+       add constraint FKog2rp4qthbtt2lfyhfo32lsw9 
+       foreign key (category_id) 
+       references categories
+Hibernate: 
+    alter table if exists products 
+       add constraint FKog2rp4qthbtt2lfyhfo32lsw9 
+       foreign key (category_id) 
+       references categories
+2025-12-10T18:17:11.174-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    alter table if exists user_roles 
+       add constraint FKh8ciramu9cc9q3qcqiv4ue8a6 
+       foreign key (role_id) 
+       references roles
+Hibernate: 
+    alter table if exists user_roles 
+       add constraint FKh8ciramu9cc9q3qcqiv4ue8a6 
+       foreign key (role_id) 
+       references roles
+2025-12-10T18:17:11.176-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    alter table if exists user_roles 
+       add constraint FKhfh9dx7w3ubf1co1vdev94g3f 
+       foreign key (user_id) 
+       references users
+Hibernate: 
+    alter table if exists user_roles 
+       add constraint FKhfh9dx7w3ubf1co1vdev94g3f 
+       foreign key (user_id) 
+       references users
+2025-12-10T18:17:11.181-03:00  INFO 36585 --- [BlueVelvetMusicStore] [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-12-10T18:17:11.557-03:00  INFO 36585 --- [BlueVelvetMusicStore] [    Test worker] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-12-10T18:17:12.050-03:00  WARN 36585 --- [BlueVelvetMusicStore] [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-12-10T18:17:12.338-03:00  INFO 36585 --- [BlueVelvetMusicStore] [    Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@1e3f0c5c, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1476e447, org.springframework.security.web.context.SecurityContextHolderFilter@106a6420, org.springframework.security.web.header.HeaderWriterFilter@28e2d3ed, org.springframework.web.filter.CorsFilter@2b991034, org.springframework.security.web.authentication.logout.LogoutFilter@3b0b20a8, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@5fe1b8d2, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@597ef918, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@666033b1, org.springframework.security.web.session.SessionManagementFilter@53a4637c, org.springframework.security.web.access.ExceptionTranslationFilter@196519dd, org.springframework.security.web.access.intercept.AuthorizationFilter@2e8488f4]
+2025-12-10T18:17:12.575-03:00  INFO 36585 --- [BlueVelvetMusicStore] [    Test worker] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-12-10T18:17:12.691-03:00  INFO 36585 --- [BlueVelvetMusicStore] [    Test worker] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2025-12-10T18:17:12.692-03:00  INFO 36585 --- [BlueVelvetMusicStore] [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2025-12-10T18:17:12.693-03:00  INFO 36585 --- [BlueVelvetMusicStore] [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
+2025-12-10T18:17:12.715-03:00  INFO 36585 --- [BlueVelvetMusicStore] [    Test worker] c.b.c.CategoryControllerIntegrationTest  : Started CategoryControllerIntegrationTest in 4.599 seconds (process running for 5.825)
+2025-12-10T18:17:12.782-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    select
+        count(*) 
+    from
+        roles r1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        roles r1_0
+2025-12-10T18:17:12.818-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        roles
+        (name, id) 
+    values
+        (?, default)
+Hibernate: 
+    insert 
+    into
+        roles
+        (name, id) 
+    values
+        (?, default)
+2025-12-10T18:17:12.830-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        roles
+        (name, id) 
+    values
+        (?, default)
+Hibernate: 
+    insert 
+    into
+        roles
+        (name, id) 
+    values
+        (?, default)
+2025-12-10T18:17:12.832-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        roles
+        (name, id) 
+    values
+        (?, default)
+Hibernate: 
+    insert 
+    into
+        roles
+        (name, id) 
+    values
+        (?, default)
+2025-12-10T18:17:12.835-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        roles
+        (name, id) 
+    values
+        (?, default)
+Hibernate: 
+    insert 
+    into
+        roles
+        (name, id) 
+    values
+        (?, default)
+2025-12-10T18:17:12.837-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        roles
+        (name, id) 
+    values
+        (?, default)
+Hibernate: 
+    insert 
+    into
+        roles
+        (name, id) 
+    values
+        (?, default)
+Initial roles created successfully
+2025-12-10T18:17:12.840-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    select
+        count(*) 
+    from
+        categories c1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        categories c1_0
+2025-12-10T18:17:12.855-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        categories
+        (enabled, image_file_name, name, parent_id, id) 
+    values
+        (?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        categories
+        (enabled, image_file_name, name, parent_id, id) 
+    values
+        (?, ?, ?, ?, default)
+2025-12-10T18:17:12.862-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        categories
+        (enabled, image_file_name, name, parent_id, id) 
+    values
+        (?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        categories
+        (enabled, image_file_name, name, parent_id, id) 
+    values
+        (?, ?, ?, ?, default)
+2025-12-10T18:17:12.864-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        categories
+        (enabled, image_file_name, name, parent_id, id) 
+    values
+        (?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        categories
+        (enabled, image_file_name, name, parent_id, id) 
+    values
+        (?, ?, ?, ?, default)
+2025-12-10T18:17:12.867-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        categories
+        (enabled, image_file_name, name, parent_id, id) 
+    values
+        (?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        categories
+        (enabled, image_file_name, name, parent_id, id) 
+    values
+        (?, ?, ?, ?, default)
+2025-12-10T18:17:12.870-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        categories
+        (enabled, image_file_name, name, parent_id, id) 
+    values
+        (?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        categories
+        (enabled, image_file_name, name, parent_id, id) 
+    values
+        (?, ?, ?, ?, default)
+2025-12-10T18:17:12.872-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        categories
+        (enabled, image_file_name, name, parent_id, id) 
+    values
+        (?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        categories
+        (enabled, image_file_name, name, parent_id, id) 
+    values
+        (?, ?, ?, ?, default)
+2025-12-10T18:17:12.875-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        categories
+        (enabled, image_file_name, name, parent_id, id) 
+    values
+        (?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        categories
+        (enabled, image_file_name, name, parent_id, id) 
+    values
+        (?, ?, ?, ?, default)
+2025-12-10T18:17:12.877-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        categories
+        (enabled, image_file_name, name, parent_id, id) 
+    values
+        (?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        categories
+        (enabled, image_file_name, name, parent_id, id) 
+    values
+        (?, ?, ?, ?, default)
+2025-12-10T18:17:12.879-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        categories
+        (enabled, image_file_name, name, parent_id, id) 
+    values
+        (?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        categories
+        (enabled, image_file_name, name, parent_id, id) 
+    values
+        (?, ?, ?, ?, default)
+Initial categories created successfully
+2025-12-10T18:17:13.383-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    select
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name,
+        c1_0.parent_id 
+    from
+        categories c1_0
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name,
+        c1_0.parent_id 
+    from
+        categories c1_0
+2025-12-10T18:17:13.405-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+Hibernate: 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+2025-12-10T18:17:13.409-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+Hibernate: 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+2025-12-10T18:17:13.412-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+Hibernate: 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+2025-12-10T18:17:13.413-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+Hibernate: 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+2025-12-10T18:17:13.415-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+Hibernate: 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+2025-12-10T18:17:13.419-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+Hibernate: 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+2025-12-10T18:17:13.422-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+Hibernate: 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+2025-12-10T18:17:13.423-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+Hibernate: 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+2025-12-10T18:17:13.425-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+Hibernate: 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+2025-12-10T18:17:13.429-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        categories
+        (enabled, image_file_name, name, parent_id, id) 
+    values
+        (?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        categories
+        (enabled, image_file_name, name, parent_id, id) 
+    values
+        (?, ?, ?, ?, default)
+2025-12-10T18:17:13.431-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        categories
+        (enabled, image_file_name, name, parent_id, id) 
+    values
+        (?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        categories
+        (enabled, image_file_name, name, parent_id, id) 
+    values
+        (?, ?, ?, ?, default)
+2025-12-10T18:17:13.440-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    delete 
+    from
+        categories 
+    where
+        id=?
+Hibernate: 
+    delete 
+    from
+        categories 
+    where
+        id=?
+2025-12-10T18:17:13.442-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    delete 
+    from
+        categories 
+    where
+        id=?
+Hibernate: 
+    delete 
+    from
+        categories 
+    where
+        id=?
+2025-12-10T18:17:13.443-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    delete 
+    from
+        categories 
+    where
+        id=?
+Hibernate: 
+    delete 
+    from
+        categories 
+    where
+        id=?
+2025-12-10T18:17:13.444-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    delete 
+    from
+        categories 
+    where
+        id=?
+Hibernate: 
+    delete 
+    from
+        categories 
+    where
+        id=?
+2025-12-10T18:17:13.445-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    delete 
+    from
+        categories 
+    where
+        id=?
+Hibernate: 
+    delete 
+    from
+        categories 
+    where
+        id=?
+2025-12-10T18:17:13.446-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    delete 
+    from
+        categories 
+    where
+        id=?
+Hibernate: 
+    delete 
+    from
+        categories 
+    where
+        id=?
+2025-12-10T18:17:13.447-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    delete 
+    from
+        categories 
+    where
+        id=?
+Hibernate: 
+    delete 
+    from
+        categories 
+    where
+        id=?
+2025-12-10T18:17:13.448-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    delete 
+    from
+        categories 
+    where
+        id=?
+Hibernate: 
+    delete 
+    from
+        categories 
+    where
+        id=?
+2025-12-10T18:17:13.449-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    delete 
+    from
+        categories 
+    where
+        id=?
+Hibernate: 
+    delete 
+    from
+        categories 
+    where
+        id=?
+2025-12-10T18:17:13.500-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    select
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name,
+        c1_0.parent_id 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id is null 
+    offset
+        ? rows 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name,
+        c1_0.parent_id 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id is null 
+    offset
+        ? rows 
+    fetch
+        first ? rows only
+2025-12-10T18:17:13.613-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    select
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name,
+        c1_0.parent_id 
+    from
+        categories c1_0
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name,
+        c1_0.parent_id 
+    from
+        categories c1_0
+2025-12-10T18:17:13.616-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+Hibernate: 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+2025-12-10T18:17:13.618-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+Hibernate: 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+2025-12-10T18:17:13.619-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+Hibernate: 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+2025-12-10T18:17:13.620-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+Hibernate: 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+2025-12-10T18:17:13.620-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+Hibernate: 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+2025-12-10T18:17:13.621-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+Hibernate: 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+2025-12-10T18:17:13.622-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+Hibernate: 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+2025-12-10T18:17:13.623-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+Hibernate: 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+2025-12-10T18:17:13.624-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+Hibernate: 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+2025-12-10T18:17:13.691-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    select
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name,
+        c1_0.parent_id 
+    from
+        categories c1_0
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name,
+        c1_0.parent_id 
+    from
+        categories c1_0
+2025-12-10T18:17:13.695-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+Hibernate: 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+2025-12-10T18:17:13.697-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+Hibernate: 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+2025-12-10T18:17:13.698-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+Hibernate: 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+2025-12-10T18:17:13.699-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+Hibernate: 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+2025-12-10T18:17:13.700-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+Hibernate: 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+2025-12-10T18:17:13.702-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+Hibernate: 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+2025-12-10T18:17:13.704-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+Hibernate: 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+2025-12-10T18:17:13.705-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+Hibernate: 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+2025-12-10T18:17:13.707-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+Hibernate: 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+2025-12-10T18:17:13.709-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        categories
+        (enabled, image_file_name, name, parent_id, id) 
+    values
+        (?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        categories
+        (enabled, image_file_name, name, parent_id, id) 
+    values
+        (?, ?, ?, ?, default)
+2025-12-10T18:17:13.711-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        categories
+        (enabled, image_file_name, name, parent_id, id) 
+    values
+        (?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        categories
+        (enabled, image_file_name, name, parent_id, id) 
+    values
+        (?, ?, ?, ?, default)
+2025-12-10T18:17:13.712-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        categories
+        (enabled, image_file_name, name, parent_id, id) 
+    values
+        (?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        categories
+        (enabled, image_file_name, name, parent_id, id) 
+    values
+        (?, ?, ?, ?, default)
+2025-12-10T18:17:13.714-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        categories
+        (enabled, image_file_name, name, parent_id, id) 
+    values
+        (?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        categories
+        (enabled, image_file_name, name, parent_id, id) 
+    values
+        (?, ?, ?, ?, default)
+2025-12-10T18:17:13.715-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        categories
+        (enabled, image_file_name, name, parent_id, id) 
+    values
+        (?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        categories
+        (enabled, image_file_name, name, parent_id, id) 
+    values
+        (?, ?, ?, ?, default)
+2025-12-10T18:17:13.719-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    delete 
+    from
+        categories 
+    where
+        id=?
+Hibernate: 
+    delete 
+    from
+        categories 
+    where
+        id=?
+2025-12-10T18:17:13.720-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    delete 
+    from
+        categories 
+    where
+        id=?
+Hibernate: 
+    delete 
+    from
+        categories 
+    where
+        id=?
+2025-12-10T18:17:13.720-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    delete 
+    from
+        categories 
+    where
+        id=?
+Hibernate: 
+    delete 
+    from
+        categories 
+    where
+        id=?
+2025-12-10T18:17:13.721-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    delete 
+    from
+        categories 
+    where
+        id=?
+Hibernate: 
+    delete 
+    from
+        categories 
+    where
+        id=?
+2025-12-10T18:17:13.722-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    delete 
+    from
+        categories 
+    where
+        id=?
+Hibernate: 
+    delete 
+    from
+        categories 
+    where
+        id=?
+2025-12-10T18:17:13.723-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    delete 
+    from
+        categories 
+    where
+        id=?
+Hibernate: 
+    delete 
+    from
+        categories 
+    where
+        id=?
+2025-12-10T18:17:13.723-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    delete 
+    from
+        categories 
+    where
+        id=?
+Hibernate: 
+    delete 
+    from
+        categories 
+    where
+        id=?
+2025-12-10T18:17:13.724-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    delete 
+    from
+        categories 
+    where
+        id=?
+Hibernate: 
+    delete 
+    from
+        categories 
+    where
+        id=?
+2025-12-10T18:17:13.725-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    delete 
+    from
+        categories 
+    where
+        id=?
+Hibernate: 
+    delete 
+    from
+        categories 
+    where
+        id=?
+2025-12-10T18:17:13.726-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    select
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name,
+        c1_0.parent_id 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id is null 
+    offset
+        ? rows 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name,
+        c1_0.parent_id 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id is null 
+    offset
+        ? rows 
+    fetch
+        first ? rows only
+2025-12-10T18:17:13.729-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    select
+        count(c1_0.id) 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id is null
+Hibernate: 
+    select
+        count(c1_0.id) 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id is null
+2025-12-10T18:17:13.742-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    select
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name,
+        c1_0.parent_id 
+    from
+        categories c1_0
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name,
+        c1_0.parent_id 
+    from
+        categories c1_0
+2025-12-10T18:17:13.745-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+Hibernate: 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+2025-12-10T18:17:13.746-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+Hibernate: 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+2025-12-10T18:17:13.747-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+Hibernate: 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+2025-12-10T18:17:13.747-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+Hibernate: 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+2025-12-10T18:17:13.748-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+Hibernate: 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+2025-12-10T18:17:13.749-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+Hibernate: 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+2025-12-10T18:17:13.750-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+Hibernate: 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+2025-12-10T18:17:13.750-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+Hibernate: 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+2025-12-10T18:17:13.751-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+Hibernate: 
+    select
+        c1_0.parent_id,
+        c1_0.id,
+        c1_0.enabled,
+        c1_0.image_file_name,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.parent_id=?
+2025-12-10T18:17:13.764-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    delete 
+    from
+        categories 
+    where
+        id=?
+Hibernate: 
+    delete 
+    from
+        categories 
+    where
+        id=?
+2025-12-10T18:17:13.765-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    delete 
+    from
+        categories 
+    where
+        id=?
+Hibernate: 
+    delete 
+    from
+        categories 
+    where
+        id=?
+2025-12-10T18:17:13.765-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    delete 
+    from
+        categories 
+    where
+        id=?
+Hibernate: 
+    delete 
+    from
+        categories 
+    where
+        id=?
+2025-12-10T18:17:13.766-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    delete 
+    from
+        categories 
+    where
+        id=?
+Hibernate: 
+    delete 
+    from
+        categories 
+    where
+        id=?
+2025-12-10T18:17:13.767-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    delete 
+    from
+        categories 
+    where
+        id=?
+Hibernate: 
+    delete 
+    from
+        categories 
+    where
+        id=?
+2025-12-10T18:17:13.767-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    delete 
+    from
+        categories 
+    where
+        id=?
+Hibernate: 
+    delete 
+    from
+        categories 
+    where
+        id=?
+2025-12-10T18:17:13.768-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    delete 
+    from
+        categories 
+    where
+        id=?
+Hibernate: 
+    delete 
+    from
+        categories 
+    where
+        id=?
+2025-12-10T18:17:13.769-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    delete 
+    from
+        categories 
+    where
+        id=?
+Hibernate: 
+    delete 
+    from
+        categories 
+    where
+        id=?
+2025-12-10T18:17:13.769-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    delete 
+    from
+        categories 
+    where
+        id=?
+Hibernate: 
+    delete 
+    from
+        categories 
+    where
+        id=?
+2025-12-10T18:17:13.770-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    select
+        c1_0.id 
+    from
+        categories c1_0 
+    where
+        c1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        c1_0.id 
+    from
+        categories c1_0 
+    where
+        c1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-10T18:17:13.772-03:00 DEBUG 36585 --- [BlueVelvetMusicStore] [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        categories
+        (enabled, image_file_name, name, parent_id, id) 
+    values
+        (?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        categories
+        (enabled, image_file_name, name, parent_id, id) 
+    values
+        (?, ?, ?, ?, default)
+</pre>
+</span>
+</div>
+<div id="tab2" class="tab">
+<h2>Standard error</h2>
+<span class="code">
+<pre>WARNING: A Java agent has been loaded dynamically (/home/rafael/.gradle/caches/modules-2/files-2.1/net.bytebuddy/byte-buddy-agent/1.14.12/be4984cb6fd1ef1d11f218a648889dfda44b8a15/byte-buddy-agent-1.14.12.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+</pre>
+</span>
+</div>
+</div>
+<div id="footer">
+<p>
+<div>
+<label class="hidden" id="label-for-line-wrapping-toggle" for="line-wrapping-toggle">Wrap lines
+<input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+</label>
+</div>Generated by 
+<a href="http://www.gradle.org">Gradle 8.5</a> at Dec 10, 2025, 6:17:13 PM</p>
+</div>
+</div>
+</body>
+</html>
