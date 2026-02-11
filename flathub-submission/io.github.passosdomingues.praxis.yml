@@ -23,6 +23,6 @@ modules:
       - install -D data/flutter_assets /app/data/flutter_assets
       - install -D lib /app/lib
     sources:
-      - type: git
-        url: https://github.com/passosdomingues/scrum_master
-    branch: main
+  - type: archive
+    url: https://raw.githubusercontent.com/passosdomingues/site/main/flathub-submission/praxis-source.tar.gz
+    sha256: ab23099c90d2377a7ecd8453e918d3076e1f77226c6f59eb02eda22611455f76
