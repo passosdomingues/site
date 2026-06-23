@@ -59,22 +59,30 @@
     color: var(--text-secondary);
     font-weight: 500;
     font-size: var(--text-sm);
-    padding: 0.45rem 0.85rem;
-    border-radius: var(--radius);
+    padding: 0.35rem 0.65rem;
     transition: all var(--transition);
     position: relative;
     white-space: nowrap;
 }
 
 .nav-link:hover {
-    color: var(--color-primary);
-    background: var(--color-primary-50);
+    color: var(--color-gray-900);
 }
 
 .nav-link.active {
     color: var(--color-primary);
-    background: var(--color-primary-100);
     font-weight: 600;
+}
+
+.nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0.65rem;
+    right: 0.65rem;
+    height: 2px;
+    background: var(--color-accent);
+    border-radius: var(--radius-full);
 }
 
 /* Mobile hamburger */
@@ -238,28 +246,15 @@
     background: var(--surface-card);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
-    padding: 1.75rem 1.25rem;
+    padding: 1.5rem 1.25rem;
     text-align: center;
-    box-shadow: var(--shadow-sm);
     transition: all var(--transition);
     position: relative;
-    overflow: hidden;
-}
-
-.metric-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
 }
 
 .metric-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-lg);
-    border-color: var(--color-primary-300);
+    border-color: var(--color-gray-400);
+    background: var(--surface-2);
 }
 
 .metric-icon {
@@ -298,49 +293,29 @@
     background: var(--surface-card);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
-    padding: 1.75rem;
-    box-shadow: var(--shadow-sm);
+    padding: 1.5rem;
     transition: all var(--transition);
     display: flex;
     flex-direction: column;
     position: relative;
-    overflow: hidden;
-}
-
-.card::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 3px;
-    background: linear-gradient(to bottom, var(--color-primary), var(--color-accent));
-    opacity: 0;
-    transition: opacity var(--transition);
 }
 
 .card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-lg);
-    border-color: var(--color-primary-300);
-}
-
-.card:hover::before {
-    opacity: 1;
+    border-color: var(--color-gray-400);
+    background: var(--surface-2);
 }
 
 .card-highlight-badge {
     position: absolute;
-    top: 1rem;
-    right: 1rem;
-    background: var(--color-accent-100);
+    top: 1.25rem;
+    right: 1.25rem;
     color: var(--color-accent-600);
-    border: 1px solid var(--color-accent-400);
-    font-size: 0.65rem;
+    font-size: 0.7rem;
     font-weight: 700;
-    padding: 0.15rem 0.5rem;
-    border-radius: var(--radius-full);
     letter-spacing: 0.04em;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
 }
 
 .card-title {
@@ -733,23 +708,22 @@
 .app-control-button {
     width: 44px;
     height: 44px;
-    border: none;
-    border-radius: var(--radius);
-    background: var(--color-primary);
-    color: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--surface-card);
+    color: var(--text-secondary);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 1.1rem;
     transition: all var(--transition);
-    box-shadow: var(--shadow-md);
 }
 
 .app-control-button:hover {
-    transform: scale(1.08);
-    box-shadow: var(--shadow-lg);
-    background: var(--color-primary-700);
+    color: var(--color-primary);
+    border-color: var(--color-gray-400);
+    background: var(--surface-2);
 }
 
 /* Accessibility Menu */
@@ -764,7 +738,7 @@
     background: var(--surface-card);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-xl);
+    box-shadow: var(--shadow-md);
     padding: 0.5rem;
     min-width: 200px;
     z-index: 1001;
@@ -793,8 +767,7 @@
 }
 
 .accessibility-menu-item:hover {
-    background: var(--color-primary-50);
-    color: var(--color-primary);
+    background: var(--surface-2);
 }
 
 .menu-item-icon {

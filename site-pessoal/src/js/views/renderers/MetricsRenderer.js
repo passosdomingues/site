@@ -20,15 +20,21 @@ function esc(text) {
 export function renderMetrics(content) {
     if (!Array.isArray(content) || !content.length) return '';
 
-    const cards = content.map((m, idx) => `
-        <div class="metric-card animate-on-scroll"
-             style="transition-delay:${idx * 0.08}s"
-             role="listitem">
-            <span class="metric-icon" aria-hidden="true">${m.icon || '📊'}</span>
-            <div class="metric-value">${esc(m.value)}</div>
-            <div class="metric-label">${esc(m.label)}</div>
-        </div>
-    `).join('');
+    const cards = content.map((m, idx) => {
+        const iconHtml = m.icon && (m.icon.startsWith('fa') || m.icon.includes('fa-'))
+            ? `<i class="${esc(m.icon)}" aria-hidden="true"></i>`
+            : esc(m.icon || '');
+
+        return `
+            <div class="metric-card animate-on-scroll"
+                 style="transition-delay:${idx * 0.08}s"
+                 role="listitem">
+                <span class="metric-icon" aria-hidden="true">${iconHtml}</span>
+                <div class="metric-value">${esc(m.value)}</div>
+                <div class="metric-label">${esc(m.label)}</div>
+            </div>
+        `;
+    }).join('');
 
     return `<div class="metrics-grid" role="list" aria-label="Métricas de impacto">${cards}</div>`;
 }

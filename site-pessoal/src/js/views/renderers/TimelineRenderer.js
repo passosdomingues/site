@@ -23,21 +23,27 @@ function esc(text) {
 export function renderTimeline(content) {
     if (!content?.timeline?.length) return '<p>Nenhum dado de trajetória.</p>';
 
-    const items = content.timeline.map((item, idx) => `
-        <div class="timeline-item animate-on-scroll" style="transition-delay:${idx * 0.1}s">
-            <div class="timeline-icon" aria-hidden="true">${item.icon || '📌'}</div>
-            <div class="timeline-content">
-                <div class="timeline-period">${esc(item.period)}</div>
-                <h3 class="timeline-title">${esc(item.title)}</h3>
-                <p class="timeline-description">${esc(item.description)}</p>
-                ${item.highlights?.length ? `
-                    <div class="highlights-list" aria-label="Destaques">
-                        ${item.highlights.map(h => `<span class="highlight-tag">${esc(h)}</span>`).join('')}
-                    </div>
-                ` : ''}
+    const items = content.timeline.map((item, idx) => {
+        const iconHtml = item.icon && (item.icon.startsWith('fa') || item.icon.includes('fa-'))
+            ? `<i class="${esc(item.icon)}" aria-hidden="true"></i>`
+            : esc(item.icon || '');
+
+        return `
+            <div class="timeline-item animate-on-scroll" style="transition-delay:${idx * 0.1}s">
+                <div class="timeline-icon" aria-hidden="true">${iconHtml}</div>
+                <div class="timeline-content">
+                    <div class="timeline-period">${esc(item.period)}</div>
+                    <h3 class="timeline-title">${esc(item.title)}</h3>
+                    <p class="timeline-description">${esc(item.description)}</p>
+                    ${item.highlights?.length ? `
+                        <div class="highlights-list" aria-label="Destaques">
+                            ${item.highlights.map(h => `<span class="highlight-tag">${esc(h)}</span>`).join('')}
+                        </div>
+                    ` : ''}
+                </div>
             </div>
-        </div>
-    `).join('');
+        `;
+    }).join('');
 
     return `<div class="timeline" role="list">${items}</div>`;
 }

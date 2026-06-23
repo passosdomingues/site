@@ -26,35 +26,35 @@ export const PORTFOLIO_DATA = {
                 timeline: [
                     {
                         period: '2014–2018',
-                        icon: '🔭',
+                        icon: 'fas fa-university',
                         title: 'Licenciatura em Física — UNIFAL-MG',
                         description: 'Atuação em divulgação científica no Observatório Astronômico da UNIFAL-MG (2015–2019). Iniciação científica em Astrofísica Galáctica e Extragaláctica, com foco em análise de dados observacionais.',
                         highlights: ['Astrofísica', 'Iniciação Científica', 'Divulgação Científica']
                     },
                     {
                         period: '2019–2022',
-                        icon: '🏫',
+                        icon: 'fas fa-chalkboard-teacher',
                         title: 'Professor de Física — SEE-MG',
                         description: 'Ensino de Física em três municípios mineiros. Desenvolvimento de plataforma de ensino remoto para 640+ alunos durante a pandemia, reconhecida pela Secretaria Estadual de Educação como boa prática.',
                         highlights: ['Ensino', 'Plataforma Digital', 'Educação Remota']
                     },
                     {
                         period: '2021–2023',
-                        icon: '🌌',
+                        icon: 'fas fa-graduation-cap',
                         title: 'Mestrado em Física — UNIFEI',
                         description: 'Pesquisa em Núcleos Galácticos Ativos (AGN). Quando adquiri paixão especial por dados e análise computacional, o que catalisou a transição de carreira.',
                         highlights: ['AGN', 'Análise de Dados', 'Pesquisa Científica']
                     },
                     {
                         period: '2023–presente',
-                        icon: '💻',
+                        icon: 'fas fa-laptop-code',
                         title: 'Bacharelado em Ciência da Computação — UNIFAL-MG',
                         description: 'Transição de carreira para Ciência da Computação. Bolsista FAPEMIG na Incubadora NidusTec (2024–2025). Foco em Deep Learning, Visão Computacional, Manufatura Generativa e Arquitetura de Software.',
                         highlights: ['Transição de Carreira', 'Desenvolvimento de Software', 'Pesquisa Aplicada']
                     },
                     {
                         period: '2024–2025',
-                        icon: '🚀',
+                        icon: 'fas fa-rocket',
                         title: 'Bolsista CT&I Nível III — FAPEMIG / NidusTec · UNIFAL-MG',
                         description: 'Atuação em ambiente de inovação, incubação, prototipagem e apoio a empreendimentos tecnológicos. Gestão de 29 processos do Modelo CERNE. Contribuição para evolução da NidusTec de CERNE 1 para CERNE 2. Desenvolvimento de 64+ protótipos com potencial mercadológico.',
                         highlights: ['Modelo CERNE', 'Incubação', 'Prototipagem', 'Manufatura Maker', 'Propriedade Intelectual']
@@ -73,12 +73,12 @@ export const PORTFOLIO_DATA = {
             type: 'metrics',
             metadata: { order: 2, visible: true },
             content: [
-                { value: '29', label: 'Processos CERNE geridos', icon: '⚙️' },
-                { value: '64+', label: 'Protótipos com potencial mercadológico', icon: '🛠️' },
-                { value: '4', label: 'Startups orientadas (1 internacionalizada)', icon: '🌍' },
-                { value: '4', label: 'Softwares em registro no INPI', icon: '📜' },
-                { value: '750h+', label: 'Certificações e capacitações', icon: '🏅' },
-                { value: '2024', label: 'Troféu ANPROTEC — Adelino Medeiros', icon: '🏆' }
+                { value: '29', label: 'Processos CERNE geridos', icon: 'fas fa-cogs' },
+                { value: '64+', label: 'Protótipos com potencial mercadológico', icon: 'fas fa-tools' },
+                { value: '4', label: 'Startups orientadas (1 internacionalizada)', icon: 'fas fa-globe' },
+                { value: '4', label: 'Softwares em registro no INPI', icon: 'fas fa-file-signature' },
+                { value: '750h+', label: 'Certificações e capacitações', icon: 'fas fa-award' },
+                { value: '2024', label: 'Troféu ANPROTEC — Adelino Medeiros', icon: 'fas fa-trophy' }
             ]
         },
 
@@ -94,17 +94,17 @@ export const PORTFOLIO_DATA = {
             content: [
                 {
                     title: 'NEVA — Sistema de Gestão Integrada de Incubadoras (CERNE)',
-                    description: 'Software para gestão de práticas do Modelo CERNE em incubadoras que buscam certificação. Automatiza processos, indicadores e acompanhamento de empresas incubadas. Em trâmite de registro no INPI.',
+                    description: 'Software corporativo para gestão de práticas e processos do Modelo CERNE em incubadoras. Centraliza o acompanhamento de empresas, indicadores e auditoria de maturidade para certificação.',
                     links: [],
                     tags: ['Java', 'Spring Boot', 'CERNE', 'Gestão de Inovação', 'INPI'],
                     status: 'Em Registro',
                     date: '2024–2025'
                 },
                 {
-                    title: 'LaserCutImageConversor — Corte a Laser por IA',
-                    description: 'Conversor de imagens para modelos vetorizados destinados à produção em cortadoras laser com controladora RUIDA. Integra visão computacional e geração de G-code. Processo INPI: BR 51 2025 006158-7.',
+                    title: 'LaserCutImageConversor — Conversão Inteligente para Laser CNC',
+                    description: 'Conversor e fatiador de imagens raster em modelos vetoriais otimizados para gravação e corte em máquinas laser CO2 controladas por placas RUIDA. Gera G-code diretamente via OpenCV. Processo INPI: BR 51 2025 006158-7.',
                     links: [
-                        { url: 'https://passosdomingues.github.io/webappshowcase/site/main.html', label: 'Demo Online' }
+                        { url: 'https://passosdomingues.github.io/webappshowcase/utilities/CNCImageConversor.html', label: 'Demo Online' }
                     ],
                     tags: ['Python', 'OpenCV', 'G-code', 'RUIDA', 'Laser CNC', 'INPI'],
                     status: 'Registrado — INPI',
@@ -112,42 +112,82 @@ export const PORTFOLIO_DATA = {
                     highlight: 'BR 51 2025 006158-7'
                 },
                 {
-                    title: '3DPrintScultor — Conversor de Imagens para Impressão 3D',
-                    description: 'Conversor de imagens para modelos 3D destinados à impressão em impressoras 3D. Reduz o atrito entre ideação, modelagem e fabricação física.',
+                    title: '3DPrintSculptor — Vetorização e Relevo para Impressão 3D',
+                    description: 'Ferramenta utilitária de computação gráfica para conversão de imagens bidimensionais em modelos tridimensionais (relevos e esculturas) prontos para fatiadores e impressão 3D.',
                     links: [
-                        { url: 'https://passosdomingues.github.io/webappshowcase/site/main.html', label: 'WebApp Showcase' }
+                        { url: 'https://passosdomingues.github.io/webappshowcase/utilities/3DPrintScultor.html', label: 'Demo Online' }
                     ],
-                    tags: ['Python', 'Computação Gráfica', 'Impressão 3D', 'INPI'],
+                    tags: ['Python', 'Computação Gráfica', 'Impressão 3D', 'STL'],
                     status: 'Em Registro',
                     date: '2024–2025'
                 },
                 {
-                    title: 'MakerFlow — Gestão de Espaços Maker',
-                    description: 'Sistema de gestão integrada para espaços maker (makerspaces): equipamentos, usuários, projetos e agendamentos. Aplicado ao NidusLab da UNIFAL-MG.',
+                    title: 'Oráculo CERNE — Motor de Busca com Okapi BM25',
+                    description: 'Motor de busca inteligente client-side baseado no algoritmo Okapi BM25. Desenvolvido para indexar as práticas e regulamentos do Modelo CERNE, com busca preditiva, did-you-mean, autocomplete e destaque semântico.',
+                    links: [
+                        { url: 'https://passosdomingues.github.io/webappshowcase/utilities/oraculoCerne.html', label: 'Demo Online' }
+                    ],
+                    tags: ['JavaScript', 'BM25', 'Autocomplete', 'CERNE', 'Inovação'],
+                    status: 'Ativo',
+                    date: '2025'
+                },
+                {
+                    title: 'Busca Contexto PDF — Extrator Semântico de Documentos',
+                    description: 'Utilitário de leitura e busca avançada em múltiplos arquivos PDF. Analisa e fragmenta os textos do documento em parágrafos estruturados, permitindo buscas de contexto extremamente inteligentes e ordenação por relevância via BM25.',
+                    links: [
+                        { url: 'https://passosdomingues.github.io/webappshowcase/utilities/buscaContextoPDFs.html', label: 'Demo Online' }
+                    ],
+                    tags: ['JavaScript', 'PDF.js', 'BM25', 'Semantic Search', 'Client-Side'],
+                    status: 'Ativo',
+                    date: '2025'
+                },
+                {
+                    title: 'Calculadora TRL & CRL — Avaliação de Maturidade de Startups',
+                    description: 'Sistema interativo de avaliação de prontidão tecnológica (Technology Readiness Level) e maturidade de mercado (Customer Readiness Level). Mapeia graficamente o progresso de soluções inovadoras.',
+                    links: [
+                        { url: 'https://passosdomingues.github.io/webappshowcase/utilities/calculadora_trl_crl.html', label: 'Demo Online' }
+                    ],
+                    tags: ['JavaScript', 'TRL', 'CRL', 'Inovação', 'Maturidade'],
+                    status: 'Ativo',
+                    date: '2025'
+                },
+                {
+                    title: 'busHour — Grade e Rotas de Transporte Público de Alfenas',
+                    description: 'Painel inteligente de transporte urbano integrando horários de partidas, trajetos de 13 linhas integradas e cálculo de ETA (Tempo Estimado de Chegada) em tempo real, otimizado para mobile.',
+                    links: [
+                        { url: 'https://passosdomingues.github.io/webappshowcase/utilities/busHour.html', label: 'Demo Online' }
+                    ],
+                    tags: ['JavaScript', 'Google Maps', 'UX/UI', 'Mobile First'],
+                    status: 'Ativo',
+                    date: '2025'
+                },
+                {
+                    title: 'MakerFlow — Gestão de Espaços Maker (Makerspace)',
+                    description: 'Plataforma para administração de laboratórios maker: cadastro de usuários, agendamento de equipamentos (impressoras 3D, cortadoras laser) e registro de projetos e consumo de insumos.',
                     links: [],
                     tags: ['Java', 'Spring Boot', 'PostgreSQL', 'Gestão Maker'],
                     status: 'Em Registro',
                     date: '2024–2025'
                 },
                 {
-                    title: 'WebApp Showcase — Utilitários Browser-Based',
-                    description: 'Coleção de aplicações web leves e client-side, focadas em privacidade e simplicidade. Inclui ferramentas com busca BM25, gerador de QR, agendamento de transporte, análise de PDFs e mais de 40 utilitários.',
-                    links: [
-                        { url: 'https://passosdomingues.github.io/webappshowcase/site/main.html', label: 'Ver Showcase ao Vivo' }
-                    ],
-                    tags: ['JavaScript', 'HTML5', 'CSS3', 'BM25', 'Client-Side'],
-                    status: 'Ativo',
-                    date: '2023–presente'
-                },
-                {
                     title: 'LLM para Manufatura Generativa',
-                    description: 'Modelo de linguagem especializado em modelagem 3D e automação de processos de manufatura, com integração a controladoras RUIDA e geração de G-code. Reduz o tempo entre ideação, prototipagem e validação técnica.',
+                    description: 'Modelo de linguagem especializado em modelagem e fatiamento 3D. Permite tradução de comandos em linguagem natural diretamente para código G-code integrado ao fatiamento.',
                     links: [
                         { url: 'https://youtu.be/4R1Z92z-zNs', label: 'Apresentação em Vídeo' }
                     ],
-                    tags: ['LLM', 'Gemini', 'G-code', 'RUIDA', 'Manufatura Generativa'],
+                    tags: ['LLM', 'Gemini API', 'G-code', 'RUIDA', 'Manufatura Generativa'],
                     status: 'Pesquisa Aplicada',
                     date: '2024–2025'
+                },
+                {
+                    title: 'WebApp Showcase — Hub de Utilitários Browser-Based',
+                    description: 'Catálogo de aplicações client-side leves e focadas em privacidade. Centraliza mais de 45 ferramentas para desenvolvedores, pesquisadores e gestão de inovação.',
+                    links: [
+                        { url: 'https://passosdomingues.github.io/webappshowcase/site/main.html', label: 'Ver Showcase' }
+                    ],
+                    tags: ['JavaScript', 'HTML5', 'CSS3', 'Client-Side'],
+                    status: 'Ativo',
+                    date: '2023–presente'
                 }
             ]
         },
@@ -194,7 +234,7 @@ export const PORTFOLIO_DATA = {
             metadata: { order: 5, visible: true },
             content: [
                 {
-                    title: '🏆 Prêmio Nacional ANPROTEC 2024 — Troféu Adelino Medeiros (Bronze)',
+                    title: 'Prêmio Nacional ANPROTEC 2024 — Troféu Adelino Medeiros (Bronze)',
                     description: 'Reconhecimento nacional pelo trabalho desenvolvido na NidusTec/UNIFAL-MG, na categoria de inovação empreendedora. Premiação realizada em São José dos Campos.',
                     links: [
                         { url: 'https://anprotec.org.br/site/2024/12/premio-nacional-anprotec-de-empreendedorismo-inovador-2024-revela-vencedores-em-sao-jose-dos-campos/', label: 'Notícia ANPROTEC' }

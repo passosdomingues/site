@@ -250,6 +250,18 @@ body {
     transform: translateY(-2px);
 }
 
+.hero-cta-button--whatsapp {
+    background: #25d366;
+    color: white;
+    box-shadow: 0 4px 14px rgba(37,211,102,.3);
+}
+
+.hero-cta-button--whatsapp:hover {
+    background: #128c7e;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(37,211,102,.5);
+}
+
 .hero-cta-button--ghost {
     background: transparent;
     color: rgba(255,255,255,.8);

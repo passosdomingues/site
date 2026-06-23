@@ -122,7 +122,7 @@ class Application {
     }
 
     /**
-     * @brief Sets up global UI controls (theme toggle, accessibility buttons).
+     * @brief Sets up global UI controls (accessibility buttons).
      */
     async setupGlobalUIControls() {
         // Verifica se os controles já existem
@@ -134,12 +134,6 @@ class Application {
         controlsContainer.className = 'app-controls';
         document.body.appendChild(controlsContainer);
 
-        // --- Theme Toggle Button ---
-        const themeManager = this.app.getService('themeManager');
-        if (themeManager) {
-            this.createThemeToggle(themeManager, controlsContainer);
-        }
-
         // --- Accessibility Controls ---
         const accessibilityManager = this.app.getService('accessibilityManager');
         if (accessibilityManager) {
@@ -150,32 +144,6 @@ class Application {
     }
 
     /**
-     * @brief Creates theme toggle button
-     */
-    createThemeToggle(themeManager, container) {
-        const themeToggleBtn = document.createElement('button');
-        themeToggleBtn.className = 'app-control-button theme-toggle-btn';
-        themeToggleBtn.setAttribute('aria-label', 'Toggle theme');
-        
-        const updateThemeIcon = () => {
-            const isDark = themeManager.isDarkMode();
-            themeToggleBtn.innerHTML = isDark ? '☀️' : '🌙';
-            themeToggleBtn.setAttribute('aria-label', `Switch to ${isDark ? 'light' : 'dark'} theme`);
-        };
-        
-        themeToggleBtn.addEventListener('click', () => {
-            themeManager.toggleTheme();
-            // A atualização do ícone será feita pelo evento do ThemeManager
-        });
-
-        // Atualiza o ícone quando o tema mudar
-        this.app.eventBus.subscribe('theme:changed', updateThemeIcon);
-        
-        container.appendChild(themeToggleBtn);
-        updateThemeIcon(); // Define o ícone inicial
-    }
-
-    /**
      * @brief Creates accessibility controls
      */
     createAccessibilityControls(accessibilityManager, container) {
@@ -183,11 +151,11 @@ class Application {
         const accessibilityContainer = document.createElement('div');
         accessibilityContainer.className = 'accessibility-container';
         
-        // Botão hamburguer para menu de acessibilidade
+        // Botão para menu de acessibilidade
         const menuToggle = document.createElement('button');
         menuToggle.className = 'app-control-button accessibility-menu-toggle';
-        menuToggle.setAttribute('aria-label', 'Accessibility options');
-        menuToggle.innerHTML = '👁️';
+        menuToggle.setAttribute('aria-label', 'Opções de acessibilidade');
+        menuToggle.innerHTML = '<i class="fas fa-universal-access" aria-hidden="true"></i>';
         menuToggle.setAttribute('aria-expanded', 'false');
         
         // Menu de acessibilidade (inicialmente escondido)
@@ -198,30 +166,30 @@ class Application {
         // Itens do menu
         const menuItems = [
             {
-                label: 'Increase Font Size',
+                label: 'Aumentar Fonte',
                 action: () => accessibilityManager.increaseFontSize(),
                 icon: 'A+'
             },
             {
-                label: 'Decrease Font Size', 
+                label: 'Diminuir Fonte', 
                 action: () => accessibilityManager.decreaseFontSize(),
                 icon: 'A-'
             },
             {
-                label: 'High Contrast',
+                label: 'Alto Contraste',
                 action: () => {
                     const current = document.body.classList.contains('high-contrast');
                     accessibilityManager.toggleHighContrast(!current);
                 },
-                icon: '⚫'
+                icon: '<i class="fas fa-adjust" aria-hidden="true"></i>'
             },
             {
-                label: 'Reduced Motion',
+                label: 'Reduzir Animações',
                 action: () => {
                     const current = document.body.classList.contains('reduced-motion');
                     accessibilityManager.toggleReducedMotion(!current);
                 },
-                icon: '🌀'
+                icon: '<i class="fas fa-eye-slash" aria-hidden="true"></i>'
             }
         ];
 

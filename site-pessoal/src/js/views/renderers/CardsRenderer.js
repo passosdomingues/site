@@ -57,7 +57,7 @@ export function renderCards(content) {
                      style="transition-delay:${idx * 0.07}s"
                      aria-label="${esc(item.title)}">
                 ${item.highlight
-                    ? `<div class="card-highlight-badge" aria-label="Destaque">🔖 ${esc(item.highlight)}</div>`
+                    ? `<div class="card-highlight-badge" aria-label="Destaque"><i class="fas fa-bookmark" aria-hidden="true"></i> ${esc(item.highlight)}</div>`
                     : ''}
                 <h3 class="card-title">${esc(item.title)}</h3>
                 <p class="card-description">${esc(item.description)}</p>
