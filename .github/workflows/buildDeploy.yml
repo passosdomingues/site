@@ -10,11 +10,9 @@ on:
         required: false
         default: 'Deploy manual'
 
-# Permissões necessárias para ambos os métodos de deploy
+# Permissões necessárias para push na branch gh-pages
 permissions:
-  contents: write   # necessário para peaceiris/actions-gh-pages (push para branch)
-  pages: write      # necessário para actions/deploy-pages
-  id-token: write   # necessário para actions/deploy-pages
+  contents: write
 
 # Apenas um deploy por vez
 concurrency:
@@ -23,7 +21,7 @@ concurrency:
 
 jobs:
   build-and-deploy:
-    name: Build & Deploy
+    name: Build & Deploy → gh-pages
     runs-on: ubuntu-latest
 
     steps:
@@ -53,23 +51,11 @@ jobs:
         env:
           NODE_ENV: production
 
-      # 5. Método A: Deploy via GitHub Actions (oficial)
-      #    Se o Pages estiver configurado para "GitHub Actions" nas configurações do repo,
-      #    este passo fará a publicação direta.
-      - name: Upload Pages Artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./site-pessoal/dist
-
-      - name: Deploy to GitHub Pages (Actions method)
-        id: admin-deploy
-        uses: actions/deploy-pages@v4
-        continue-on-error: true # Se falhar por falta de config nas settings, continua para o Método B
-
-      # 6. Método B: Deploy via branch gh-pages
-      #    Se o Pages estiver configurado para "Deploy from branch (gh-pages)",
-      #    este passo atualizará a branch gh-pages e o GitHub fará o deploy automático.
-      - name: Deploy to gh-pages branch (Branch method)
+      # 5. Deploy da pasta dist/ para a branch gh-pages
+      #    Este método atualiza a branch gh-pages. Para o site ir ao ar,
+      #    certifique-se de que nas configurações do repositório (Settings -> Pages)
+      #    a fonte está configurada como "Deploy from a branch" apontando para "gh-pages".
+      - name: Deploy para a branch gh-pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
