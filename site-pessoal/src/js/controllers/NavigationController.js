@@ -24,39 +24,43 @@ export class NavigationController {
      * @returns {Promise<void>}
      */
     async init() {
-        if (this.isInitialized) {
-            console.warn('NavigationController: Already initialized');
-            return;
-        }
+        if (this.isInitialized) return;
 
         try {
-            // Initialize NavigationView
-            const navContainer = document.getElementById('nav-list');
+            // Cria e injeta o container de nav antes do main-content
+            let navContainer = document.querySelector('.main-navigation-container');
             if (!navContainer) {
-                throw new Error('NavigationController: nav-list element not found');
+                navContainer = document.createElement('div');
+                navContainer.className = 'main-navigation-container';
+                const mainContent = document.getElementById('main-content');
+                document.body.insertBefore(navContainer, mainContent || document.body.firstChild);
+            }
+
+            // Obtém seções antes de criar a view
+            let sections = [];
+            if (this.contentModel) {
+                if (!this.contentModel.isInitialized) {
+                    await this.contentModel.initializeContentModel();
+                }
+                sections = this.contentModel.getAllSections();
             }
 
             this.navigationView = new NavigationView({
                 container: navContainer,
-                eventBus: this.eventBus
+                eventBus: this.eventBus,
+                sections
             });
 
-            // Set up event listeners
+            await this.navigationView.init();
+            await this.navigationView.render();
+
             this.setupEventListeners();
 
-            // Wait for content model
-            if (this.contentModel && !this.contentModel.isInitialized) {
-                await this.contentModel.initializeContentModel();
-            }
-
-            // Initial render
-            await this.renderNavigation();
-
             this.isInitialized = true;
-            console.info('NavigationController: Initialized successfully');
+            console.info('NavigationController: Inicializado com sucesso.');
 
         } catch (error) {
-            console.error('NavigationController: Initialization failed', error);
+            console.error('NavigationController: Falha na inicialização', error);
             this.eventBus.publish('app:error', error);
         }
     }
@@ -90,44 +94,16 @@ export class NavigationController {
      * @brief Render navigation menu
      */
     async renderNavigation() {
-        if (!this.navigationView || !this.contentModel) {
-            return;
-        }
-
-        try {
-            const sections = this.contentModel.getAllSections();
-            this.navigationView.renderNavigation(sections);
-            
-            this.eventBus.publish('navigation:rendered', { sections });
-            console.info('NavigationController: Navigation rendered');
-
-        } catch (error) {
-            console.error('NavigationController: Error rendering navigation', error);
-        }
+        // Navegação agora é renderizada no init() via NavigationView
+        // Este método é mantido para retrocompatibilidade com eventos
+        console.info('NavigationController: renderNavigation() chamado (já renderizado no init).');
     }
 
     /**
      * @brief Update active navigation link based on scroll position
      */
     updateActiveNavigationLink() {
-        if (!this.contentModel) return;
-
-        const scrollPosition = window.scrollY + 100; // Offset
-        const sections = this.contentModel.getAllSections();
-        
-        let activeSectionId = null;
-
-        for (const section of sections) {
-            const sectionElement = document.getElementById(section.id);
-            if (sectionElement && scrollPosition >= sectionElement.offsetTop) {
-                activeSectionId = section.id;
-            }
-        }
-
-        if (activeSectionId) {
-            this.navigationView.setActiveSection(activeSectionId);
-            this.eventBus.publish('section:activated', { sectionId: activeSectionId });
-        }
+        // Scroll spy agora é gerenciado via IntersectionObserver no NavigationView
     }
 
     /**

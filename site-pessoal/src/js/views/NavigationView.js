@@ -1,149 +1,196 @@
-import eventBus from '../core/EventBus.js';
+import { BaseView } from './BaseView.js';
 
 /**
- * @brief Navigation view
- * @description Renders and manages navigation UI
+ * @file NavigationView.js
+ * @brief Navegação principal — PT-BR, scroll spy, hamburger mobile.
  */
-export class NavigationView {
+export class NavigationView extends BaseView {
     constructor(config = {}) {
-        this.container = config.container;
-        this.eventBus = config.eventBus || eventBus;
-        
-        this.isMobileMenuOpen = false;
-        
-        this.handleNavClick = this.handleNavClick.bind(this);
-        this.setupEventListeners();
+        super(config);
+        this.sections = config.sections || [];
+        this._activeLink = null;
+        this._mobileMenuOpen = false;
     }
 
-    /**
-     * @brief Set up event listeners
-     */
-    setupEventListeners() {
-        this.container.addEventListener('click', this.handleNavClick);
-        
-        // Handle window resize for mobile menu
-        window.addEventListener('resize', this.handleResize.bind(this));
+    async init() {
+        await super.init();
     }
 
-    /**
-     * @brief Handle navigation click events
-     * @param {Event} event - Click event
-     */
-    handleNavClick(event) {
-        const link = event.target.closest('.nav-link');
-        if (!link) return;
-
-        event.preventDefault();
-        
-        const sectionId = link.getAttribute('href')?.replace('#', '');
-        if (sectionId) {
-            this.eventBus.publish('navigation:clicked', { sectionId });
-            
-            // Close mobile menu if open
-            if (this.isMobileMenuOpen) {
-                this.toggleMobileMenu();
-            }
-        }
-    }
-
-    /**
-     * @brief Handle window resize
-     */
-    handleResize() {
-        // Close mobile menu on large screens
-        if (window.innerWidth > 768 && this.isMobileMenuOpen) {
-            this.toggleMobileMenu(false);
-        }
-    }
-
-    /**
-     * @brief Render navigation menu
-     * @param {Array} sections - Array of section objects
-     */
-    renderNavigation(sections) {
+    async render() {
+        await super.render();
         if (!this.container) return;
 
-        const visibleSections = sections.filter(section => section.metadata.visible);
-        
-        const navHTML = visibleSections.map(section => `
-            <li class="nav-item">
-                <a href="#${section.id}" 
-                   class="nav-link" 
-                   data-section-id="${section.id}">
-                    ${this.escapeHtml(section.title)}
-                </a>
-            </li>
-        `).join('');
-
-        this.container.innerHTML = navHTML;
-        
-        this.eventBus.publish('navigation:view:rendered', { sections: visibleSections });
+        this.container.innerHTML = this.createNavHTML();
+        this._setupScrollSpy();
+        this._setupMobileMenu();
+        this._setupScrollEffect();
+        this._handleNavClick();
     }
 
-    /**
-     * @brief Set active section in navigation
-     * @param {string} sectionId - ID of the active section
-     */
-    setActiveSection(sectionId) {
-        // Remove active class from all links
-        this.container.querySelectorAll('.nav-link').forEach(link => {
-            link.classList.remove('active');
+    /* ──────────────────────────────────────────
+       HTML
+    ────────────────────────────────────────── */
+    createNavHTML() {
+        // Mapeia IDs de seção → rótulos PT-BR
+        const sectionLabels = {
+            sobre:                   'Trajetória',
+            impacto:                 'Impacto',
+            projetos:                'Projetos',
+            'propriedade-intelectual': 'PI & INPI',
+            publicacoes:             'Publicações',
+            inovacao:                'NidusTec',
+            'deep-learning':         'Deep Learning',
+            astrofisica:             'Astrofísica',
+            observatorio:            'Observatório',
+            competencias:            'Competências',
+        };
+
+        const navItems = this.sections
+            .filter(s => s.metadata?.visible)
+            .sort((a, b) => (a.metadata?.order || 0) - (b.metadata?.order || 0))
+            .map(s => {
+                const label = sectionLabels[s.id] || s.title;
+                return `
+                    <li class="nav-item">
+                        <a href="#${this.escapeHtml(s.id)}"
+                           class="nav-link"
+                           data-section="${this.escapeHtml(s.id)}">
+                            ${this.escapeHtml(label)}
+                        </a>
+                    </li>
+                `;
+            }).join('');
+
+        return `
+            <nav class="nav-container" role="navigation" aria-label="Navegação principal">
+                <a href="#hero-section" class="nav-brand" aria-label="Rafael Passos Domingues — Início">
+                    Rafael<span>.</span>
+                </a>
+                <ul class="nav-list" role="list">
+                    ${navItems}
+                </ul>
+                <button class="nav-mobile-toggle"
+                        aria-label="Abrir menu de navegação"
+                        aria-expanded="false"
+                        id="nav-mobile-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </nav>
+            <div class="nav-mobile-menu" id="nav-mobile-menu" role="navigation" aria-label="Menu mobile">
+                <ul class="nav-list" role="list">
+                    ${navItems}
+                </ul>
+            </div>
+        `;
+    }
+
+    /* ──────────────────────────────────────────
+       SCROLL SPY
+    ────────────────────────────────────────── */
+    _setupScrollSpy() {
+        const links = this.container.querySelectorAll('.nav-link[data-section]');
+        const sectionIds = [...links].map(l => l.dataset.section).filter(Boolean);
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.id;
+                    links.forEach(l => {
+                        l.classList.toggle('active', l.dataset.section === id);
+                    });
+                    // Sync mobile menu
+                    const mobileLinks = document.querySelectorAll('#nav-mobile-menu .nav-link');
+                    mobileLinks.forEach(l => {
+                        l.classList.toggle('active', l.dataset.section === id);
+                    });
+                }
+            });
+        }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
+
+        sectionIds.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) observer.observe(el);
         });
 
-        // Add active class to current section link
-        const activeLink = this.container.querySelector(`[data-section-id="${sectionId}"]`);
-        if (activeLink) {
-            activeLink.classList.add('active');
-        }
+        this._scrollObserver = observer;
     }
 
-    /**
-     * @brief Toggle mobile menu
-     * @param {boolean} [force] - Force open/close state
-     */
-    toggleMobileMenu(force) {
-        this.isMobileMenuOpen = force !== undefined ? force : !this.isMobileMenuOpen;
-        
-        const navContainer = this.container.closest('.main-navigation-container');
-        if (navContainer) {
-            navContainer.classList.toggle('nav-mobile-open', this.isMobileMenuOpen);
-        }
-        
-        this.eventBus.publish('navigation:mobile:toggled', { isOpen: this.isMobileMenuOpen });
+    /* ──────────────────────────────────────────
+       NAVBAR SCROLL EFFECT
+    ────────────────────────────────────────── */
+    _setupScrollEffect() {
+        const navEl = this.container;
+        const handler = () => {
+            navEl.classList.toggle('scrolled', window.scrollY > 40);
+        };
+        window.addEventListener('scroll', handler, { passive: true });
+        this._scrollHandler = handler;
     }
 
-    /**
-     * @brief Update navigation item
-     * @param {string} sectionId - Section identifier
-     * @param {Object} updates - Update data
-     */
-    updateNavigationItem(sectionId, updates) {
-        const navItem = this.container.querySelector(`[data-section-id="${sectionId}"]`);
-        if (navItem && updates.title) {
-            navItem.textContent = updates.title;
-        }
+    /* ──────────────────────────────────────────
+       MOBILE HAMBURGER
+    ────────────────────────────────────────── */
+    _setupMobileMenu() {
+        const btn = document.getElementById('nav-mobile-btn');
+        const menu = document.getElementById('nav-mobile-menu');
+        if (!btn || !menu) return;
+
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this._mobileMenuOpen = !this._mobileMenuOpen;
+            menu.classList.toggle('open', this._mobileMenuOpen);
+            btn.setAttribute('aria-expanded', String(this._mobileMenuOpen));
+            btn.innerHTML = this._mobileMenuOpen
+                ? '<i class="fas fa-times"></i>'
+                : '<i class="fas fa-bars"></i>';
+        });
+
+        document.addEventListener('click', () => {
+            if (this._mobileMenuOpen) {
+                this._mobileMenuOpen = false;
+                menu.classList.remove('open');
+                btn.setAttribute('aria-expanded', 'false');
+                btn.innerHTML = '<i class="fas fa-bars"></i>';
+            }
+        });
     }
 
-    /**
-     * @brief Escape HTML to prevent XSS
-     * @param {string} text - Text to escape
-     * @returns {string} Escaped text
-     */
+    /* ──────────────────────────────────────────
+       SMOOTH SCROLL ON CLICK
+    ────────────────────────────────────────── */
+    _handleNavClick() {
+        const allLinks = document.querySelectorAll('.nav-link[href^="#"]');
+        allLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const target = document.querySelector(link.getAttribute('href'));
+                if (target) {
+                    const offset = 70; // altura do nav fixo
+                    const top = target.getBoundingClientRect().top + window.scrollY - offset;
+                    window.scrollTo({ top, behavior: 'smooth' });
+                }
+                // Fecha mobile menu se aberto
+                if (this._mobileMenuOpen) {
+                    document.getElementById('nav-mobile-menu')?.classList.remove('open');
+                    document.getElementById('nav-mobile-btn')?.setAttribute('aria-expanded', 'false');
+                    this._mobileMenuOpen = false;
+                }
+            });
+        });
+    }
+
     escapeHtml(text) {
         if (!text) return '';
-        
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
+        const d = document.createElement('div');
+        d.textContent = text;
+        return d.innerHTML;
     }
 
-    /**
-     * @brief Destroy navigation view
-     */
     destroy() {
-        this.container.removeEventListener('click', this.handleNavClick);
-        window.removeEventListener('resize', this.handleResize);
-        
-        console.info('NavigationView: Destroyed');
+        this._scrollObserver?.disconnect();
+        if (this._scrollHandler) {
+            window.removeEventListener('scroll', this._scrollHandler);
+        }
+        super.destroy?.();
     }
 }

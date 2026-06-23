@@ -18,17 +18,15 @@ export class ThemeManager {
     async init() {
         if (this.isInitialized) return;
 
-        const savedTheme = localStorage.getItem('app-theme');
-        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        
-        // Use saved theme, otherwise system preference, otherwise default to dark
-        this.currentTheme = savedTheme || (systemPrefersDark ? 'dark' : 'dark'); // Default to dark
-        
+        // Light mode como padrão — ignora preferência de sistema para garantir consistência
+        const savedTheme = localStorage.getItem('app-theme') || 'light';
+        this.currentTheme = savedTheme;
+
         this.applyTheme(this.currentTheme);
         this.setupEventListeners();
-        
+
         this.isInitialized = true;
-        console.info('ThemeManager: Initialized with theme:', this.currentTheme);
+        console.info('ThemeManager: Inicializado com tema:', this.currentTheme);
     }
 
     /**

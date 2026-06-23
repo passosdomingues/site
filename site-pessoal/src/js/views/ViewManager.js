@@ -1,147 +1,173 @@
 import eventBus from '../core/EventBus.js';
 
 /**
- * @brief View manager for rendering sections
- * @description Handles rendering of different section types with template methods
+ * @file ViewManager.js
+ * @brief Gerenciador de views — renderiza seções do portfólio pelo tipo.
+ * @description Refatorado: suporte a 'metrics', timeline com ícones, cards com badges,
+ *              gallery com item featured, skills animadas, Intersection Observer para scroll reveal.
  */
 class ViewManager {
-    /**
-     * @brief Create a new ViewManager instance
-     * @param {Object} config - Configuration object
-     * @param {HTMLElement} config.container - Container element for sections
-     * @param {Object} config.eventBus - Event bus instance
-     */
     constructor(config = {}) {
         this.container = config.container;
         this.eventBus = config.eventBus || eventBus;
-        
+
         this.renderMethods = {
-            timeline: this.renderTimeline.bind(this),
-            cards: this.renderCards.bind(this),
-            skills: this.renderSkills.bind(this),
-            gallery: this.renderGallery.bind(this),
+            timeline:  this.renderTimeline.bind(this),
+            cards:     this.renderCards.bind(this),
+            skills:    this.renderSkills.bind(this),
+            gallery:   this.renderGallery.bind(this),
+            metrics:   this.renderMetrics.bind(this),  // NOVO
         };
 
+        this._setupScrollReveal();
         this.setupEventListeners();
     }
 
-    /**
-     * @brief Set up event listeners
-     */
     setupEventListeners() {
         this.eventBus.subscribe('section:updated', this.onSectionUpdated.bind(this));
     }
 
-    /**
-     * @brief Handle section updates
-     * @param {Object} data - Update data with sectionId and newContent
-     */
     onSectionUpdated(data) {
         this.renderSection(data.sectionId, data.newContent);
     }
 
-    /**
-     * @brief Render a section
-     * @param {Object} section - Section data object
-     */
+    /* ──────────────────────────────────────────
+       RENDER SECTION (wrapper)
+    ────────────────────────────────────────── */
     renderSection(section) {
-        if (!this.container) {
-            console.error('ViewManager: Container not available');
-            return;
-        }
+        if (!this.container) return;
 
         try {
-            const sectionElement = document.createElement('section');
-            sectionElement.id = section.id;
-            sectionElement.className = `section section--${section.type}`;
+            const wrapper = document.createElement('div');
+            wrapper.className = 'section-wrapper';
 
-            const renderMethod = this.renderMethods[section.type];
-            if (typeof renderMethod !== 'function') {
-                console.warn(`ViewManager: No render method for type "${section.type}"`);
+            const sectionEl = document.createElement('section');
+            sectionEl.id = section.id;
+            sectionEl.className = `portfolio-section section--${section.type} animate-on-scroll`;
+
+            const renderFn = this.renderMethods[section.type];
+            if (typeof renderFn !== 'function') {
+                console.warn(`ViewManager: Tipo de seção desconhecido: "${section.type}"`);
                 return;
             }
 
-            const sectionContent = renderMethod(section.content);
-            
-            sectionElement.innerHTML = `
-                <div class="section-container">
-                    <header class="section-header">
-                        <h2 class="section-title">${this.escapeHtml(section.title)}</h2>
-                        <p class="section-subtitle">${this.escapeHtml(section.subtitle)}</p>
-                    </header>
-                    ${sectionContent}
-                </div>
+            const sectionNumber = this.container.children.length + 1;
+            const content = renderFn(section.content);
+
+            sectionEl.innerHTML = `
+                <header class="section-header">
+                    <div class="section-label">${String(sectionNumber).padStart(2,'0')}</div>
+                    <h2 class="section-title">${this.escapeHtml(section.title)}</h2>
+                    <p class="section-subtitle">${this.escapeHtml(section.subtitle)}</p>
+                </header>
+                ${content}
             `;
 
-            this.container.appendChild(sectionElement);
-            
-            this.eventBus.publish('view:section:rendered', { 
+            wrapper.appendChild(sectionEl);
+            this.container.appendChild(wrapper);
+
+            // Ativa scroll reveal para os elementos filhos
+            this._observeSection(sectionEl);
+
+            // Anima skill bars quando visível
+            if (section.type === 'skills') {
+                this._animateSkillBars(sectionEl);
+            }
+
+            this.eventBus.publish('view:section:rendered', {
                 sectionId: section.id,
-                element: sectionElement 
+                element: sectionEl
             });
 
         } catch (error) {
-            console.error(`ViewManager: Error rendering section ${section.id}`, error);
+            console.error(`ViewManager: Erro ao renderizar seção "${section.id}"`, error);
             this.eventBus.publish('view:render:error', { sectionId: section.id, error });
         }
     }
 
-    /**
-     * @brief Render timeline content
-     * @param {Object} content - Timeline content data
-     * @returns {string} HTML string
-     */
+    /* ──────────────────────────────────────────
+       TIMELINE
+    ────────────────────────────────────────── */
     renderTimeline(content) {
-        if (!content.timeline) return '';
+        if (!content?.timeline) return '';
 
-        const timelineItems = content.timeline.map(item => `
-            <div class="timeline-item">
-                <div class="timeline-period">${this.escapeHtml(item.period)}</div>
+        const items = content.timeline.map((item, idx) => `
+            <div class="timeline-item animate-on-scroll" style="transition-delay: ${idx * 0.1}s">
+                <div class="timeline-icon">${item.icon || '📌'}</div>
                 <div class="timeline-content">
+                    <div class="timeline-period">${this.escapeHtml(item.period)}</div>
                     <h3 class="timeline-title">${this.escapeHtml(item.title)}</h3>
                     <p class="timeline-description">${this.escapeHtml(item.description)}</p>
-                    <div class="highlights-list">
-                        ${item.highlights.map(h => 
-                            `<span class="highlight-tag">${this.escapeHtml(h)}</span>`
-                        ).join('')}
-                    </div>
+                    ${item.highlights?.length ? `
+                        <div class="highlights-list">
+                            ${item.highlights.map(h =>
+                                `<span class="highlight-tag">${this.escapeHtml(h)}</span>`
+                            ).join('')}
+                        </div>
+                    ` : ''}
                 </div>
             </div>
         `).join('');
 
-        return `<div class="timeline">${timelineItems}</div>`;
+        return `<div class="timeline">${items}</div>`;
     }
 
-    /**
-     * @brief Render cards content
-     * @param {Array} content - Cards content array
-     * @returns {string} HTML string
-     */
+    /* ──────────────────────────────────────────
+       METRICS (nova seção)
+    ────────────────────────────────────────── */
+    renderMetrics(content) {
+        if (!Array.isArray(content)) return '';
+
+        const cards = content.map((m, idx) => `
+            <div class="metric-card animate-on-scroll" style="transition-delay: ${idx * 0.08}s">
+                <span class="metric-icon">${m.icon || '📊'}</span>
+                <div class="metric-value">${this.escapeHtml(m.value)}</div>
+                <div class="metric-label">${this.escapeHtml(m.label)}</div>
+            </div>
+        `).join('');
+
+        return `<div class="metrics-grid">${cards}</div>`;
+    }
+
+    /* ──────────────────────────────────────────
+       CARDS
+    ────────────────────────────────────────── */
     renderCards(content) {
         if (!Array.isArray(content)) return '';
 
-        const cards = content.map(item => `
-            <div class="card">
+        const statusClass = (status) => {
+            if (!status) return '';
+            const s = status.toLowerCase();
+            if (s.includes('registro')) return 'status-em-registro';
+            if (s.includes('pesquisa')) return 'status-pesquisa';
+            if (s.includes('ativo') || s.includes('ongoing')) return 'status-ativo';
+            return '';
+        };
+
+        const cards = content.map((item, idx) => `
+            <div class="card animate-on-scroll" style="transition-delay: ${idx * 0.07}s">
+                ${item.highlight ? `<div class="card-highlight-badge">🔖 ${this.escapeHtml(item.highlight)}</div>` : ''}
                 <h3 class="card-title">${this.escapeHtml(item.title)}</h3>
                 <p class="card-description">${this.escapeHtml(item.description)}</p>
-                ${item.links && item.links.length > 0 ? `
+                ${item.links?.length ? `
                     <div class="card-links">
-                        ${item.links.map(link => 
-                            `<a href="${this.escapeHtml(link.url)}" target="_blank" rel="noopener noreferrer" class="card-link">
-                                ${this.escapeHtml(link.label)}
-                            </a>`
-                        ).join('')}
+                        ${item.links.map(l => `
+                            <a href="${this.escapeHtml(l.url)}" target="_blank" rel="noopener noreferrer">
+                                <i class="fas fa-external-link-alt"></i>
+                                ${this.escapeHtml(l.label)}
+                            </a>
+                        `).join('')}
                     </div>
                 ` : ''}
-                <div class="tags-container">
-                    ${item.tags.map(tag => 
-                        `<span class="tag">${this.escapeHtml(tag)}</span>`
-                    ).join('')}
-                </div>
+                ${item.tags?.length ? `
+                    <div class="tags-container">
+                        ${item.tags.map(t => `<span class="tag">${this.escapeHtml(t)}</span>`).join('')}
+                    </div>
+                ` : ''}
                 <div class="card-meta">
-                    <span class="card-date">${this.escapeHtml(item.date)}</span>
-                    <span class="card-status card-status--${item.status?.toLowerCase()}">
-                        ${this.escapeHtml(item.status)}
+                    <span>${this.escapeHtml(item.date || '')}</span>
+                    <span class="card-status ${statusClass(item.status)}">
+                        ${this.escapeHtml(item.status || '')}
                     </span>
                 </div>
             </div>
@@ -150,137 +176,160 @@ class ViewManager {
         return `<div class="cards-grid">${cards}</div>`;
     }
 
-    /**
-     * @brief Render skills content
-     * @param {Array} content - Skills content array (array of categories from PortfolioData.js)
-     * @returns {string} HTML string
-     */
+    /* ──────────────────────────────────────────
+       SKILLS
+    ────────────────────────────────────────── */
     renderSkills(content) {
-        // Corrigido: O 'content' é o próprio array de categorias
         if (!Array.isArray(content)) return '';
 
-        const categories = content.map(category => {
-            const skills = category.skills.map(skill => {
-                
-                // Adicionado: Renderiza links se existirem
-                const linksHtml = (skill.links && Array.isArray(skill.links) && skill.links.length > 0)
-                    ? `<div class="skill-links">
-                        ${skill.links.map(link => 
-                            `<a href="${this.escapeHtml(link.url)}" target="_blank" rel="noopener noreferrer" class="skill-link">
-                                ${this.escapeHtml(link.label)}
-                            </a>`
-                        ).join('')}
-                    </div>`
-                    : '';
-                
-                // Adicionado: Verifica se 'proficiency' existe para renderizar a barra
-                const hasProficiency = typeof skill.proficiency === 'number';
+        const categories = content.map(cat => {
+            const skills = cat.skills.map(skill => {
+                const hasPct = typeof skill.proficiency === 'number';
+                const links = skill.links?.length ? `
+                    <div class="skill-links">
+                        ${skill.links.map(l =>
+                            `<a href="${this.escapeHtml(l.url)}" target="_blank" rel="noopener noreferrer">${this.escapeHtml(l.label)}</a>`
+                        ).join(' · ')}
+                    </div>
+                ` : '';
 
                 return `
                     <div class="skill-item">
                         <div class="skill-header">
                             <span class="skill-name">${this.escapeHtml(skill.name)}</span>
-                            ${hasProficiency ?
-                                `<span class="skill-proficiency">${skill.proficiency}%</span>` : ''
-                            }
+                            ${hasPct ? `<span class="skill-percent">${skill.proficiency}%</span>` : ''}
                         </div>
-                        ${hasProficiency ?
-                            `<div class="skill-bar">
-                                <div class="skill-progress" 
-                                     style="width: ${skill.proficiency}%;"
-                                     data-proficiency="${skill.proficiency}">
+                        ${hasPct ? `
+                            <div class="skill-bar">
+                                <div class="skill-progress"
+                                     data-proficiency="${skill.proficiency}"
+                                     style="width: 0%">
                                 </div>
-                            </div>` : ''
-                        }
+                            </div>
+                        ` : ''}
                         <p class="skill-description">${this.escapeHtml(skill.description)}</p>
-                        ${linksHtml}
+                        ${links}
                     </div>
                 `;
             }).join('');
 
             return `
                 <div class="skill-category">
-                    <h3 class="category-title">${this.escapeHtml(category.category)}</h3>
-                    <div class="skills-list">
-                        ${skills}
-                    </div>
+                    <h3 class="category-title">${this.escapeHtml(cat.category)}</h3>
+                    <div class="skills-list">${skills}</div>
                 </div>
             `;
         }).join('');
-        
+
         return `<div class="skills-categories">${categories}</div>`;
     }
-    
-    /**
-     * @brief Render gallery content compatible with PortfolioData.js
-     * @param {Array} content - Gallery content array
-     * @returns {string} HTML string
-     */
+
+    /* ──────────────────────────────────────────
+       GALLERY
+    ────────────────────────────────────────── */
     renderGallery(content) {
         if (!Array.isArray(content)) return '';
 
-        const items = content.map(item => {
-            const src = item.imageUrl || (item.image && item.image.src) || (item.images && item.images[0]?.src) || '';
-            const alt = item.alt || item.caption || item.title || 'Gallery image';
-            const caption = item.caption || (item.image && item.image.caption) || '';
+        const [first, ...rest] = content;
 
-            // Se houver várias imagens em um mesmo item
-            const multipleImages = item.images?.length > 1 ? item.images.map(img => `
-                <div class="gallery-subitem">
-                    <img src="${this.escapeHtml(img.src)}"
-                        alt="${this.escapeHtml(img.alt || alt)}"
-                        class="gallery-image"
-                        loading="lazy">
-                    ${img.caption ? `<div class="gallery-caption">${this.escapeHtml(img.caption)}</div>` : ''}
-                </div>
-            `).join('') : '';
+        // Primeiro item como destaque se tiver description/links
+        let featuredHtml = '';
+        let regularItems = content;
 
-            return `
-                <div class="gallery-item">
-                    ${src ? `
-                        <img src="${this.escapeHtml(src)}"
-                            alt="${this.escapeHtml(alt)}"
-                            class="gallery-image"
-                            loading="lazy">
+        if (first?.description || first?.links?.length) {
+            featuredHtml = `
+                <div class="gallery-item-featured">
+                    ${first.imageUrl ? `
+                        <img src="${this.escapeHtml(first.imageUrl)}"
+                             alt="${this.escapeHtml(first.caption || '')}"
+                             class="gallery-featured-image"
+                             loading="lazy">
                     ` : ''}
-                    ${multipleImages}
-                    ${caption ? `<div class="gallery-caption">${this.escapeHtml(caption)}</div>` : ''}
+                    <div class="gallery-featured-info">
+                        ${first.caption ? `<div class="gallery-featured-title">${this.escapeHtml(first.caption)}</div>` : ''}
+                        ${first.description ? `<p class="gallery-featured-desc">${this.escapeHtml(first.description)}</p>` : ''}
+                        ${first.links?.length ? `
+                            <div class="gallery-featured-links">
+                                ${first.links.map(l =>
+                                    `<a href="${this.escapeHtml(l.url)}" target="_blank" rel="noopener noreferrer">${this.escapeHtml(l.label)}</a>`
+                                ).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
                 </div>
             `;
-        }).join('');
+            regularItems = rest;
+        }
 
-        return `<div class="gallery-grid">${items}</div>`;
+        const gridItems = regularItems.map(item => `
+            <div class="gallery-item">
+                <img src="${this.escapeHtml(item.imageUrl || '')}"
+                     alt="${this.escapeHtml(item.caption || '')}"
+                     class="gallery-image"
+                     loading="lazy">
+                ${item.caption ? `<div class="gallery-caption">${this.escapeHtml(item.caption)}</div>` : ''}
+            </div>
+        `).join('');
+
+        return `
+            <div class="gallery-grid">
+                ${featuredHtml}
+                ${gridItems}
+            </div>
+        `;
     }
 
-    /**
-     * @brief Escape HTML to prevent XSS
-     * @param {string} text - Text to escape
-     * @returns {string} Escaped text
-     */
+    /* ──────────────────────────────────────────
+       SCROLL REVEAL (Intersection Observer)
+    ────────────────────────────────────────── */
+    _setupScrollReveal() {
+        this._observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    // Para skill bars: animar quando ficar visível
+                    const bars = entry.target.querySelectorAll('.skill-progress[data-proficiency]');
+                    bars.forEach(bar => {
+                        bar.style.width = bar.dataset.proficiency + '%';
+                    });
+                }
+            });
+        }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+    }
+
+    _observeSection(sectionEl) {
+        // Observa a seção principal
+        this._observer.observe(sectionEl);
+        // Observa itens filhos com animate-on-scroll
+        sectionEl.querySelectorAll('.animate-on-scroll').forEach(el => {
+            this._observer.observe(el);
+        });
+    }
+
+    _animateSkillBars(sectionEl) {
+        // Skill bars começam em 0 e animam quando visíveis via observer
+        const bars = sectionEl.querySelectorAll('.skill-progress');
+        bars.forEach(bar => { bar.style.width = '0%'; });
+    }
+
+    /* ──────────────────────────────────────────
+       UTILS
+    ────────────────────────────────────────── */
     escapeHtml(text) {
         if (!text) return '';
-        
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
     }
 
-    /**
-     * @brief Clear all rendered content
-     */
     clear() {
-        if (this.container) {
-            this.container.innerHTML = '';
-        }
+        if (this.container) this.container.innerHTML = '';
     }
 
-    /**
-     * @brief Destroy view manager and clean up resources
-     */
     destroy() {
+        this._observer?.disconnect();
         this.eventBus.unsubscribe('section:updated', this.onSectionUpdated);
         this.clear();
-        console.info('ViewManager: Destroyed');
     }
 }
 

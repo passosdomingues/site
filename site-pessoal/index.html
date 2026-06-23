@@ -1,48 +1,98 @@
 <!DOCTYPE html>
-<html lang="en" class="js dark" data-theme="dark">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="/favicon.ico" />
-    <title>Rafael Passos Domingues | Physicist & Computer Scientist | Astrophysics Research & Innovation</title>
-    <meta name="description" content="Rafael Passos Domingues - Physicist and Computer Scientist specialized in Astrophysics Research, Data Science and Technology Innovation. Bridging scientific research with computational methodologies.">
+
+    <!-- SEO -->
+    <title>Rafael Passos Domingues | Desenvolvedor T-Shaped | IA · Manufatura · Propriedade Intelectual</title>
+    <meta name="description" content="Portfólio de Rafael Passos Domingues — Desenvolvedor T-Shaped especialista em IA, Manufatura Generativa, Modelo CERNE e Propriedade Intelectual. UNIFAL-MG · NidusTec · ANPROTEC 2024.">
     <meta name="author" content="Rafael Passos Domingues">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <meta name="keywords" content="Rafael Passos Domingues, T-Shaped Developer, IA, Manufatura Generativa, CERNE, Propriedade Intelectual, INPI, NidusTec, UNIFAL-MG, Deep Learning">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Rafael Passos Domingues | Desenvolvedor T-Shaped">
+    <meta property="og:description" content="IA · Manufatura Generativa · Propriedade Intelectual · Modelo CERNE — UNIFAL-MG">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="./images/perfilMid.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Styles -->
     <link rel="stylesheet" href="./src/css/styles.css">
 </head>
 <body>
-    <!-- <a href="#main-content" class="skip-link">Skip to main content</a> -->
 
     <div class="main-container">
-        <div class="main-loading-overlay" id="loading-overlay">
+
+        <!-- Loading overlay -->
+        <div class="main-loading-overlay" id="loading-overlay" aria-live="polite" aria-busy="true">
             <div class="loading-content">
                 <h1>Rafael Passos Domingues</h1>
-                <p>Loading portfolio...</p>
+                <p>Carregando portfólio…</p>
             </div>
         </div>
 
+        <!-- Main content -->
         <main id="main-content" class="main-content">
+            <!-- Hero Section -->
             <section class="hero-section" id="hero-section">
-                <div class="hero-content">
-                    <h1 class="hero-title">Rafael Passos Domingues</h1>
-                    <p class="hero-subtitle">Physicist & Computer Scientist</p>
-                    <p class="hero-description">
-                        Researcher in Astrophysics, Data Science and Technology Innovation. 
-                        Combining scientific rigor with computational expertise to solve 
-                        complex problems and drive innovation.
-                    </p>
+                <div class="hero-inner">
+                    <div class="hero-content">
+                        <div class="hero-availability-badge">
+                            <span class="hero-availability-dot"></span>
+                            Disponível para oportunidades
+                        </div>
+                        <h1 class="hero-title">Rafael Passos Domingues</h1>
+                        <p class="hero-subtitle">Desenvolvedor T-Shaped</p>
+                        <div class="hero-tags">
+                            <span class="hero-tag">IA & Deep Learning</span>
+                            <span class="hero-tag">Manufatura Generativa</span>
+                            <span class="hero-tag">Propriedade Intelectual</span>
+                            <span class="hero-tag">Modelo CERNE</span>
+                        </div>
+                        <p class="hero-description">
+                            Profissional T-Shaped na interseção entre arquitetura de dados,
+                            desenvolvimento de software, manufatura aditiva e estratégia de
+                            propriedade intelectual. UNIFAL-MG · NidusTec · FAPEMIG.
+                        </p>
+                        <div class="hero-cta-container">
+                            <a href="#projetos" class="hero-cta-button hero-cta-button--primary">
+                                <i class="fas fa-code-branch"></i> Ver Projetos
+                            </a>
+                            <a href="https://www.linkedin.com/in/rafaelpassosdomingues/" target="_blank" rel="noopener noreferrer" class="hero-cta-button hero-cta-button--secondary">
+                                <i class="fab fa-linkedin"></i> LinkedIn
+                            </a>
+                            <a href="http://lattes.cnpq.br/2726901051757064" target="_blank" rel="noopener noreferrer" class="hero-cta-button hero-cta-button--ghost">
+                                Lattes CV
+                            </a>
+                        </div>
+                    </div>
+                    <div class="hero-image-container">
+                        <img src="./images/perfilMid.png" alt="Foto de Rafael Passos Domingues" class="hero-image" loading="eager">
+                    </div>
+                </div>
+                <div class="hero-scroll-hint" aria-hidden="true">
+                    <span>scroll</span>
+                    <div class="scroll-arrow"></div>
                 </div>
             </section>
-            
-            <div id="sections-container">
-                </div>
+
+            <!-- Seções dinâmicas geradas pelo MVC -->
+            <div id="sections-container"></div>
         </main>
-        
+
+        <!-- Footer -->
         <footer class="main-footer">
             <div class="footer-content" id="footer-container">
-                <p class="footer-text">
-                    &copy; 2025
-                </p>
+                <p class="footer-copyright">© 2025 Rafael Passos Domingues</p>
             </div>
         </footer>
     </div>

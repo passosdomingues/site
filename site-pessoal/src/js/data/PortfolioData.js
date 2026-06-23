@@ -1,302 +1,429 @@
 /**
  * @file PortfolioData.js
  * @author Rafael Passos Domingues
- * @brief Centralized data source with ORIGINAL working structure
+ * @brief Fonte de dados centralizada do portfólio — conteúdo completo em PT-BR.
+ * @description Refatorado com base no vitae 2025 para refletir identidade T-Shaped:
+ *              IA, Manufatura Generativa, CERNE, PI e trajetória acadêmica em Astrofísica.
  */
 
 export const PORTFOLIO_DATA = {
     user: {
-        name: "Rafael Passos Domingues",
-        title: "Physicist | Computer Scientist | Tech Innovator"
+        name: 'Rafael Passos Domingues',
+        title: 'Desenvolvedor T-Shaped | IA · Manufatura · Propriedade Intelectual'
     },
     sections: [
+
+        // ─────────────────────────────────────────────────────────────
+        // 1. SOBRE / TRAJETÓRIA
+        // ─────────────────────────────────────────────────────────────
         {
-            id: 'about',
-            title: 'About Me',
-            subtitle: 'My academic and professional journey',
+            id: 'sobre',
+            title: 'Trajetória',
+            subtitle: 'Da Física à Inovação Tecnológica',
             type: 'timeline',
             metadata: { order: 1, visible: true },
             content: {
                 timeline: [
                     {
-                        period: '2014-2018',
-                        title: 'Bachelor\'s in Physics, UNIFAL-MG',
-                        description: 'As a Physics student at UNIFAL-MG (2014-2018), I was a scholar in Galactic and Extragalactic Astrophysics, integrating the team of the UNIFAL-MG Astronomical Observatory (2016-2018), where I could work with science dissemination.',
-                        highlights: ['Astrophysics', 'Scientific Initiation', 'Data Analysis']
+                        period: '2014–2018',
+                        icon: '🔭',
+                        title: 'Licenciatura em Física — UNIFAL-MG',
+                        description: 'Atuação em divulgação científica no Observatório Astronômico da UNIFAL-MG (2015–2019). Iniciação científica em Astrofísica Galáctica e Extragaláctica, com foco em análise de dados observacionais.',
+                        highlights: ['Astrofísica', 'Iniciação Científica', 'Divulgação Científica']
                     },
                     {
-                        period: '2019-2022',
-                        title: 'Physics Teacher, State Department of Education of Minas Gerais',
-                        description: 'I taught at SEE-MG (2019-2022) bringing scientific knowledge in theoretical, experimental and practical spheres, applying technical knowledge to the challenges that the period (2020-2022) brought, to three municipalities in Minas Gerais.',
-                        highlights: ['Teaching', 'Educational Material Development', 'Remote Education']
+                        period: '2019–2022',
+                        icon: '🏫',
+                        title: 'Professor de Física — SEE-MG',
+                        description: 'Ensino de Física em três municípios mineiros. Desenvolvimento de plataforma de ensino remoto para 640+ alunos durante a pandemia, reconhecida pela Secretaria Estadual de Educação como boa prática.',
+                        highlights: ['Ensino', 'Plataforma Digital', 'Educação Remota']
                     },
                     {
-                        period: '2021-2023',
-                        title: 'Master\'s in Physics, UNIFEI',
-                        description: 'During my Master\'s in Physics at UNIFEI (2021-2023), I had research in Active Galactic Nuclei: That\'s when I acquired a special passion for data.',
-                        highlights: ['Research', 'Data Analysis', 'Active Galactic Nuclei']
+                        period: '2021–2023',
+                        icon: '🌌',
+                        title: 'Mestrado em Física — UNIFEI',
+                        description: 'Pesquisa em Núcleos Galácticos Ativos (AGN). Quando adquiri paixão especial por dados e análise computacional, o que catalisou a transição de carreira.',
+                        highlights: ['AGN', 'Análise de Dados', 'Pesquisa Científica']
                     },
                     {
-                        period: '2023-Present',
-                        title: 'Bachelor\'s in Computer Science, UNIFAL-MG',
-                        description: 'In 2023 I made the career transition decision, becoming a student of the Bachelor\'s in Computer Science at UNIFAL-MG (2023-2029) and a gardener in my spare time.',
-                        highlights: ['Career Transition', 'Computer Science', 'Software Development']
+                        period: '2023–presente',
+                        icon: '💻',
+                        title: 'Bacharelado em Ciência da Computação — UNIFAL-MG',
+                        description: 'Transição de carreira para Ciência da Computação. Bolsista FAPEMIG na Incubadora NidusTec (2024–2025). Foco em Deep Learning, Visão Computacional, Manufatura Generativa e Arquitetura de Software.',
+                        highlights: ['Transição de Carreira', 'Desenvolvimento de Software', 'Pesquisa Aplicada']
                     },
                     {
-                        period: '2024-2025',
-                        title: 'Innovation Ecosystem and Maker Educator, NidusTec/UNIFAL-MG',
-                        description: 'I joined the team of the Technology-Based Business Incubator - NidusTec/UNIFAL-MG (2024-2025), connecting academia and market...',
-                        highlights: ['Innovation', 'Entrepreneurship', 'Maker Education', '3D Modeling', 'CNC']
+                        period: '2024–2025',
+                        icon: '🚀',
+                        title: 'Bolsista CT&I Nível III — FAPEMIG / NidusTec · UNIFAL-MG',
+                        description: 'Atuação em ambiente de inovação, incubação, prototipagem e apoio a empreendimentos tecnológicos. Gestão de 29 processos do Modelo CERNE. Contribuição para evolução da NidusTec de CERNE 1 para CERNE 2. Desenvolvimento de 64+ protótipos com potencial mercadológico.',
+                        highlights: ['Modelo CERNE', 'Incubação', 'Prototipagem', 'Manufatura Maker', 'Propriedade Intelectual']
                     }
                 ]
             }
         },
+
+        // ─────────────────────────────────────────────────────────────
+        // 2. IMPACTO & RESULTADOS
+        // ─────────────────────────────────────────────────────────────
         {
-            id: 'lna-zeiss-telescope',
-            title: 'LNA Zeiss Telescope Experience',
-            subtitle: 'Operating a classic instrument at Pico dos Dias Observatory',
-            type: 'gallery',
-            metadata: { order: 5, visible: true },
-            content: [
-                { imageUrl: './images/obs4.jpg', caption: 'LNA Observatory at sunset' },
-                { imageUrl: './images/obs5.jpg', caption: 'Aerial view of National Astrophysics Laboratory (LNA)' }
-            ]
-        },
-        {
-            id: 'astrophysics-research',
-            title: 'Astrophysics Research',
-            subtitle: 'Work in galactic and extragalactic astrophysics',
-            type: 'cards',
+            id: 'impacto',
+            title: 'Impacto & Resultados',
+            subtitle: 'Números que resumem a trajetória recente',
+            type: 'metrics',
             metadata: { order: 2, visible: true },
             content: [
+                { value: '29', label: 'Processos CERNE geridos', icon: '⚙️' },
+                { value: '64+', label: 'Protótipos com potencial mercadológico', icon: '🛠️' },
+                { value: '4', label: 'Startups orientadas (1 internacionalizada)', icon: '🌍' },
+                { value: '4', label: 'Softwares em registro no INPI', icon: '📜' },
+                { value: '750h+', label: 'Certificações e capacitações', icon: '🏅' },
+                { value: '2024', label: 'Troféu ANPROTEC — Adelino Medeiros', icon: '🏆' }
+            ]
+        },
+
+        // ─────────────────────────────────────────────────────────────
+        // 3. PROJETOS DE SOFTWARE
+        // ─────────────────────────────────────────────────────────────
+        {
+            id: 'projetos',
+            title: 'Projetos de Software',
+            subtitle: 'Soluções desenvolvidas para inovação, manufatura e educação',
+            type: 'cards',
+            metadata: { order: 3, visible: true },
+            content: [
                 {
-                    title: 'Beyond the Telescope: Diving into the Frontier of Galactic Astrophysics at UNIFAL-MG',
-                    description: 'Looking at the sky through the eyepiece is the first step, but what really moves me is the mystery of Galactic Astrophysics...',
-                    links: [
-                        { url: 'https://sciforum.net/paper/view/5868', label: 'Research Paper' }
-                    ],
-                    tags: ['Dark Matter', 'Galactic Astrophysics', 'Research', 'Stellar Orbits'],
-                    status: 'Completed',
-                    date: '2019'
+                    title: 'NEVA — Sistema de Gestão Integrada de Incubadoras (CERNE)',
+                    description: 'Software para gestão de práticas do Modelo CERNE em incubadoras que buscam certificação. Automatiza processos, indicadores e acompanhamento de empresas incubadas. Em trâmite de registro no INPI.',
+                    links: [],
+                    tags: ['Java', 'Spring Boot', 'CERNE', 'Gestão de Inovação', 'INPI'],
+                    status: 'Em Registro',
+                    date: '2024–2025'
                 },
                 {
-                    title: 'Testing CCC+TL Cosmology with Observed Baryon Acoustic Oscillation Features',
-                    description: 'A recent study published in "The Astrophysical Journal" brings a new interpretation...',
+                    title: 'LaserCutImageConversor — Corte a Laser por IA',
+                    description: 'Conversor de imagens para modelos vetorizados destinados à produção em cortadoras laser com controladora RUIDA. Integra visão computacional e geração de G-code. Processo INPI: BR 51 2025 006158-7.',
+                    links: [
+                        { url: 'https://passosdomingues.github.io/webappshowcase/site/main.html', label: 'Demo Online' }
+                    ],
+                    tags: ['Python', 'OpenCV', 'G-code', 'RUIDA', 'Laser CNC', 'INPI'],
+                    status: 'Registrado — INPI',
+                    date: '2024–2025',
+                    highlight: 'BR 51 2025 006158-7'
+                },
+                {
+                    title: '3DPrintScultor — Conversor de Imagens para Impressão 3D',
+                    description: 'Conversor de imagens para modelos 3D destinados à impressão em impressoras 3D. Reduz o atrito entre ideação, modelagem e fabricação física.',
+                    links: [
+                        { url: 'https://passosdomingues.github.io/webappshowcase/site/main.html', label: 'WebApp Showcase' }
+                    ],
+                    tags: ['Python', 'Computação Gráfica', 'Impressão 3D', 'INPI'],
+                    status: 'Em Registro',
+                    date: '2024–2025'
+                },
+                {
+                    title: 'MakerFlow — Gestão de Espaços Maker',
+                    description: 'Sistema de gestão integrada para espaços maker (makerspaces): equipamentos, usuários, projetos e agendamentos. Aplicado ao NidusLab da UNIFAL-MG.',
+                    links: [],
+                    tags: ['Java', 'Spring Boot', 'PostgreSQL', 'Gestão Maker'],
+                    status: 'Em Registro',
+                    date: '2024–2025'
+                },
+                {
+                    title: 'WebApp Showcase — Utilitários Browser-Based',
+                    description: 'Coleção de aplicações web leves e client-side, focadas em privacidade e simplicidade. Inclui ferramentas com busca BM25, gerador de QR, agendamento de transporte, análise de PDFs e mais de 40 utilitários.',
+                    links: [
+                        { url: 'https://passosdomingues.github.io/webappshowcase/site/main.html', label: 'Ver Showcase ao Vivo' }
+                    ],
+                    tags: ['JavaScript', 'HTML5', 'CSS3', 'BM25', 'Client-Side'],
+                    status: 'Ativo',
+                    date: '2023–presente'
+                },
+                {
+                    title: 'LLM para Manufatura Generativa',
+                    description: 'Modelo de linguagem especializado em modelagem 3D e automação de processos de manufatura, com integração a controladoras RUIDA e geração de G-code. Reduz o tempo entre ideação, prototipagem e validação técnica.',
+                    links: [
+                        { url: 'https://youtu.be/4R1Z92z-zNs', label: 'Apresentação em Vídeo' }
+                    ],
+                    tags: ['LLM', 'Gemini', 'G-code', 'RUIDA', 'Manufatura Generativa'],
+                    status: 'Pesquisa Aplicada',
+                    date: '2024–2025'
+                }
+            ]
+        },
+
+        // ─────────────────────────────────────────────────────────────
+        // 4. PROPRIEDADE INTELECTUAL
+        // ─────────────────────────────────────────────────────────────
+        {
+            id: 'propriedade-intelectual',
+            title: 'Propriedade Intelectual',
+            subtitle: 'Proteção de ativos tecnológicos junto ao INPI',
+            type: 'cards',
+            metadata: { order: 4, visible: true },
+            content: [
+                {
+                    title: 'BR 51 2025 006158-7 — LaserCutImageConversor',
+                    description: 'Processo de registro de software no INPI referente ao conversor de imagens para corte a laser com integração a controladoras RUIDA e geração de G-code via visão computacional.',
+                    links: [],
+                    tags: ['INPI', 'Registro de Software', 'Visão Computacional', 'G-code'],
+                    status: 'Em Trâmite',
+                    date: '2025'
+                },
+                {
+                    title: 'Portfólio de PI — NidusTec / UNIFAL-MG',
+                    description: 'Experiência em prospecção tecnológica sistemática, análise de anterioridade e apoio à redação técnica de pedidos de patente. Capacidade de traduzir algoritmos, hardwares e protótipos em ativos de PI com potencial de licenciamento e transferência tecnológica.',
+                    links: [
+                        { url: 'https://www.unifal-mg.edu.br/i9unifal/', label: 'Agência I9 — UNIFAL-MG' }
+                    ],
+                    tags: ['Busca de Anterioridade', 'Espacenet', 'Derwent Innovation', 'INPI', 'TRL'],
+                    status: 'Contínuo',
+                    date: '2024–2025'
+                }
+            ]
+        },
+
+        // ─────────────────────────────────────────────────────────────
+        // 5. PUBLICAÇÕES E PRÊMIOS
+        // ─────────────────────────────────────────────────────────────
+        {
+            id: 'publicacoes',
+            title: 'Publicações e Prêmios',
+            subtitle: 'Reconhecimentos e contribuições ao ecossistema de inovação',
+            type: 'cards',
+            metadata: { order: 5, visible: true },
+            content: [
+                {
+                    title: '🏆 Prêmio Nacional ANPROTEC 2024 — Troféu Adelino Medeiros (Bronze)',
+                    description: 'Reconhecimento nacional pelo trabalho desenvolvido na NidusTec/UNIFAL-MG, na categoria de inovação empreendedora. Premiação realizada em São José dos Campos.',
+                    links: [
+                        { url: 'https://anprotec.org.br/site/2024/12/premio-nacional-anprotec-de-empreendedorismo-inovador-2024-revela-vencedores-em-sao-jose-dos-campos/', label: 'Notícia ANPROTEC' }
+                    ],
+                    tags: ['ANPROTEC', 'Inovação', 'Empreendedorismo', 'Prêmio Nacional'],
+                    status: 'Premiado',
+                    date: '2024'
+                },
+                {
+                    title: 'Artigo — 34ª ANPROTEC: Metodologia para Medição dos Impactos do Modelo CERNE',
+                    description: 'Desenvolvimento de metodologia para medição dos impactos e validação da implementação do Modelo CERNE. Artigo técnico publicado nos anais da 34ª ANPROTEC.',
+                    links: [],
+                    tags: ['CERNE', 'Metodologia', 'Incubação', 'Publicação Técnica'],
+                    status: 'Publicado',
+                    date: '2024'
+                },
+                {
+                    title: 'Relato de Boas Práticas — 34ª ANPROTEC: Agência I9 · UNIFAL-MG',
+                    description: 'Relato de boas práticas referente à gestão da Agência de Inovação e Empreendedorismo da UNIFAL-MG, apresentado na conferência nacional da ANPROTEC.',
+                    links: [],
+                    tags: ['ANPROTEC', 'Boas Práticas', 'Agência I9', 'Gestão'],
+                    status: 'Publicado',
+                    date: '2024'
+                },
+                {
+                    title: 'Publicação Científica — The Astrophysical Journal',
+                    description: 'Coautoria em artigo sobre "Testing CCC+TL Cosmology with Observed Baryon Acoustic Oscillation Features" publicado no The Astrophysical Journal.',
                     links: [
                         { url: 'https://lnkd.in/dwsKCSbM', label: 'The Astrophysical Journal' }
                     ],
-                    tags: ['Cosmology', 'Dark Energy', 'Dark Matter', 'Research'],
-                    status: 'Published',
+                    tags: ['Cosmologia', 'Astrofísica', 'BAO', 'Publicação Internacional'],
+                    status: 'Publicado',
                     date: '2024'
                 }
             ]
         },
+
+        // ─────────────────────────────────────────────────────────────
+        // 6. ECOSSISTEMA DE INOVAÇÃO (NidusTec / NidusLab)
+        // ─────────────────────────────────────────────────────────────
         {
-            id: 'astronomical-observatory',
-            title: 'Astronomical Observatory',
-            subtitle: 'Scientific outreach and research at UNIFAL-MG',
+            id: 'inovacao',
+            title: 'Ecossistema de Inovação',
+            subtitle: 'NidusTec · NidusLab · Agência I9 · UNIFAL-MG',
             type: 'gallery',
-            metadata: { order: 3, visible: true },
-            content: [
-                { imageUrl: './images/bullet-cluster-black-matter_upscayl.png', caption: 'Bullet Cluster showing dark matter distribution' },
-                { imageUrl: './images/seminario.jpg', caption: 'Astronomy seminar presentation at UNIFAL-MG' },
-                { imageUrl: './images/obs1.jpg', caption: 'Main telescope at UNIFAL-MG Observatory' },
-                { imageUrl: './images/obs2.jpg', caption: 'Public observation night' },
-                { imageUrl: './images/obs3.jpg', caption: 'Orion Nebula (M42) recording' },
-                { imageUrl: './images/escolaOBS1.png', caption: 'Scientific outreach event for schools' },
-                { imageUrl: './images/escolaOBS2.jpg', caption: 'Students observing with telescope' },
-                { imageUrl: './images/escolaOBS3.jpg', caption: 'Astronomy presentation for students' },
-                { imageUrl: './images/escolaOBS4.jpg', caption: 'Hands-on activity during outreach event' },
-                { imageUrl: './images/obsLua.jpg', caption: 'Detailed Moon observation' },
-                { imageUrl: './images/obsGalaxiaSombrero.jpg', caption: 'Sombrero Galaxy (M104) astrophotography' }
-            ]
-        },
-        {
-            id: 'craam-visit',
-            title: 'CRAAM Visit',
-            subtitle: 'Mackenzie Center for Radio Astronomy and Astrophysics',
-            type: 'gallery',
-            metadata: { order: 4, visible: true },
-            content: [
-                { imageUrl: './images/craamAntena.jpg', caption: 'Radio Polarimeter antenna at CRAAM' },
-                { imageUrl: './images/craamControle.jpg', caption: 'Control room at CRAAM' },
-                { imageUrl: './images/craamDomo.jpg', caption: 'Inside the CRAAM dome' },
-                { imageUrl: './images/craamEscada.jpg', caption: 'Access to radio-heliograph instrumentation' }
-            ]
-        },
-        {
-            id: 'education-experience',
-            title: 'Education Experience',
-            subtitle: 'Teaching and educational material development',
-            type: 'timeline',
             metadata: { order: 6, visible: true },
-            content: {
-                timeline: [
-                    {
-                        period: '2016-2018',
-                        title: 'Teaching Assistant, Physics Department, UNIFAL-MG',
-                        description: 'During my undergraduate studies, I served as a Teaching Assistant in the Physics Department at UNIFAL-MG...',
-                        highlights: ['Laboratory Instruction', 'Academic Support', 'Experimental Protocols']
-                    },
-                    {
-                        period: '2017-2018',
-                        title: 'Educational Material Developer, UNIFAL-MG Astronomical Observatory',
-                        description: 'I led the creation of engaging astronomy education materials and played a key role in developing and coordinating public outreach programs...',
-                        highlights: ['Educational Materials', 'Public Outreach', 'Workshops']
-                    },
-                    {
-                        period: '2019-2022',
-                        title: 'Physics Teacher, State Department of Education of Minas Gerais',
-                        description: 'I taught Physics in three municipalities, adapting scientific knowledge to diverse audiences...',
-                        highlights: ['Teaching', 'Curriculum Adaptation', 'Innovative Strategies']
-                    }
-                ]
-            }
-        },
-        {
-            id: 'innovation-entrepreneurship',
-            title: 'Innovation and Entrepreneurship',
-            subtitle: 'NidusTec and innovation ecosystem',
-            type: 'gallery',
-            metadata: { order: 7, visible: true },
             content: [
                 {
                     imageUrl: './images/nidus.jpg',
-                    caption: 'NidusTec - Technology-Based Business Incubator',
-                    description: 'As part of the NidusTec team, I acted as a bridge between academic research and the market...',
+                    caption: 'NidusTec — Incubadora de Empresas de Base Tecnológica',
+                    description: 'Atuação como ponte entre pesquisa acadêmica e mercado, com gestão de processos CERNE e apoio a startups de base tecnológica.',
                     links: [
-                        { url: 'https://www.unifal-mg.edu.br/i9unifal/maratona-de-ideias-senac-alfenas-i9-em-parceria-com-o-unis-cefet-varginha-e-cesullab/', label: 'Maratona de Ideias Senac Alfenas' },
-                        { url: 'https://jornal.unifal-mg.edu.br/comunidade-academica-do-campus-varginha-adquire-habilidades-praticas-e-teoricas-na-area-da-cultura-maker-em-capacitacao-promovida-no-niduslab/', label: 'Capacitação em Cultura Maker - Campus Varginha' },
-                        { url: 'https://jornal.unifal-mg.edu.br/agencia-de-inovacao-de-empreendedorismo-da-unifal-mg-realiza-segunda-oficina-de-capacitacao-para-corte-a-laser-nos-laboratorios-maker-dos-campi-alfenas-e-pocos-de-caldas/', label: 'Oficina de Corte a Laser - Alfenas e Poços de Caldas' },
-                        { url: 'https://jornal.unifal-mg.edu.br/calouros-vivenciam-inovacao-em-visitas-ao-laboratorio-maker-na-unifal-mg/', label: 'Calouros Visitam Laboratório Maker' },
-                        { url: 'https://jornal.unifal-mg.edu.br/agencia-de-inovacao-e-empreendedorismo-da-unifal-mg-promove-visita-tecnica-no-espaco-maker-a-calouros-do-bacharelado-em-quimica-da-instituicao/', label: 'Visita Técnica ao Espaço Maker - Calouros de Química' },
-                        { url: 'https://jornal.unifal-mg.edu.br/capacitacoes-promovidas-pela-agencia-de-inovacao-e-incubadora-de-empresas-de-base-tecnologica-impulsionam-a-criatividade-e-o-empreendedorismo/', label: 'Capacitações Impulsionam Criatividade e Empreendedorismo' },
-                        { url: 'https://jornal.unifal-mg.edu.br/capacitacoes-promovidas-pela-agencia-de-inovacao-e-a-incubadora-de-empresas-no-mes-de-junho-estimulam-a-cultura-empreendedora-e-a-inovacao-tecnologica-junto-a-comunidade/', label: 'Capacitações de Junho - Cultura Empreendedora' },
-                        { url: 'https://anprotec.org.br/site/2024/12/premio-nacional-anprotec-de-empreendedorismo-inovador-2024-revela-vencedores-em-sao-jose-dos-campos/', label: 'ANPROTEC Award News' }
-                    ],
-                    tags: ['Innovation', 'Entrepreneurship', 'Technology', 'Startups'],
-                    status: 'Completed',
-                    date: '2021-2023'
+                        { url: 'https://jornal.unifal-mg.edu.br/calouros-vivenciam-inovacao-em-visitas-ao-laboratorio-maker-na-unifal-mg/', label: 'Calouros no NidusLab' },
+                        { url: 'https://jornal.unifal-mg.edu.br/agencia-de-inovacao-e-empreendedorismo-da-unifal-mg-promove-visita-tecnica-no-espaco-maker-a-calouros-do-bacharelado-em-quimica-da-instituicao/', label: 'Visita Técnica — Química' },
+                        { url: 'https://anprotec.org.br/site/2024/12/premio-nacional-anprotec-de-empreendedorismo-inovador-2024-revela-vencedores-em-sao-jose-dos-campos/', label: 'Prêmio ANPROTEC 2024' }
+                    ]
                 },
-                { imageUrl: './images/nidus2.jpg', caption: 'NidusTec Activities' },
-                { imageUrl: './images/nidus3.jpg', caption: 'Innovation Workshop' },
-                { imageUrl: './images/nidus4.jpg', caption: 'Maker Space Equipment' },
-                { imageUrl: './images/nidus5.jpg', caption: 'Team Collaboration' },
-                { imageUrl: './images/nidus6.jpg', caption: 'Project Development' },
-                { imageUrl: './images/nidus7.jpg', caption: 'Technology Prototyping' },
-                { imageUrl: './images/nidus8.jpg', caption: 'Entrepreneurship Training' },
-                { imageUrl: './images/nidus9.jpg', caption: 'Innovation Ecosystem' },
-                { imageUrl: './images/nidus10.jpg', caption: 'Startup Incubation' },
-                { imageUrl: './images/nidus11.jpg', caption: 'Maker Culture' }
+                { imageUrl: './images/nidus2.jpg', caption: 'Atividades de Prototipagem' },
+                { imageUrl: './images/nidus3.jpg', caption: 'Workshop de Inovação' },
+                { imageUrl: './images/nidus4.jpg', caption: 'Equipamentos do NidusLab' },
+                { imageUrl: './images/nidus5.jpg', caption: 'Trabalho em Equipe' },
+                { imageUrl: './images/nidus6.jpg', caption: 'Desenvolvimento de Projetos' },
+                { imageUrl: './images/nidus7.jpg', caption: 'Prototipagem Tecnológica' },
+                { imageUrl: './images/nidus8.jpg', caption: 'Capacitação Empreendedora' },
+                { imageUrl: './images/nidus9.jpg', caption: 'Ecossistema de Inovação' },
+                { imageUrl: './images/nidus10.jpg', caption: 'Incubação de Startups' },
+                { imageUrl: './images/nidus11.jpg', caption: 'Cultura Maker' }
             ]
         },
+
+        // ─────────────────────────────────────────────────────────────
+        // 7. DEEP LEARNING & VISÃO COMPUTACIONAL
+        // ─────────────────────────────────────────────────────────────
         {
-            id: 'deep-learning-projects',
-            title: 'Deep Learning Projects',
-            subtitle: 'Applying ML/DL to medical imaging and astrophysics',
+            id: 'deep-learning',
+            title: 'Deep Learning & Visão Computacional',
+            subtitle: 'Aplicações em medicina, astrofísica e manufatura',
+            type: 'cards',
+            metadata: { order: 7, visible: true },
+            content: [
+                {
+                    title: 'Segmentação de Tumores Cerebrais em Ressonância Magnética',
+                    description: 'Arquitetura U-Net para segmentação automática de tumores cerebrais em imagens de RM. Projeto desenvolvido como parte da iniciação em Deep Learning aplicado à medicina.',
+                    links: [
+                        { url: 'https://youtu.be/11ahe2JBN5c', label: 'Pipeline Completo de ML para Diagnóstico de Câncer' },
+                        { url: 'https://youtu.be/Sdd98HDahPA', label: 'Redução de Dimensionalidade — Uma Perspectiva Física' }
+                    ],
+                    tags: ['Deep Learning', 'U-Net', 'TensorFlow', 'Medicina', 'Python'],
+                    status: 'Concluído',
+                    date: '2023'
+                },
+                {
+                    title: 'Classificação Morfológica de Galáxias com CNNs',
+                    description: 'Rede neural convolucional para classificar galáxias por morfologia usando dados do Galaxy Zoo. Interseção entre astrofísica observacional e visão computacional.',
+                    links: [
+                        { url: 'https://youtu.be/naBvOJhUAH4', label: 'Simulação Estocástica: M/M/1 e o Universo' }
+                    ],
+                    tags: ['CNN', 'PyTorch', 'Astrofísica', 'Galaxy Zoo', 'Python'],
+                    status: 'Concluído',
+                    date: '2022'
+                },
+                {
+                    title: 'Materialização de Pixels — Laser CNC com Visão Computacional',
+                    description: 'Da imagem ao corte físico: pipeline completo de visão computacional para geração de G-code e envio a cortadoras laser com controladora RUIDA.',
+                    links: [
+                        { url: 'https://youtu.be/4R1Z92z-zNs', label: 'Da Imagem à Matéria — CO₂ Laser & G-code' }
+                    ],
+                    tags: ['OpenCV', 'G-code', 'RUIDA', 'Laser CNC', 'Python'],
+                    status: 'Em Produção',
+                    date: '2024–2025'
+                }
+            ]
+        },
+
+        // ─────────────────────────────────────────────────────────────
+        // 8. ASTROFÍSICA (trajetória histórica)
+        // ─────────────────────────────────────────────────────────────
+        {
+            id: 'astrofisica',
+            title: 'Astrofísica',
+            subtitle: 'Pesquisa galáctica e extragaláctica — a origem da paixão por dados',
             type: 'cards',
             metadata: { order: 8, visible: true },
             content: [
                 {
-                    title: 'WebApp Showcase - Browser-Based Utilities and Prototypes',
-                    description: 'A curated collection of lightweight web applications focused on privacy and simplicity. Each webapp operates entirely client-side, storing data only in the user\'s browser. The project includes completed utilities for personal and professional workflows, experimental prototypes for potential solutions, and tools with WhatsApp export functionality. This evolving repository represents my approach to solving everyday problems through minimal, accessible web technologies.',
+                    title: 'Além do Telescópio: Astrofísica Galáctica na UNIFAL-MG',
+                    description: 'Iniciação científica em astrofísica galáctica com foco em órbitas estelares e matéria escura. O fascínio pelos dados observacionais foi o ponto de partida para a jornada em Ciência da Computação.',
                     links: [
-                        { url: 'https://passosdomingues.github.io/webappshowcase/site/main.html', label: 'WebApp Showcase - Live Demo' }
+                        { url: 'https://sciforum.net/paper/view/5868', label: 'Artigo Científico' }
                     ],
-                    tags: ['Web Development', 'JavaScript', 'HTML5', 'CSS3', 'Prototyping', 'Utilities', 'Client-Side'],
-                    status: 'Ongoing',
-                    date: '2023-2024'
+                    tags: ['Matéria Escura', 'Astrofísica Galáctica', 'Órbitas Estelares'],
+                    status: 'Concluído',
+                    date: '2019'
                 },
                 {
-                    title: 'Brain Tumor Segmentation in Magnetic Resonance Images',
-                    description: 'This project used a U-Net architecture for automatic segmentation of brain tumors in magnetic resonance images...',
+                    title: 'Testing CCC+TL Cosmology with Baryon Acoustic Oscillations',
+                    description: 'Coautoria em estudo publicado no The Astrophysical Journal explorando cosmologia alternativa com dados de BAO. Pesquisa desenvolvida durante o Mestrado em Física na UNIFEI.',
                     links: [
-                        { url: 'https://youtu.be/Sdd98HDahPA', label: 'Machine Learning Fundamentals: Dimensionality Reduction - A Physical and Mathematical Perspective' },
-                        { url: 'https://youtu.be/11ahe2JBN5c', label: 'Building a Complete Machine Learning Pipeline for Breast Cancer Diagnosis | End-to-End Project' },
-                        { url: 'https://youtu.be/4R1Z92z-zNs', label: 'Materializing Pixels: From Photons to Matter with CO₂ Laser CNC and Computational Vision Horizons' }
+                        { url: 'https://lnkd.in/dwsKCSbM', label: 'The Astrophysical Journal' }
                     ],
-                    tags: ['Deep Learning', 'Computer Vision', 'Python', 'TensorFlow', 'Medicine'],
-                    status: 'Completed',
-                    date: '2023'
-                },
-                {
-                    title: 'Morphological Classification of Galaxies with CNNs',
-                    description: 'Using data from the Galaxy Zoo project, I developed a convolutional neural network to classify galaxies based on their morphology...',
-                    links: [
-                        { url: 'https://youtu.be/naBvOJhUAH4', label: 'Are We Living in a Simulation? How M/M/1 Queues Could Reveal the Universe (Stochastic Experiment)' }
-                    ],
-                    tags: ['Deep Learning', 'Astrophysics', 'Python', 'PyTorch', 'Data Science'],
-                    status: 'Completed',
-                    date: '2022'
+                    tags: ['Cosmologia', 'BAO', 'Energia Escura', 'Pesquisa'],
+                    status: 'Publicado',
+                    date: '2024'
                 }
             ]
         },
+
+        // ─────────────────────────────────────────────────────────────
+        // 9. OBSERVATÓRIO & CRAAM (galeria)
+        // ─────────────────────────────────────────────────────────────
         {
-            id: 'skills',
-            title: 'Skills and Competencies',
-            subtitle: 'From data to value: A journey through technology and education',
-            type: 'skills',
+            id: 'observatorio',
+            title: 'Observatório Astronômico',
+            subtitle: 'Divulgação científica e pesquisa na UNIFAL-MG',
+            type: 'gallery',
             metadata: { order: 9, visible: true },
             content: [
+                { imageUrl: './images/bullet-cluster-black-matter_upscayl.png', caption: 'Bullet Cluster — distribuição de matéria escura' },
+                { imageUrl: './images/seminario.jpg', caption: 'Seminário de Astronomia — UNIFAL-MG' },
+                { imageUrl: './images/obs1.jpg', caption: 'Telescópio principal do Observatório UNIFAL-MG' },
+                { imageUrl: './images/obs2.jpg', caption: 'Noite de observação pública' },
+                { imageUrl: './images/obs3.jpg', caption: 'Registro da Nebulosa de Orion (M42)' },
+                { imageUrl: './images/escolaOBS1.png', caption: 'Divulgação científica nas escolas' },
+                { imageUrl: './images/escolaOBS2.jpg', caption: 'Estudantes no telescópio' },
+                { imageUrl: './images/obs4.jpg', caption: 'Observatório LNA ao entardecer' },
+                { imageUrl: './images/obs5.jpg', caption: 'Vista aérea do LNA — Pico dos Dias' },
+                { imageUrl: './images/obsLua.jpg', caption: 'Observação da Lua' },
+                { imageUrl: './images/obsGalaxiaSombrero.jpg', caption: 'Galáxia Sombrero (M104)' }
+            ]
+        },
+
+        // ─────────────────────────────────────────────────────────────
+        // 10. COMPETÊNCIAS TÉCNICAS
+        // ─────────────────────────────────────────────────────────────
+        {
+            id: 'competencias',
+            title: 'Competências Técnicas',
+            subtitle: 'Stack tecnológico e nível de domínio',
+            type: 'skills',
+            metadata: { order: 10, visible: true },
+            content: [
                 {
-                    category: 'Programming Languages & Data Transformation',
+                    category: 'Linguagens e Frameworks',
                     skills: [
-                        { name: 'Python', proficiency: 95, description: 'Started with scientific simulations and data analysis in astrophysics, now focused on transforming raw data into actionable insights and value.' },
-                        { name: 'Java', proficiency: 85, description: 'Currently developing enterprise solutions for Industry 5.0 and innovation management, applying MVC principles and modern frameworks.' },
-                        { name: 'JavaScript / TypeScript', proficiency: 85, description: 'Building practical web applications and this portfolio site, learning MVC architecture through hands-on experience.' },
-                        { name: 'C/C++', proficiency: 70, description: 'Foundation in astronomical instrumentation and robotics, understanding low-level system programming.' },
-                        { name: 'SQL', proficiency: 80, description: 'Currently deepening knowledge with Java integration, JDBC, JPA, and database design patterns.' }
+                        { name: 'Python', proficiency: 95, description: 'Simulações científicas, análise de dados astrofísicos, Deep Learning, visão computacional e automação de manufatura.' },
+                        { name: 'Java / Spring Boot', proficiency: 85, description: 'Desenvolvimento de sistemas corporativos (NEVA, MakerFlow) com princípios MVC e integração com bancos de dados.' },
+                        { name: 'JavaScript / TypeScript', proficiency: 85, description: 'Aplicações web SPA, utilitários client-side e este portfólio com arquitetura MVC.' },
+                        { name: 'C / C++', proficiency: 70, description: 'Instrumentação astronômica, robótica e simulação física de baixo nível.' },
+                        { name: 'SQL', proficiency: 80, description: 'Modelagem de dados, JDBC, JPA e integração com Spring Boot.' },
+                        { name: 'LaTeX', proficiency: 90, description: 'Documentação acadêmica, materiais didáticos e redação científica.' }
                     ]
                 },
                 {
-                    category: 'Data Science & Machine Learning',
+                    category: 'IA & Ciência de Dados',
                     skills: [
-                        { name: 'TensorFlow / PyTorch', proficiency: 90, description: 'Applied to medical imaging and astrophysics, focusing on practical problem-solving rather than theoretical perfection.' },
-                        { name: 'Neo4j', proficiency: 88, description: 'Specializing in graph databases for complex relationship mapping in innovation ecosystems and manufacturing systems.' },
-                        { name: 'Scikit-learn', proficiency: 95, description: 'Reliable companion for classical ML models, from academic research to industrial applications.' },
-                        { name: 'Pandas / NumPy / Matplotlib', proficiency: 98, description: 'Essential toolkit honed through years of exploratory data analysis and astronomical data reduction.' },
-                        { name: 'Image Processing (OpenCV)', proficiency: 85, description: 'Bridging scientific applications with practical computer vision solutions.' }
+                        { name: 'TensorFlow / PyTorch', proficiency: 90, description: 'U-Net para segmentação médica, CNNs para classificação de galáxias, modelos aplicados à manufatura.' },
+                        { name: 'Scikit-learn', proficiency: 95, description: 'ML clássico para análise exploratória, diagnósticos e validação de modelos.' },
+                        { name: 'Pandas / NumPy / Matplotlib', proficiency: 98, description: 'Toolkit essencial para análise de dados astronômicos e científicos.' },
+                        { name: 'Neo4j (Graph DB)', proficiency: 88, description: 'Mapeamento de relacionamentos complexos em ecossistemas de inovação e manufatura.' },
+                        { name: 'Elasticsearch', proficiency: 80, description: 'Busca e indexação de dados em sistemas de gestão.' },
+                        { name: 'OpenCV', proficiency: 85, description: 'Processamento de imagens para geração de G-code e controle de cortadoras laser.' }
                     ]
                 },
                 {
-                    category: 'Tools and Technologies',
+                    category: 'Manufatura & Hardware',
                     skills: [
-                        { name: 'Git / GitHub', proficiency: 95, description: 'Essential for collaborative development and learning through practical projects like this portfolio.' },
-                        { name: 'Docker', proficiency: 75, description: 'Simplifying deployment and ensuring consistency across development environments.' },
-                        { name: 'Linux / Shell Scripting', proficiency: 85, description: 'Daily driver for development, from simple automation to complex system administration.' },
-                        { name: 'Vite & GitHub Actions', proficiency: 80, description: 'Modern tools embraced while building this portfolio, representing ongoing learning journey.' },
-                        { name: 'Cloud Computing (AWS/GCP)', proficiency: 60, description: 'Exploring cloud solutions for scalable applications and data processing.' }
+                        { name: 'G-code & CNC', proficiency: 85, description: 'Geração e edição de G-code para corte a laser, fresamento e impressão 3D.' },
+                        { name: 'Controladora RUIDA', proficiency: 80, description: 'Integração direta com controladoras RUIDA para envio de arquivos de corte a laser.' },
+                        { name: 'Impressão 3D', proficiency: 88, description: 'Modelagem, fatiamento e fabricação de protótipos funcionais no NidusLab.' },
+                        { name: 'Desenho 3D', proficiency: 80, description: 'Modelagem 3D para prototipagem rápida e validação de produtos.' }
                     ]
                 },
                 {
-                    category: 'Educational Technology & Practical Solutions',
+                    category: 'Infraestrutura & Ferramentas',
                     skills: [
-                        { name: 'LaTeX', proficiency: 90, description: 'Extensive experience in academic documentation and teaching materials during teaching career.' },
-                        { name: 'HTML/CSS', proficiency: 88, description: 'Evolved from simple WordPress sites to complex MVC-based applications like this portfolio.' },
-                        { name: 'WordPress', proficiency: 75, description: 'Practical experience developing school platforms during pandemic, focusing on accessibility.' },
-                        { name: 'IRAF & Astronomical Data Reduction', proficiency: 80, description: 'Specialized skills in astronomical data processing from research background.' },
-                        { name: 'Teaching Platform Development', proficiency: 85, description: 'Proven ability to create educational solutions under constraints, serving 640+ students.' }
+                        { name: 'Git / GitHub', proficiency: 95, description: 'Controle de versão, CI/CD com GitHub Actions e colaboração em projetos.' },
+                        { name: 'Docker', proficiency: 75, description: 'Containerização de ambientes de desenvolvimento e produção.' },
+                        { name: 'Linux / Shell Scripting', proficiency: 85, description: 'Ambiente principal de desenvolvimento, automação e administração de sistemas.' },
+                        { name: 'Power BI / ETL', proficiency: 78, description: 'Dashboards e pipelines de dados para gestão de incubadoras e startups.' },
+                        { name: 'GitHub Actions / Vite', proficiency: 82, description: 'Pipelines de CI/CD e bundling moderno para aplicações web.' }
                     ]
                 },
                 {
-                    category: 'Educational Impact Projects',
+                    category: 'Inovação & Propriedade Intelectual',
                     skills: [
-                        { 
-                            name: 'Integrated Physics Teaching Platform - Pandemic Response', 
-                            proficiency: 100, 
-                            description: 'During COVID-19, transformed limited resources into a comprehensive remote learning platform for 640+ students, maintaining educational continuity through synchronous and asynchronous resources.',
-                            links: [
-                                { url: 'https://sites.google.com/view/pandefisica/', label: 'Physics Teaching Platform' }
-                            ]
-                        },
-                        { 
-                            name: 'Digital School Management Platform', 
-                            proficiency: 100, 
-                            description: 'Developed a unified communication platform during pandemic crisis, centralizing essential information and pedagogical content. Recognized by State Education Department as best practice.',
-                            links: [
-                                { url: 'https://sites.google.com/view/piccinini-virtual/p%C3%A1gina-inicial', label: 'School Management Platform' }
-                            ]
-                        }
+                        { name: 'Modelo CERNE', proficiency: 95, description: 'Gestão de 29 processos de incubação, contribuindo para certificação CERNE 2 da NidusTec.' },
+                        { name: 'Busca de Anterioridade', proficiency: 88, description: 'Prospecção tecnológica sistemática com Espacenet, Google Patents e Derwent Innovation.' },
+                        { name: 'Redação de Ativos de PI', proficiency: 82, description: 'Estruturação técnica de pedidos de patente e registros de software junto ao INPI.' },
+                        { name: 'TRL & Roadmaps Tecnológicos', proficiency: 90, description: 'Diagnóstico de maturidade tecnológica e elaboração de roadmaps para startups.' }
                     ]
                 }
             ]
