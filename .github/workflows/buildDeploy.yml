@@ -8,29 +8,32 @@ on:
       reason:
         description: 'Motivo do deploy manual'
         required: false
-        default: 'Deploy manual via GitHub Actions'
+        default: 'Deploy manual'
 
+# Permissões necessárias para ambos os métodos de deploy
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write   # necessário para peaceiris/actions-gh-pages (push para branch)
+  pages: write      # necessário para actions/deploy-pages
+  id-token: write   # necessário para actions/deploy-pages
 
-# Apenas um deploy por vez — cancela o anterior se houver fila
+# Apenas um deploy por vez
 concurrency:
-  group: "pages"
+  group: "pages-deploy"
   cancel-in-progress: true
 
 jobs:
-  # ─────────────────────────────────────────────
-  # JOB 1: Build
-  # ─────────────────────────────────────────────
-  build:
-    name: Build Vite
+  build-and-deploy:
+    name: Build & Deploy
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout do repositório
-        uses: actions/checkout@v4
 
+    steps:
+      # 1. Checkout completo do repositório
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # 2. Node.js com cache de npm
       - name: Configurar Node.js 22
         uses: actions/setup-node@v4
         with:
@@ -38,30 +41,41 @@ jobs:
           cache: 'npm'
           cache-dependency-path: './site-pessoal/package-lock.json'
 
+      # 3. Instalar dependências (ci = determinístico, usa lock file)
       - name: Instalar dependências
         working-directory: ./site-pessoal
         run: npm ci
 
+      # 4. Build do projeto (Vite)
       - name: Build do projeto (Vite)
         working-directory: ./site-pessoal
         run: npm run build
+        env:
+          NODE_ENV: production
 
-      - name: Upload do artefato de Pages
+      # 5. Método A: Deploy via GitHub Actions (oficial)
+      #    Se o Pages estiver configurado para "GitHub Actions" nas configurações do repo,
+      #    este passo fará a publicação direta.
+      - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./site-pessoal/dist
 
-  # ─────────────────────────────────────────────
-  # JOB 2: Deploy (só roda após build bem-sucedido)
-  # ─────────────────────────────────────────────
-  deploy:
-    name: Deploy para GitHub Pages
-    needs: build
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy para GitHub Pages
-        id: deployment
+      - name: Deploy to GitHub Pages (Actions method)
+        id: admin-deploy
         uses: actions/deploy-pages@v4
+        continue-on-error: true # Se falhar por falta de config nas settings, continua para o Método B
+
+      # 6. Método B: Deploy via branch gh-pages
+      #    Se o Pages estiver configurado para "Deploy from branch (gh-pages)",
+      #    este passo atualizará a branch gh-pages e o GitHub fará o deploy automático.
+      - name: Deploy to gh-pages branch (Branch method)
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./site-pessoal/dist
+          publish_branch: gh-pages
+          force_orphan: true        # branch gh-pages limpa a cada deploy
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+          commit_message: 'deploy: ${{ github.sha }} — ${{ github.event.head_commit.message || inputs.reason }}'

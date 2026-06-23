@@ -33,13 +33,11 @@ export default defineConfig({
                     ],
                     'mvc-controllers': [
                         './src/js/controllers/MainController.js',
-                        './src/js/controllers/NavigationController.js',
-                        './src/js/controllers/SectionController.js'
+                        './src/js/controllers/NavigationController.js'
                     ],
                     'mvc-views': [
                         './src/js/views/BaseView.js',
                         './src/js/views/FooterView.js',
-                        './src/js/views/HeroView.js',
                         './src/js/views/NavigationView.js',
                         './src/js/views/ViewManager.js'
                     ],
