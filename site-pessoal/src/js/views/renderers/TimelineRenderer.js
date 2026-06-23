@@ -5,6 +5,8 @@
  *              Editar a aparência da timeline = editar só este arquivo.
  */
 
+import { SVG_ICONS } from './SvgIcons.js';
+
 /**
  * @param {string} text
  * @returns {string}
@@ -24,9 +26,7 @@ export function renderTimeline(content) {
     if (!content?.timeline?.length) return '<p>Nenhum dado de trajetória.</p>';
 
     const items = content.timeline.map((item, idx) => {
-        const iconHtml = item.icon && (item.icon.startsWith('fa') || item.icon.includes('fa-'))
-            ? `<i class="${esc(item.icon)}" aria-hidden="true"></i>`
-            : esc(item.icon || '');
+        const iconHtml = SVG_ICONS[item.icon] || '';
 
         return `
             <div class="timeline-item animate-on-scroll" style="transition-delay:${idx * 0.1}s">

@@ -1,10 +1,4 @@
-/**
- * @file CardsRenderer.js
- * @brief Renderiza seções do tipo "cards" (projetos, publicações, PI, etc.).
- * @description Módulo puro: recebe array de cards, retorna HTML string.
- *              Suporta: highlight badge, links externos, tags, status, data.
- *              Para mudar a aparência de qualquer card: editar só este arquivo.
- */
+import { SVG_ICONS } from './SvgIcons.js';
 
 function esc(text) {
     if (!text) return '';
@@ -35,13 +29,13 @@ export function renderCards(content) {
         const linksHtml = item.links?.length ? `
             <div class="card-links">
                 ${item.links.map(l => `
-                    <a href="${esc(l.url)}"
-                       target="_blank"
-                       rel="noopener noreferrer"
-                       aria-label="${esc(l.label)}">
-                        <i class="fas fa-external-link-alt" aria-hidden="true"></i>
-                        ${esc(l.label)}
-                    </a>
+                     <a href="${esc(l.url)}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="${esc(l.label)}">
+                         ${SVG_ICONS.link}
+                         ${esc(l.label)}
+                     </a>
                 `).join('')}
             </div>
         ` : '';
@@ -56,9 +50,9 @@ export function renderCards(content) {
             <article class="card animate-on-scroll"
                      style="transition-delay:${idx * 0.07}s"
                      aria-label="${esc(item.title)}">
-                ${item.highlight
-                    ? `<div class="card-highlight-badge" aria-label="Destaque"><i class="fas fa-bookmark" aria-hidden="true"></i> ${esc(item.highlight)}</div>`
-                    : ''}
+                 ${item.highlight
+                     ? `<div class="card-highlight-badge" aria-label="Destaque">${SVG_ICONS.bookmark} ${esc(item.highlight)}</div>`
+                     : ''}
                 <h3 class="card-title">${esc(item.title)}</h3>
                 <p class="card-description">${esc(item.description)}</p>
                 ${linksHtml}

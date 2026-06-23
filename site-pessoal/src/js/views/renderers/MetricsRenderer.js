@@ -6,6 +6,8 @@
  *              Para mudar a aparência dos cards: editar só este arquivo.
  */
 
+import { SVG_ICONS } from './SvgIcons.js';
+
 function esc(text) {
     if (!text) return '';
     const d = document.createElement('div');
@@ -21,9 +23,7 @@ export function renderMetrics(content) {
     if (!Array.isArray(content) || !content.length) return '';
 
     const cards = content.map((m, idx) => {
-        const iconHtml = m.icon && (m.icon.startsWith('fa') || m.icon.includes('fa-'))
-            ? `<i class="${esc(m.icon)}" aria-hidden="true"></i>`
-            : esc(m.icon || '');
+        const iconHtml = SVG_ICONS[m.icon] || '';
 
         return `
             <div class="metric-card animate-on-scroll"

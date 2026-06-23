@@ -1,4 +1,5 @@
 import { BaseView } from './BaseView.js';
+import { SVG_ICONS } from './renderers/SvgIcons.js';
 
 /**
  * @file NavigationView.js
@@ -73,7 +74,7 @@ export class NavigationView extends BaseView {
                         aria-label="Abrir menu de navegação"
                         aria-expanded="false"
                         id="nav-mobile-btn">
-                    <i class="fas fa-bars"></i>
+                    ${SVG_ICONS.menu}
                 </button>
             </nav>
             <div class="nav-mobile-menu" id="nav-mobile-menu" role="navigation" aria-label="Menu mobile">
@@ -140,9 +141,7 @@ export class NavigationView extends BaseView {
             this._mobileMenuOpen = !this._mobileMenuOpen;
             menu.classList.toggle('open', this._mobileMenuOpen);
             btn.setAttribute('aria-expanded', String(this._mobileMenuOpen));
-            btn.innerHTML = this._mobileMenuOpen
-                ? '<i class="fas fa-times"></i>'
-                : '<i class="fas fa-bars"></i>';
+            btn.innerHTML = this._mobileMenuOpen ? SVG_ICONS.close : SVG_ICONS.menu;
         });
 
         document.addEventListener('click', () => {
@@ -150,7 +149,7 @@ export class NavigationView extends BaseView {
                 this._mobileMenuOpen = false;
                 menu.classList.remove('open');
                 btn.setAttribute('aria-expanded', 'false');
-                btn.innerHTML = '<i class="fas fa-bars"></i>';
+                btn.innerHTML = SVG_ICONS.menu;
             }
         });
     }

@@ -1,4 +1,5 @@
 import { BaseView } from './BaseView.js';
+import { SVG_ICONS } from './renderers/SvgIcons.js';
 
 /**
  * @file FooterView.js
@@ -25,11 +26,11 @@ export class FooterView extends BaseView {
         const year = new Date().getFullYear();
 
         const socials = [
-            { url: socialLinks?.github,   icon: 'fab fa-github',   label: 'GitHub'   },
-            { url: socialLinks?.linkedin, icon: 'fab fa-linkedin',  label: 'LinkedIn' },
-            { url: socialLinks?.lattes,   icon: 'fas fa-graduation-cap', label: 'Lattes' },
-            { url: `mailto:${contact?.email}`, icon: 'fas fa-envelope', label: 'E-mail' },
-            { url: contact?.whatsapp,     icon: 'fab fa-whatsapp', label: 'WhatsApp' },
+            { url: socialLinks?.github,   icon: 'github',   label: 'GitHub'   },
+            { url: socialLinks?.linkedin, icon: 'linkedin',  label: 'LinkedIn' },
+            { url: socialLinks?.lattes,   icon: 'graduate', label: 'Lattes' },
+            { url: `mailto:${contact?.email}`, icon: 'envelope', label: 'E-mail' },
+            { url: contact?.whatsapp,     icon: 'whatsapp', label: 'WhatsApp' },
         ].filter(s => s.url);
 
         const socialHTML = socials.map(s => `
@@ -39,7 +40,7 @@ export class FooterView extends BaseView {
                    rel="noopener noreferrer"
                    aria-label="${this.escapeHtml(s.label)}"
                    title="${this.escapeHtml(s.label)}">
-                    <i class="${s.icon}"></i>
+                    ${SVG_ICONS[s.icon] || ''}
                 </a>
             </li>
         `).join('');

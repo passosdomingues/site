@@ -14,3 +14,4 @@ export { renderMetrics }   from './MetricsRenderer.js';
 export { renderCards }     from './CardsRenderer.js';
 export { renderSkills }    from './SkillsRenderer.js';
 export { renderGallery }   from './GalleryRenderer.js';
+export { SVG_ICONS }       from './SvgIcons.js';

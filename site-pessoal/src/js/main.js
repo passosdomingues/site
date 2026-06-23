@@ -14,6 +14,7 @@ import { PerformanceMonitor } from './services/PerformanceMonitor.js';
 // Importando a FooterView e os dados do usuário.
 import { FooterView } from './views/FooterView.js';
 import { USER_DATA } from './data/UserData.js';
+import { SVG_ICONS } from './views/renderers/SvgIcons.js';
 
 class Application {
     constructor() {
@@ -155,7 +156,7 @@ class Application {
         const menuToggle = document.createElement('button');
         menuToggle.className = 'app-control-button accessibility-menu-toggle';
         menuToggle.setAttribute('aria-label', 'Opções de acessibilidade');
-        menuToggle.innerHTML = '<i class="fas fa-universal-access" aria-hidden="true"></i>';
+        menuToggle.innerHTML = SVG_ICONS.accessibility;
         menuToggle.setAttribute('aria-expanded', 'false');
         
         // Menu de acessibilidade (inicialmente escondido)
@@ -181,7 +182,7 @@ class Application {
                     const current = document.body.classList.contains('high-contrast');
                     accessibilityManager.toggleHighContrast(!current);
                 },
-                icon: '<i class="fas fa-adjust" aria-hidden="true"></i>'
+                icon: SVG_ICONS.adjust
             },
             {
                 label: 'Reduzir Animações',
@@ -189,7 +190,7 @@ class Application {
                     const current = document.body.classList.contains('reduced-motion');
                     accessibilityManager.toggleReducedMotion(!current);
                 },
-                icon: '<i class="fas fa-eye-slash" aria-hidden="true"></i>'
+                icon: SVG_ICONS.eyeSlash
             }
         ];
 

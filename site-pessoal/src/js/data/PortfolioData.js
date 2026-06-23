@@ -26,35 +26,35 @@ export const PORTFOLIO_DATA = {
                 timeline: [
                     {
                         period: '2014–2018',
-                        icon: 'fas fa-university',
+                        icon: 'university',
                         title: 'Licenciatura em Física — UNIFAL-MG',
                         description: 'Atuação em divulgação científica no Observatório Astronômico da UNIFAL-MG (2015–2019). Iniciação científica em Astrofísica Galáctica e Extragaláctica, com foco em análise de dados observacionais.',
                         highlights: ['Astrofísica', 'Iniciação Científica', 'Divulgação Científica']
                     },
                     {
                         period: '2019–2022',
-                        icon: 'fas fa-chalkboard-teacher',
+                        icon: 'teacher',
                         title: 'Professor de Física — SEE-MG',
                         description: 'Ensino de Física em três municípios mineiros. Desenvolvimento de plataforma de ensino remoto para 640+ alunos durante a pandemia, reconhecida pela Secretaria Estadual de Educação como boa prática.',
                         highlights: ['Ensino', 'Plataforma Digital', 'Educação Remota']
                     },
                     {
                         period: '2021–2023',
-                        icon: 'fas fa-graduation-cap',
+                        icon: 'graduate',
                         title: 'Mestrado em Física — UNIFEI',
                         description: 'Pesquisa em Núcleos Galácticos Ativos (AGN). Quando adquiri paixão especial por dados e análise computacional, o que catalisou a transição de carreira.',
                         highlights: ['AGN', 'Análise de Dados', 'Pesquisa Científica']
                     },
                     {
                         period: '2023–presente',
-                        icon: 'fas fa-laptop-code',
+                        icon: 'code',
                         title: 'Bacharelado em Ciência da Computação — UNIFAL-MG',
                         description: 'Transição de carreira para Ciência da Computação. Bolsista FAPEMIG na Incubadora NidusTec (2024–2025). Foco em Deep Learning, Visão Computacional, Manufatura Generativa e Arquitetura de Software.',
                         highlights: ['Transição de Carreira', 'Desenvolvimento de Software', 'Pesquisa Aplicada']
                     },
                     {
                         period: '2024–2025',
-                        icon: 'fas fa-rocket',
+                        icon: 'rocket',
                         title: 'Bolsista CT&I Nível III — FAPEMIG / NidusTec · UNIFAL-MG',
                         description: 'Atuação em ambiente de inovação, incubação, prototipagem e apoio a empreendimentos tecnológicos. Gestão de 29 processos do Modelo CERNE. Contribuição para evolução da NidusTec de CERNE 1 para CERNE 2. Desenvolvimento de 64+ protótipos com potencial mercadológico.',
                         highlights: ['Modelo CERNE', 'Incubação', 'Prototipagem', 'Manufatura Maker', 'Propriedade Intelectual']
@@ -73,12 +73,12 @@ export const PORTFOLIO_DATA = {
             type: 'metrics',
             metadata: { order: 2, visible: true },
             content: [
-                { value: '29', label: 'Processos CERNE geridos', icon: 'fas fa-cogs' },
-                { value: '64+', label: 'Protótipos com potencial mercadológico', icon: 'fas fa-tools' },
-                { value: '4', label: 'Startups orientadas (1 internacionalizada)', icon: 'fas fa-globe' },
-                { value: '4', label: 'Softwares em registro no INPI', icon: 'fas fa-file-signature' },
-                { value: '750h+', label: 'Certificações e capacitações', icon: 'fas fa-award' },
-                { value: '2024', label: 'Troféu ANPROTEC — Adelino Medeiros', icon: 'fas fa-trophy' }
+                { value: '29', label: 'Processos CERNE geridos', icon: 'cogs' },
+                { value: '64+', label: 'Protótipos com potencial mercadológico', icon: 'tools' },
+                { value: '4', label: 'Startups orientadas (1 internacionalizada)', icon: 'globe' },
+                { value: '4', label: 'Softwares em registro no INPI', icon: 'file' },
+                { value: '750h+', label: 'Certificações e capacitações', icon: 'award' },
+                { value: '2024', label: 'Troféu ANPROTEC — Adelino Medeiros', icon: 'trophy' }
             ]
         },
 
