@@ -1,4 +1,12 @@
-import { SVG_ICONS } from './SvgIcons.js';
+/**
+ * @file CardsRenderer.js
+ * @brief Renderiza seções do tipo "cards".
+ * @description Módulo puro: recebe array de objetos card, retorna HTML string.
+ *              Para adicionar cards: edite o módulo de dados correspondente em sections/.
+ *              Para mudar o visual: edite este arquivo + components.css.
+ */
+
+import { renderIcon } from './SvgIcons.js';
 
 function esc(text) {
     if (!text) return '';
@@ -7,14 +15,14 @@ function esc(text) {
     return d.innerHTML;
 }
 
-/** Mapeia status → CSS class para cor da bolinha */
+/** Mapeia status → CSS class para cor do indicador */
 function statusClass(status) {
     if (!status) return '';
     const s = status.toLowerCase();
-    if (s.includes('registro')) return 'status-em-registro';
+    if (s.includes('registro') || s.includes('trâmite')) return 'status-em-registro';
     if (s.includes('pesquisa')) return 'status-pesquisa';
-    if (s.includes('ativo') || s.includes('ongoing')) return 'status-ativo';
-    if (s.includes('publicado') || s.includes('premiado')) return 'status-ativo';
+    if (s.includes('ativo') || s.includes('ongoing') || s.includes('contínuo') || s.includes('produção')) return 'status-ativo';
+    if (s.includes('publicado') || s.includes('premiado') || s.includes('concluído') || s.includes('registrado')) return 'status-ativo';
     return '';
 }
 
@@ -33,7 +41,7 @@ export function renderCards(content) {
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label="${esc(l.label)}">
-                         ${SVG_ICONS.link}
+                         ${renderIcon('link', 'card-link-icon')}
                          ${esc(l.label)}
                      </a>
                 `).join('')}
@@ -51,7 +59,7 @@ export function renderCards(content) {
                      style="transition-delay:${idx * 0.07}s"
                      aria-label="${esc(item.title)}">
                  ${item.highlight
-                     ? `<div class="card-highlight-badge" aria-label="Destaque">${SVG_ICONS.bookmark} ${esc(item.highlight)}</div>`
+                     ? `<div class="card-highlight-badge" aria-label="Destaque">${renderIcon('bookmark', 'card-badge-icon')} ${esc(item.highlight)}</div>`
                      : ''}
                 <h3 class="card-title">${esc(item.title)}</h3>
                 <p class="card-description">${esc(item.description)}</p>

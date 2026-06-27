@@ -3,14 +3,11 @@
  * @brief Renderiza seções do tipo "timeline".
  * @description Módulo puro: recebe dados, retorna HTML string.
  *              Editar a aparência da timeline = editar só este arquivo.
+ *              Editar conteúdo = editar trajetoria.js.
  */
 
-import { SVG_ICONS } from './SvgIcons.js';
+import { renderIcon } from './SvgIcons.js';
 
-/**
- * @param {string} text
- * @returns {string}
- */
 function esc(text) {
     if (!text) return '';
     const d = document.createElement('div');
@@ -26,7 +23,7 @@ export function renderTimeline(content) {
     if (!content?.timeline?.length) return '<p>Nenhum dado de trajetória.</p>';
 
     const items = content.timeline.map((item, idx) => {
-        const iconHtml = SVG_ICONS[item.icon] || '';
+        const iconHtml = renderIcon(item.icon, 'timeline-fa-icon');
 
         return `
             <div class="timeline-item animate-on-scroll" style="transition-delay:${idx * 0.1}s">

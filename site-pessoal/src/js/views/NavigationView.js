@@ -1,5 +1,5 @@
 import { BaseView } from './BaseView.js';
-import { SVG_ICONS } from './renderers/SvgIcons.js';
+import { renderIcon } from './renderers/SvgIcons.js';
 
 /**
  * @file NavigationView.js
@@ -74,7 +74,7 @@ export class NavigationView extends BaseView {
                         aria-label="Abrir menu de navegação"
                         aria-expanded="false"
                         id="nav-mobile-btn">
-                    ${SVG_ICONS.menu}
+                    ${renderIcon('menu')}
                 </button>
             </nav>
             <div class="nav-mobile-menu" id="nav-mobile-menu" role="navigation" aria-label="Menu mobile">
@@ -141,7 +141,7 @@ export class NavigationView extends BaseView {
             this._mobileMenuOpen = !this._mobileMenuOpen;
             menu.classList.toggle('open', this._mobileMenuOpen);
             btn.setAttribute('aria-expanded', String(this._mobileMenuOpen));
-            btn.innerHTML = this._mobileMenuOpen ? SVG_ICONS.close : SVG_ICONS.menu;
+            btn.innerHTML = this._mobileMenuOpen ? renderIcon('close') : renderIcon('menu');
         });
 
         document.addEventListener('click', () => {
@@ -149,7 +149,7 @@ export class NavigationView extends BaseView {
                 this._mobileMenuOpen = false;
                 menu.classList.remove('open');
                 btn.setAttribute('aria-expanded', 'false');
-                btn.innerHTML = SVG_ICONS.menu;
+                btn.innerHTML = renderIcon('menu');
             }
         });
     }

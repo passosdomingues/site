@@ -1,5 +1,5 @@
 import { BaseView } from './BaseView.js';
-import { SVG_ICONS } from './renderers/SvgIcons.js';
+import { renderIcon } from './renderers/SvgIcons.js';
 
 /**
  * @file FooterView.js
@@ -27,8 +27,8 @@ export class FooterView extends BaseView {
 
         const socials = [
             { url: socialLinks?.github,   icon: 'github',   label: 'GitHub'   },
-            { url: socialLinks?.linkedin, icon: 'linkedin',  label: 'LinkedIn' },
-            { url: socialLinks?.lattes,   icon: 'graduate', label: 'Lattes' },
+            { url: socialLinks?.linkedin, icon: 'linkedin',  label: 'LinkedIn'  },
+            { url: socialLinks?.lattes,   icon: 'lattes',    label: 'Lattes CV' },
             { url: `mailto:${contact?.email}`, icon: 'envelope', label: 'E-mail' },
             { url: contact?.whatsapp,     icon: 'whatsapp', label: 'WhatsApp' },
         ].filter(s => s.url);
@@ -40,7 +40,7 @@ export class FooterView extends BaseView {
                    rel="noopener noreferrer"
                    aria-label="${this.escapeHtml(s.label)}"
                    title="${this.escapeHtml(s.label)}">
-                    ${SVG_ICONS[s.icon] || ''}
+                    ${renderIcon(s.icon)}
                 </a>
             </li>
         `).join('');

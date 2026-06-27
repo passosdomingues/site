@@ -174,15 +174,17 @@ body {
     animation: fadeInUp 0.7s ease 0.3s both;
 }
 
+/* Hero tags — cores definidas em light.css / dark.css */
 .hero-tag {
-    background: rgba(217,119,6,.2);
-    border: 1px solid rgba(217,119,6,.4);
-    color: #fde68a;
     padding: 0.2rem 0.7rem;
     border-radius: var(--radius-full);
     font-size: var(--text-xs);
     font-weight: 600;
     letter-spacing: 0.03em;
+    /* Fallback para dark mode (sem classe explícita) */
+    background: rgba(217,119,6,.18);
+    border: 1px solid rgba(217,119,6,.35);
+    color: #fbbf24;
 }
 
 .hero-description {

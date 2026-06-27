@@ -2,11 +2,11 @@
  * @file MetricsRenderer.js
  * @brief Renderiza seções do tipo "metrics" (cards de impacto com números).
  * @description Módulo puro: recebe array de métricas, retorna HTML string.
- *              Para adicionar/remover uma métrica: editar só PortfolioData.js.
+ *              Para adicionar/remover uma métrica: editar só impacto.js.
  *              Para mudar a aparência dos cards: editar só este arquivo.
  */
 
-import { SVG_ICONS } from './SvgIcons.js';
+import { renderIcon } from './SvgIcons.js';
 
 function esc(text) {
     if (!text) return '';
@@ -23,7 +23,7 @@ export function renderMetrics(content) {
     if (!Array.isArray(content) || !content.length) return '';
 
     const cards = content.map((m, idx) => {
-        const iconHtml = SVG_ICONS[m.icon] || '';
+        const iconHtml = renderIcon(m.icon, 'metric-fa-icon');
 
         return `
             <div class="metric-card animate-on-scroll"

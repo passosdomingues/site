@@ -4,23 +4,58 @@
  */
 
 /* ──────────────────────────────────────────────
-   SVG ICONS STANDARD STYLING
+   FONT AWESOME ICONS — contexto e accent color
    ────────────────────────────────────────────── */
-.svg-icon {
-    width: 20px;
-    height: 20px;
+
+/** Cor padrão dos ícones FA no sistema */
+.icon-accent {
+    color: var(--color-accent);
     display: inline-block;
     vertical-align: middle;
-    stroke: currentColor;
-    fill: none;
-    stroke-linecap: round;
-    stroke-linejoin: round;
+    line-height: 1;
 }
 
-.svg-icon--sm {
-    width: 14px;
-    height: 14px;
-    stroke-width: 2;
+/** Tamanhos por contexto */
+.timeline-icon .icon-accent,
+.timeline-fa-icon {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+}
+
+.timeline-item:hover .timeline-icon .icon-accent,
+.timeline-item:hover .timeline-fa-icon {
+    color: var(--color-accent);
+}
+
+.metric-icon .icon-accent,
+.metric-fa-icon {
+    font-size: 1.4rem;
+}
+
+.card-link-icon {
+    font-size: 0.7rem;
+    color: var(--color-primary-500);
+}
+
+.card-badge-icon {
+    font-size: 0.75rem;
+    color: var(--color-accent-600);
+}
+
+.footer-social-item a .icon-accent {
+    font-size: 1rem;
+    color: inherit;
+}
+
+.nav-mobile-toggle .icon-accent,
+.app-control-button .icon-accent {
+    font-size: 1.1rem;
+    color: currentColor;
+}
+
+.accessibility-menu-item .menu-item-icon .icon-accent {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
 }
 
 /* ──────────────────────────────────────────────
@@ -31,7 +66,7 @@
     top: 0;
     width: 100%;
     z-index: 1000;
-    background: rgba(255, 255, 255, 0.95);
+    background: var(--nav-bg, rgba(255, 255, 255, 0.95));
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
@@ -41,7 +76,7 @@
 
 .main-navigation-container.scrolled {
     box-shadow: var(--shadow-sm);
-    background: rgba(255, 255, 255, 0.98);
+    background: var(--nav-bg-scrolled, rgba(255, 255, 255, 0.98));
 }
 
 .nav-container {

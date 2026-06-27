@@ -1,73 +1,199 @@
-/* src/css/dark.css */
+/* src/css/dark.css
+ * Dark mode tokens — paleta profissional escura
+ * Azul slate profundo + Âmbar, tipografia clara
+ */
 
 html.dark {
-    /* Cores invertidas e ajustadas para o modo escuro */
-    --primary-color: #5dade2;
-    --secondary-color: #3498db;
-    --accent-color: #23cf8d;
-    --text-color: #ecf0f1;
-    --light-bg: #2c3e50;
-    --dark-bg: #212f3d;
-    --card-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    --component-bg: #34495e;
-    --component-text-color: var(--text-color);
-    --nav-bg: rgba(44, 62, 80, 0.9);
-    --tag-highlight-bg: #4e647a;
-    --skill-bar-bg: #566573;
+    /* ── Superfícies ─────────────────────────────── */
+    --surface:          #0f1724;
+    --surface-2:        #161e2e;
+    --surface-3:        #1e2a3d;
+    --surface-card:     #1a2232;
+
+    /* ── Bordas ──────────────────────────────────── */
+    --border:           rgba(255,255,255,.08);
+    --border-2:         rgba(255,255,255,.14);
+
+    /* ── Texto ───────────────────────────────────── */
+    --text-primary:     #e8edf5;
+    --text-secondary:   #94a3b8;
+    --text-muted:       #64748b;
+    --text-inverted:    #0f1724;
+    --text-accent:      #fbbf24;
+    --text-link:        #5b9bd5;
+    --text-link-hover:  #93c5fd;
+
+    /* ── Paleta primária (luminosa no dark) ──────── */
+    --color-primary:       #5b9bd5;
+    --color-primary-700:   #3b82f6;
+    --color-primary-500:   #60a5fa;
+    --color-primary-300:   #93c5fd;
+    --color-primary-100:   rgba(96,165,250,.15);
+    --color-primary-50:    rgba(96,165,250,.08);
+
+    /* ── Accent âmbar ────────────────────────────── */
+    --color-accent:        #f59e0b;
+    --color-accent-600:    #d97706;
+    --color-accent-400:    #fbbf24;
+    --color-accent-100:    rgba(245,158,11,.15);
+    --color-accent-50:     rgba(245,158,11,.08);
+
+    /* ── Aliases legados ─────────────────────────── */
+    --primary-color:        var(--color-primary);
+    --secondary-color:      var(--color-primary-500);
+    --accent-color:         var(--color-accent);
+    --text-color:           var(--text-primary);
+    --light-bg:             var(--surface-2);
+    --dark-bg:              #0b1120;
+    --component-bg:         var(--surface-card);
+    --component-text-color: var(--text-primary);
+    --color-text-secondary: var(--text-secondary);
+    --nav-bg:               rgba(15,23,36,.88);
+    --nav-bg-scrolled:      rgba(15,23,36,.96);
+    --tag-highlight-bg:     var(--surface-3);
+    --skill-bar-bg:         var(--surface-3);
+    --card-shadow:          0 1px 3px rgba(0,0,0,.3), 0 4px 12px rgba(0,0,0,.2);
+
+    /* ── Sombras dark ────────────────────────────── */
+    --shadow-xs:  0 1px 2px rgba(0,0,0,.25);
+    --shadow-sm:  0 1px 4px rgba(0,0,0,.35);
+    --shadow:     0 2px 8px rgba(0,0,0,.35);
+    --shadow-md:  0 4px 16px rgba(0,0,0,.40);
+    --shadow-lg:  0 8px 28px rgba(0,0,0,.45);
+    --shadow-xl:  0 16px 48px rgba(0,0,0,.50);
 }
 
-html.dark .section:nth-child(even) {
-    background: var(--component-bg);
+/* ── Seções alternadas ───────────────────────── */
+html.dark .section-wrapper {
+    background: var(--surface);
+    border-color: var(--border);
 }
 
+html.dark .section-wrapper:nth-of-type(even) {
+    background: var(--surface-2);
+}
+
+/* ── Cards & timeline ────────────────────────── */
 html.dark .card,
 html.dark .timeline-content,
-html.dark .skill-category {
-    background: var(--component-bg);
+html.dark .skill-category,
+html.dark .metric-card,
+html.dark .gallery-item-featured {
+    background: var(--surface-card);
+    border-color: var(--border);
 }
 
+html.dark .card:hover {
+    border-color: var(--color-primary-300);
+}
+
+/* ── Hero tags (dark) ────────────────────────── */
+html.dark .hero-tag {
+    background: rgba(245,158,11,.15);
+    border: 1px solid rgba(245,158,11,.30);
+    color: #fbbf24;
+}
+
+/* ── Gallery ─────────────────────────────────── */
 html.dark .gallery-caption {
-    background: rgba(0, 0, 0, 0.8);
+    background: linear-gradient(to top, rgba(0,0,0,.85), transparent);
 }
 
+/* ── Nav links ───────────────────────────────── */
 html.dark .nav-link {
-    color: var(--text-color);
+    color: var(--text-secondary);
 }
 
+html.dark .nav-link:hover {
+    color: var(--text-primary);
+    background: rgba(255,255,255,.05);
+    border-radius: 6px;
+}
+
+html.dark .nav-link.active {
+    color: var(--color-primary);
+}
+
+html.dark .nav-mobile-menu {
+    background: var(--surface);
+    border-color: var(--border);
+}
+
+/* ── Footer ──────────────────────────────────── */
 html.dark .main-footer {
-    background: var(--dark-bg);
-    color: var(--text-color);
+    background: #0b1120;
+    color: var(--text-secondary);
+    border-top-color: var(--border);
+}
+
+html.dark .footer-brand {
+    color: var(--text-primary);
+}
+
+html.dark .footer-brand span {
+    color: var(--color-accent);
 }
 
 html.dark .footer-resume-link {
-    color: var(--accent-color);
-    border-color: var(--accent-color);
+    color: var(--color-accent);
+    border-color: var(--color-accent);
 }
 
 html.dark .footer-resume-link:hover {
-    background: var(--accent-color);
-    color: white;
+    background: var(--color-accent);
+    color: #0f1724;
 }
 
 html.dark .footer-social-link {
-    color: var(--text-color);
+    color: var(--text-secondary);
 }
 
 html.dark .footer-social-link:hover {
-    color: var(--accent-color);
+    color: var(--color-accent);
 }
 
+html.dark .footer-social-item a {
+    background: var(--surface-3);
+    color: var(--text-secondary);
+    border-color: var(--border);
+}
+
+html.dark .footer-social-item a:hover {
+    background: var(--color-accent);
+    color: #0f1724;
+    border-color: var(--color-accent);
+}
+
+/* ── Accessibility Menu ──────────────────────── */
 html.dark .accessibility-menu {
-    background: var(--component-bg);
-    color: var(--text-color);
-    border: 1px solid var(--secondary-color);
+    background: var(--surface-card);
+    border-color: var(--border);
+    box-shadow: var(--shadow-md);
 }
 
 html.dark .accessibility-menu-item {
-    color: var(--text-color);
+    color: var(--text-primary);
 }
 
 html.dark .accessibility-menu-item:hover {
-    background: var(--secondary-color);
-    color: white;
+    background: var(--surface-3);
+    color: var(--text-primary);
+}
+
+/* ── App Controls ────────────────────────────── */
+html.dark .app-control-button {
+    background: var(--surface-card);
+    border-color: var(--border);
+    color: var(--text-secondary);
+}
+
+html.dark .app-control-button:hover {
+    background: var(--surface-3);
+    border-color: var(--border-2);
+    color: var(--color-primary);
+}
+
+/* ── Loading overlay ─────────────────────────── */
+html.dark .main-loading-overlay {
+    background: var(--surface);
 }
